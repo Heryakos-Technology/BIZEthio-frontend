@@ -161,7 +161,7 @@
           </div>
         </div>
 
-        <img src="/footerimgbig-registration.png" alt="" class="ml-40 -mt-16 ">
+        <img src="/footerimgbig-registration.png" alt="" class="ml-40 ">
 
 <!-- <div class="">
   <div  class="bg-[#1b6489] w-80 h-3/4 rounded-xl transform rotate-45 "></div>
@@ -194,22 +194,23 @@
        </div>
      </div>
      <div class="flex ">
-       <div class="px-7 mt-4 w-11/12">
+       <div class="px-7 mt-4 w-full -ml-2">
          <div class="flex">
              <p class="">Description</p>
              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
          </div>
-         <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md">
+         <!-- <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md"> -->
+          <textarea name="description" id="" cols="30" rows="6" class="border-2 border-[#60b5e6] rounded-md w-11/12"></textarea>
        </div>
      <div class="container">
-       <div class="px-4  mt-4 w-11/12 mx-auto">
+       <div class="px-4  mt-4  mx-auto">
          <div class="flex">
              <p class="">Contact Phone</p>
              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
          </div>
          <input v-model="contact_phone" type="number" class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
        </div>
-       <div class="px-4  mt-4 w-11/12 mx-auto">
+       <div class="px-4  mt-4  mx-auto">
          <div class="flex">
              <p class="">Website</p>
              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
@@ -317,10 +318,16 @@
 
 <script>
 export default {
+    data(){
+      return{
 
+      }
+    },
+    methods:{
+      getItems(){
+        axios.get('https://bizethio-backend-production.up.railway.app/api/register')
+      }
+    }
 }
 </script>
 
-<style>
-
-</style>
