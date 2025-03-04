@@ -66,23 +66,23 @@
                   <input type="file" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12 placeholder:text-sm">
               </div>
           </div>
-          <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5 mx-auto pt-7 pr-4 mt-20">
+          <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5  mx-auto pt-7 pr-4 mt-20 md:w-3/4">
       <div class="flex justify-between">
           <div class="w-1/3">
               <img src="/public/logo.png" alt="">
           </div>
-          <div class=""> 
+          <div class="md:w-2/3 ml-4"> 
               <p class="">Privacy Information</p>
           </div>
       </div>
       <div>
-  <p class="w-7/8 text-center mx-auto mt-4 text-sm">At [Business Name], 
+  <p class="w-7/8 md:w-2/3 text-center mx-auto mt-4 text-sm">At [Business Name], 
   we prioritize your privacy and
   are committed to protecting 
   your personal information.</p>
       </div>
   </div>
-  <div class="flex mt-10" >
+  <div class="flex mt-10 md:w-1/2 md:mx-auto" >
     <div class="mr-2 ">
 
     <input type="checkbox" class="border border-cyan-300">
