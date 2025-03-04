@@ -224,7 +224,20 @@
   
   <script>
   export default {
-  
+  data(){
+    return{
+        model:{
+            user:{
+                location:"",
+                password:"",
+                password_confirmation:"",
+                verification_status:"",
+                photo:"",
+                is_banned:false
+            }
+        }
+    }
+  }
   }
   </script>
   

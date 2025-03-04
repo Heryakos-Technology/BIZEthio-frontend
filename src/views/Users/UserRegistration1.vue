@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="name">
             </div>
         </div>
         <div class="mt-9">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="email">
             </div>
         </div>
         <div class="mt-9">
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="city">
             </div>
         </div>
         <div class="mt-9">
@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
@@ -156,7 +156,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="name">
             </div>
         </div>
         <div class="mt-9">
@@ -170,7 +170,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="email">
             </div>
         </div>
         <div class="mt-9">
@@ -184,7 +184,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -198,7 +198,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="city">
             </div>
         </div>
         <div class="mt-9">
@@ -212,7 +212,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -226,7 +226,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
@@ -247,8 +247,31 @@ your personal information.</p>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+data(){
+    return{
+        base_url:'https://bizethio-backend-production.up.railway.app/api',
+        mode:{
+            user:{
+                name:"",
+                email:"",
+                phone_number:"",
+                city:"",
+                sub_city:"",
+               
+            }
+        }
+    }
+},
+mounted(){
 
+},
+methods:{
+    registerUser(){
+    axios.post(base_url/register)
+    }
+}
 }
 </script>
 
