@@ -21,9 +21,11 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="name">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="model.user.name">
+               
             </div>
         </div>
+       {{ name }}
         <div class="mt-9">
             <div class="flex">
                 <div>
@@ -35,7 +37,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="email">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -49,7 +51,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="phone_number">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -63,7 +65,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="city">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -77,7 +79,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="sub_city">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -91,11 +93,11 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="location">
+                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-            <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm ">Continue</button>
+            <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm " @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
             <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -156,7 +158,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="name">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.name">
             </div>
         </div>
         <div class="mt-9">
@@ -170,7 +172,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="email">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -184,7 +186,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="phone_number">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -198,7 +200,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="city">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -212,7 +214,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="sub_city">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -226,11 +228,11 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="location">
+                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-            <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg">Continue</button>
+            <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
             <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -252,25 +254,51 @@ export default {
 data(){
     return{
         base_url:'https://bizethio-backend-production.up.railway.app/api',
-        mode:{
+        model:{
             user:{
                 name:"",
                 email:"",
                 phone_number:"",
                 city:"",
                 sub_city:"",
-               
+                location:""
             }
         }
     }
 },
 mounted(){
-
+// axios.get(`${this.base_url}/users`).then((res)=>{
+//     console.log(res.data)
+// })
 },
 methods:{
     registerUser(){
-    axios.post(base_url/register)
-    }
+        localStorage.setItem('name',this.model.user.name)
+      
+        localStorage.setItem('email',this.model.user.email)
+      
+        localStorage.setItem('phone_number',this.model.user.phone_number)
+       
+        localStorage.setItem('city',this.model.user.city)
+       
+        localStorage.setItem('sub_city',this.model.user.sub_city)
+        const parsedLocation = JSON.parse(this.model.user.location);
+        this.model.user.location = JSON.stringify(parsedLocation)
+        localStorage.setItem('location',this.model.user.location)
+        
+
+        this.$router.push('/next')
+
+    },
+//    registerUser(){
+//         localStorage.setItem('name',this.name)
+//         localStorage.setItem('email',this.email)
+//         localStorage.setItem('phone_number',this.phone_number)
+//         localStorage.setItem('city',this.city)
+//         localStorage.setItem('sub_city',this.sub_city)
+//         localStorage.setItem('location',this.location)
+//     this.$router.push('/next')
+//    }
 }
 }
 </script>
