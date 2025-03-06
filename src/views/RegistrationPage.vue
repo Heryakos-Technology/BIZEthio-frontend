@@ -219,7 +219,7 @@
           </div>
         </div>
 
-        <img src="/Bottom Desogn Card.png" alt="" class="  mt-36">
+        <img src="/Bottom Desogn Card.png" alt="" class="  mt-64">
 
       </div>
       <div class="ml-20 w-2/3">
