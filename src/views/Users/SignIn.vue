@@ -1,5 +1,86 @@
 <template>
-    <div class="px-2 py-5">
+
+<div class="hidden lg:block">
+    <div class="pt-10 pb-10">
+
+<div class="relative w-1/2 h-165 rounded-2xl overflow-hidden ml-100 pt-30 mx-auto">
+ 
+  <div class="absolute inset-0 bg-gray-100 ">
+    <h1 class="text-center mt-8 font-bold text-xl w-1/2">SIgn In</h1>
+    <div class="w-9/10 mx-auto mt-10">
+              <div class="flex">
+                  <div>
+  
+                      <p>User Name or Email: </p>
+                  </div>
+                
+              </div>
+              <div class="mt-2 ">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-1/2 md:h-12"  v-model="email">
+                 
+              </div>
+          </div>
+          <div class="w-9/10 mx-auto mt-10">
+              <div class="flex">
+                  <div>
+  
+                      <p>Password </p>
+                  </div>
+                 
+              </div>
+              <div class="mt-2 ">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-1/2 md:h-12" v-model="password">
+              </div>
+          </div>
+          <div class="mt-9 flex w-12/12  mx-auto">
+             
+
+                 <div class="md:text-lg md:w-1/2 md:mx-auto ">
+                   <div class="flex w-2/3 mx-auto">
+                       <div class="">
+                   <input type="radio" class= " border border-cyan-400" >
+                 </div>
+                 <div class=" mx-auto">
+    
+                     <p class="text-cyan-500 text-lg">Remember me</p>
+                 </div>
+                   </div>
+             </div>
+            <div class="w-11/10 mx-auto -mt-5">
+
+                <p class="text-cyan-500 mt-6  ">Forgot Password?</p>
+            </div>
+         </div>
+         <div class="w-2/3 mx-auto mt-7">
+              <button class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-3xl " @click="handleLogin">Continue</button>
+          </div>
+          <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
+              <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
+              <p class="text-gray-400 text-sm mt-7 w-11/11 mx-auto">Or connect with social media</p>
+          </div>
+          <div class="w-4/5 mx-auto text-white bg-cyan mt-5">
+            <div class="w-3/4">
+                <button style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-twitter -ml-6 mr-1"></i>  Sign in with Twitter</button>
+            </div>
+            <div class="mt-3 w-3/4">
+             <button style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
+            </div>
+          </div>
+  </div>
+
+  <!-- Blue Diagonal Section -->
+  <div class="absolute right-0 top-0 pt-20 left-112 w-1/2 mx-auto h-full bg-blue-200 transform -skew-x-12">
+    <div class="w-2/3 mx-auto ">
+        <img src="/public/logolarge.png" alt="" class=" pt-5 w-2/3 mx-auto -ml-8">
+        <h1 class="mt-36  text-xl w-12/12 -ml-3 mx-auto">Welcome Back</h1>
+        <p class="text-sm font-normal w-13/13 -ml-10 mt-2 mx-auto">Sign in to continue access pages</p>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+    <div class="px-2 py-5 lg:hidden">
       <div class="bg-white rounded-sm pb-10 lg:hidden">
       
   <img src="/public/logo.png" alt="" class="mx-auto pt-5">
@@ -20,7 +101,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="email">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -34,7 +115,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="password">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
               </div>
           </div>
       
@@ -93,7 +174,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="email">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -107,7 +188,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="password">
+                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
               </div>
           </div>
       
