@@ -50,7 +50,7 @@
         <p class="">Contact Phone</p>
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
-      <input v-model="companies.contact_phone" type="number"
+      <input v-model="companies.contact_phone" type="text"
         class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
@@ -262,7 +262,7 @@
                 <p class="">Contact Phone</p>
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input v-model="companies.contact_phone" type="number"
+              <input v-model="companies.contact_phone" type="text"
                 class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
             </div>
 
