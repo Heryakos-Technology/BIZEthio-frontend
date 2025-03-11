@@ -13,12 +13,12 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12"  >
+                  <input type="text" class="border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" v-model="email" id="email" required>
                  
               </div>
           </div>
     
-          <div class="mt-9">
+          <!-- <div class="mt-9">
               <div class="flex">
                   <div>
   
@@ -29,13 +29,13 @@
               <div class="mt-2 ">
                   <input type="text" class="border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" >
               </div>
-          </div>
+          </div> -->
          
        
     
   
           <div class="mx-auto w-3/4 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-500 text-white px-8 py-2 rounded-md " >Reset Password</button>
+              <button class="bg-cyan-500 text-white px-8 py-2 rounded-md " @click="sendResetEmail" >Send Reset Link</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center text-gray-400"> Back to Sign in </p>
@@ -58,11 +58,11 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white"  >
+                  <input type="text" class="border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white"  v-model="email" id="email" required>
                  
               </div>
           </div>
-          <div class="mt-5">
+          <!-- <div class="mt-5">
               <div class="flex">
                   <div>
   
@@ -74,9 +74,13 @@
                   <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12 focus:outline-none bg-white"  >
                  
               </div>
-          </div>
+          </div> -->
           <div class=" w-3/4 mx-auto mt-6 ">
-              <button class="bg-cyan-500 text-white px-8 py-2 rounded-md " >Reset Password</button>
+              <button class="bg-cyan-500 text-white px-8 py-2 rounded-md " @click="sendResetEmail" >Send Reset Link</button>
+          </div>
+          <div>
+            <p v-if="message">{{ message }}</p>
+      <p v-if="error">{{ error }}</p>
           </div>
 </div>
 </div>
@@ -86,7 +90,29 @@
   </template>
   
   <script>
-
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { auth } from '../firebase'; 
+export default {
+  data() {
+    return {
+      email: '',
+      message: '',
+      error: '',
+    };
+  },
+  methods: {
+    async sendResetEmail() {
+      try {
+        await sendPasswordResetEmail(auth, this.email);
+        this.message = 'Password reset email sent! Check your inbox.';
+        this.error = '';
+      } catch (err) {
+        this.error = err.message;
+        this.message = '';
+      }
+    },
+  },
+};
   </script>
   
   <style>
