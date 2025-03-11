@@ -48,7 +48,7 @@
     <img src="/forgotdesktop.png" alt="" class="h-58">
 </div>
 <div class="w-2/3 mx-auto ml-5 mt-10">
-    <h1>New password</h1>
+    <h1>Reset Your Passowrd</h1>
     <div class="mt-5">
               <div class="flex">
                   <div>
