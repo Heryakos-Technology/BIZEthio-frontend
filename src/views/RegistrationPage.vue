@@ -389,23 +389,25 @@
           </div>
         </div>
 
-        <div class="px-4 mt-4 w-88">
+        <div class="px-4 mt-4 w-1/2 ">
           <div class="flex">
             <p>Image</p>
-
           </div>
-          <input v-model="companies.images" type="text"
-            class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-            placeholder="Upload an image" readonly />
-          <input type="file" @change="handleFileUpload" class="mt-2" />
-          <button @click="uploadImage" class="mt-2 bg-[#409cd0] text-white rounded-md px-4 py-2">
-            Upload
-          </button>
-          <div v-if="imageUrl" class="mt-4">
-            <h3>Uploaded Image:</h3>
-            <img :src="imageUrl" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
-          </div>
+          <input v-model="companies.images" type="text"  class="w-11/12  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload images" readonly />
+          <input type="file" @change="handleFileUpload" class="mt-2" multiple />
+          
+          <div v-if="imageUrl && imageUrl.length" class="mt-4">
+            <h3>Uploaded Images:</h3>
+            <!-- <div v-for="(url, index) in imageUrl" :key="index">
+              <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
+            </div> -->
+         
         </div>
+       
+
+      </div>
+
+      <button @click="uploadImage" class="mt-2 ml-4 bg-[#409cd0] text-white rounded-md px-4 py-2">Upload</button>
         <!-- end of image -->
 
         <div class="px-7 mt-4">
@@ -417,11 +419,11 @@
             </div>
             <div class="flex mt-8 -ml-20">
               <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
-                class="w-56 h-10 bg-transparent pl-20 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                class="w-56 h-10 bg-transparent pl-2  border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
               <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
-                class="w-56 h-10 bg-transparent pl-20 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                class="w-56 h-10 bg-transparent pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
               <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
-                class="w-56 h-10 bg-transparent pl-20 border-2 border-[#60b5e6] rounded-md mb-4" />
+                class="w-56 h-10 bg-transparent pl-2  border-2 border-[#60b5e6] rounded-md mb-4" />
             </div>
 
           </div>
@@ -464,23 +466,23 @@ export default {
       error: null,
       categories: [],
       companies: {
-        name: '',
-        owner_name: '',
-        description: '',
-        password: '',
-        password_confirmation: '',
-        operating_hours: '',
-        category_id: '',
-        address: '',
-        city: '',
-        region: '',
-        country: '',
-        contact_phone: '',
-        contact_email: '',
-        website: '',
-        social_media_links: '',
-        status: '',
-        rating_avg: '',
+        name: 'kaltech',
+        owner_name: 'kalkidan solomon',
+        description: 'cutting-edge technology company dedicated to creating innovative solutions that enhance everyday life. Specializing in software development, artificial intelligence, and cloud computing, we empower businesses to optimize their operations and drive growth.',
+        password: '12345678',
+        password_confirmation: '12345678',
+        operating_hours: '5',
+        category_id: '1',
+        address: 'dessie',
+        city: 'dessie',
+        region: 'amhara',
+        country: 'ethiopia',
+        contact_phone: '0921212121',
+        contact_email: 'kal@gmail.com',
+        website: 'www.techinnovations.com',
+        social_media_links: 'www.techinnovations.com',
+        status: 'pending',
+        rating_avg: '5',
         images: {},
       },
       socialMediaLinks: {
@@ -497,35 +499,42 @@ export default {
   },
   methods: {
     handleFileUpload(event) {
-      this.file = event.target.files[0];
-      if (this.file) {
-        this.images = this.file.name;
-      }
-    }, async uploadImage() {
-      if (!this.file) return;
+  this.file = event.target.files; 
+  if (this.file) {
+    this.images = Array.from(this.file).map(file => file.name).join(', ');
+  }
+},  
+    async uploadImage() {
+  if (!this.file || this.file.length === 0) return;
 
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-      const formData = new FormData();
-      formData.append('file', this.file);
-      formData.append('upload_preset', 'my_unsigned_preset');
+  const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+  console.log('cloudinary url',cloudinaryUrl)
+  const promises = []; // Array to hold upload promises
 
+  for (const singleFile of this.file) {
+    const formData = new FormData();
+    formData.append('file', singleFile);
+    formData.append('upload_preset', 'my_unsigned_preset');
 
-      try {
-        const response = await fetch(cloudinaryUrl, {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await response.json();
-        if (data.secure_url) {
-          this.imageUrl = data.secure_url;
-          this.companies.images = this.imageUrl;
-        } else {
-          console.error('Upload failed:', data);
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    },
+    // Push the upload promise to the array
+    promises.push(
+      fetch(cloudinaryUrl, {
+        method: 'POST',
+        body: formData,
+      }).then(response => response.json())
+    );
+  }
+
+  // Wait for all uploads to complete
+  try {
+    const responses = await Promise.all(promises);
+    // Extract URLs and store them
+    this.imageUrl = responses.map(data => data.secure_url);
+    this.companies.images = JSON.stringify(this.imageUrl); // Store as JSON array
+  } catch (error) {
+    console.error('Error uploading images:', error);
+  }
+},
 
     async fetchCategories() {
       try {
