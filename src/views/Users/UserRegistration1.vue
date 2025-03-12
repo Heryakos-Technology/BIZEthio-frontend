@@ -250,6 +250,7 @@ your personal information.</p>
 
 <script>
 import axios from 'axios'
+
 export default {
 data(){
     return{

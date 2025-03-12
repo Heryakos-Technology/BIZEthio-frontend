@@ -52,7 +52,7 @@
             </div>
          </div>
          <div class="w-2/3 mx-auto mt-7">
-              <button class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-3xl " @click="handleLogin">Continue</button>
+              <button  @click="() => { handleLogin(); handleLogin2(); }" class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-3xl ">Continue</button>
           </div>
           <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -135,7 +135,7 @@
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm " @click="handleLogin">Continue</button>
+              <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -208,7 +208,7 @@
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm " @click="registerUser">Continue</button>
+              <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -237,6 +237,7 @@
   
   <script>
   import axios from 'axios'
+  import { login, register } from '../../auth';
   export default {
   data(){
       return{
@@ -254,7 +255,14 @@
 // }
   },
   methods:{
-      
+    async handleLogin2() {
+      try {
+        await login(this.email, this.password);
+        alert('Logged in successfully!');
+      } catch (error) {
+        alert(error.message);
+      }
+    },
  async handleLogin(){
     try{
             const response = await axios.post(`${this.base_url}/login`,{
