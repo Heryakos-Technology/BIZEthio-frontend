@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UserLanding from '../views/userPage/UserLanding.vue'
 import RegistrationPage from '@/views/RegistrationPage.vue'
-import header from '../components/header.vue'
+// import footer from '../components/footer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,11 +22,11 @@ const router = createRouter({
       name: 'RegistrationPage',
       component: RegistrationPage,
     },
-    {
-      path: '/header',
-      name: 'headr',
-      component: header,
-    },
+    // {
+    //   path: '/footer',
+    //   name: 'footer',
+    //   component: footer,
+    // },
     
     
     {
