@@ -128,7 +128,7 @@
                   </div>
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+                  <input type="password" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
               </div>
           </div>
           <div class="mt-9">
@@ -142,7 +142,7 @@
                   </div>
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+                  <input type="password" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
               </div>
           </div>
         
@@ -156,7 +156,7 @@
               </div>
               <div class="mt-2 ">
                   <input type="file" class="border-2 rounded-xl pl-3 pt-2 border-blue-300 w-13/13 md:h-12 relative" @change="handleFileUpload" accept="image/" >
-                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-8 py-2 rounded-md h-1/17  absolute top-126 left-240">Upload File</button>
+                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" cursor-pointer text-black px-8 py-2 rounded-md h-1/17  absolute top-126 left-240">Upload File</button>
               </div>
           </div>
           <div class="mt-9">
@@ -170,7 +170,7 @@
           </div>
         
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg" @click="registerUser">Submit</button>
+              <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" @click="registerUser">Submit</button>
           </div>
          
   </div>
