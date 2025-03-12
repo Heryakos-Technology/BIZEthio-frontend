@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12"  v-model="model.user.name">
+                <input type="text" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12"  v-model="model.user.name">
                
             </div>
         </div>
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="email" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
+                <input type="email" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="tel" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
+                <input type="tel" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
+                <input type="text" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
+                <input type="text" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
+                <input type="text" class="border-2  rounded-md pl-3 focus:outline-none  border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
@@ -158,7 +158,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.name">
+                <input type="text" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.name">
             </div>
         </div>
         <div class="mt-9">
@@ -172,7 +172,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
+                <input type="email" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -186,7 +186,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
+                <input type="tel" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -200,7 +200,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
+                <input type="text" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -214,7 +214,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
+                <input type="text" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -228,14 +228,14 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
+                <input type="text" class="pl-3 focus:outline-none  border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-            <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg" @click="registerUser">Continue</button>
+            <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
+            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
         </div>
 </div>
 </div>
