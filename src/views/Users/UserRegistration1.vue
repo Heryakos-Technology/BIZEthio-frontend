@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="model.user.name">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12"  v-model="model.user.name">
                
             </div>
         </div>
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
+                <input type="email" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
@@ -158,7 +158,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.name">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.name">
             </div>
         </div>
         <div class="mt-9">
@@ -172,7 +172,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.email">
             </div>
         </div>
         <div class="mt-9">
@@ -186,7 +186,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.phone_number">
             </div>
         </div>
         <div class="mt-9">
@@ -200,7 +200,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.city">
             </div>
         </div>
         <div class="mt-9">
@@ -214,7 +214,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.sub_city">
             </div>
         </div>
         <div class="mt-9">
@@ -228,7 +228,7 @@ your personal information.</p>
                 </div>
             </div>
             <div class="mt-2 ">
-                <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
+                <input type="text" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.location">
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
@@ -245,6 +245,7 @@ your personal information.</p>
 </div>
 
   </div>
+  <p>{{ errors }}</p>
   </div>
 </template>
 
@@ -264,7 +265,8 @@ data(){
                 sub_city:"",
                 location:""
             }
-        }
+        },
+        errors: {},
     }
 },
 mounted(){
@@ -273,7 +275,8 @@ mounted(){
 // })
 },
 methods:{
-    registerUser(){
+  async  registerUser(){
+     
         localStorage.setItem('name',this.model.user.name)
       
         localStorage.setItem('email',this.model.user.email)
@@ -283,8 +286,8 @@ methods:{
         localStorage.setItem('city',this.model.user.city)
        
         localStorage.setItem('sub_city',this.model.user.sub_city)
-        const parsedLocation = JSON.parse(this.model.user.location);
-        this.model.user.location = JSON.stringify(parsedLocation)
+        // const parsedLocation = JSON.parse(this.model.user.location);
+        // this.model.user.location = JSON.stringify(parsedLocation)
         localStorage.setItem('location',this.model.user.location)
         
 
