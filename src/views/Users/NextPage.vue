@@ -61,7 +61,7 @@
   </div>
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm " @click="registerUser">Submit</button>
+              <button @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Submit</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -170,7 +170,7 @@
           </div>
         
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" @click="registerUser">Submit</button>
+              <button @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
           </div>
          
   </div>
@@ -187,7 +187,8 @@
   
   <script>
   import axios from 'axios';
-  import CryptoJS from 'crypto-js'; // Import CryptoJS
+  import { login, register } from '../../auth';
+  // import CryptoJS from 'crypto-js'; // Import CryptoJS
   
   export default {
     data() {
@@ -215,6 +216,14 @@
       };
     },
     methods: {
+      async handleRegister() {
+      try {
+        await register(localStorage.getItem('email'), this.model.user.password);
+        alert('Registered successfully!');
+      } catch (error) {
+        alert(error.message);
+      }
+    },
       handleFileUpload(event) {
         this.file = event.target.files[0];
       },
