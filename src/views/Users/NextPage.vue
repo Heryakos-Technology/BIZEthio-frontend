@@ -1,0 +1,313 @@
+<template>
+    <div class="px-2 py-5">
+      <div class="bg-white rounded-sm pb-10 lg:hidden">
+        <img src="/public/logo.png" alt="" class="mx-auto pt-5">
+        <h1 class="text-center mt-8 text-xl">Create an account</h1>
+        <div class="flex justify-between w-1/3 mx-auto text-gray-400 mt-4 md:w-1/5 md:mx-auto">
+          <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>
+          <div><i class="fa-brands fa-twitter text-2xl"></i></div>
+          <div><i class="fa-brands fa-linkedin-in text-2xl"></i></div>
+        </div>
+        <p class="text-gray-400 text-center mt-4">Fill the form for registration</p>
+        <div class="w-2/3 mx-auto mt-10">
+          <div class="mt-9">
+            <div class="flex">
+              <div><p>Password</p></div>
+              <div><p class="text-red-400 mt-1 ml-1">*</p></div>
+            </div>
+            <div class="mt-2">
+              <input type="password" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+            </div>
+          </div>
+          <div class="mt-9">
+            <div class="flex">
+              <div><p>Confirm password</p></div>
+              <div><p class="text-red-400 mt-1 ml-1">*</p></div>
+            </div>
+            <div class="mt-2">
+              <input type="password" class="border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+            </div>
+          </div>
+          <div class="mt-9">
+            <div class="flex">
+              <div><p>Profile picture</p></div>
+             
+            </div>
+            <div class="mt-2 w-13/13">
+              <input type="file" class="border-2 rounded-md pl-3 pt-1 border-blue-300 w-13/13 md:h-12" @change="handleFileUpload" accept="image/*">
+              <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-6 py-1 rounded-sm mt-5 w-1/2 text-sm mx-auto">Upload File</button>
+            </div>
+            <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5  mx-auto pt-7 pr-4 mt-16 md:w-3/4">
+      <div class="flex justify-between">
+          <div class="w-1/3">
+              <img src="/public/logo.png" alt="">
+          </div>
+          <div class="md:w-2/3 ml-4"> 
+              <p class="">Privacy Information</p>
+          </div>
+      </div>
+      <div>
+  <p class="w-7/8 md:w-2/3 text-center mx-auto mt-4 text-sm">At [Business Name], 
+  we prioritize your privacy and
+  are committed to protecting 
+  your personal information.</p>
+      </div>
+  </div>
+  <div class="flex mt-10 md:w-1/2 md:mx-auto" >
+    <div class="mr-2 ">
+        <input type="checkbox" class="border border-cyan-300">
+    </div>
+    <div class="w-11/12"><p class=" text-sm">agree with terms and agreements</p></div>
+  </div>
+         
+          <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+              <button  @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Submit</button>
+          </div>
+          <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
+              <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
+          </div>
+      </div>
+      </div>
+           
+          </div>
+         
+         
+        </div>
+        
+      <div class="hidden lg:block w-2/3 mx-auto pb-20">
+  <div class="flex justify-between">
+  <div class="bg-[#BDE5F2] rounded-md px-10 pt-20 w-1/2 pb-20">
+  <div class="w-2/3 mx-auto">
+      <img src="/public/logolarge.png" alt="">
+  </div>
+  <h1 class="mt-20 text-center font-bold w-3/4">Elevate Your Business Online</h1>
+  <p class="text-sm w-10/11 mx-auto mt-16">An online platform designed to showcase your 
+  products and services, connect with customers,
+  and enhance your brand's visibility. This website 
+  serves as a critical tool for engaging with your
+  audience, providing essential information, and 
+  facilitating transactions. It typically includes 
+  features such as an about page, product listings, 
+  a blog for content marketing, customer
+  testimonials, and contact information to fost
+  er communication and trust.</p>
+  <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-5/6 pb-5 mx-auto pt-7 pr-4 mt-30">
+      <div class="flex justify-between">
+          <div class="w-1/3">
+              <img src="/public/logo.png" alt="">
+          </div>
+          <div class=""> 
+              <p class="">Privacy Information</p>
+          </div>
+      </div>
+      <div>
+  <p class="w-7/8 text-center mx-auto mt-4">At [Business Name], 
+  we prioritize your privacy and
+  are committed to protecting 
+  your personal information.</p>
+      </div>
+  </div>
+  </div>
+  <div class="bg-white rounded-md w-2/3 mx-auto px-10 pb-20">
+  <h1 class="mt-10 w-1/2 mx-auto text-xl text-center">Create and account</h1>
+  <div class="flex justify-between w-1/4 mx-auto text-gray-400 mt-7">
+      <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>
+      <div><i class="fa-brands fa-twitter text-2xl"></i></div>
+      <div><i class="fa-brands fa-linkedin-in text-2xl"></i></div>
+  </div>
+  <p class="w-1/2 text-center mx-auto mt-6 text-gray-400">fill the form for registration</p>
+  <div>
+      <div class="mt-4">
+              <div class="flex">
+                  <div>
+  
+                      <p>Password </p>
+                  </div>
+                  <div>
+                      <p class="text-red-400 mt-1 ml-1">*</p>
+                  </div>
+              </div>
+              <div class="mt-2 ">
+                  <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+              </div>
+          </div>
+          <div class="mt-9">
+              <div class="flex">
+                  <div>
+  
+                      <p>Confirm password </p>
+                  </div>
+                  <div>
+                      <p class="text-red-400 mt-1 ml-1">*</p>
+                  </div>
+              </div>
+              <div class="mt-2 ">
+                  <input type="text" class="border-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+              </div>
+          </div>
+        
+          <div class="mt-9">
+            <div class="flex">
+                  <div>
+  
+                      <p>Profile picture </p>
+                  </div>
+                  
+              </div>
+              <div class="mt-2 ">
+                  <input type="file" class="border-2 rounded-xl pl-3 pt-2 border-blue-300 w-13/13 md:h-12 relative" @change="handleFileUpload" accept="image/" >
+                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-8 py-2 rounded-md h-1/17  absolute top-126 left-240">Upload File</button>
+              </div>
+          </div>
+          <div class="mt-9">
+              <div class="flex w-3/4 mx-auto">
+                <div class="mt-2 ">
+                  <input type="checkbox" class="border-2 rounded-xl border-blue-300  md:h-12">
+              </div>
+              <p class="mt-4 ml-3">agree with terms and agreements</p>
+              </div>
+              
+          </div>
+        
+          <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+              <button  @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg" >Submit</button>
+          </div>
+         
+  </div>
+  </div>
+  <div>
+     
+  </div>
+  </div>
+  
+
+          </div>
+ 
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  import { login, register } from '../../auth';
+  import CryptoJS from 'crypto-js'; // Import CryptoJS
+  
+  export default {
+    data() {
+      return {
+        base_url: 'https://bizethio-backend-production.up.railway.app/api',
+        model: {
+          user: {
+            name: "",
+            email: "",
+            phone_number: "",
+            city: "",
+            sub_city: "",
+            location: "",
+            password: "",
+            password_confirmation: "",
+            verification_status: "unverified",
+            profile_picture_url: "", 
+            role: "user",
+            is_banned: 1,
+          }
+        },
+        file: null,
+        uploadPreset: 'ml_default',
+        cloudName: 'dzofoegwf',
+      };
+    },
+    methods: {
+      handleFileUpload(event) {
+        this.file = event.target.files[0];
+      },
+      async uploadFile() {
+        if (!this.file) return;
+  
+        const timestamp = Math.floor(Date.now() / 1000);
+        const params = {
+          timestamp,
+          upload_preset: this.uploadPreset,
+        };
+  
+        const { signature } = this.generateSignature(params);
+  
+        const formData = new FormData();
+        formData.append('file', this.file);
+        formData.append('upload_preset', this.uploadPreset);
+        formData.append('timestamp', timestamp);
+        formData.append('signature', signature);
+        formData.append('api_key', '734174595538154');
+  
+        try {
+  const response = await axios.post(`https://api.cloudinary.com/v1_1/${this.cloudName}/upload`, formData);
+  console.log('Upload response:', response.data.secure_url); // Log the response
+  this.model.user.profile_picture_url = response.data.secure_url; // Store the uploaded profile_picture_url URL
+} catch (error) {
+  console.error('Error uploading file:', error.response.data);
+}
+      },
+      generateSignature(params) {
+        const apiSecret = 'A5D7SF1aLxGmy_TUAao-iA5C3rM'; // Replace with your actual API secret
+        const sortedParams = Object.entries(params)
+          .sort()
+          .map(([key, value]) => `${key}=${value}`)
+          .join('&') + apiSecret;
+  
+        const signature = CryptoJS.SHA1(sortedParams).toString(CryptoJS.enc.Hex);
+        return { signature };
+      },
+      async handleRegister() {
+      try {
+        await register(localStorage.getItem('email'), this.model.user.password);
+        alert('Registered successfully!');
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+      async registerUser() {
+        const formData = new FormData();
+        formData.append('name', localStorage.getItem('name'));
+        formData.append('email', localStorage.getItem('email'));
+        formData.append('phone_number', localStorage.getItem('phone_number'));
+        formData.append('city', localStorage.getItem('city'));
+        formData.append('sub_city', localStorage.getItem('sub_city'));
+        const locationData = localStorage.getItem('location');
+        let parsedLocation;
+            try {
+                parsedLocation = JSON.parse(locationData);
+            } catch (error) {
+                console.error('Error parsing location data:', error);
+               
+            }
+            if (parsedLocation) {
+
+                formData.append('location', JSON.stringify(parsedLocation));
+            } else {
+                console.warn('No valid location data found to append.');
+            }
+        //formData.append('location', localStorage.getItem('location'));
+        formData.append('password', this.model.user.password);
+        formData.append('password_confirmation', this.model.user.password_confirmation);
+        formData.append('verification_status', this.model.user.verification_status);
+        formData.append('is_banned', this.model.user.is_banned);
+        formData.append('role', this.model.user.role);
+        formData.append('profile_picture_url', this.model.user.profile_picture_url); 
+  
+        try {
+          const response = await axios.post(`${this.base_url}/register`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          console.log('User created successfully', response.data);
+         
+        } catch (error) {
+          console.error('Error creating user:', error.response ? error.response.data.message : 'An error occurred. Please try again.');
+        }
+      },
+    },
+  };
+  </script>
+  
+  <style>
+  /* Add any necessary styles */
+  </style>
