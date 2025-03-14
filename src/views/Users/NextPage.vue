@@ -61,7 +61,9 @@
   </div>
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+
               <button @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Submit</button>
+
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -169,8 +171,9 @@
               
           </div>
         
-          <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+
               <button @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
+
           </div>
          
   </div>
@@ -188,7 +191,9 @@
   <script>
   import axios from 'axios';
   import { login, register } from '../../auth';
+
   // import CryptoJS from 'crypto-js'; // Import CryptoJS
+
   
   export default {
     data() {
@@ -205,7 +210,7 @@
             password: "",
             password_confirmation: "",
             verification_status: "unverified",
-            profile_picture_url: "", // Ensure this is correctly set after upload
+            profile_picture_url: "", 
             role: "user",
             is_banned: 1,
           }
@@ -263,6 +268,14 @@
         const signature = CryptoJS.SHA1(sortedParams).toString(CryptoJS.enc.Hex);
         return { signature };
       },
+      async handleRegister() {
+      try {
+        await register(localStorage.getItem('email'), this.model.user.password);
+        alert('Registered successfully!');
+      } catch (error) {
+        alert(error.message);
+      }
+    },
       async registerUser() {
         const formData = new FormData();
         formData.append('name', localStorage.getItem('name'));
@@ -270,13 +283,27 @@
         formData.append('phone_number', localStorage.getItem('phone_number'));
         formData.append('city', localStorage.getItem('city'));
         formData.append('sub_city', localStorage.getItem('sub_city'));
-        formData.append('location', localStorage.getItem('location'));
+        const locationData = localStorage.getItem('location');
+        let parsedLocation;
+            try {
+                parsedLocation = JSON.parse(locationData);
+            } catch (error) {
+                console.error('Error parsing location data:', error);
+               
+            }
+            if (parsedLocation) {
+
+                formData.append('location', JSON.stringify(parsedLocation));
+            } else {
+                console.warn('No valid location data found to append.');
+            }
+        //formData.append('location', localStorage.getItem('location'));
         formData.append('password', this.model.user.password);
         formData.append('password_confirmation', this.model.user.password_confirmation);
         formData.append('verification_status', this.model.user.verification_status);
         formData.append('is_banned', this.model.user.is_banned);
         formData.append('role', this.model.user.role);
-        formData.append('profile_picture_url', this.model.user.profile_picture_url); // Ensure this is set correctly
+        formData.append('profile_picture_url', this.model.user.profile_picture_url); 
   
         try {
           const response = await axios.post(`${this.base_url}/register`, formData, {
@@ -285,7 +312,7 @@
             }
           });
           console.log('User created successfully', response.data);
-          // Clear local storage and reset model values here
+         
         } catch (error) {
           console.error('Error creating user:', error.response ? error.response.data.message : 'An error occurred. Please try again.');
         }
