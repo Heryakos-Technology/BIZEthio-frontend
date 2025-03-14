@@ -13,7 +13,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" v-model="email" id="email" required>
+                  <input type="text" class="pl-3 border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" v-model="email" id="email" required>
                  
               </div>
           </div>
@@ -48,7 +48,7 @@
     <img src="/forgotdesktop.png" alt="" class="h-58">
 </div>
 <div class="w-2/3 mx-auto ml-5 mt-10">
-    <h1>Forgot Your Password?</h1>
+    <h1 class="font-bold">Forgot Your Password?</h1>
     <div class="mt-5">
               <div class="flex">
                   <div>
@@ -58,7 +58,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white"  v-model="email" id="email" required>
+                  <input type="text" class="pl-3 border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white"  v-model="email" id="email" required>
                  
               </div>
           </div>
@@ -76,11 +76,14 @@
               </div>
           </div> -->
           <div class=" w-3/4 mx-auto mt-6 ">
-              <button class="bg-cyan-500 text-white px-8 py-2 rounded-md " @click="sendResetEmail" >Send Reset Link</button>
+              <button  style="background: linear-gradient(to bottom left, #78C4DE 75%, #57B4D3 100%);" class=" text-white px-8 py-2 rounded-2xl w-10/11" @click="sendResetEmail" >Send Reset Link</button>
           </div>
-          <div>
+          <div class="mt-4 text-gray-400">
             <p v-if="message">{{ message }}</p>
       <p v-if="error">{{ error }}</p>
+          </div>
+          <div @click="backToSignIn">
+            <p class="text-center text-gray-400 mt-6 font-light cursor-pointer">Back to sign in</p>
           </div>
 </div>
 </div>
@@ -90,33 +93,46 @@
   </template>
   
   <script>
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { auth } from '../firebase'; 
-export default {
-  data() {
-    return {
-      email: '',
-      message: '',
-      error: '',
-    };
-  },
-  methods: {
-    async sendResetEmail() {
-      try {
-        await sendPasswordResetEmail(auth, this.email);
-        this.message = 'Password reset email sent! Check your inbox.';
-        this.error = '';
-      } catch (err) {
-        this.error = err.message;
-        this.message = '';
-      }
+  import { ref } from 'vue'; 
+  import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+  import { auth } from '../firebase';
+  import { useRouter } from 'vue-router'; 
+  
+  export default {
+    setup() {
+      const email = ref(''); 
+      const message = ref(''); 
+      const error = ref(''); 
+      const router = useRouter(); 
+  
+      const backToSignIn = () => {
+        router.push('/signin'); 
+      };
+  
+      const sendResetEmail = async () => {
+        try {
+          await sendPasswordResetEmail(auth, email.value); 
+          message.value = 'Password reset email sent! Check your inbox.';
+          error.value = '';
+        } catch (err) {
+          error.value = err.message; 
+          message.value = '';
+        }
+      };
+  
+      return {
+        email,
+        message,
+        error,
+        backToSignIn,
+        sendResetEmail,
+      };
     },
-  },
-};
+  };
   </script>
   
-  <style>
+  <style scoped>
   .container{
-    background-color: #E0F7FF;
+    background-color: #d4f1fb;
   }
   </style>

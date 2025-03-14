@@ -16,7 +16,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-1/2 md:h-12"  v-model="email">
+                  <input type="email" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -29,10 +29,10 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-1/2 md:h-12" v-model="password">
+                  <input type="password" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12" v-model="password">
               </div>
           </div>
-          <div class="mt-9 flex w-12/12  mx-auto">
+          <div class="mt-9 flex w-12/12  mx-auto font-light">
              
 
                  <div class="md:text-lg md:w-1/2 md:mx-auto ">
@@ -42,17 +42,17 @@
                  </div>
                  <div class=" mx-auto">
     
-                     <p class="text-cyan-500 text-lg">Remember me</p>
+                     <p class="text-cyan-500 text- cursor-pointer">Remember me</p>
                  </div>
                    </div>
              </div>
             <div class="w-11/10 mx-auto -mt-5">
 
-                <p class="text-cyan-500 mt-6  ">Forgot Password?</p>
+                <p class="text-cyan-500 mt-6  cursor-pointer">Forgot Password?</p>
             </div>
          </div>
          <div class="w-2/3 mx-auto mt-7">
-              <button  @click="() => { handleLogin(); handleLogin2(); }" class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-3xl ">Continue</button>
+              <button  @click="() => { handleLogin(); handleLogin2(); }" class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-xl ">Continue</button>
           </div>
           <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
@@ -69,7 +69,7 @@
   </div>
 
   <!-- Blue Diagonal Section -->
-  <div class="absolute right-0 top-0 pt-20 left-112 w-1/2 mx-auto h-full bg-blue-200 transform -skew-x-12">
+  <div class="absolute right-0 top-0 pt-20 left-112 w-1/2 mx-auto h-full bg-[#BDE5F2] transform -skew-x-12">
     <div class="w-2/3 mx-auto ">
         <img src="/public/logolarge.png" alt="" class=" pt-5 w-2/3 mx-auto -ml-8">
         <h1 class="mt-36  text-xl w-12/12 -ml-3 mx-auto">Welcome Back</h1>
@@ -101,7 +101,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
+                  <input type="email" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -115,7 +115,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
+                  <input type="password" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
               </div>
           </div>
       
@@ -174,7 +174,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
+                  <input type="email" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -188,7 +188,7 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
+                  <input type="password" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12" v-model="password">
               </div>
           </div>
       
@@ -236,81 +236,76 @@
   </template>
   
   <script>
-  import axios from 'axios'
-  import { login, register } from '../../auth';
+  import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router'; 
+  import axios from 'axios';
+  import { login } from '../../auth'; 
+  
   export default {
-  data(){
-      return{
-          base_url:'https://bizethio-backend-production.up.railway.app/api',
-            email:"",
-            password:"",
-            currentUser:""
-      }
-  },
-  mounted(){
-//     const token = localStorage.getItem('token');
-// if(token){
-//       axios.defaults.withCredentials = true
-//       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-// }
-  },
-  methods:{
-    async handleLogin2() {
-      try {
-        await login(this.email, this.password);
-        alert('Logged in successfully!');
-      } catch (error) {
-        alert(error.message);
-      }
-    },
- async handleLogin(){
-    try{
-            const response = await axios.post(`${this.base_url}/login`,{
-                email:this.email,
-                password:this.password
-            });
-            
-            const token = response.data.token; // Get the token
-      const user = response.data.user;   // Get user information
-
-      console.log('Token:', token);
-      console.log('User:', user);
-            console.log('token',response)
-            localStorage.setItem('token',token)
-
-            axios.defaults.headers.common['Authorization'] = `Bearer${token}`
-
-            if(token){
-                this.$router.push('/')
-            }
-           //this.getUser();
-           // this.signin = true
-           // localStorage.setItem('signin',this.signin)
-           // console.log('signin',this.signin)
-            // if (router) {
-            //   router.push('/');
-            //   console.log('redirect to home page')
-            // }
-            // // const router = useRouter()
-            // // this.redirectToHome(router)
-        }catch(res){
-            console.log(res)
+    setup() {
+      const router = useRouter(); // Initialize the router
+      const base_url = 'https://bizethio-backend-production.up.railway.app/api';
+      const email = ref('');
+      const password = ref('');
+      const currentUser = ref(''); // If you plan to use currentUser later
+  
+      onMounted(() => {
+        // Uncomment if you need to implement the commented out code
+        // const token = localStorage.getItem('token');
+        // if (token) {
+        //   axios.defaults.withCredentials = true;
+        //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        // }
+      });
+  
+      const handleLogin2 = async () => {
+        try {
+          await login(email.value, password.value);
+          alert('Logged in successfully!');
+        } catch (error) {
+          alert(error.message);
         }
- }
-  },
-  created(){
-    // const token = localStorage.getItem('token')
-   
-
-    // if (token) {
-    //   console.log('token', token)
-    //   axios.defaults.withCredentials = true
-    //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    // }
-  }
-  }
+      };
+  
+      const handleLogin = async () => {
+        try {
+          const response = await axios.post(`${base_url}/login`, {
+            email: email.value,
+            password: password.value,
+          });
+  
+          const token = response.data.token; 
+          const user = response.data.user;   
+          
+          console.log('Token:', token);
+          console.log('User:', user);
+          console.log('response:', response);
+          localStorage.setItem('token', token);
+  
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; 
+  
+        
+          if (token) {
+            console.log('Redirecting to home page...'); 
+            router.push('/'); 
+          }
+        } catch (error) {
+          console.error(error); 
+        }
+      };
+  
+      return {
+        base_url,
+        email,
+        password,
+        currentUser,
+        handleLogin2,
+        handleLogin,
+      };
+    },
+  };
   </script>
   
   <style>
-  
+ 
   </style>
