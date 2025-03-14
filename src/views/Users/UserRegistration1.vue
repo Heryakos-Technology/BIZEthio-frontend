@@ -97,10 +97,10 @@
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-            <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm " @click="registerUser">Continue</button>
+            <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
+            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
         </div>
     </div>
     </div>
@@ -110,8 +110,8 @@
 <div class="w-2/3 mx-auto">
     <img src="/public/logolarge.png" alt="">
 </div>
-<h1 class="mt-20 text-center font-bold w-3/4">Elevate Your Business Online</h1>
-<p class="text-sm w-10/11 mx-auto mt-16">An online platform designed to showcase your 
+<h1 class="mt-20 text-center font-bold w-4/5">Elevate Your Business Online</h1>
+<p class="text-sm w-12/11 mx-auto mt-16">An online platform designed to showcase your 
 products and services, connect with customers,
 and enhance your brand's visibility. This website 
 serves as a critical tool for engaging with your
@@ -122,11 +122,11 @@ a blog for content marketing, customer
 testimonials, and contact information to fost
 er communication and trust.</p>
 <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-5/6 pb-5 mx-auto pt-7 pr-4 mt-30">
-    <div class="flex justify-between">
-        <div class="w-1/3">
+    <div class="flex ">
+        <div class="w-1/3 ">
             <img src="/public/logo.png" alt="">
         </div>
-        <div class=""> 
+        <div class="ml-2"> 
             <p class="">Privacy Information</p>
         </div>
     </div>
@@ -232,10 +232,10 @@ your personal information.</p>
             </div>
         </div>
         <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-            <button class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg" @click="registerUser">Continue</button>
+            <button class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
+            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
         </div>
 </div>
 </div>
@@ -250,63 +250,41 @@ your personal information.</p>
 </template>
 
 <script>
-import axios from 'axios'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
-data(){
-    return{
-        base_url:'https://bizethio-backend-production.up.railway.app/api',
-        model:{
-            user:{
-                name:"",
-                email:"",
-                phone_number:"",
-                city:"",
-                sub_city:"",
-                location:""
-            }
-        },
-        errors: {},
-    }
-},
-mounted(){
-// axios.get(`${this.base_url}/users`).then((res)=>{
-//     console.log(res.data)
-// })
-},
-methods:{
-  async  registerUser(){
-     
-        localStorage.setItem('name',this.model.user.name)
-      
-        localStorage.setItem('email',this.model.user.email)
-      
-        localStorage.setItem('phone_number',this.model.user.phone_number)
-       
-        localStorage.setItem('city',this.model.user.city)
-       
-        localStorage.setItem('sub_city',this.model.user.sub_city)
-        // const parsedLocation = JSON.parse(this.model.user.location);
-        // this.model.user.location = JSON.stringify(parsedLocation)
-        localStorage.setItem('location',this.model.user.location)
-        
+  setup() {
+    const base_url = 'https://bizethio-backend-production.up.railway.app/api';
+    const model = ref({
+      user: {
+        name: '',
+        email: '',
+        phone_number: '',
+        city: '',
+        sub_city: '',
+        location: ''
+      }
+    });
 
-        this.$router.push('/next')
+    const router = useRouter();
 
-    },
-//    registerUser(){
-//         localStorage.setItem('name',this.name)
-//         localStorage.setItem('email',this.email)
-//         localStorage.setItem('phone_number',this.phone_number)
-//         localStorage.setItem('city',this.city)
-//         localStorage.setItem('sub_city',this.sub_city)
-//         localStorage.setItem('location',this.location)
-//     this.$router.push('/next')
-//    }
-}
-}
+    const registerUser = async () => {
+      localStorage.setItem('name', model.value.user.name);
+      localStorage.setItem('email', model.value.user.email);
+      localStorage.setItem('phone_number', model.value.user.phone_number);
+      localStorage.setItem('city', model.value.user.city);
+      localStorage.setItem('sub_city', model.value.user.sub_city);
+      localStorage.setItem('location', model.value.user.location);
+
+      router.push('/next');
+    };
+
+    return {
+      base_url,
+      model,
+      registerUser
+    };
+  }
+};
 </script>
-
-<style>
-
-</style>
