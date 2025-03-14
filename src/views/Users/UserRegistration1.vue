@@ -257,7 +257,7 @@ your personal information.</p>
 
   </div>
   <p>{{ errors }}</p>
-  </div>
+ 
 </template>
 
 <script>
