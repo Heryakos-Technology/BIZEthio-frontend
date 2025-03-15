@@ -1,15 +1,13 @@
-<template>
-  <div class=" w-full" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #BFECFC 48%, #EAFAFF 98%);">
-    <RouterView />
-  
-  </div>
-</template>
-
 <script setup>
-import MediaUpload from './components/MediaUpload.vue';
-
+import MediaUpload from "./components/MediaUpload.vue";
+import Header from "@/components/HomeView/Header.vue";
 </script>
 
-<style>
-/* Add any global styles here */
-</style>
+<template>
+  <Header />
+  <div
+    class="w-full bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff]"
+  >
+    <RouterView />
+  </div>
+</template>
