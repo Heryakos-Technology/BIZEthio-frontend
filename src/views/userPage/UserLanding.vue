@@ -62,13 +62,18 @@
                 <div class="bg-[#DCF2F8] h-76 lg:h-96  w-11/12 lg:mr-2 lg:w-11/12">
                     <img src="/kategna (2).png" alt="" class="rounded-br-4xl lg:w-full">
                     <p class="font-bold ml-2 h-6  text-xs mt-4 lg:text-lg">Kategna Restaurant</p>
-                    <p class="text-xs   mt-4  ml-2 h-26 lg:h-16  font-normal pr-1">Kategna provides an authentic Ethiopian experience, featuring shared dishes and unique spices that celebrate loyalty and friendship.</p>
-                    <div class="flex  ml-4 h-10">
-                        <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xl"></i>
-                        <div class="w-20 lg:ml-26 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
+                    <p class="text-xs   mt-4  ml-2 h-26 lg:h-26  font-normal pr-1">Kategna provides an authentic Ethiopian experience, featuring shared dishes and unique spices that celebrate loyalty and friendship.</p>
+                    <div class="flex md:-mt-4  ml-4 h-10">
+                        <i @click="openMapModal" class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xlcursor-pointer" ></i>
+                        <div class="w-20 lg:ml-26 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
                     </div>
+                    <MapModal
+      :visible="isMapVisible"
+      :mapSrc="mapSrc"
+      @close="closeMapModal"
+    />
                 </div>
             </div>
             <div class="rounded-t-lg">
@@ -277,16 +282,27 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import FooterPart from '@/components/FooterPart.vue'
+import MapModal from '@/components/MapModal.vue';
 export default {
 components:{
     Navbar,
-    FooterPart
+    FooterPart,
+    MapModal
 },
 data(){
     return{
-        
+              isMapVisible: false,
+      mapSrc: 'YOUR_GOOGLE_MAP_EMBED_URL'
     }
-}
+},
+methods: {
+    openMapModal() {
+      this.isMapVisible = true;
+    },
+    closeMapModal() {
+      this.isMapVisible = false;
+    },
+  },
 }
 </script>
 
