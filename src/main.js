@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { auth } from './firebase'; 
 import { onAuthStateChanged } from "firebase/auth";
+
 import App from './App.vue'
 import router from './router'
 
