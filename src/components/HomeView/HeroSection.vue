@@ -32,9 +32,9 @@
       </p>
     </div>
 
-    <div class="w-fit bg-[#1B7590]/80 p-1.5 rounded-4xl mx-auto">
+    <div class="w-fit bg-[#1B7590]/80 p-1.5 mt-6 rounded-4xl mx-auto">
       <div
-        class="w-full bg-primaryColor py-2 px-4 text-white rounded-4xl innerShadow innerShadow2"
+        class="innerShadow innerShadow2 w-full bg-primaryColor py-2 px-4 text-white rounded-4xl xl:px-5 2xl:px-7 2xl:py-3"
       >
         Start Your Journey
       </div>
