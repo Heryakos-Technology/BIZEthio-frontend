@@ -66,11 +66,12 @@
   </div>
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button  @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >Submit</button>
+              <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >Submit</button>
           </div>
-          <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
+          <!-- <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
-          </div>
+          </div> -->
+          <p class="text-gray-400 text-center" @click="()=>{this.$router.push('/signup')}">Back to previous page</p>
       </div>
       </div>
            
@@ -133,7 +134,7 @@
                   </div>
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+                  <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
               </div>
           </div>
           <div class="mt-9">
@@ -147,7 +148,7 @@
                   </div>
               </div>
               <div class="mt-2 ">
-                  <input type="text" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+                  <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
               </div>
           </div>
         
@@ -179,7 +180,8 @@
         
           <div class="mx-auto w-1/2 mt-4 md:w-1/3 md:mx-auto">
             <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
-              <button  @click="() => { registerUser(); handleRegister(); }" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
+              <button  @click="handleRegister" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
+              <p class="text-cyan-500 underline text-center w-12/11 mt-4 cursor-pointer" @click="()=>{this.$router.push('/signup')} ">Back to previous page</p>
           </div>
          
   </div>
@@ -199,6 +201,7 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { login, register } from '../../auth';
+import { useRouter } from 'vue-router';
 import CryptoJS from 'crypto-js'; // Import CryptoJS
 
 export default {
@@ -221,13 +224,14 @@ export default {
         is_banned: 1,
       }
     });
-    
+    const router = useRouter();
     const file = ref(null);
     const uploadPreset = 'ml_default';
     const cloudName = 'dzofoegwf';
     const errors = ref('');
     const uploaded = ref('');
     const checkboxMessage = ref('');
+    const registered = ref(false)
 
     const handleFileUpload = (event) => {
       file.value = event.target.files[0];
@@ -274,68 +278,64 @@ export default {
       return { signature };
     };
 
+   
+
     const handleRegister = async () => {
-      const checkbox = document.getElementById('myCheckbox');
-      if (checkbox.checked) {
-        try {
-          await register(localStorage.getItem('email'), model.value.user.password);
-          alert('Registered successfully on Firebase!');
-        } catch (error) {
-          alert(error.message);
-        }
-      } else {
-        checkboxMessage.value = "Please agree to the terms and agreements to proceed";
-      }
-    };
+  const checkbox = document.getElementById('myCheckbox');
+  if (!checkbox.checked) {
+    checkboxMessage.value = "Please agree to the terms and agreements to proceed";
+    return;
+  }
 
-    const registerUser = async () => {
-      const checkbox = document.getElementById('myCheckbox');
-      if (checkbox.checked) {
-        const formData = new FormData();
-        formData.append('name', localStorage.getItem('name'));
-        formData.append('email', localStorage.getItem('email'));
-        formData.append('phone_number', localStorage.getItem('phone_number'));
-        formData.append('city', localStorage.getItem('city'));
-        formData.append('sub_city', localStorage.getItem('sub_city'));
-        
-        const locationData = localStorage.getItem('location');
-        let parsedLocation;
-        try {
-          parsedLocation = JSON.parse(locationData);
-        } catch (error) {
-          console.error('Error parsing location data:', error);
-        }
-        if (parsedLocation) {
-          formData.append('location', JSON.stringify(parsedLocation));
-        } else {
-          console.warn('No valid location data found to append.');
-        }
-        
-        formData.append('password', model.value.user.password);
-        formData.append('password_confirmation', model.value.user.password_confirmation);
-        formData.append('verification_status', model.value.user.verification_status);
-        formData.append('is_banned', model.value.user.is_banned);
-        formData.append('role', model.value.user.role);
-        formData.append('profile_picture_url', model.value.user.profile_picture_url);
-  
-        try {
-          const response = await axios.post(`${base_url}/register`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-          console.log('User created successfully', response.data);
-          router.push('/signin');
-        } catch (error) {
-          console.error('Error creating user:', error.response ? error.response.data.message : 'An error occurred. Please try again.');
-          errors.value = error.response.data.message;
-          console.log('errors', errors.value);
-        }
-      } else {
-        checkboxMessage.value = "Please agree to the terms and agreements to proceed";
-      }
-    };
+  checkboxMessage.value = '';
+  const formData = new FormData();
+  formData.append('name', localStorage.getItem('name'));
+  formData.append('email', localStorage.getItem('email'));
+  formData.append('phone_number', localStorage.getItem('phone_number'));
+  formData.append('city', localStorage.getItem('city'));
+  formData.append('sub_city', localStorage.getItem('sub_city'));
 
+  const locationData = localStorage.getItem('location');
+  let parsedLocation;
+  try {
+    parsedLocation = JSON.parse(locationData);
+  } catch (error) {
+    console.error('Error parsing location data:', error);
+  }
+  if (parsedLocation) {
+    formData.append('location', JSON.stringify(parsedLocation));
+  } else {
+    console.warn('No valid location data found to append.');
+  }
+
+  formData.append('password', model.value.user.password);
+  formData.append('password_confirmation', model.value.user.password_confirmation);
+  formData.append('verification_status', model.value.user.verification_status);
+  formData.append('is_banned', model.value.user.is_banned);
+  formData.append('role', model.value.user.role);
+  formData.append('profile_picture_url', model.value.user.profile_picture_url);
+
+  try {
+    const response = await axios.post(`${base_url}/register`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    console.log('User created successfully', response.data);
+    registered.value = true;
+
+    // Proceed to Firebase registration
+    await register(localStorage.getItem('email'), model.value.user.password);
+    alert('Registered successfully on Firebase!');
+    
+    // Redirect after successful registration
+    router.push('/signin');
+  } catch (error) {
+    console.error('Error creating user:', error.response ? error.response.data.message : 'An error occurred. Please try again.');
+    errors.value = error.response.data.message;
+    console.log('errors', errors.value);
+  }
+};
     return {
       base_url,
       model,
@@ -348,7 +348,7 @@ export default {
       handleFileUpload,
       uploadFile,
       handleRegister,
-      registerUser,
+      // handleRegister,
     };
   },
 };

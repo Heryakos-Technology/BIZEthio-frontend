@@ -100,7 +100,7 @@
             <button class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
+            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer underline" @click="()=>{this.$router.push('/signin')}">Login</span> </p>
         </div>
     </div>
     </div>
@@ -139,7 +139,7 @@ your personal information.</p>
 </div>
 </div>
 <div class="bg-white rounded-md w-2/3 mx-auto px-10 pb-20">
-<h1 class="mt-10 w-1/2 mx-auto text-xl text-center">Create and account</h1>
+<h1 class="mt-10 w-1/2 mx-auto text-xl text-center">Create an account</h1>
 <div class="flex justify-between w-1/4 mx-auto text-gray-400 mt-7">
     <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>
     <div><i class="fa-brands fa-twitter text-2xl"></i></div>
@@ -235,7 +235,7 @@ your personal information.</p>
             <button class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer" @click="registerUser">Continue</button>
         </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-            <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
+            <p class="md:text-lg text-sm text-center lg:text-sm"> Do you have an account ? <span class="text-cyan-500 cursor-pointer underline" @click="()=>{this.$router.push('/signin')}">Login</span> </p>
         </div>
 </div>
 </div>

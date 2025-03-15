@@ -38,7 +38,7 @@
                  <div class="md:text-lg md:w-1/2 md:mx-auto ">
                    <div class="flex w-2/3 mx-auto">
                        <div class="">
-                   <input type="radio" class= " border border-cyan-400" >
+                   <input type="radio" class= " border border-cyan-400"  id="rememberMe">
                  </div>
                  <div class=" mx-auto">
     
@@ -46,16 +46,16 @@
                  </div>
                    </div>
              </div>
-            <div class="w-11/10 mx-auto -mt-5">
+            <div class="w-11/10 mx-auto -mt-5" >
 
-                <p class="text-cyan-500 mt-6  cursor-pointer">Forgot Password?</p>
+                <p class="text-cyan-500 mt-6  cursor-pointer" @click="()=>{this.$router.push('/forgot')} ">Forgot Password?</p>
             </div>
          </div>
          <div class="w-2/3 mx-auto mt-7">
               <button  @click="() => { handleLogin(); handleLogin2(); }" class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-xl ">Continue</button>
           </div>
           <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
-              <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
+              <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4 lg:text-sm"> Don't have an account ? <span class="text-cyan-500 cursor-pointer" @click="()=>{this.$router.push('/signup')}">Sign Up</span> </p>
               <p class="text-gray-400 text-sm mt-7 w-11/11 mx-auto">Or connect with social media</p>
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-5">
@@ -124,21 +124,21 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" >
+                <input type="radio" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 
                   <p class="text-cyan-500 w-12/11">Remember me</p>
               </div>
                 </div>
-                <p class="text-cyan-500 mt-6  w-12/11">Forgot Password?</p>
+                <span class="text-cyan-500 mt-6  w-12/11 cursor-pointer" @click="()=>{this.$router.push('/forgot')} ">Forgot Password?</span>
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
               <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-              <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
+              <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 cursor-pointer" @click="()=>{this.$router.push('/signup')}">Sign Up</span> </p>
               <p class="text-gray-400 text-sm mt-2 w-10/11 text-center">Or connect with social media</p>
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
@@ -174,7 +174,7 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="email" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
+                  <input type="emailx" class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"  v-model="email">
                  
               </div>
           </div>
@@ -197,21 +197,21 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" >
+                <input type="radio" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 
                   <p class="text-cyan-500 w-12/11">Remember me</p>
               </div>
                 </div>
-                <p class="text-cyan-500 mt-6  w-12/11">Forgot Password?</p>
+                <span class="text-cyan-500 mt-6  w-12/11" @click="()=>{this.$router.push('/forgot')} ">Forgot Password?</span>
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
               <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-              <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Login</span> </p>
+              <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Sign Up</span> </p>
               <p class="text-gray-400 text-sm mt-2 w-10/11 text-center">Or connect with social media</p>
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
@@ -247,17 +247,37 @@
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
       const email = ref('');
       const password = ref('');
-      const currentUser = ref(''); // If you plan to use currentUser later
-  
-      onMounted(() => {
-        // Uncomment if you need to implement the commented out code
-        // const token = localStorage.getItem('token');
-        // if (token) {
-        //   axios.defaults.withCredentials = true;
-        //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        // }
-      });
-  
+      const currentUser = ref('');
+      const isRemembered = ref(false); // Reactive reference to store the state
+
+// Function to set the initial state from localStorage
+const setRememberMeState = () => {
+  const rememberedValue = localStorage.getItem('rememberMe'); // Get value from localStorage
+  isRemembered.value = rememberedValue === 'true'; // Update reactive state
+  const rememberMe = document.getElementById('rememberMe');
+  if (rememberMe) {
+    rememberMe.checked = isRemembered.value; // Set the radio button's checked state
+  }
+};
+
+// Function to update localStorage when the radio button changes
+const handleRememberMeChange = () => {
+  localStorage.setItem('rememberMe', isRemembered.value); // Save the state to localStorage
+};
+
+// Lifecycle hook to run code after the component is mounted
+onMounted(() => {
+  setRememberMeState(); // Set the initial state when component mounts
+
+  const rememberMe = document.getElementById('rememberMe');
+  if (rememberMe) {
+    rememberMe.addEventListener('change', () => {
+      isRemembered.value = rememberMe.checked; // Update reactive state on change
+      handleRememberMeChange(); // Update localStorage
+    });
+  }
+});
+
       const handleLogin2 = async () => {
         try {
           await login(email.value, password.value);
@@ -301,6 +321,7 @@
         currentUser,
         handleLogin2,
         handleLogin,
+        isRemembered
       };
     },
   };
