@@ -66,7 +66,15 @@
   </div>
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+
               <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >Submit</button>
+
+              
+
+          </div>
+          <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
+              <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 ">Login</span> </p>
+
           </div>
           <!-- <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center"> Do you have an account ? <span class="text-cyan-500 cursor-pointer">Login</span> </p>
@@ -134,7 +142,9 @@
                   </div>
               </div>
               <div class="mt-2 ">
+
                   <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+
               </div>
           </div>
           <div class="mt-9">
@@ -148,7 +158,9 @@
                   </div>
               </div>
               <div class="mt-2 ">
+
                   <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+
               </div>
           </div>
         
@@ -161,8 +173,10 @@
                   
               </div>
               <div class="mt-2 ">
+
                   <input type="file" class="border focus:outline-none pl-3 er-2 rounded-xl  pt-2 border-blue-300 w-13/13 md:h-12 relative" @change="handleFileUpload" accept="image/" >
                   <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-8 py-2 rounded-md h-1/17  absolute top-126 left-240 cursor-pointer">Upload File</button>
+
               </div>
           </div>
           <p class="text-center mt-5 text-cyan-500">{{ uploaded }}</p>
@@ -178,10 +192,12 @@
               
           </div>
         
+
           <div class="mx-auto w-1/2 mt-4 md:w-1/3 md:mx-auto">
             <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
               <button  @click="handleRegister" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
               <p class="text-cyan-500 underline text-center w-12/11 mt-4 cursor-pointer" @click="()=>{this.$router.push('/signup')} ">Back to previous page</p>
+
           </div>
          
   </div>
@@ -191,13 +207,12 @@
   </div>
   </div>
   
-
-          </div>
  
 
   </template>
   
   <script>
+
 import axios from 'axios';
 import { ref } from 'vue';
 import { login, register } from '../../auth';
@@ -255,6 +270,7 @@ export default {
       formData.append('timestamp', timestamp);
       formData.append('signature', signature);
       formData.append('api_key', '734174595538154');
+
 
       try {
         const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData);
