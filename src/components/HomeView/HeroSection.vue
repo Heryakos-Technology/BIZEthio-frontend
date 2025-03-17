@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import HeroImage from "/images/Hero_Image.png";
+</script>
 
 <template>
   <div class="min-h-screen">
@@ -39,6 +41,8 @@
         Start Your Journey
       </div>
     </div>
+
+    <div class="bg-url(``)"></div>
   </div>
 </template>
 <style scoped>
