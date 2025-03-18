@@ -5,7 +5,7 @@ import HeroImage from "/images/Hero_Image.png";
 <template>
   <div class="min-h-screen">
     <div
-      class="text-center text-2xl space-y-2 font-semibold px-2 xs:text-3xl max-w-[425px] mx-auto sm:max-w-[640px] sm:text-5xl md:mt-16 lg:max-w-[900px] lg:text-6xl lg:space-y-3 xl:max-w-[1120px] xl:text-7xl xl:mt-20 2xl:text-8xl 2xl:space-y-5"
+      class="text-center text-2xl space-y-2 font-semibold px-2 xs:text-3xl max-w-[425px] mx-auto sm:max-w-[640px] sm:text-5xl md:mt-6 lg:max-w-[900px] lg:text-6xl lg:space-y-3 xl:max-w-[1120px] xl:text-7xl xl:mt-8 2xl:mt-10 2xl:text-8xl 2xl:space-y-5"
     >
       <h1 class="">Empower Your Business Discovery With</h1>
       <div
@@ -42,7 +42,29 @@ import HeroImage from "/images/Hero_Image.png";
       </div>
     </div>
 
-    <div class="bg-url(``)"></div>
+    <div
+      class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px]"
+      :style="{ backgroundImage: `url(${HeroImage})` }"
+    ></div>
+
+    <p class="">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, maxime
+      voluptatem ex tempore aut harum. Esse iste magnam excepturi ducimus
+      dolore! Alias soluta at eum obcaecati vitae consequatur molestiae? Nobis?
+      Enim quidem ullam quo harum culpa corporis rerum, nostrum neque sint! Amet
+      recusandae, delectus, eveniet laudantium qui est optio mollitia quia alias
+      suscipit, repudiandae beatae quas? Voluptatem blanditiis accusamus
+      temporibus! Culpa fuga facilis minima tempore qui laboriosam iure ipsa
+      veritatis, sapiente temporibus omnis officia aperiam sequi debitis,
+      placeat dicta facere nesciunt quasi doloribus quia fugiat nostrum quod ex.
+      Vero, sapiente? Accusamus minus corporis nostrum natus animi ipsam nam
+      deleniti saepe ea velit facilis magni cum autem voluptate in laborum
+      magnam doloribus, impedit nesciunt! Perferendis consequatur sed tempore
+      animi, placeat explicabo. Quam consequatur explicabo hic aspernatur
+      voluptatibus, dolore praesentium ea est perspiciatis, repellendus magnam
+      numquam totam maiores maxime non modi iusto porro aperiam impedit
+      provident adipisci laboriosam laudantium reiciendis? Possimus, esse?
+    </p>
   </div>
 </template>
 <style scoped>
