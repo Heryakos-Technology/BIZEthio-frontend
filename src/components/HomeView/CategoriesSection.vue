@@ -51,7 +51,7 @@ const categories = [
 
 <template>
   <div
-    class="-translate-y-[70px] pb-16 xs:translate-y-0 md:mt-8 px-2 lg:mt-32 xl:max-w-[1200px] mx-auto"
+    class="-translate-y-[70px] pb-4 xs:translate-y-0 md:mt-8 px-2 lg:mt-32 xl:max-w-[1200px] mx-auto"
   >
     <h1 class="text-primaryColor text-lg font-bold md:text-center md:text-3xl">
       Browse By Categories
