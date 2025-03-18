@@ -12,7 +12,7 @@ const items = [
     image: addisCafeImage,
     rating: 4.7,
     category: "Restaurants & Cafes",
-    location: "Bole, Addis Ababa, Ethiopia",
+    location: "Bole, Addis Ababa",
     hours: "Mon-Sun, 7 AM - 9 PM",
   },
   {
@@ -20,7 +20,7 @@ const items = [
     image: ethioFashionImage,
     rating: 4.0,
     category: "Retail Shops",
-    location: "Piassa, Addis Ababa, Ethiopia",
+    location: "Piassa, Addis Ababa",
     hours: "Mon-Sat, 9 AM - 7 PM",
   },
   {
@@ -28,7 +28,7 @@ const items = [
     image: sabaSalonImage,
     rating: 4.9,
     category: "Service Providers",
-    location: "Kazanchis, Addis Ababa, Ethiopia",
+    location: "Kazanchis, Addis Ababa",
     hours: "Tue-Sun, 10 AM - 8 PM",
   },
   {
@@ -36,7 +36,7 @@ const items = [
     image: bolePharmacyImage,
     rating: 4.5,
     category: "Health & Wellness",
-    location: "Bole Medhanialem, Addis Ababa, Ethiopia",
+    location: "Bole Medhanialem, Addis Ababa",
     hours: "Mon-Sun, 8 AM - 10 PM",
   },
   {
@@ -44,7 +44,7 @@ const items = [
     image: horizonHotelImage,
     rating: 4.6,
     category: "Hotels & Accommodations",
-    location: "Mexico Square, Addis Ababa, Ethiopia",
+    location: "Mexico Square, Addis Ababa",
     hours: "24/7",
   },
   {
@@ -52,7 +52,7 @@ const items = [
     image: unityAutoImage,
     rating: 4.4,
     category: "Automotive Services",
-    location: "Arat Kilo, Addis Ababa, Ethiopia",
+    location: "Arat Kilo, Addis Ababa",
     hours: "Mon-Sat, 8 AM - 6 PM",
   },
 ];
@@ -76,17 +76,21 @@ function generateStars(rating) {
 </script>
 
 <template>
-  <div class="px-4">
-    <h1 class="text-primaryColor text-lg font-bold md:text-center md:text-3xl">
-      For You
-    </h1>
-    <div class="grid gap-y-8 place-items-center">
-      <div v-for="(item, index) in items" :key="index" class="bg-white">
+  <div class="px-4 xl:max-w-[1200px] mx-auto sm:mt-16">
+    <h1 class="text-primaryColor text-lg font-bold md:text-3xl">For You</h1>
+    <div
+      class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
+    >
+      <div
+        v-for="(item, index) in items"
+        :key="index"
+        class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
+      >
         <div
-          class="w-full h-full bg-cover"
+          class="w-full h-[250px] bg-cover rounded-t-xl"
           :style="{ backgroundImage: `url(${item.image})` }"
         ></div>
-        <div class="">
+        <div class="mt-3">
           <div class="flex">
             <div
               v-for="(star, index) in generateStars(item.rating)"
@@ -128,7 +132,38 @@ function generateStars(rating) {
             <p class="mx-3">({{ item.rating }})</p>
           </div>
           <h1 class="font-semibold">{{ item.name }}</h1>
-          <div class=""></div>
+          <div class="flex gap-x-2 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-5"
+              viewBox="0 0 256 256"
+            >
+              <path
+                d="M232,136.66A104.12,104.12,0,1,1,119.34,24,8,8,0,0,1,120.66,40,88.12,88.12,0,1,0,216,135.34,8,8,0,0,1,232,136.66ZM120,72v56a8,8,0,0,0,8,8h56a8,8,0,0,0,0-16H136V72a8,8,0,0,0-16,0Zm40-24a12,12,0,1,0-12-12A12,12,0,0,0,160,48Zm36,24a12,12,0,1,0-12-12A12,12,0,0,0,196,72Zm24,36a12,12,0,1,0-12-12A12,12,0,0,0,220,108Z"
+              ></path>
+            </svg>
+            <p class="">{{ item.hours }}</p>
+          </div>
+
+          <div class="flex gap-x-2 text-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-5"
+              viewBox="0 0 256 256"
+            >
+              <path
+                d="M200,224H150.54A266.56,266.56,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25a88,88,0,0,0-176,0c0,31.4,14.51,64.68,42,96.25A266.56,266.56,0,0,0,105.46,224H56a8,8,0,0,0,0,16H200a8,8,0,0,0,0-16ZM56,104a72,72,0,0,1,144,0c0,57.23-55.47,105-72,118C111.47,209,56,161.23,56,104Zm112,0a40,40,0,1,0-40,40A40,40,0,0,0,168,104Zm-64,0a24,24,0,1,1,24,24A24,24,0,0,1,104,104Z"
+              ></path>
+            </svg>
+            <p class="text-nowrap">{{ item.category }}</p>
+            <p class="">{{ item.location }}</p>
+          </div>
+
+          <div
+            class="bg-primaryColor w-32 flex mt-5 rounded-lg text-white cursor-pointer items-center justify-center py-2"
+          >
+            View Details
+          </div>
         </div>
       </div>
     </div>
