@@ -34,7 +34,7 @@ import HeroImage from "/images/Hero_Image.png";
       </p>
     </div>
 
-    <div class="w-fit bg-[#1B7590]/80 p-1.5 mt-6 rounded-4xl mx-auto">
+    <div class="w-fit bg-[#1B7590]/80 p-1.5 my-6 rounded-4xl mx-auto">
       <div
         class="innerShadow innerShadow2 w-full bg-primaryColor py-2 px-4 text-white rounded-4xl xl:px-5 2xl:px-7 2xl:py-3"
       >
@@ -46,25 +46,6 @@ import HeroImage from "/images/Hero_Image.png";
       class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px]"
       :style="{ backgroundImage: `url(${HeroImage})` }"
     ></div>
-
-    <p class="">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, maxime
-      voluptatem ex tempore aut harum. Esse iste magnam excepturi ducimus
-      dolore! Alias soluta at eum obcaecati vitae consequatur molestiae? Nobis?
-      Enim quidem ullam quo harum culpa corporis rerum, nostrum neque sint! Amet
-      recusandae, delectus, eveniet laudantium qui est optio mollitia quia alias
-      suscipit, repudiandae beatae quas? Voluptatem blanditiis accusamus
-      temporibus! Culpa fuga facilis minima tempore qui laboriosam iure ipsa
-      veritatis, sapiente temporibus omnis officia aperiam sequi debitis,
-      placeat dicta facere nesciunt quasi doloribus quia fugiat nostrum quod ex.
-      Vero, sapiente? Accusamus minus corporis nostrum natus animi ipsam nam
-      deleniti saepe ea velit facilis magni cum autem voluptate in laborum
-      magnam doloribus, impedit nesciunt! Perferendis consequatur sed tempore
-      animi, placeat explicabo. Quam consequatur explicabo hic aspernatur
-      voluptatibus, dolore praesentium ea est perspiciatis, repellendus magnam
-      numquam totam maiores maxime non modi iusto porro aperiam impedit
-      provident adipisci laboriosam laudantium reiciendis? Possimus, esse?
-    </p>
   </div>
 </template>
 <style scoped>
