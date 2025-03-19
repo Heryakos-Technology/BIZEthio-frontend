@@ -7,18 +7,17 @@
   <script setup>
   import { AdvancedImage } from '@cloudinary/vue';
   import { Cloudinary } from '@cloudinary/url-gen';
-  
-  // Create a Cloudinary instance
+
   const cld = new Cloudinary({
     cloud: {
-      cloudName: 'demo', // Replace 'demo' with your actual cloud name
+      cloudName: 'demo', 
     },
   });
   
-  // Create an image instance
-  const myImg = cld.image('docs/models'); // Replace 'docs/models' with your actual public ID
+
+  const myImg = cld.image('docs/models'); 
   </script>
   
   <style scoped>
-  /* Add any styles specific to your CloudImage component here */
+
   </style>
