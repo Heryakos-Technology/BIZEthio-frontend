@@ -1,9 +1,16 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import CallToActionSection from "@/components/HomeView/CallToActionSection.vue";
+import CategoriesSection from "@/components/HomeView/CategoriesSection.vue";
+import ForYourSection from "@/components/HomeView/ForYourSection.vue";
+import Header from "@/components/HomeView/Header.vue";
+import HeroSection from "@/components/HomeView/HeroSection.vue";
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="pt-[90px]">
+    <HeroSection />
+    <CategoriesSection />
+    <ForYourSection />
+    <CallToActionSection />
+  </div>
 </template>
