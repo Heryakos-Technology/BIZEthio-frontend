@@ -27,14 +27,18 @@
                     </div>
                 </div>
             </div>
-            <div class="font-light lg:font-normal lg:w-1/3 lg:-ml-96 lg:text-lg">
+
+            <div class="font-light lg:font-normal lg:text-gray-200 lg:w-1/3 lg:-ml-96 lg:text-lg">
+
                 <p class="text-center mt-4">ADDRESS</p>
                 <p class="text-center mt-4">123 Tech Avenue</p>
                 <p class="text-center mt-4">Innovation City, IC 45678</p>
             </div>
         </div>
         <div>
-            <p class="text-center mt-8">© 2025 Company Name. All rights reserved.</p>
+
+            <p class="text-center mt-8 text-[12px]">© 2025 BIZEthio. All rights reserved.</p>
+
         </div>
         </div>
         
