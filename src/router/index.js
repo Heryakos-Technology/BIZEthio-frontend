@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import RegistrationPage from '../views/RegistrationPage.vue';
 import UserRegistration1 from '../views/Users/UserRegistration1.vue';
@@ -11,7 +11,7 @@ import UserLanding from '@/views/userPage/UserLanding.vue';
 import UserProfile from '@/views/userPage/UserProfile.vue';
 
 const router = createRouter({
-  history: createWebHistory('/BIZEthio-frontend/'), 
+  history: createWebHashHistory(), 
   routes: [
     {
       path: '/',
