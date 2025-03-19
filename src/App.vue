@@ -1,6 +1,7 @@
 <script setup>
 import MediaUpload from "./components/MediaUpload.vue";
 import Header from "@/components/HomeView/Header.vue";
+import Footer from "@/components/Footer.vue";
 </script>
 
 <template>
@@ -10,4 +11,5 @@ import Header from "@/components/HomeView/Header.vue";
   >
     <RouterView />
   </div>
+  <Footer />
 </template>
