@@ -6,7 +6,7 @@ import RegistrationPage from '../views/RegistrationPage.vue'
 import UserRegistration1 from '../views/Users/UserRegistration1.vue'
 import NextPage from '../views/Users/NextPage.vue'
 import SignIn from '../views/Users/SignIn.vue'
-// import AboutView from '@/views/AboutView.vue'
+
 import EditProfile from '@/views/userPage/EditProfile.vue'
 import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
@@ -66,11 +66,7 @@ const router = createRouter({
       component: EditProfile,
     },
 
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   component: AboutView
-    // },
+
   ],
 })
 
