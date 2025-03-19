@@ -25,19 +25,13 @@
                                 <p class="mb-3">Subcity</p>
                                 <p class="mb-3">Location</p>
                             </div>
-                            <div class="text-[12px] w-5/6 font-normal text-gray-100 ml-5 md:text-[16px]">
-                                <p class="">Selam Belete</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
-                                <p class="">not_realemail@gmail.com</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
-                                <p class="">+251 9 323232</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
-                                <p class="">Addis Abeba</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
-                                <p class="">Megenagna</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
-                                <p class="">Megenagna Square</p>
-                                <div class="w-full -ml-4 mb-2 h-0.5 bg-gray-300 rounded-full"></div>
+                            <div class="text-[12px] w-5/6 font-normal text-gray-100 -mt-4 ml-5 md:text-[16px]">
+                                <input type="text" v-model="name" class="border-b-2 w-56 outline-none h-9 "/>
+                                <input type="text" v-model="email" class="border-b-2 w-56 outline-none h-9 "/>
+                                <input type="text" v-model="phone_number" class="border-b-2 w-56 outline-none h-9"/>
+                                <input type="text" v-model="city" class="border-b-2 w-56 outline-none h-9"/>
+                                <input type="text" v-model="sub_city" class="border-b-2 w-56 outline-none h-9"/>
+                                <input type="text" v-model="location" class="border-b-2 w-56 outline-none h-9"/>
                             </div>
                         </div>
                     </div>
