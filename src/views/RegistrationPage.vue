@@ -33,7 +33,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.description" type="textArea"
-        class="w-80 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4 md:p-2">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -159,7 +159,7 @@
         Upload
       </button>
       <div v-if="imageUrl" class="mt-4">
-        <h3>Uploaded Image:</h3>
+
         <img :src="imageUrl" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md" />
       </div>
     </div>
@@ -232,7 +232,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.owner_name" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -241,7 +241,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.name" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -251,7 +251,7 @@
               <p class="">Description</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <!-- <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md"> -->
+            <!-- <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"> -->
             <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
               class="border-2 border-[#60b5e6] rounded-md w-11/12"></textarea>
           </div>
@@ -263,7 +263,7 @@
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
               <input v-model="companies.contact_phone" type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
             </div>
 
             <div class="px-4  mt-4  mx-auto">
@@ -273,7 +273,7 @@
               </div>
 
               <select name="category" v-model="companies.category_id"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
                 <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
                 </option>
               </select>
@@ -288,7 +288,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.contact_email" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
@@ -296,7 +296,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password" type="password"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -309,7 +309,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password_confirmation" type="password"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -318,7 +318,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.operating_hours" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -330,7 +330,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <select name="country" v-model="companies.country"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
               <option value="">Select country</option>
               <option v-for="country in countries" :key="country.id" :value="country.name"
                 class="border-[#84d2ffb7] rounded-lg mt-2">
@@ -345,7 +345,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.address" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -357,7 +357,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.region" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
@@ -365,7 +365,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.city" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -378,42 +378,40 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.license_url" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4 mt-6 w-11/12 mx-auto">
             <div class="flex">
               <p>Website</p>
             </div>
             <input v-model="companies.website" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" />
+              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
           </div>
         </div>
 
         <div class="px-4 mt-4 w-1/2 ">
-          <div class="flex">
+          <div class="flex mb-2">
             <p>Image</p>
           </div>
-          <input v-model="companies.images" type="text"  class="w-11/12  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload images" readonly />
-          <input type="file" @change="handleFileUpload" class="mt-2" multiple />
-          
+
+          <input @change="handleFileUpload" multiple type="file"
+            class="cursor-pointer w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+          <input v-model="companies.images" type="text"
+            class="w-11/12  hidden  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+            placeholder="Upload images" readonly />
           <div v-if="imageUrl && imageUrl.length" class="mt-4">
-            <h3>Uploaded Images:</h3>
-            <!-- <div v-for="(url, index) in imageUrl" :key="index">
-              <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
-            </div> -->
-         
+          </div>
         </div>
-       
 
-      </div>
 
-      <button @click="uploadImage" class="mt-2 ml-4 bg-[#409cd0] text-white rounded-md px-4 py-2">Upload</button>
+        <button :disabled="isButtonDisabled" @click="uploadImage"
+          class="cursor-pointer mt-2 ml-4 bg-[#409cd0] text-white rounded-md px-4 py-2"><span>Upload</span> </button>
         <!-- end of image -->
 
         <div class="px-7 mt-4">
-          <div class="flex">
-            <div>
-              <p>Social Media Links</p>
+          <div class="">
+            <div class="md:w-56">
+              <p class="md:text-s md:w-40">Social Media Links</p>
             </div>
             <div>
             </div>
@@ -427,15 +425,13 @@
             </div>
 
           </div>
-          <button class="bg-[#2178AC] mb-8 ml-8 py-2 px-2 rounded-md text-white text-sm">
-            Add Social Media Link
-          </button>
+
         </div>
 
 
         <div class=" mt-6 ml-20">
-          <button @click="createCompany"
-            class="bg-[#2178AC] mb-32 ml-40 py-3 px-40 -mt-80 rounded-md text-white text-md">Register
+          <button @click="createCompany" :disabled="isButtonDisabled"
+            class="bg-[#2178AC] mb-32 ml-40 py-3 cursor-pointer px-40 -mt-80 md:ml-20 rounded-md text-white text-md">Register
             Company</button>
 
         </div>
@@ -479,8 +475,8 @@ export default {
         country: 'ethiopia',
         contact_phone: '0921212121',
         contact_email: 'kal@gmail.com',
-        website: 'www.techinnovations.com',
-        social_media_links: 'www.techinnovations.com',
+        website: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+        social_media_links: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
         status: 'pending',
         rating_avg: '5',
         images: {},
@@ -495,46 +491,55 @@ export default {
       imageUrl: null,
       cloudName: 'dwh8v2zhg',
       apiKey: '934859592498419',
+      isButtonDisabled: false,
+      timeOutDuration: 2000,
     };
   },
   methods: {
     handleFileUpload(event) {
-  this.file = event.target.files; 
-  if (this.file) {
-    this.images = Array.from(this.file).map(file => file.name).join(', ');
-  }
-},  
+      this.file = event.target.files;
+      if (this.file) {
+        this.images = Array.from(this.file).map(file => file.name).join(', ');
+      }
+    },
     async uploadImage() {
-  if (!this.file || this.file.length === 0) return;
+      if (!this.file || this.file.length === 0) return;
 
-  const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-  console.log('cloudinary url',cloudinaryUrl)
-  const promises = []; // Array to hold upload promises
+      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+      this.disableButtons()
+      console.log('cloudinary url', cloudinaryUrl)
+      const promises = [];
 
-  for (const singleFile of this.file) {
-    const formData = new FormData();
-    formData.append('file', singleFile);
-    formData.append('upload_preset', 'my_unsigned_preset');
+      for (const singleFile of this.file) {
+        const formData = new FormData();
+        formData.append('file', singleFile);
+        formData.append('upload_preset', 'my_unsigned_preset');
 
-    // Push the upload promise to the array
-    promises.push(
-      fetch(cloudinaryUrl, {
-        method: 'POST',
-        body: formData,
-      }).then(response => response.json())
-    );
-  }
 
-  // Wait for all uploads to complete
-  try {
-    const responses = await Promise.all(promises);
-    // Extract URLs and store them
-    this.imageUrl = responses.map(data => data.secure_url);
-    this.companies.images = JSON.stringify(this.imageUrl); // Store as JSON array
-  } catch (error) {
-    console.error('Error uploading images:', error);
-  }
-},
+        promises.push(
+          fetch(cloudinaryUrl, {
+            method: 'POST',
+            body: formData,
+          }).then(response => response.json())
+        );
+      }
+
+
+      try {
+        const responses = await Promise.all(promises);
+
+        this.imageUrl = responses.map(data => data.secure_url);
+        this.companies.images = JSON.stringify(this.imageUrl);
+      } catch (error) {
+        console.error('Error uploading images:', error);
+      }
+    },
+    disableButtons() {
+      this.isButtonDisabled = true
+      setTimeout(() => {
+        this.isButtonDisabled = false
+      }, this.timeOutDuration)
+    },
 
     async fetchCategories() {
       try {
@@ -555,7 +560,8 @@ export default {
         this.error = 'Failed to fetch countries.';
         console.error(error);
       }
-    }, async createCompany() {
+    },
+    async createCompany() {
       this.companies.social_media_links = JSON.stringify(this.socialMediaLinks);
 
 
@@ -582,6 +588,7 @@ export default {
         });
         console.log('Company created successfully', response.data);
         this.resetForm();
+        this.disableButtons()
       } catch (error) {
         this.errorMessage = error.response ? error.response.data.message : 'An error occurred. Please try again.';
         console.error('Error creating company:', this.errorMessage);
@@ -619,4 +626,3 @@ export default {
   },
 };
 </script>
-
