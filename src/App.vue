@@ -14,5 +14,3 @@ import MediaUpload from './components/MediaUpload.vue';
 /* Add any global styles here */
 </style>
 
-
-
