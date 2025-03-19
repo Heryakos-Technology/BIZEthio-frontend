@@ -1,4 +1,5 @@
 <script setup>
+import CallToActionSection from "@/components/HomeView/CallToActionSection.vue";
 import CategoriesSection from "@/components/HomeView/CategoriesSection.vue";
 import ForYourSection from "@/components/HomeView/ForYourSection.vue";
 import Header from "@/components/HomeView/Header.vue";
@@ -10,5 +11,6 @@ import HeroSection from "@/components/HomeView/HeroSection.vue";
     <HeroSection />
     <CategoriesSection />
     <ForYourSection />
+    <CallToActionSection />
   </div>
 </template>

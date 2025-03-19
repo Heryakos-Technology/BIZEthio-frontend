@@ -87,10 +87,10 @@ function generateStars(rating) {
         class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
       >
         <div
-          class="w-full h-[250px] bg-cover rounded-t-xl"
+          class="w-full h-[250px] hover:scale-105 transition-all duration-300 ease-linear bg-cover rounded-t-xl"
           :style="{ backgroundImage: `url(${item.image})` }"
         ></div>
-        <div class="mt-3">
+        <div class="mt-3 space-y-2">
           <div class="flex">
             <div
               v-for="(star, index) in generateStars(item.rating)"
@@ -131,7 +131,7 @@ function generateStars(rating) {
 
             <p class="mx-3">({{ item.rating }})</p>
           </div>
-          <h1 class="font-semibold">{{ item.name }}</h1>
+          <h1 class="font-semibold ml-1">{{ item.name }}</h1>
           <div class="flex gap-x-2 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -155,9 +155,9 @@ function generateStars(rating) {
                 d="M200,224H150.54A266.56,266.56,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25a88,88,0,0,0-176,0c0,31.4,14.51,64.68,42,96.25A266.56,266.56,0,0,0,105.46,224H56a8,8,0,0,0,0,16H200a8,8,0,0,0,0-16ZM56,104a72,72,0,0,1,144,0c0,57.23-55.47,105-72,118C111.47,209,56,161.23,56,104Zm112,0a40,40,0,1,0-40,40A40,40,0,0,0,168,104Zm-64,0a24,24,0,1,1,24,24A24,24,0,0,1,104,104Z"
               ></path>
             </svg>
-            <p class="text-nowrap">{{ item.category }}</p>
             <p class="">{{ item.location }}</p>
           </div>
+          <p class="font-semibold">{{ item.category }}</p>
 
           <div
             class="bg-primaryColor w-32 flex mt-5 rounded-lg text-white cursor-pointer items-center justify-center py-2"
