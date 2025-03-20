@@ -1,6 +1,6 @@
 <template>
-  <div class="px-2 py-5">
-    <div class="bg-white rounded-sm pb-10 lg:hidden">
+  <div class="px-2 py-5 pt-10 pb-10">
+    <div class="bg-white rounded-sm pb-10 lg:hidden ">
 <img src="/public/logo.png" alt="" class="mx-auto pt-5">
 <h1 class="text-center mt-8 text-xl">Create an account</h1>
 <div class="flex justify-between w-1/3 mx-auto text-gray-400 mt-4 md:w-1/5 md:mx-auto">
@@ -117,9 +117,9 @@
         </div>
     </div>
     </div>
-  <div class="hidden lg:block w-2/3 mx-auto">
+  <div class="hidden lg:block w-2/3 mx-auto pb-10">
 <div class="flex justify-between">
-<div class="bg-[#BDE5F2] rounded-md px-10 pt-20 w-1/2 pb-20">
+<div class="bg-[#BDE5F2] rounded-l-md px-10 pt-20 w-1/2 pb-20">
 <div class="w-2/3 mx-auto">
     <img src="/public/logolarge.png" alt="">
 </div>
@@ -151,7 +151,7 @@ your personal information.</p>
     </div>
 </div>
 </div>
-<div class="bg-white rounded-md w-2/3 mx-auto px-10 pb-20">
+<div class="bg-white rounded-r-md w-2/3 mx-auto px-10 pb-20">
 <h1 class="mt-10 w-1/2 mx-auto text-xl text-center">Create an account</h1>
 <div class="flex justify-between w-1/4 mx-auto text-gray-400 mt-7">
     <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>

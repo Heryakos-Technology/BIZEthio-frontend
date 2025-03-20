@@ -1,9 +1,9 @@
 <template>
 
-<div class="hidden lg:block">
+<div class="hidden lg:block pt-10">
     <div class="pt-10 pb-10">
 
-<div class="relative w-1/2 h-165 rounded-2xl overflow-hidden ml-100 pt-30 mx-auto">
+<div class="relative w-1/2 h-165 rounded-2xl overflow-hidden ml-100 pt-30 mx-auto ">
  
   <div class="absolute inset-0 bg-gray-100 ">
     <h1 class="text-center mt-8 font-bold text-xl w-1/2">SIgn In</h1>

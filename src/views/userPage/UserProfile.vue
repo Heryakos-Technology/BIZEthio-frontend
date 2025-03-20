@@ -1,6 +1,6 @@
 <template>
-    <Navbar class="" />
-    <div class="lg:px-20 lg:w-9/10 lg:mx-auto">
+    <!-- <Navbar class="" /> -->
+    <div class="lg:px-20 lg:w-9/10 lg:mx-auto lg:pt-24 ">
     <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl ">
         <p class="font-semibold lg:font-bold lg:ml-4">My profile</p>
         <div class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20">
@@ -39,7 +39,7 @@
                 <div class="flex -ml-14 md:-ml- mt-10 lg:mt-8 w-64 lg:w-full md:w-full md:mt-4 md:mx-auto">
                     <div class="flex bg-[#075E86] w-26 py-2 rounded-lg ">
                         <i class="fa-solid fa-pen mr-2 mt-1 ml-1"></i>
-                        <button class=" text-[14px] font-normal text-white">Edit Profile</button>
+                        <router-link to="/EditProfile" class=" text-[14px] font-normal  text-white">Edit Profile</router-link>
                     </div>
                     <div class="flex ml-20 mt-2 md:ml-72 lg:ml-64 md:mt-4">
                         <i class="fa-solid fa-right-from-bracket text-red-700"></i>
@@ -58,7 +58,7 @@
         </div>
         <p class="underline ml-5 text-[#10434f] -mt-4 text-[14px] md:text[15px] lg:text-[15px]">See More</p>
     </div>
-    <div class="mb-20 w-11/12  lg:w-6/7 lg:mx-auto mx-auto">
+    <div class="mb-20 w-11/12  lg:w-6/7 lg:mx-auto mx-auto lg:pb-10">
         <p class="text-center mb-4 text-bold text-lg lg:text-xl  lg:text-center">Rated companies</p>
         <div class="flex flex-wrap">
             <div v-for="(company, index) in companies" :key="index" class="w-full sm:w-1/2 lg:w-1/3 p-2 lg:mb-6">
@@ -77,16 +77,16 @@
             </div>
         </div>
     </div>
-    <FooterPart class="" />
+    <!-- <FooterPart class="" /> -->
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue'
-import FooterPart from '@/components/FooterPart.vue'
+// import Navbar from '@/components/Navbar.vue'
+// import FooterPart from '@/components/FooterPart.vue'
 export default {
     components: {
-        Navbar,
-        FooterPart,
+        // Navbar,
+        // FooterPart,
 
     },
     data() {
