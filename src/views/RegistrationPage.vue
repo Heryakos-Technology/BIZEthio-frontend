@@ -15,7 +15,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.owner_name" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -24,7 +24,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.name" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-7 mt-4">
@@ -33,7 +33,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.description" type="textArea"
-        class="w-80 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4 md:p-2">
+        class="w-80 outline-none  h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4 md:p-2">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -42,7 +42,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.password" type="password"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -51,7 +51,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.contact_phone" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -61,7 +61,7 @@
       </div>
 
       <select name="category" v-model="companies.category_id"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
         <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
       </select>
     </div>
@@ -72,7 +72,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.contact_email" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -81,7 +81,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.website" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -90,7 +90,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.license_url" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -99,7 +99,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.operating_hours" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4 mt-4 w-11/12 mx-auto">
@@ -109,7 +109,7 @@
       </div>
 
       <select name="country" v-model="companies.country"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
         <option v-for="country in countries" :key="country.alpha2Code" :value="country.name">
           {{ country.name }}
         </option>
@@ -125,7 +125,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.address" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -134,7 +134,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.region" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -143,7 +143,7 @@
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.city" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
     </div>
     <!-- image -->
     <div class="px-4 mt-4 w-11/12 mx-auto">
@@ -152,7 +152,7 @@
         <p class="text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.images" type="text"
-        class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload an image"
+        class="w-80 outline-none  mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload an image"
         readonly />
       <input type="file" @change="handleFileUpload" class="mt-2" />
       <button @click="uploadImage" class="mt-2 bg-[#60b5e6] text-white rounded-md px-4 py-2">
@@ -232,7 +232,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.owner_name" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -241,39 +241,39 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.name" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
         <div class="flex ">
-          <div class="px-7 mt-4 w-full -ml-2">
+          <div class="px-5.5 mt-4 w-full -ml-2">
             <div class="flex">
               <p class="">Description</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <!-- <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"> -->
+            <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"> -->
             <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
               class="border-2 border-[#60b5e6] rounded-md w-11/12"></textarea>
           </div>
 
           <div class="container">
-            <div class="px-4  mt-8  mx-auto">
+            <div class="px-3.5 -ml-1  mt-8  mx-auto">
               <div class="flex">
                 <p class="">Contact Phone</p>
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
               <input v-model="companies.contact_phone" type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
             </div>
 
-            <div class="px-4  mt-4  mx-auto">
+            <div class="px-3.5 -ml-1  mt-4  mx-auto">
               <div class="flex">
                 <label class="">category</label><br>
                 <p class=" text-red-600 text-2xl font-medium ml-1">*</p>
               </div>
 
               <select name="category" v-model="companies.category_id"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
                 <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
                 </option>
               </select>
@@ -288,7 +288,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.contact_email" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
@@ -296,7 +296,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password" type="password"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -309,7 +309,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password_confirmation" type="password"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -318,7 +318,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.operating_hours" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -330,7 +330,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <select name="country" v-model="companies.country"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
               <option value="">Select country</option>
               <option v-for="country in countries" :key="country.id" :value="country.name"
                 class="border-[#84d2ffb7] rounded-lg mt-2">
@@ -345,7 +345,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.address" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -357,7 +357,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.region" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
@@ -365,7 +365,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.city" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
 
         </div>
@@ -378,14 +378,14 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.license_url" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
           </div>
           <div class="px-4 mt-6 w-11/12 mx-auto">
             <div class="flex">
               <p>Website</p>
             </div>
             <input v-model="companies.website" type="text"
-              class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
           </div>
         </div>
 
@@ -397,7 +397,7 @@
           <input @change="handleFileUpload" multiple type="file"
             class="cursor-pointer w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
           <input v-model="companies.images" type="text"
-            class="w-11/12  hidden  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+            class="w-11/12 outline-none  hidden  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
             placeholder="Upload images" readonly />
           <div v-if="imageUrl && imageUrl.length" class="mt-4">
           </div>
@@ -410,12 +410,12 @@
 
         <div class="px-7 mt-4">
           <div class="">
-            <div class="md:w-56">
-              <p class="md:text-s md:w-40">Social Media Links</p>
+            <div class="md:w-56 mt-6">
+              <p class="md:text-s md:w-40 ">Social Media Links</p>
             </div>
             <div>
             </div>
-            <div class="flex mt-8 -ml-20">
+            <div class="flex mt-4 -ml-3">
               <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
                 class="w-56 h-10 bg-transparent pl-2  border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
               <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
@@ -429,9 +429,9 @@
         </div>
 
 
-        <div class=" mt-6 ml-20">
+        <div class=" mt-10 ml-20 ">
           <button @click="createCompany" :disabled="isButtonDisabled"
-            class="bg-[#2178AC] mb-32 ml-40 py-3 cursor-pointer px-40 -mt-80 md:ml-20 rounded-md text-white text-md">Register
+            class="bg-[#2178AC] mb-32 hover:bg-[#374364] ml-40 py-3 cursor-pointer px-40 -mt-80 md:ml-20 rounded-md text-white text-md">Register
             Company</button>
 
         </div>
@@ -588,6 +588,7 @@ export default {
         });
         console.log('Company created successfully', response.data);
         this.resetForm();
+        this.$router.push('/signin')
         this.disableButtons()
       } catch (error) {
         this.errorMessage = error.response ? error.response.data.message : 'An error occurred. Please try again.';
