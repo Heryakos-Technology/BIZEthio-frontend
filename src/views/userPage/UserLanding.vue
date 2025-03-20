@@ -1,12 +1,12 @@
 <template>
-  <Navbar />
+ 
   <div class="">
     <div class="categories  lg:ml-10">
-        <div class="lg:mt-36">
+        <div class="lg:pt-44 ">
            <p class="text-center lg:font-semibold lg:text-lg">Quick search</p>
         <div class="flex w-72 lg:w-80 mt-4 mx-auto">
             <div class="w-56 lg:w-72 lg:-ml-10 lg:h-10  h-9 bg-[#F0EEFF] rounded-tl-full rounded-br-full "></div>
-            <div class="w-20 h-9 lg:h-10 bg-[#075E86] rounded-tr-lg rounded-bl-xl rounded-br-lg -ml-5">
+            <div class="w-20 h-9 lg:h-10 bg-[#075E86] rounded-tr-lg rounded-bl-xl  rounded-br-lg -ml-5">
                 <p class="text-center text-white mt-1 font-light">search</p>
             </div>
             <div class="fa-solid fa-magnifying-glass -ml-68 mt-3 lg:-ml-80"></div>
@@ -63,8 +63,8 @@
                     <img src="/kategna (2).png" alt="" class="rounded-br-4xl lg:w-full">
                     <p class="font-bold ml-2 h-6  text-xs mt-4 lg:text-lg">Kategna Restaurant</p>
                     <p class="text-xs   mt-4  ml-2 h-26 lg:h-26  font-normal pr-1">Kategna provides an authentic Ethiopian experience, featuring shared dishes and unique spices that celebrate loyalty and friendship.</p>
-                    <div class="flex md:-mt-4  ml-4 h-10">
-                        <i @click="openMapModal" class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xlcursor-pointer" ></i>
+                    <div class="flex md:-mt-4  ml-4 h-10 lg:-mt-10">
+                        <i @click="openMapModal" class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xl cursor-pointer" ></i>
                         <div class="w-20 lg:ml-26 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
@@ -82,7 +82,7 @@
                     <p class="font-bold ml-2 h-6  text-xs mt-4 lg:text-lg">Tikur Anbessa Hospital</p>
                     <p class="text-xs  mt-4  ml-2 h-26 lg:h-18 lg:mb-1 font-normal pr-1">Tikur Anbessa Hospital is a key healthcare facility in Ethiopia, offering diverse medical services and prioritizing quality patient care.</p>
                     <div class="flex  ml-4 h-10">
-                        <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xl"></i>
+                        <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:mr-10 lg:text-xl cursor-pointer "></i>
                         <div class="w-20 lg:ml-26 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
@@ -97,7 +97,7 @@
                     <p class="font-bold ml-2 h-6  text-xs mt-4 lg:text-lg">Commercial Bank of Ethiopia</p>
                     <p class="text-xs  mt-4 w-40 lg:w-80  ml-2 h-26 lg:h-20   font-normal pr-1">CBE is Ethiopia's largest bank, providing essential financial services nationwide.</p>
                     <div class="flex lg:-ml-1 ml-4 h-10">
-                        <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xl"></i>
+                        <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 lg:mr-8 mt-2 lg:ml-8 lg:text-xl"></i>
                         <div class="w-20 lg:ml-26 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
@@ -123,7 +123,7 @@
     <div class="recommended-section ">
         <p class="text-center font-bold lg:text-2xl">recommended for you</p>
         <div class=" lg:flex w-11/12 px-6 mx-auto mt-4 lg:ml-40">
-            <div class="bg-[#1B7590] rounded-lg h-96 lg:mt-4 lg:h-8/9 lg:mr-10">
+            <div class="bg-[#1B7590] rounded-lg h-96 lg:mt-4 lg:h-8/9 lg:mr-10 lg:pb-2">
                 <img src="/sishu.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Sishu Restaurant</p>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:mr-10 lg:h-8/9">
+            <div class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:mr-10 lg:h-8/9 lg:pb-2">
                 <img src="/golden-plate.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto ">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40 ">Golden Plate Restaurant</p>
@@ -141,7 +141,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:h-8/9">
+            <div class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:h-8/9 lg:pb-2">
                 <img src="/bole-medhanialem.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Bole Medanialem Shopping Center</p>
@@ -214,7 +214,7 @@
             <p class="font-bold text-center lg:text-2xl ">Top picks</p>
             <div class="w-11/12 px-6 mx-auto mt-4 lg:ml-40">
                 <div class="lg:flex">
-                    <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10">
+                    <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                 <img src="/edna-mol.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2 ">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Edna Mall</p>
@@ -223,7 +223,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10">
+            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                 <img src="/hayle-grand.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Haile Grand Addis Ababa</p>
@@ -232,7 +232,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10">
+            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                 <img src="/zefmesh.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Zefmesh Grand Mall</p>
@@ -243,7 +243,7 @@
             </div>
                 </div>
                 <div class="lg:flex lg:mt-6">
-                    <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10">
+                    <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                 <img src="/fit-addis.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Fit Addis</p>
@@ -252,7 +252,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10">
+            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                 <img src="/saron-beauty.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Saron Beauty</p>
@@ -261,7 +261,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4">
+            <div class="bg-[#1B7590] rounded-lg lg:h-8/9 h-96 mt-4 lg:pb-2">
                 <img src="/skylight.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 lg:w-40">Ethiopian Skylight Hotel</p>
@@ -274,19 +274,15 @@
                 <p class="underline lg:text-xl text-[#1B7590]">Discover more</p>
             </div>
         </div>
-        <FooterPart class=""/>
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue'
-import FooterPart from '@/components/FooterPart.vue'
+
 import MapModal from '@/components/MapModal.vue';
 export default {
 components:{
-    Navbar,
-    FooterPart,
     MapModal
 },
 data(){

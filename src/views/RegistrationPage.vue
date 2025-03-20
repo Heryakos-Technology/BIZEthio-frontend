@@ -1,6 +1,6 @@
 <template>
-  <div class="border-b-1 border-b-gray-600 py-2">
-    <img src="/BIZEthio-logo.png" alt="" class="w-26 pt-1 ml-4">
+  <div class="border-b-1 border-b-gray-600 py-2 lg:pt-10 ">
+  
   </div>
   <div class="block md:hidden">
     <p class="text-center text-2xl mt-4">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>

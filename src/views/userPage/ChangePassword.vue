@@ -1,6 +1,6 @@
 <template>
-    <Navbar class="" />
-    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto">
+   
+    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto lg:pt-24 lg:pb-40">
         <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl ">
             <p class="font-semibold lg:font-bold lg:ml-4 mb-2">Change Password</p>
             <div
@@ -35,16 +35,13 @@
         </div>
     </div>
 
-    <FooterPart class="" />
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue'
-import FooterPart from '@/components/FooterPart.vue'
+
 export default {
     components: {
-        Navbar,
-        FooterPart,
+
 
     },
     data() {
