@@ -1,6 +1,6 @@
 <template>
-    <Navbar class="" />
-    <div class="lg:px-20 mb-40 lg:w-9/10 lg:mx-auto">
+    <!-- <Navbar class="" /> -->
+    <div class="lg:px-20 mb-40 lg:w-9/10 lg:mx-auto lg:pt-24 lg:pb-40">
     <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl ">
         <p class="font-semibold lg:font-bold lg:ml-4">Edit Profile</p>
         <div class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="flex -ml-14 md:h-10 mt-10 lg:mt-2 w-80 lg:w-full md:w-full md:-mt-1 md:mx-auto">
                     <div class="flex bg-[#075E86] w-32 py- px-2 rounded-lg ">
-                        <button class=" text-[14px] text-center  font-normal text-white">Change Password</button>
+                        <router-link to="/ChangePassword" class=" text-[14px] text-center lg:mt-2     font-normal text-white">Change Password</router-link>
                     </div>
                     <div class="flex ml-16  bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:ml-64 lg:w-20 lg:mx-auto">
                         <button class=" text-[14px] font-normal text-white lg:text-center ml-2">save</button>
@@ -48,16 +48,16 @@
         </div>
     </div>
   
-    <FooterPart class="" />
+    <!-- <FooterPart class="" /> -->
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue'
-import FooterPart from '@/components/FooterPart.vue'
+// import Navbar from '@/components/Navbar.vue'
+// import FooterPart from '@/components/FooterPart.vue'
 export default {
     components: {
-        Navbar,
-        FooterPart,
+        // Navbar,
+        // FooterPart,
 
     },
     data() {
