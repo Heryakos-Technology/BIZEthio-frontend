@@ -17,11 +17,11 @@ const handleSidebarOpen = () => {
 };
 
 const navLinks = [
-  { name: "Home", label: "Categories" },
-  { name: "Home", label: "Shop" },
-  { name: "Home", label: "Help" },
-  { name: "Home", label: "About Us" },
-  { name: "Home", label: "Home" },
+  { name: "RegistrationPage", label: "Campany Registration",path:'registration' },
+  { name: "UserRegistration1", label: "signup" ,path:'signup'},
+  { name: "UserProfile", label: "Profile",path:'UserProfile' },
+  { name: "UserLanding", label: "UserLanding",path:'UserLanding' },
+  { name: "SignIn", label: "sign in",path:'signin' },
 ];
 
 // const handleScroll = () => {

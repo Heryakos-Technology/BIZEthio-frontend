@@ -65,7 +65,7 @@
                     <p class="text-xs   mt-4  ml-2 h-26 lg:h-26  font-normal pr-1">Kategna provides an authentic Ethiopian experience, featuring shared dishes and unique spices that celebrate loyalty and friendship.</p>
                     <div class="flex md:-mt-4  ml-4 h-10 lg:-mt-6">
                         <i @click="openMapModal" class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:text-xl cursor-pointer" ></i>
-                        <div class="w-20 lg:ml-26 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
+                        <div class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                     <p class="text-xs  mt-4  ml-2 h-26 lg:h-18 lg:mb-1 font-normal pr-1">Tikur Anbessa Hospital is a key healthcare facility in Ethiopia, offering diverse medical services and prioritizing quality patient care.</p>
                     <div class="flex  ml-4 h-10">
                         <i class="fa-solid fa-location-dot text-[#1B7590] mr-12 mt-2 lg:ml-4 lg:mr-10 lg:text-xl cursor-pointer "></i>
-                        <div class="w-20 lg:ml-26 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
+                        <div class="w-20 lg:ml-20 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
                             <p class="text-white text-xs text-center mt-2">explore more</p>
                         </div>
                     </div>
