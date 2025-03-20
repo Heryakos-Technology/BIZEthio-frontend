@@ -38,7 +38,7 @@
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
       <div class="flex">
-        <p class="">passowrd</p>
+        <p class="">password</p>
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
       <input v-model="companies.password" type="password"
@@ -292,7 +292,7 @@
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
-              <p class="">passowrd</p>
+              <p class="">password</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password" type="password"
@@ -305,7 +305,7 @@
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
-              <p class=""> confirm passowrd</p>
+              <p class=""> confirm password</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.password_confirmation" type="password"
