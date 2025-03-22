@@ -7,6 +7,11 @@ import UserRegistration1 from '../views/Users/UserRegistration1.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import NextPage from '../views/Users/NextPage.vue'
 import SignIn from '../views/Users/SignIn.vue'
+import Verify from '../views/Users/Verify.vue'
+import PasswordStrength from '../views/Users/PasswordStrength.vue'
+import PasswordVesibility from '../views/Users/PasswordVesibility.vue'
+import InputValidation from '../views/Users/InputValidation.vue'
+
 
 import EditProfile from '@/views/userPage/EditProfile.vue'
 import ChangePassword from '@/views/userPage/ChangePassword.vue'
@@ -65,6 +70,30 @@ const router = createRouter({
       component: NextPage,
     },
     {
+      path: '/verify-email',
+      name: 'Verify',
+      component: Verify,
+    },
+    {
+      path: '/InputValidation',
+      name: 'InputValidation',
+      component: InputValidation,
+    },
+    
+    {
+      path: '/PasswordVesibility',
+      name: 'PasswordVesibility',
+      component: PasswordVesibility,
+    },
+    
+    {
+      path: '/PasswordStrength',
+      name: 'PasswordStrength',
+      component: PasswordStrength,
+    },
+    
+    
+    {
       path: '/signin',
       name: 'SignIn',
       component: SignIn,
@@ -74,7 +103,7 @@ const router = createRouter({
       name: 'EditProfile',
       component: EditProfile,
     },
-
+    
 
   ],
 })
