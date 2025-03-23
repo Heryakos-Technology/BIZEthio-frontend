@@ -76,7 +76,7 @@
           </div>
   </div>
 
-  <!-- Blue Diagonal Section -->
+ 
   <div class="absolute right-0 top-0 pt-20 left-112 w-1/2 mx-auto h-full bg-[#BDE5F2] transform -skew-x-12">
     <div class="w-2/3 mx-auto ">
         <img src="/public/logolarge.png" alt="" class=" pt-5 w-2/3 mx-auto -ml-8">
@@ -271,7 +271,7 @@
       return email.value.trim() === '' || password.value.trim() === '';
     });
     const validateEmail = () => {
-      emailError.value = ''; // Clear previous error
+      emailError.value = ''; 
       if (!email.value) {
         emailError.value = 'Email is required.';
       } else if (!/\S+@\S+\.\S+/.test(email.value)) {
@@ -279,7 +279,7 @@
       }
     };
     const validatePassword = () => {
-      passwordError.value = ''; // Clear previous error
+      passwordError.value = ''; 
       if (!password.value) {
         passwordError.value = 'Password is required.';
       }
@@ -293,20 +293,20 @@ const setRememberMeState = () => {
   }
 };
 
-// Function to update localStorage when the radio button changes
+
 const handleRememberMeChange = () => {
-  localStorage.setItem('rememberMe', isRemembered.value); // Save the state to localStorage
+  localStorage.setItem('rememberMe', isRemembered.value); 
 };
 
-// Lifecycle hook to run code after the component is mounted
+
 onMounted(() => {
-  setRememberMeState(); // Set the initial state when component mounts
+  setRememberMeState(); 
 
   const rememberMe = document.getElementById('rememberMe');
   if (rememberMe) {
     rememberMe.addEventListener('change', () => {
-      isRemembered.value = rememberMe.checked; // Update reactive state on change
-      handleRememberMeChange(); // Update localStorage
+      isRemembered.value = rememberMe.checked; 
+      handleRememberMeChange(); 
     });
   }
 });
@@ -321,10 +321,12 @@ onMounted(() => {
       };
   
       const handleLogin = async () => {
-        emailError.value = '';
+        if(handleLogin2){
+          emailError.value = '';
         passwordError.value = '';
         signInMessage.value = "Loading..."
         try {
+        
           const response = await axios.post(`${base_url}/login`, {
             email: email.value,
             password: password.value,
@@ -352,6 +354,8 @@ onMounted(() => {
           emailError.value = 'Invalid email or password.'; 
           passwordError.value = 'Invalid email or password.';
         }
+          }
+        
       };
   
       return {

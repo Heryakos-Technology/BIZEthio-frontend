@@ -1,69 +1,119 @@
-import { auth } from './firebase'; //
-import { getAuth } from 'firebase/auth';
-// Ensure this path is correct
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  sendEmailVerification,
-  fetchSignInMethodsForEmail 
-} from 'firebase/auth';
+import { auth } from './firebase'; 
+import { getAuth, 
+         createUserWithEmailAndPassword, 
+         signInWithEmailAndPassword, 
+         signOut, 
+         sendEmailVerification, 
+         fetchSignInMethodsForEmail, 
+         updatePassword } from 'firebase/auth';
 
-// Register function
-export const register = async (email, password) => {
+
+export const register = async (email, newPassword) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCredential.user); // Send verification email
-    return userCredential; // Return the user credential
+    
+    const exists = await checkEmailExists(email);
+    
+    if (!exists) {
+      throw new Error('Email is not registered. Please sign up first.');
+    }
+
+    const isVerified = await checkEmailVerified(email);
+    
+    if (!isVerified) {
+      throw new Error('Email is not verified. Please verify your email before registering.');
+    }
+
+
+    const userCredential = await createUserWithEmailAndPassword(auth, email, newPassword);
+    
+
+    return userCredential; 
   } catch (error) {
     console.error('Error during registration:', error.message);
-    throw error; // Propagate the error
+    throw error; 
   }
 };
 
-// Login function
+
 export const login = async (email, password) => {
   try {
-    return await signInWithEmailAndPassword(auth, email, password); // Return user credential
+    return await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error('Error during login:', error.message);
-    throw error; // Propagate the error
+    throw error; 
   }
 };
 
-// Logout function
+
 export const logout = async () => {
   try {
-    await signOut(auth); // Sign out the user
+    await signOut(auth); 
   } catch (error) {
     console.error('Error during logout:', error.message);
-    throw error; // Propagate the error
+    throw error; 
   }
 };
 
-// Function to check if email exists
+
 export const checkEmailExists = async (email) => {
   try {
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-    
-    // If the signInMethods array is empty, check if the email is already linked to a verified user
+
     if (signInMethods.length === 0) {
       console.log(`No sign-in methods found for ${email}. Checking if user exists...`);
       
-      // Attempt to get the user data
       const user = auth.currentUser;
 
       if (user && user.email === email) {
         console.log(`User found with verified email: ${email}`);
-        return true; // User exists but is verified, so still valid
+        return true; 
       }
 
       return false;
     }
 
-    return true; // Sign-in methods exist, meaning email is registered
+    return true; 
   } catch (error) {
     console.error("Error checking email existence:", error);
-    throw error; // Propagate error for debugging
+    throw error; 
+  }
+};
+
+export const checkEmailVerified = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('No user is currently logged in.');
+  }
+
+  await user.reload();
+  return user.emailVerified;
+};
+
+
+
+export const updateUserPassword = async (email, tempPassword, newPassword) => {
+  const auth = getAuth();
+
+  try {
+ 
+    const userCredential = await signInWithEmailAndPassword(auth, email, tempPassword);
+    const currentUser = userCredential.user; 
+
+   
+    await currentUser.reload(); 
+    if (currentUser.emailVerified) {
+
+      await updatePassword(currentUser, newPassword);
+      console.log('Password updated successfully');
+      alert('User Registered Successfully')
+      return true; 
+    } else {
+      throw new Error('Email is not verified. Please verify your email before updating the password.');
+    }
+  } catch (error) {
+    console.error('Error during password update:', error.message);
+    throw error; 
   }
 };

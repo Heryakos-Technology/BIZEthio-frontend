@@ -92,7 +92,7 @@
             <button :disabled="isButtonDisabled" :class="{
     'bg-gray-200  cursor-not-allowed': isButtonDisabled,
     'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled
-  }"  class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" @click="registerUser">Continue</button>
+  }"  class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" @click="registerUser">{{continueButton}}</button>
           </div>
   
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
@@ -237,7 +237,7 @@
                 <button :disabled="isButtonDisabled" :class="{
     'bg-gray-200  cursor-not-allowed': isButtonDisabled,
     'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled
-  }" class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer" @click="registerUser">Continue</button>
+  }" class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer" @click="registerUser">{{continueButton}}</button>
               </div>
               <!-- <p v-if="isButtonDisabled">The button is currently disabled.</p>
 <p v-else>The button is enabled.</p> -->
@@ -254,6 +254,7 @@
   <script>
   import { ref, computed,onMounted,watch} from 'vue';
   import { useRouter } from 'vue-router';
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
   
   export default {
     
@@ -269,8 +270,10 @@
           location: ''
         }
       });
+      const errorss = ref('');
       const router = useRouter();
       const errors = ref({});
+      const continueButton = ref('Continue');
       onMounted(() => {
   Object.keys(model.value.user).forEach(key => {
     model.value.user[key] = localStorage.getItem(key) || '';
@@ -295,6 +298,20 @@
            !model.value.user.sub_city || 
            !model.value.user.location;
       });
+  //     const userData = {
+  //   email: model.user.email,
+  //   // email: localStorage.getItem('email'),
+  //   // phone_number: localStorage.getItem('phone_number'),
+  //   // city: localStorage.getItem('city'),
+  //   // sub_city: localStorage.getItem('sub_city'),
+  //   // password: model.value.user.password,
+  //   // password_confirmation: model.value.user.password_confirmation,
+  //   // verification_status: model.value.user.verification_status,
+  //   // is_banned: model.value.user.is_banned,
+  //   // role: model.value.user.role,
+  //   // profile_picture_url: model.value.user.profile_picture_url,
+  // };
+
   
       const registerUser = async () => {
   validate();
@@ -304,7 +321,48 @@
   Object.keys(model.value.user).forEach(key => {
     localStorage.setItem(key, model.value.user[key]);
   });
+  continueButton.value = 'Loading...'
+  const userData = {
+    email: model.value.user.email,
+    // email: localStorage.getItem('email'),
+    // phone_number: localStorage.getItem('phone_number'),
+    // city: localStorage.getItem('city'),
+    // sub_city: localStorage.getItem('sub_city'),
+    // password: model.value.user.password,
+    // password_confirmation: model.value.user.password_confirmation,
+    // verification_status: model.value.user.verification_status,
+    // is_banned: model.value.user.is_banned,
+    // role: model.value.user.role,
+    // profile_picture_url: model.value.user.profile_picture_url,
+  };
 
+  try {
+    const tempPassword = Math.random().toString(36).slice(-8);
+    localStorage.setItem('temporaryPassword', tempPassword)
+    localStorage.setItem('name', model.value.user.name)
+    localStorage.setItem('email', model.value.user.email)
+    localStorage.setItem('phone_number', model.value.user.phone_number)
+    localStorage.setItem('city', model.value.user.city)
+    localStorage.setItem('sub_city', model.value.user.sub_city)
+    localStorage.setItem('location', model.value.user.location)
+
+// isLoading.value = 'Submitting'
+const auth = getAuth();
+const userCredential = await createUserWithEmailAndPassword(auth, userData.email,tempPassword);
+
+
+await sendEmailVerification(userCredential.user);
+alert('A verification email has been sent. Please check your inbox.');
+
+
+alert('Please verify your email to complete your registration.');
+continueButton.value = "Sent"
+} catch (error) {
+console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+errorss.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+// isLoading.value = 'Failed'
+continueButton.value = 'Failed'
+}
   router.push('/next');
 };
 
@@ -322,7 +380,8 @@ watch(isButtonDisabled, (newValue) => {
         registerUser,
         isButtonDisabled,
         errors,
-        validate
+        validate,
+        continueButton
       };
     }
   };

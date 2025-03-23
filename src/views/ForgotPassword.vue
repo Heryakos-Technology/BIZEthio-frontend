@@ -104,6 +104,7 @@ export default {
     await sendPasswordResetEmail(auth, email.value);
     buttonMessage.value = 'Reset Link Send'
     message.value = 'Password reset email sent! Check your inbox.';
+    email.value = ''
   } catch (err) {
     console.error(err);
     error.value = 'An error occurred. Please try again later.';

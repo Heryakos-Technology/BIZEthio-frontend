@@ -16,11 +16,12 @@
               <div><p class="text-red-400 mt-1 ml-1">*</p></div>
             </div>
             <div class="mt-2 relative">
-              <input :type="isPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password" @input="checkPasswordStrength">
+              <input :type="isPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password" @input="checkPasswordStrength(),validate()">
               <span @click="togglePasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
             <i :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
             </div>
+            <div v-if="errors.password" class="text-red-400 mt-1">{{ errors.password }}</div>
             <p :class="passwordStrengthClass">{{ passwordStrengthMessage }}</p>
               <ul>
   <li 
@@ -42,12 +43,13 @@
               <div><p class="text-red-400 mt-1 ml-1">*</p></div>
             </div>
             <div class="mt-2 relative">
-              <input :type="isConfirmPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation" @input="validatePasswords">
+              <input :type="isConfirmPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation" @input="validatePasswords(),validate()">
               <span @click="toggleConfirmPasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
             <i :class="isConfirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
             </div>
           </div>
+          <div v-if="errors.password_confirmation" class="text-red-400 mt-1">{{ errors.password_confirmation }}</div>
           <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
           <div class="mt-9">
             <div class="flex">
@@ -55,7 +57,8 @@
              
             </div>
             <div class="mt-2 w-13/13">
-              <input type="file" class=" focus:outline-none  er-2 rounded-md pl-3 pt-1w-13/13 md:h-12" @change="handleFileUpload" accept="image/*">
+              <input type="file" class=" focus:outline-none  er-2 rounded-md pl-3 pt-1w-13/13 md:h-12" @change="handleFileUpload" @input="validate" accept="image/*">
+              <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
               <p class="text-center mt-5 text-cyan-500">{{ uploaded }}</p>
               <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-6 py-1 rounded-sm mt-5 w-1/2 text-sm mx-auto cursor-pointer">Upload File</button>
               <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-5" />
@@ -88,7 +91,7 @@
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
             <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
-              <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >{{ isLoading}}</button>
+              <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >{{ submitText}}</button>
 
               
 
@@ -164,11 +167,12 @@
               </div>
               <div class="mt-2 relative">
 
-                  <input  :type="isPasswordVisible ? 'text' : 'password'" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password"   @input="checkPasswordStrength" >
+                  <input  :type="isPasswordVisible ? 'text' : 'password'" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password"   @input="checkPasswordStrength(),validate()" >
                   <span @click="togglePasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
             <i :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
               </div>
+              <div v-if="errors.password" class="text-red-400 mt-1">{{ errors.password }}</div>
               <p :class="passwordStrengthClass">{{ passwordStrengthMessage }}</p>
               <ul>
   <li 
@@ -196,12 +200,13 @@
               </div>
               <div class="mt-2 relative">
 
-                  <input :type="isConfirmPasswordVisible ? 'text' : 'password'"  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation"  @input="validatePasswords">
+                  <input :type="isConfirmPasswordVisible ? 'text' : 'password'"  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation"  @input="validatePasswords(),validate()">
                   <span @click="toggleConfirmPasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
             <i :class="isConfirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
               </div>
           </div>
+          <div v-if="errors.password_confirmation" class="text-red-400 mt-1">{{ errors.password_confirmation }}</div>
           <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
         
           <div class="mt-9">
@@ -214,11 +219,12 @@
               </div>
               <div class="mt-5 ">
 
-                  <input type="file" class="  er-2 rounded-xl  pt-2 w-13/13 md:h-12 relative" @change="handleFileUpload" accept="image/" >
+                  <input type="file" class="  er-2 rounded-xl  pt-2 w-13/13 md:h-12 relative"   @change="handleFileUpload"  @input="validate" accept="image/" >
                   <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-4 py-1 rounded-md h-1/20  cursor-pointer">Upload File</button>
 
               </div>
           </div>
+          <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
           <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p>
 
           <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/>
@@ -236,8 +242,11 @@
         
 
           <div class="mx-auto w-1/2 mt-4 md:w-1/3 md:mx-auto">
-            <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
-              <button  @click="handleRegister" class="bg-cyan-700 text-white px-10 py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer" >{{ isLoading}}</button>
+            <!-- <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p> -->
+              <button :disabled="isButtonDisabled" :class="{
+    'bg-gray-200  cursor-not-allowed': isButtonDisabled,
+    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled
+  }"   @click="handleRegister" class="bg-cyan-700 text-white px-10 py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer" >{{ submitText}}</button>
               <!-- <button  @click="completeRegistration" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer mt-10" >complate</button> -->
               <p class="text-cyan-500 underline text-center w-12/11 mt-4 cursor-pointer" @click="()=>{this.$router.push('/signup')} ">Back to previous page</p>
 
@@ -257,11 +266,12 @@
   <script>
 
 import axios from 'axios';
-import { ref,onMounted,watch  } from 'vue';
-import { login, register } from '../../auth';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'; // Import Firebase Auth functions
+import { ref,onMounted,watch, computed } from 'vue';
+import { login, register ,updateUserPassword} from '../../auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification,signInWithEmailAndPassword ,updatePassword   } from 'firebase/auth'; // Import Firebase Auth functions
 import { useRouter } from 'vue-router';
 import CryptoJS from 'crypto-js'; 
+// import { updateUserPassword } from './auth';
 
 export default {
   setup() {
@@ -301,10 +311,31 @@ export default {
     const isConfirmPasswordVisible = ref(false);
     const isLoading = ref('Submit')
     const isCheckboxChecked = ref(false);
-    
+    const submitText = ref('Submit')
+
+    const errorss = ref('');
+    const validate = () => {
+        errors.value = {}; 
+        if (!model.value.user.password) errors.value.password = 'password is required.';
+        if (!model.value.user.password_confirmation) errors.value.password_confirmation = 'password is required.';
+        if (!model.value.user.profile_picture_url) errors.value.profile_picture_url = 'profile picture is required.';
+      };
+      const isButtonDisabled = computed(() => {
+        return !model.value.user.password || 
+           !model.value.user.password_confirmation || 
+           !model.value.user.profile_picture_url 
+       
+      });
     watch(isCheckboxChecked, (newValue) => {
   if (newValue) {
     checkboxMessage.value = ''; 
+  }
+});
+watch(isButtonDisabled, (newValue) => {
+  if (newValue) {
+    console.log('Button is disabled');
+  } else {
+    console.log('Button is enabled');
   }
 });
       const passwordCriteria = ref([
@@ -397,35 +428,125 @@ export default {
     };
 
    
-
     const handleRegister = async () => {
-
+      validate();
+      if (Object.keys(errors.value).length > 0) return;
+      submitText.value = "Loading..."
+  const email = model.value.user.email.trim().toLowerCase(); 
+  const password = model.value.user.password;
+  const name = model.value.user.name;
+  const phone_number = model.value.user.phone_number;
+  const city = model.value.user.city;
+  const sub_city = model.value.user.sub_city;
+  //const location = model.value.user.location;
+  const verification_status =  model.value.user.verification_status;
+  const is_banned =  model.value.user.is_banned;
+  const role =  model.value.user.role;
+  const profile_picture_url= model.value.user.profile_picture_url;
+  const password_confirmation = model.value.user.password_confirmation;
   const checkbox = document.getElementById('myCheckbox');
+
   if (!isCheckboxChecked.value) {
+      submitText.value = 'Submit'
     checkboxMessage.value = "Please agree to the terms and agreements to proceed";
+    
     return;
   }
 
   checkboxMessage.value = '';
 
-
   const userData = {
-    name: localStorage.getItem('name'),
-    email: localStorage.getItem('email'),
-    phone_number: localStorage.getItem('phone_number'),
-    city: localStorage.getItem('city'),
-    sub_city: localStorage.getItem('sub_city'),
-    password: model.value.user.password,
-    password_confirmation: model.value.user.password_confirmation,
-    verification_status: model.value.user.verification_status,
-    is_banned: model.value.user.is_banned,
-    role: model.value.user.role,
-    profile_picture_url: model.value.user.profile_picture_url,
+    email,
+    password,
+    name,
+    phone_number,
+    city,
+    sub_city,
+    //location,
+    password_confirmation,
+    verification_status,
+    is_banned,
+    role,
+    profile_picture_url
   };
 
+  const auth = getAuth();
+ 
 
-  // Store user data temporarily
-  localStorage.setItem('pendingUserData', JSON.stringify(userData));
+  try {
+  
+    const currentUser = auth.currentUser;
+
+
+    if (!currentUser) {
+      
+      const tempPassword = Math.random().toString(36).slice(-8);
+
+    
+      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, tempPassword);
+
+     
+      await sendEmailVerification(userCredential.user);
+      alert('A verification email has been sent. Please check your inbox.');
+
+      
+      localStorage.setItem('temporaryPassword', tempPassword);
+      
+      return; 
+    } else {
+      
+      await currentUser.reload(); 
+
+      if (currentUser.emailVerified) {
+      
+        const tempPassword = localStorage.getItem('temporaryPassword');
+        const success = await updateUserPassword(email, tempPassword, password);
+
+        if (success) {
+          
+          const response = await axios.post(`${base_url}/register`, userData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          console.log('User registered successfully', response.data);
+          submitText.value = 'Registered'
+          registered.value = true;
+
+        
+          localStorage.removeItem('name');
+          localStorage.removeItem('email');
+          localStorage.removeItem('phone_number');
+          localStorage.removeItem('city');
+          localStorage.removeItem('sub_city');
+          localStorage.removeItem('pendingUserData');
+          localStorage.removeItem('temporaryPassword');
+         model.value.user.password = '';
+       model.value.user.password_confirmation = '';
+        model.value.user.profile_picture_url = '';
+         
+
+          isLoading.value = "Submit";
+          router.push('/signin');
+        }
+      } else {
+        alert('Your email is not verified. Please verify your email before registering again.');
+        submitText.value = 'Failed'
+        model.value.user.password = '';
+        model.value.user.password_confirmation = '';
+        model.value.user.profile_picture_url = '';
+      }
+    }
+  } catch (error) {
+    console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+    errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+    submitText.value = "Failed";
+    model.value.user.password = '';
+    model.value.user.password_confirmation = '';
+    model.value.user.profile_picture_url = '';
+  }
+};
 onMounted(() => {
   model.value.user.name = localStorage.getItem('name') || '';
   model.value.user.email = localStorage.getItem('email') || '';
@@ -433,55 +554,7 @@ onMounted(() => {
   model.value.user.city = localStorage.getItem('city') || '';
   model.value.user.sub_city = localStorage.getItem('sub_city') || '';
   model.value.user.location = localStorage.getItem('location') || '';
-
 });
-  try {
-
-    isLoading.value = 'Submitting'
-    const auth = getAuth();
-    const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
-    
-    
-    await sendEmailVerification(userCredential.user);
-    alert('A verification email has been sent. Please check your inbox.');
-
-  
-    alert('Please verify your email to complete your registration.');
-
-  } catch (error) {
-    console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
-    errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
-    isLoading.value = 'Failed'
-  }
-  try {
-    
-    const response = await axios.post(`${base_url}/register`, userData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    console.log('User registered successfully', response.data);
-    registered.value = true;
-
-   
-    localStorage.removeItem('pendingUserData');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
-    localStorage.removeItem('phone_number');
-    localStorage.removeItem('city');
-    localStorage.removeItem('sub_city');
-    isLoading.value = "Submit"
-   
-    router.push('/signin');
-  } catch (error) {
-    console.error('Error during backend registration:', error.message || 'An error occurred. Please try again.');
-    errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
-    isLoading.value = "Failed"
-  
-  }
-  
-};
 
 // Function to complete registration after email verification
 // const completeRegistration = async () => {
@@ -553,7 +626,9 @@ const togglePasswordVisibility = () => {
       isPasswordVisible,
       isConfirmPasswordVisible,
       isLoading,
-      isCheckboxChecked
+      isCheckboxChecked,
+      submitText,
+      isButtonDisabled,
 
       // handleRegister,
     };
