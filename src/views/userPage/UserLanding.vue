@@ -5,11 +5,11 @@
         <div class="lg:pt-44 lg:ml-4">
            <p class="text-center lg:font-semibold lg:text-lg lg:-ml-14">Quick search</p>
         <div class="flex w-72 lg:w-80 mt-4 mx-auto">
-            <div class="w-56 lg:w-72 lg:-ml-10 lg:h-10  h-9 bg-[#F0EEFF] rounded-tl-full rounded-br-full "></div>
+            <input v-model="search" type="text" class="w-56 lg:w-72 lg:-ml-10 lg:h-10  pl-12 h-9 bg-[#F0EEFF] outline-none rounded-tl-full rounded-br-full "/>
             <div class="w-20 h-9 lg:h-10 bg-[#075E86] rounded-tr-lg rounded-bl-xl  rounded-br-lg -ml-5">
-                <p class="text-center text-white mt-1 font-light">search</p>
+                <p class="text-center text-white mt-1 font-light hover:cursor-pointer">search</p>
             </div>
-            <div class="fa-solid fa-magnifying-glass text-gray-600 -ml-68 mt-3 lg:-ml-80"></div>
+            <div class="fa-solid fa-magnifying-glass  text-gray-600 -ml-68 mt-3 lg:-ml-82"></div>
         </div>
        </div>
        <div class="lg:-mt-48 md:-mt-56 lg:ml-4">
@@ -66,7 +66,7 @@
                     <div class="flex md:-mt-4  ml-4 h-10 lg:-mt-6">
                         <i @click="openMapModal" class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-3 lg:ml-4 lg:text-xl cursor-pointer" ></i>
                         <div class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
-                            <p class="text-white text-xs text-center mt-2.5">explore more</p>
+                            <p class="text-white text-xs hover:cursor-pointer text-center mt-2.5">explore more</p>
                         </div>
                     </div>
                     <MapModal
@@ -84,7 +84,7 @@
                     <div class="flex md:-mt-4  ml-4 h-10 lg:mt-2">
                         <i @click="openMapModal" class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-3 lg:ml-4 lg:text-xl cursor-pointer" ></i>
                         <div class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
-                            <p class="text-white text-xs text-center mt-2.5">explore more</p>
+                            <p class="text-white text-xs text-center hover:cursor-pointer mt-2.5">explore more</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     <div class="flex md:-mt-4  ml-4 h-10 lg:mt-0.5">
                         <i @click="openMapModal" class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-3 lg:ml-4 lg:text-xl cursor-pointer" ></i>
                         <div class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
-                            <p class="text-white text-xs text-center mt-2.5">explore more</p>
+                            <p class="text-white text-xs text-center hover:cursor-pointer mt-2.5">explore more</p>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                     <div class="flex md:-mt-4  ml-4 h-10 lg:-mt-6">
                         <i @click="openMapModal" class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-3 lg:ml-4 lg:text-xl cursor-pointer" ></i>
                         <div class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10  h-8 bg-[#1B7590] rounded-lg">
-                            <p class="text-white text-xs text-center mt-2.5">explore more</p>
+                            <p class="text-white text-xs text-center hover:cursor-pointer mt-2.5">explore more</p>
                         </div>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40">Sishu Restaurant</p>
                     <div class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">see detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">see detail</p>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40 ">Golden Plate Restaurant</p>
                     <div class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">see detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">see detail</p>
                     </div>
                 </div>
             </div>
@@ -146,13 +146,13 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40">Bole Medanialem Shopping Center</p>
                     <div class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">see detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">see detail</p>
                     </div>
                 </div>
             </div>
             
         </div>
-        <p class="underline text-[#003962] mt-2 lg:ml-46 md:ml-12 ml-10">More Results</p>
+        <p class="underline text-[#003962] mt-2 lg:ml-46 md:ml-12 hover:cursor-pointer ml-10">More Results</p>
 
         <div class="Toppicks-section mt-18 pb-20">
             <p class="font-bold ml-10 lg:text-2xl lg:ml-44">Top picks</p>
@@ -163,7 +163,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2 ">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Edna Mall</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Haile Grand Addis Ababa</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Zefmesh Grand Mall</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Fit Addis</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
@@ -201,7 +201,7 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Saron Beauty</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
@@ -210,12 +210,12 @@
                 <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
                     <p class="mr-6  text-sm font-semibold w-32 lg:w-40">Ethiopian Skylight Hotel</p>
                     <div class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md  border-white">
-                        <p class="text-center text-white text-xs mt-2.5">view detail</p>
+                        <p class="text-center text-white text-xs hover:cursor-pointer mt-2.5">view detail</p>
                     </div>
                 </div>
             </div>
                 </div>
-                <p class="underline lg:mt-2 -ml-0.5 text-[#1B7590]">Discover more</p>
+                <p class="underline lg:mt-2 -ml-0.5 text-[#1B7590] hover:cursor-pointer">Discover more</p>
             </div>
         </div>
         <div class="Reviews-section  lg:px-56 lg:-ml-12">
@@ -289,7 +289,8 @@ components:{
 data(){
     return{
               isMapVisible: false,
-      mapSrc: 'YOUR_GOOGLE_MAP_EMBED_URL'
+      mapSrc: 'YOUR_GOOGLE_MAP_EMBED_URL',
+      search: ''
     }
 },
 methods: {
