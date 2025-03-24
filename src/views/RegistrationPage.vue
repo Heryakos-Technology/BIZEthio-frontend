@@ -232,7 +232,7 @@
               <p class="">Owner name</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.owner_name" type="text"
+            <input v-model="companies.owner_name" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.owner_name" class="text-red-500 text-sm">{{ errors.owner_name }}</p>
           </div>
@@ -242,7 +242,7 @@
               <p class="">Company name</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.name" type="text"
+            <input v-model="companies.name" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</p>
           </div>
@@ -255,7 +255,7 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"> -->
-            <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
+            <textarea v-model="companies.description" name="description" id="" cols="30" rows="6" @input="validateFields"
               class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34"></textarea>
               <p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
           </div>
@@ -266,8 +266,8 @@
                 <p class="">Contact Phone</p>
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input v-model="companies.contact_phone" type="text"
-              @input="updatePhoneNumber"
+              <input v-model="companies.contact_phone" type="text" 
+              @input="validateFields"
                 class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
                 <p v-if="errors.contact_phone" class="text-red-500 text-sm">{{ errors.contact_phone }}</p>
             </div>
@@ -278,7 +278,7 @@
                 <p class=" text-red-600 text-2xl font-medium ml-1">*</p>
               </div>
 
-              <select name="category" v-model="companies.category_id"
+              <select name="category" v-model="companies.category_id"   @change="validateFields"
                 class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
                 <option value="">Select category</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
@@ -295,7 +295,7 @@
               <p class="">Email</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.contact_email" type="text"
+            <input v-model="companies.contact_email" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.contact_email" class="text-red-500 text-sm">{{ errors.contact_email }}</p>
           </div>
@@ -305,7 +305,7 @@
               <p class="">Operating Hours</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.operating_hours" type="text"
+            <input v-model="companies.operating_hours" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.operating_hours" class="text-red-500 text-sm">{{ errors.operating_hours }}</p>
 
@@ -320,7 +320,7 @@
               <label class=" text-md">Country</label><br>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <select name="country" v-model="companies.country"
+            <select name="country" v-model="companies.country"  @change="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <option value="">Select country</option>
               <option v-for="country in countries" :key="country.id" :value="country.name"
@@ -336,7 +336,7 @@
               <p class="">Address</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.address" type="text"
+            <input v-model="companies.address" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.address" class="text-red-500 text-sm">{{ errors.address }}</p>
           </div>
@@ -349,7 +349,7 @@
               <p class="">Region</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.region" type="text"
+            <input v-model="companies.region" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.region" class="text-red-500 text-sm">{{ errors.region }}</p>
           </div>
@@ -358,9 +358,9 @@
               <p class="">City</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.city" type="text"
+            <input v-model="companies.city" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
-              <p v-if="errors.license_url" class="text-red-500 text-sm">{{ errors.license_url }}</p>
+              <p v-if="errors.city" class="text-red-500 text-sm">{{ errors.city }}</p>
           </div>
 
         </div>
@@ -372,7 +372,7 @@
               <p class="">License URL</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <input v-model="companies.license_url" type="text"
+            <input v-model="companies.license_url" type="text" @input="validateFields"
               class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.license_url" class="text-red-500 text-sm">{{ errors.license_url }}</p>
           </div>
@@ -430,55 +430,72 @@
         </div>
 
 
-        <div class=" mt-10 ml-20 ">
-          <button @click="togglePassword" :disabled="isButtonDisabled"
-            class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+        <div  class=" mt-10 ml-20 ">
+          <button @click="nextStep" 
+            class="bg-[#2178AC] mb-32 hover: ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
            next</button>
 
         </div>
 
       </div>
-      <div v-if="showPassword" class="w-1/3  mx-auto ">
-        <p class="text-center text-3xl font-bold mt-16">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
-        <div  class=" mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
-            <div  class="w-full">
-              <div class="px-4  mt-4  mx-auto">
-                <div class="flex">
-                  <p class="">password</p>
-                  <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
-                </div>
-                <input v-model="companies.password" type="password"
-                @input="updatePasswordStrength"
-                  class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
-                  <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
-                  <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
-    {{ passwordStrengthLabel }}
-  </div>
-              </div>
+      <div v-if="showPassword" class="w-1/3 mx-auto">
+  <p class="text-center text-3xl font-bold mt-16">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
+  <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
+    <div class="w-full">
+      <div class="px-4 mt-4 mx-auto">
+        <div class="flex">
+          <p>Password</p>
+          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+        </div>
+        <div class="relative">
+          <input 
+            v-model="companies.password" 
+            :type="showPasswordField ? 'text' : 'password'" 
+            @input="handlePasswordInput" 
+            class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+          />
+          <span @click="togglePasswordVisibility" class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="showPasswordField ? 'fas fa-eye' : 'fas fa-eye-slash'" class="text-gray-800 "></i>
+          </span>
+        </div>
+        <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
+        <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
+          {{ passwordStrengthLabel }}
+        </div>
+      </div>
+
+      <div class="px-4 mt-4 mx-auto">
+        <div class="flex">
+          <p>Confirm Password</p>
+          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+        </div>
+        <div class="relative">
+          <input 
+            v-model="companies.password_confirmation" 
+            @input="handleConfirmPasswordInput"
+            :type="showConfirmPasswordField ? 'text' : 'password'" 
+            class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+            :class="['outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4', 
+              isConfirmPasswordFocused && companies.password && companies.password !== companies.password_confirmation ? 'border-red-500' : 'border-[#60b5e6]']"
+            @focus="isConfirmPasswordFocused = true"
+            @blur="isConfirmPasswordFocused = false"
+          />
+          <span @click="toggleConfirmPasswordVisibility" class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="showConfirmPasswordField ? 'fas fa-eye' : 'fas fa-eye-slash'" class="text-gray-800 "></i>
+          </span>
+        </div>
+        <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{ errors.password_confirmation }}</p>
+      </div>
+    </div>
     
-              <div class="px-4  mt-4  mx-auto">
-                <div class="flex">
-                  <p class=""> Confirm password</p>
-                  <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
-                </div>
-                <input v-model="companies.password_confirmation" type="password"
-                  class=" outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                  :class="['outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4', 
-               isConfirmPasswordFocused && companies.password && companies.password !== companies.password_confirmation ? 'border-red-500' : 'border-[#60b5e6]']"
-      @focus="isConfirmPasswordFocused = true"
-      @blur="isConfirmPasswordFocused = false">
-      <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{ errors.password_confirmation }}</p>
-              </div>
-            </div>
-            <div>
-              <button @click="hidepassword" class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6b8ea1] ml-2 lg:ml-4 py-2  cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">Back</button>
-            </div>
-            <div>
-              <button @click="createCompany" :disabled="isButtonDisabled"
-                class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24   py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">Register Company</button>
-            </div>
-          </div>
-        
+    <div>
+      <button @click="hidepassword" class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6b8ea1] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">Back</button>
+    </div>
+    <div>
+      <button @click="submitForm"  class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">Register Company</button>
+    </div>
+  </div>
+
       </div>
     </div>
     <!-- /end of desktop -->
@@ -490,13 +507,22 @@
 import axios from 'axios';
 
 export default {
-  created() {
-
-
-  },
+computed:{
+  // checkButtonState() {
+  //   return Object.keys(this.errors).length > 0;
+  // },
+  buttonClass() {
+      return {
+        'bg-gray-400 cursor-not-allowed': this.checkButtonDisabled, 
+        'bg-[#2178AC] hover:bg-[#6b8ea1] cursor-pointer': !this.checkButtonDisabled, 
+        'mb-32 ml-40 py-3 transition-all duration-300 px-40 rounded-md text-white text-md': true, 
+      };
+    }
+},
   mounted() {
     this.fetchCategories();
     this.fetchCountries();
+    this.checkButtonState();
   },
   data() {
     return {
@@ -546,10 +572,17 @@ export default {
       },
       passwordStrengthMessages: [],
       contact_phone: '',
+      showPasswordField: false,
+      showConfirmPasswordField: false,
     };
   },
   methods: {
-
+    togglePasswordVisibility() {
+      this.showPasswordField = !this.showPasswordField;
+    },
+    toggleConfirmPasswordVisibility() {
+      this.showConfirmPasswordField = !this.showConfirmPasswordField;
+    },
     validatePhoneNumber(phoneNumber) {
     
       const phoneRegex = /^(\+?\d{1,3})?[- ]?(\(?\d{3}\)?[- ]?)?\d{3}[- ]?\d{4}$/;
@@ -563,37 +596,46 @@ export default {
       this.errors.contact_phone = ""; 
     }
   },
-    checkPasswordStrength(password) {
-    const strengthCriteria = [
-      { regex: /.{8,}/, message: "At least 8 characters long." },
-      { regex: /[A-Z]/, message: "At least one uppercase letter." },
-      { regex: /[a-z]/, message: "At least one lowercase letter." },
-      { regex: /[0-9]/, message: "At least one number." },
-      { regex: /[!@#$%^&*(),.?":{}|<>]/, message: "At least one special character." },
-    ];
+  checkPasswordStrength(password) {
+  const strengthCriteria = [
+    { regex: /.{6,}/, message: "At least 6 characters long." }, 
+    { regex: /[A-Z]/, message: "At least one uppercase letter." },
+    { regex: /[a-z]/, message: "At least one lowercase letter." },
+    { regex: /[0-9]/, message: "At least one number." },
+    { regex: /[!@#$%^&*(),.?":{}|<>]/, message: "At least one special character." },
+  ];
 
-    const strengthMessages = [];
-    strengthCriteria.forEach(criteria => {
-      if (!criteria.regex.test(password)) {
-        strengthMessages.push(criteria.message);
-      }
-    });
-
-    let strengthLabel = '';
-    let strengthClass = '';
-
-    if (strengthMessages.length === 0) {
-      strengthLabel = "Strong";
-      strengthClass = 'text-green-500'; 
-    } else if (strengthMessages.length <= 4) {
-      strengthLabel = "Medium";
-      strengthClass = 'text-yellow-500'; 
-    } else {
-      strengthLabel = "Weak";
-      strengthClass = 'text-red-500';
+  const strengthMessages = [];
+  strengthCriteria.forEach(criteria => {
+    if (!criteria.regex.test(password)) {
+      strengthMessages.push(criteria.message);
     }
+  });
 
-    return { label: strengthLabel, class: strengthClass };
+  let strengthLabel = '';
+  let strengthClass = '';
+
+
+  if (strengthMessages.length === 0) {
+    strengthLabel = "Strong";
+    strengthClass = 'text-green-500'; 
+  } else if (strengthMessages.length <= 2) { 
+    strengthLabel = "Medium";
+    strengthClass = 'text-yellow-500'; 
+  } else {
+    strengthLabel = "Weak";
+    strengthClass = 'text-red-500';
+  }
+
+  return { label: strengthLabel, class: strengthClass };
+},
+
+handlePasswordInput() {
+    this.validateFields(); 
+    this.updatePasswordStrength(); 
+  },
+  handleConfirmPasswordInput() {
+    this.validateFields(); 
   },
 
   updatePasswordStrength() {
@@ -601,9 +643,20 @@ export default {
     this.passwordStrengthLabel = label;
     this.passwordStrengthClass = strengthClass;
   },
-    validateFields() {
+//   validatePasswordFields(){
+//  this.errors ={}
+//      if (!this.companies.password) {
+//       this.errors.password = 'Password is required';
+//     }
+//     if (!this.companies.password_confirmation) {
+//       this.errors.password_confirmation = 'Password confirmation is required';
+//     }
+//   },
+
+  validateFields() {
     this.errors = {}; 
- 
+
+    
     if (!this.companies.owner_name) {
       this.errors.owner_name = 'Owner name is required';
     }
@@ -616,24 +669,19 @@ export default {
     if (!this.companies.contact_phone) {
       this.errors.contact_phone = 'Contact phone is required';
     }
-    if (!this.companies.password) {
-      this.errors.password = 'password is required';
-    }
-    if (!this.companies.password_confirmation) {
-      this.errors.password_confirmation = 'password confirmation is required';
-    }
+
     if (!this.companies.contact_email) {
       this.errors.contact_email = 'Contact email is required';
     }
     if (!this.companies.operating_hours) {
       this.errors.operating_hours = 'Operating hours are required';
     }
-    if (!this.companies.country || this.companies.country.length === 0) {
-    this.errors.country = 'country must be selected'; 
-  }
-    if (!this.companies.category_id || this.companies.category_id.length === 0) {
-    this.errors.category_id = 'category must be selected'; 
-  }
+    if (!this.companies.country) {
+      this.errors.country = 'Country must be selected';
+    }
+    if (!this.companies.category_id) {
+      this.errors.category_id = 'Category must be selected';
+    }
     if (!this.companies.address) {
       this.errors.address = 'Address is required';
     }
@@ -647,15 +695,45 @@ export default {
       this.errors.license_url = 'License URL is required';
     }
     if (!this.companies.images || this.companies.images.length === 0) {
-    this.errors.images = 'At least one image must be uploaded'; 
-  }
+      this.errors.images = 'At least one image must be uploaded';
+    }
+    if (this.showPassword) {
+        if (!this.companies.password) {
+          this.errors.password = 'Password is required';
+        }
+        if (!this.companies.password_confirmation) {
+          this.errors.password_confirmation = 'Password confirmation is required';
+        }
+        if (this.companies.password && this.companies.password_confirmation && this.companies.password !== this.companies.password_confirmation) {
+          this.errors.password_mismatch = 'Passwords do not match';
+        }
+      }
 
-    return Object.keys(this.errors).length === 0; 
+  
+    // return Object.keys(this.errors).length === 0;
   },
-
-    togglePassword(){
-      this.showPassword= true;
+  checkButtonState() {
+   
+      return Object.keys(this.errors).length > 0;
     },
+
+    nextStep() {
+      this.validateFields(); 
+      if (this.checkButtonState()) {
+        console.log('Form is invalid, please correct the errors.');
+      } else {
+        this.showPassword = true; // Proceed to the password section
+        this.validateFields(); // Validate password fields after showing the section
+      }
+    },
+    submitForm() {
+      this.validateFields(); 
+      if (!this.checkButtonState()) {
+        this.registerCompany();
+      }
+    },
+
+
     hidepassword(){
       this.showPassword =false
     },
@@ -733,8 +811,8 @@ export default {
         console.error(error);
       }
     },
-    async createCompany() {
-      if (this.validateFields()) {
+    async registerCompany() {
+      
       this.companies.social_media_links = JSON.stringify(this.socialMediaLinks);
 
 
@@ -767,9 +845,6 @@ export default {
       } catch (error) {
         this.errorMessage = error.response ? error.response.data.message : 'An error occurred. Please try again.';
         console.error('Error creating company:', this.errorMessage);
-      }}
-      else{
-        console.log('Form is invalid, show errors.');
       }
     },
     resetForm() {
