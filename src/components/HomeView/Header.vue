@@ -13,7 +13,7 @@ let lastScrollPosition = 0;
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
-  console.log(isSidebarOpen.value);
+  // console.log(isSidebarOpen.value);
 };
 
 const navLinks = [

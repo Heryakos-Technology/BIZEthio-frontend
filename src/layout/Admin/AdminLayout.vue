@@ -1,7 +1,11 @@
 <script setup>
 import Logo from "@/components/icons/Logo.vue";
 import { ref, onMounted } from "vue";
-
+import DashboardIcon from "/images/AdminPage/dashboard_icon.png";
+import CompaniesIcon from "/images/AdminPage/companies_icon.png";
+import RatingIcon from "/images/AdminPage/rating_icon.png";
+import userIcon from "/images/AdminPage/user_icon.png";
+import CategoriesIcon from "/images/AdminPage/categories_icon.png";
 const isSidebarOpen = ref(false);
 const sidebar = ref(null);
 
@@ -41,7 +45,7 @@ onMounted(() => {
         </svg>
 
         <div
-          class="absolute bottom-0 text-white h-screen w-full z-10 pt-14 px-4 left-0 bg-darkBlue overscroll-contain overflow-y-hidden"
+          class="absolute bottom-0 text-white h-screen w-full z-10 pt-14 px-4 left-0 bg-darkBlue overscroll-contain overflow-y-hidden max-w-[425px]"
           ref="sidebar"
           :class="{ hidden: isSidebarOpen }"
         >
@@ -59,21 +63,123 @@ onMounted(() => {
             </svg>
           </div>
           <div class="px-8 mt-16">
-            <ul class="text-2xl space-y-4">
-              <li class="">Menu</li>
-              <li class="">Profile</li>
-              <li class="">Dashboard</li>
+            <ul class="text-2xl space-y-8">
+              <li class="flex items-center gap-2">
+                <div class="bg-lightBlue p-2 rounded-lg">
+                  <svg
+                    class="size-4 fill-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
+                    />
+                  </svg>
+                </div>
+                Menu
+              </li>
+              <li class="flex gap-x-2 items-center">
+                <div class="bg-lightBlue p-1 rounded-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    strokeWidth="{1.5}"
+                    stroke="currentColor"
+                    class="size-6 fill-white"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                    />
+                  </svg>
+                </div>
+                Profile
+              </li>
+              <li class="flex gap-x-2 items-center">
+                <img :src="DashboardIcon" alt="" class="size-6" />
+                Dashboard
+              </li>
             </ul>
-            <ul class="ml-8 text-xl space-y-3 mt-2">
-              <li class="">Companies</li>
-              <li class="">Users</li>
-              <li class="">Categories</li>
-              <li class="">Rating</li>
+            <ul class="ml-8 text-xl space-y-5 mt-8">
+              <li class="flex gap-x-2 items-center">
+                <img :src="CompaniesIcon" alt="" class="size-6" />Companies
+              </li>
+              <li class="flex gap-x-2 items-center">
+                <img :src="userIcon" alt="" class="size-6" />Users
+              </li>
+              <li class="flex gap-x-2 items-center">
+                <img :src="CompaniesIcon" alt="" class="size-6" />Categories
+              </li>
+              <li class="flex gap-x-2 items-center">
+                <img :src="RatingIcon" alt="" class="size-6" />Rating
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
+      <!-- Desktop Navbar -->
+      <div
+        class="md:flex flex-col pt-24 px-4 absolute bg-darkBlue h-screen w-[300px] top-0 left-0 text-white hidden"
+      >
+        <Logo class="w-[150px] fill-white" />
+
+        <div class="px-8 mt-16">
+          <ul class="text-2xl space-y-8">
+            <li class="flex items-center gap-2">
+              <div class="bg-lightBlue p-2 rounded-lg">
+                <svg
+                  class="size-4 fill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
+                  />
+                </svg>
+              </div>
+              Menu
+            </li>
+            <li class="flex gap-x-2 items-center">
+              <div class="bg-lightBlue p-1 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  strokeWidth="{1.5}"
+                  stroke="currentColor"
+                  class="size-6 fill-white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  />
+                </svg>
+              </div>
+              Profile
+            </li>
+            <li class="flex gap-x-2 items-center">
+              <img :src="DashboardIcon" alt="" class="size-6" />
+              Dashboard
+            </li>
+          </ul>
+          <ul class="ml-8 text-xl space-y-5 mt-8">
+            <li class="flex gap-x-2 items-center">
+              <img :src="CompaniesIcon" alt="" class="size-6" />Companies
+            </li>
+            <li class="flex gap-x-2 items-center">
+              <img :src="userIcon" alt="" class="size-6" />Users
+            </li>
+            <li class="flex gap-x-2 items-center">
+              <img :src="CompaniesIcon" alt="" class="size-6" />Categories
+            </li>
+            <li class="flex gap-x-2 items-center">
+              <img :src="RatingIcon" alt="" class="size-6" />Rating
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="ml-4">
         <slot />
       </div>
