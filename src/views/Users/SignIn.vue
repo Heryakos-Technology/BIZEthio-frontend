@@ -40,7 +40,7 @@
                  <div class="md:text-lg md:w-1/2 md:mx-auto ">
                    <div class="flex w-2/3 mx-auto">
                        <div class="">
-                   <input type="radio" class= " border border-cyan-400"  id="rememberMe">
+                   <input type="checkbox" class= " border border-cyan-400"  id="rememberMe">
                  </div>
                  <div class=" mx-auto">
     
@@ -132,7 +132,7 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" id="rememberMe">
+                <input type="checkbox" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 
@@ -206,7 +206,7 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" id="rememberMe">
+                <input type="checkbox" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 

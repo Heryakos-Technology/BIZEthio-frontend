@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <input type="text" class="pl-3 border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" v-model="email" id="email" required>
+            <input type="email" class="pl-3 border-2 rounded-md border-blue-300 focus:outline-none w-13/13 md:h-12" v-model="email" id="email" required>
             
           </div>
           <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
@@ -24,7 +24,7 @@
             <!-- <p v-if="error" class="mt-3">{{ error }}</p> -->
           </div>
         <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
-          <p class="md:text-lg text-sm text-center text-gray-400"> Back to Sign in </p>
+          <p class="md:text-lg text-sm text-center text-gray-400 hover:font-semibold" > Back to Sign in </p>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="mt-2">
-              <input type="text" class="pl-3 border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white" v-model="email" id="email" required>
+              <input type="email" class="pl-3 border-2 rounded-xl border-blue-300 focus:outline-none w-13/13 md:h-12 bg-white" v-model="email" id="email" required>
             </div>
             <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
           </div>
@@ -55,7 +55,7 @@
             <!-- <p v-if="error" class="mt-3">{{ error }}</p> -->
           </div>
           <div @click="backToSignIn" class="lg:w-1/2 lg:mx-auto">
-            <p class="text-blue-600 underline mt-6 font-light cursor-pointer">Back to sign in</p>
+            <p class="text-blue-600 underline mt-6 font-light cursor-pointer hover:font-semibold" >Back to sign in</p>
           </div>
         </div>
       </div>
