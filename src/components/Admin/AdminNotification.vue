@@ -4,7 +4,7 @@ import { ref } from "vue";
 // Sample notification data
 const notifications = ref({
   users: [
-    { message: "Selam is logged out", color: "bg-purple-200" },
+    { message: "Selam is logged out", color: "bg-green-200" },
     { message: "betelhem tamru is logged in", color: "bg-yellow-200" },
     { message: "tamrat belete newly signed in", color: "bg-pink-200" },
   ],
@@ -14,7 +14,7 @@ const notifications = ref({
     { message: "vinc is now the 3rd top company", color: "bg-gray-200" },
   ],
   rating: [
-    { message: "nextEthio got 5 stars", color: "bg-yellow-200" },
+    { message: "nextEthio got 5 stars", color: "bg-sky-300" },
     { message: "rohaTech got 5 stars", color: "bg-blue-200" },
     { message: "semayawi cafe got 4 stars", color: "bg-pink-200" },
   ],
