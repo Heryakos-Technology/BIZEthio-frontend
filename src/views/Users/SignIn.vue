@@ -334,11 +334,14 @@ onMounted(() => {
   
           const token = response.data.token; 
           const user = response.data.user;   
+
           
           console.log('Token:', token);
           console.log('User:', user);
           console.log('response:', response);
           localStorage.setItem('token', token);
+          console.log("user_id",user.id)
+          localStorage.setItem('user_id', user.id);
   
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; 
   
