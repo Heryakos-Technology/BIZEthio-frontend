@@ -242,7 +242,7 @@
         
 
           <div class="mx-auto w-1/2 mt-4 md:w-1/3 md:mx-auto">
-            <!-- <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p> -->
+            <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5" v-if="errors">{{ errors }}</p>
               <button :disabled="isButtonDisabled" :class="{
     'bg-gray-200  cursor-not-allowed': isButtonDisabled,
     'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled
