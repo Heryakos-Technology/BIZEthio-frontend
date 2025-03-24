@@ -17,6 +17,7 @@ import EditProfile from '@/views/userPage/EditProfile.vue'
 import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
 import UserProfile from '@/views/userPage/UserProfile.vue'
+import AdminProfile from '@/views/Admin/AdminProfile.vue'
 
 
 
@@ -41,9 +42,9 @@ const router = createRouter({
       name: 'ForgotPassword',
       component: ForgotPassword,
     },
-    
-     
-{
+
+
+    {
       path: '/signup',
       name: 'UserRegistration1',
       component: UserRegistration1,
@@ -63,7 +64,7 @@ const router = createRouter({
       name: 'UserLanding',
       component: UserLanding,
     },
-    
+
     {
       path: '/next',
       name: 'NextPage',
@@ -103,7 +104,13 @@ const router = createRouter({
       name: 'EditProfile',
       component: EditProfile,
     },
-    
+    {
+      path: '/admin/profile',
+      name: 'AdminProfile',
+      component: AdminProfile,
+    },
+
+
 
   ],
 })

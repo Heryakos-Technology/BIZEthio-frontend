@@ -43,7 +43,7 @@ import HeroImage from "/images/Hero_Image.png";
     </div>
 
     <div
-      class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px]"
+      class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px] drop-shadow-2xl"
       :style="{ backgroundImage: `url(${HeroImage})` }"
     ></div>
   </div>
