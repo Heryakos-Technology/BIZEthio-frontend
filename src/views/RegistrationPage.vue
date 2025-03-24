@@ -431,7 +431,7 @@
 
 
         <div  class=" mt-10 ml-20 ">
-          <button @click="nextStep" 
+          <button @click="registerCompany" 
             class="bg-[#2178AC] mb-32 hover: ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
            next</button>
 
@@ -505,6 +505,8 @@
 </template>
 <script>
 import axios from 'axios';
+import { login, register ,updateUserPassword} from '../auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification,signInWithEmailAndPassword,updatePassword } from 'firebase/auth';
 
 export default {
 computed:{
@@ -710,7 +712,7 @@ handlePasswordInput() {
       }
 
   
-    // return Object.keys(this.errors).length === 0;
+   
   },
   checkButtonState() {
    
@@ -722,14 +724,157 @@ handlePasswordInput() {
       if (this.checkButtonState()) {
         console.log('Form is invalid, please correct the errors.');
       } else {
-        this.showPassword = true; // Proceed to the password section
-        this.validateFields(); // Validate password fields after showing the section
+        this.showPassword = true; 
+        this.validateFields(); 
+        
       }
     },
+    async registerCompany(){
+ const companyData = {
+  contact_email: this.companies.contact_email,
+
+  };
+
+  try {
+    const tempPassword = Math.random().toString(36).slice(-8);
+
+// isLoading.value = 'Submitting'
+const auth = getAuth();
+const userCredential = await createUserWithEmailAndPassword(auth, companyData.contact_email,tempPassword);
+
+
+await sendEmailVerification(userCredential.user);
+alert('A verification email has been sent. Please check your inbox.');
+localStorage.setItem('temporaryPassword', tempPassword);
+
+alert('Please verify your email to complete your registration.');
+continueButton.value = "Sent"
+} catch (error) {
+console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+this.errors = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+this.nextStep()
+}
+
+},
+async handleRegister() {
+
+  const name = this.companies.name;
+  const owner_name = this.companies.owner_name;
+  const description = this.companies.description;
+  const password = this.companies.password;
+  const password_confirmation = this.companies.password_confirmation;
+  const operating_hours =  this.companies.operating_hours;
+  const category_id =  this.companies.category_id;
+  const address =  this.companies.address;
+  const city = this.companies.city;
+  const region= this.companies.region;
+  const country = this.companies.country;
+  const contact_phone = this.companies.contact_phone;
+  const contact_email = this.companies.contact_email.trim().toLowerCase(); 
+  const website = this.companies.website;
+  const license_url = this.companies.license_url;
+  const socialMediaLinks = {
+    facebook:'',
+    Instagram:'',
+    LinkedIn:''
+  };
+  const status = this.companies.status;
+  const rating_avg = this.companies.rating_avg;
+  const images = this.imageUrl ? JSON.stringify([this.imageUrl]) : JSON.stringify([]);
+ 
+
+  const companyData = {
+    name,
+    owner_name,
+    description,
+    password,
+    password_confirmation,
+    operating_hours,
+    category_id,
+    address,
+    city,
+    region,
+    country,
+    contact_phone,
+    contact_email,
+    website,
+    license_url,
+    social_media_links: socialMediaLinks,
+    status,
+    rating_avg,
+    images
+    
+  };
+
+  const auth = getAuth();
+ 
+
+  try {
+  
+    const currentUser = auth.currentUser;
+
+
+    if (!currentUser) {
+      
+      const tempPassword = Math.random().toString(36).slice(-8);
+
+    
+      const userCredential = await createUserWithEmailAndPassword(auth, companyData.contact_email, tempPassword);
+
+     
+      await sendEmailVerification(userCredential.user);
+      alert('A verification email has been sent. Please check your inbox.');
+
+      
+      localStorage.setItem('temporaryPassword', tempPassword);
+      
+      return; 
+    } else {
+      
+      await currentUser.reload(); 
+
+      if (currentUser.emailVerified) {
+      
+       const tempPassword = localStorage.getItem('temporaryPassword');
+        const success = await updateUserPassword(contact_email, tempPassword, password);
+
+        if (success) {
+          
+          const response = await axios.post(`https://bizethio-backend-production.up.railway.app/api/companies`, companyData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          console.log('company registered successfully', response.data);
+
+
+        this.companies.password = '';
+      this.companies.password_confirmation = '';
+      this.$router.push('/signin')
+   
+        }
+      } else {
+        alert('Your email is not verified. Please verify your email before registering again.');
+  
+       this.companies.password = '';
+       this.companies.password_confirmation = '';
+   
+      }
+    }
+  } catch (error) {
+    console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+    this.errors = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+
+    this.companies.password = '';
+    this.companies.password_confirmation = '';
+
+  }
+},
     submitForm() {
       this.validateFields(); 
       if (!this.checkButtonState()) {
-        this.registerCompany();
+        this.handleRegister();
       }
     },
 
@@ -789,7 +934,7 @@ handlePasswordInput() {
       }, this.timeOutDuration)
     },
     checkButtonDisabled() {
-    return !this.validateFields(); // Disable button if fields are invalid
+    return !this.validateFields(); 
   },
     async fetchCategories() {
       try {
@@ -811,7 +956,7 @@ handlePasswordInput() {
         console.error(error);
       }
     },
-    async registerCompany() {
+    async Company() {
       
       this.companies.social_media_links = JSON.stringify(this.socialMediaLinks);
 
@@ -853,6 +998,7 @@ handlePasswordInput() {
         owner_name: '',
         description: '',
         password: '',
+
         operating_hours: '',
         category_id: '',
         address: '',
@@ -871,7 +1017,7 @@ handlePasswordInput() {
         facebook: '',
         Instagram: '',
         LinkedIn: '',
-      };
+      };  
       this.images = '';
       this.file = null;
       this.imageUrl = null;
