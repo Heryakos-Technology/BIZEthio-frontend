@@ -1,20 +1,33 @@
 <script setup>
 import Logo from "@/components/icons/Logo.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import DashboardIcon from "/images/AdminPage/dashboard_icon.png";
 import CompaniesIcon from "/images/AdminPage/companies_icon.png";
 import RatingIcon from "/images/AdminPage/rating_icon.png";
 import userIcons from "/images/AdminPage/users_icon.png";
 import userIcon from "/images/AdminPage/user_icon.png";
 import CategoriesIcon from "/images/AdminPage/categories_icon.png";
+
 const isSidebarOpen = ref(false);
 const sidebar = ref(null);
 
+// Toggle sidebar visibility
 const handleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
-  console.log(isSidebarOpen.value);
 };
 
+// Watch for changes in isSidebarOpen to toggle body scroll
+watch(isSidebarOpen, (newValue) => {
+  if (newValue) {
+    // Disable scrolling on the body when sidebar is open
+    document.body.classList.add("no-scroll");
+  } else {
+    // Re-enable scrolling when sidebar is closed
+    document.body.classList.remove("no-scroll");
+  }
+});
+
+// Prevent wheel scrolling on the sidebar
 onMounted(() => {
   if (sidebar.value) {
     sidebar.value.addEventListener(
@@ -29,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="">
+  <div class="bg-[#e4e8ff]">
     <div class="h-screen w-full overflow-y pt-10 px-4 relative text-base">
       <!-- Mobile Sidebar -->
       <div
@@ -47,7 +60,7 @@ onMounted(() => {
           ></path>
         </svg>
         <div class="flex gap-x-4 items-center">
-          <p class="font-semibold">Welcome , Temesgen</p>
+          <p class="font-semibold">Welcome, Temesgen</p>
           <div class="flex gap-x-1 items-end">
             <img :src="userIcon" alt="" class="size-6" />
             <svg
@@ -64,9 +77,9 @@ onMounted(() => {
       </div>
       <div class="md:hidden">
         <div
-          class="absolute bottom-0 text-white h-screen w-full z-10 pt-2 px-4 left-0 bg-darkBlue overscroll-contain overflow-y-hidden max-w-[425px]"
+          class="absolute bottom-0 text-white h-screen w-full z-10 pt-2 px-4 left-0 bg-darkBlue overscroll-contain overflow-y-auto max-w-[425px]"
           ref="sidebar"
-          :class="{ hidden: isSidebarOpen }"
+          :class="{ hidden: !isSidebarOpen }"
         >
           <div class="flex w-full justify-between">
             <svg
@@ -187,7 +200,7 @@ onMounted(() => {
 
       <!-- Desktop Navbar -->
       <div
-        class="md:flex flex-col pt-24 px-4 absolute bg-darkBlue h-screen w-[300px] top-0 left-0 text-white hidden"
+        class="md:flex fixed flex-col pt-24 px-4 bg-darkBlue h-screen w-[300px] top-0 left-0 text-white hidden"
       >
         <svg
           width="170"
@@ -293,9 +306,16 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <div class="pt-16 md:ml-[300px]">
+      <div class="pt-16 md:ml-[300px] bg-[#e4e8ff]">
         <slot />
       </div>
     </div>
   </div>
 </template>
+
+<style>
+/* Add this to your global CSS (e.g., style.css) */
+.no-scroll {
+  overflow: hidden;
+}
+</style>

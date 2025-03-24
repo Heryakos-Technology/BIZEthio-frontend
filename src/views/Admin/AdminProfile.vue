@@ -2,11 +2,13 @@
 import AdminLayout from "@/layout/AdminLayout.vue";
 import admin_user_profile from "/images/AdminPage/admin_user_profile.png";
 import admin_profile_setting from "/images/AdminPage/admin_profile_setting.png";
+import AdminCalendar from "@/components/Admin/AdminCalendar.vue";
+import AdminNotification from "@/components/Admin/AdminNotification.vue";
 </script>
 
 <template>
   <AdminLayout>
-    <div class="grid">
+    <div class="grid lg:grid-cols-2 pb-16">
       <div
         class="bg-white relative grid max-w-[400px] w-full pt-16 mt-32 mx-auto"
       >
@@ -75,6 +77,9 @@ import admin_profile_setting from "/images/AdminPage/admin_profile_setting.png";
           Edit Profile
         </button>
       </div>
+      <AdminCalendar />
+      <div class=""></div>
+      <AdminNotification />
     </div>
   </AdminLayout>
 </template>
