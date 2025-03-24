@@ -4,13 +4,16 @@ import CategoriesSection from "@/components/HomeView/CategoriesSection.vue";
 import ForYourSection from "@/components/HomeView/ForYourSection.vue";
 import Header from "@/components/HomeView/Header.vue";
 import HeroSection from "@/components/HomeView/HeroSection.vue";
+import UserLayout from "@/layout/UserLayout.vue";
 </script>
 
 <template>
-  <div class="pt-[90px]">
-    <HeroSection />
-    <CategoriesSection />
-    <ForYourSection />
-    <CallToActionSection />
-  </div>
+  <UserLayout>
+    <div class="pt-[90px]">
+      <HeroSection />
+      <CategoriesSection />
+      <ForYourSection />
+      <CallToActionSection />
+    </div>
+  </UserLayout>
 </template>
