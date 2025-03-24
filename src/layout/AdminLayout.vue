@@ -306,7 +306,7 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <div class="pt-16 md:ml-[300px] bg-[#e4e8ff]">
+      <div class="pt-8 md:ml-[300px] bg-[#e4e8ff]">
         <slot />
       </div>
     </div>
