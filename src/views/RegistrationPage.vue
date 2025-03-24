@@ -56,7 +56,7 @@
 
     <div class="px-4  mt-4 w-11/12 mx-auto">
       <div class="flex">
-        <label class="">category</label><br>
+        <label class="">Category</label><br>
         <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
       </div>
 
@@ -188,9 +188,9 @@
 
   <!-- desktop -->
 
-  <div class="hidden md:block px-4">
+  <div class="hidden md:block px-4 ">
     <div class="flex">
-      <div class=" bg-gradient-to-r from-[#0087e1] to-[#2178AC] w-1/3 -ml-4">
+      <div class=" bg-gradient-to-r from-[#0087e1] to-[#2178AC] relative w-1/3 -ml-4">
         <p class="text-2xl font-medium text-white mt-16 w-11/12 px-10 text-center">Connect, Discover, and Grow with
           AI-Powered Local Business Listings!</p>
         <div style="height: 350px"
@@ -202,7 +202,7 @@
             with personalized recommendations.</p>
         </div>
 
-        <div class="h-56 mb-20  mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]">
+        <div class="h-56 mb-20 lg:mb-96  mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]">
           <div class=" flex">
             <div class="ml-10 mt-20">
               <div class="w-16 h-1 ml-6 bg-[#1b6489] rounded-full mb-3"></div>
@@ -219,10 +219,11 @@
           </div>
         </div>
 
-        <img src="/Bottom Desogn Card.png" alt="" class="  mt-44">
+        <img src="/Bottom Desogn Card.png" alt="" class="absolute bottom-0 left-0  mt-44 ">
 
       </div>
-      <div class="ml-20 w-2/3">
+<!-- /////////////// -->
+      <div v-if="!showPassword" class="ml-20 w-2/3 ">
         <p class="text-center text-3xl font-bold mt-4">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
 
         <div class="flex w-full">
@@ -232,7 +233,8 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.owner_name" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.owner_name" class="text-red-500 text-sm">{{ errors.owner_name }}</p>
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -241,41 +243,47 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.name" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</p>
           </div>
 
         </div>
         <div class="flex ">
-          <div class="px-5.5 mt-4 w-full -ml-2">
+          <div class="px-6 mt-4 w-full -ml-2">
             <div class="flex">
               <p class="">Description</p>
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-            <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"> -->
+            <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"> -->
             <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
-              class="border-2 border-[#60b5e6] rounded-md w-11/12"></textarea>
+              class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34"></textarea>
+              <p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
           </div>
 
           <div class="container">
-            <div class="px-3.5 -ml-1  mt-8  mx-auto">
+            <div class="px-3 -ml-1 mr-1  mt-4  mx-auto">
               <div class="flex">
                 <p class="">Contact Phone</p>
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
               <input v-model="companies.contact_phone" type="text"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              @input="updatePhoneNumber"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+                <p v-if="errors.contact_phone" class="text-red-500 text-sm">{{ errors.contact_phone }}</p>
             </div>
 
-            <div class="px-3.5 -ml-1  mt-4  mx-auto">
+            <div class="px-3 -ml-1 mr-1 mt-4  mx-auto">
               <div class="flex">
-                <label class="">category</label><br>
+                <label class="">Category</label><br>
                 <p class=" text-red-600 text-2xl font-medium ml-1">*</p>
               </div>
 
               <select name="category" v-model="companies.category_id"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+                <option value="">Select category</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
                 </option>
+                <p v-if="errors.category_id" class="text-red-500 text-sm">{{ errors.category_id }}</p>
               </select>
             </div>
 
@@ -288,28 +296,8 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.contact_email" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
-          </div>
-          <div class="px-4  mt-4 w-11/12 mx-auto">
-            <div class="flex">
-              <p class="">password</p>
-              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
-            </div>
-            <input v-model="companies.password" type="password"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
-          </div>
-
-        </div>
-        <div class="flex">
-
-
-          <div class="px-4  mt-4 w-11/12 mx-auto">
-            <div class="flex">
-              <p class=""> confirm password</p>
-              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
-            </div>
-            <input v-model="companies.password_confirmation" type="password"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.contact_email" class="text-red-500 text-sm">{{ errors.contact_email }}</p>
           </div>
 
           <div class="px-4  mt-4 w-11/12 mx-auto">
@@ -318,8 +306,11 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.operating_hours" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.operating_hours" class="text-red-500 text-sm">{{ errors.operating_hours }}</p>
+
           </div>
+
 
         </div>
         <div class="flex">
@@ -330,12 +321,13 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <select name="country" v-model="companies.country"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <option value="">Select country</option>
               <option v-for="country in countries" :key="country.id" :value="country.name"
                 class="border-[#84d2ffb7] rounded-lg mt-2">
                 {{ country.name }}
               </option>
+              <p v-if="errors.country" class="text-red-500 text-sm">{{ errors.country }}</p>
             </select>
           </div>
 
@@ -345,7 +337,8 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.address" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.address" class="text-red-500 text-sm">{{ errors.address }}</p>
           </div>
 
         </div>
@@ -357,7 +350,8 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.region" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.region" class="text-red-500 text-sm">{{ errors.region }}</p>
           </div>
           <div class="px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
@@ -365,7 +359,8 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.city" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.license_url" class="text-red-500 text-sm">{{ errors.license_url }}</p>
           </div>
 
         </div>
@@ -378,50 +373,56 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <input v-model="companies.license_url" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.license_url" class="text-red-500 text-sm">{{ errors.license_url }}</p>
           </div>
-          <div class="px-4 mt-6 w-11/12 mx-auto">
+          <div class="px-4 mt-4 w-11/12 mx-auto">
             <div class="flex">
-              <p>Website</p>
+              <p class="mb-2">Website</p>
             </div>
             <input v-model="companies.website" type="text"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
+              <p v-if="errors.website" class="text-red-500 text-sm">{{ errors.website }}</p>
           </div>
         </div>
 
-        <div class="px-4 mt-4 w-1/2 ">
-          <div class="flex mb-2">
-            <p>Image</p>
-          </div>
+          <div class="px-4 mt-4 w-1/2 ">
+    <div class="flex">
+      <p class="mb-2">Image</p>
+    </div>
+    <input v-model="companies.images" type="text"  class="w-11/12 hidden h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload images" readonly />
+    <input type="file" @change="handleFileUpload" class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#60b5e6] hover:bg-[#eaf8ff] placeholder:text-center" placeholder="Upload Image" multiple />
+    
+    
+    <div v-if="imageUrl && imageUrl.length" class="mt-4">
+      <h3>Uploaded Image</h3>
+      <div v-for="(url, index) in imageUrl" :key="index">
+        <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
+      </div>
+   
+  </div>
+</div>
+<p v-if="errors.images" class="text-red-500 text-sm">{{ errors.images }}</p>
+  <button @click="uploadImage(); toggleImageButton()" v-if="!isUploading" class="mt-2 ml-4 bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
+    Upload</button>
+    <p v-if="isUploading" class="mt-2 ml-4 text-green-600">Uploading...</p>
 
-          <input @change="handleFileUpload" multiple type="file"
-            class="cursor-pointer w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md">
-          <input v-model="companies.images" type="text"
-            class="w-11/12 outline-none  hidden  h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-            placeholder="Upload images" readonly />
-          <div v-if="imageUrl && imageUrl.length" class="mt-4">
-          </div>
-        </div>
-
-
-        <button :disabled="isButtonDisabled" @click="uploadImage"
-          class="cursor-pointer mt-2 ml-4 bg-[#409cd0] text-white rounded-md px-4 py-2"><span>Upload</span> </button>
         <!-- end of image -->
 
         <div class="px-7 mt-4">
           <div class="">
             <div class="md:w-56 mt-6">
-              <p class="md:text-s md:w-40 ">Social Media Links</p>
+              <p class="md:text-s md:w-40 lg:-ml-3">Social Media Links</p>
             </div>
             <div>
             </div>
             <div class="flex mt-4 -ml-3">
               <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
-                class="w-56 h-10 bg-transparent pl-2  border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                class="w-56 h-10 bg-transparent outline-none pl-2  border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
               <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
-                class="w-56 h-10 bg-transparent pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
               <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
-                class="w-56 h-10 bg-transparent pl-2  border-2 border-[#60b5e6] rounded-md mb-4" />
+                class="w-56 h-10 bg-transparent outline-none pl-2  border-2 border-[#60b5e6] rounded-md mb-4" />
             </div>
 
           </div>
@@ -430,12 +431,54 @@
 
 
         <div class=" mt-10 ml-20 ">
-          <button @click="createCompany" :disabled="isButtonDisabled"
-            class="bg-[#2178AC] mb-32 hover:bg-[#374364] ml-40 py-3 cursor-pointer px-40 -mt-80 md:ml-20 rounded-md text-white text-md">Register
-            Company</button>
+          <button @click="togglePassword" :disabled="isButtonDisabled"
+            class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+           next</button>
 
         </div>
 
+      </div>
+      <div v-if="showPassword" class="w-1/3  mx-auto ">
+        <p class="text-center text-3xl font-bold mt-16">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
+        <div  class=" mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
+            <div  class="w-full">
+              <div class="px-4  mt-4  mx-auto">
+                <div class="flex">
+                  <p class="">password</p>
+                  <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+                </div>
+                <input v-model="companies.password" type="password"
+                @input="updatePasswordStrength"
+                  class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4">
+                  <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
+                  <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
+    {{ passwordStrengthLabel }}
+  </div>
+              </div>
+    
+              <div class="px-4  mt-4  mx-auto">
+                <div class="flex">
+                  <p class=""> Confirm password</p>
+                  <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+                </div>
+                <input v-model="companies.password_confirmation" type="password"
+                  class=" outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+                  :class="['outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4', 
+               isConfirmPasswordFocused && companies.password && companies.password !== companies.password_confirmation ? 'border-red-500' : 'border-[#60b5e6]']"
+      @focus="isConfirmPasswordFocused = true"
+      @blur="isConfirmPasswordFocused = false">
+      <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{ errors.password_confirmation }}</p>
+              </div>
+            </div>
+            <div>
+              <button @click="hidepassword" class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6b8ea1] ml-2 lg:ml-4 py-2  cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">Back</button>
+            </div>
+            <div>
+              <button @click="createCompany" :disabled="isButtonDisabled"
+                class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24   py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">Register Company</button>
+            </div>
+          </div>
+        
       </div>
     </div>
     <!-- /end of desktop -->
@@ -462,23 +505,25 @@ export default {
       error: null,
       categories: [],
       companies: {
-        name: 'kaltech',
-        owner_name: 'kalkidan solomon',
-        description: 'cutting-edge technology company dedicated to creating innovative solutions that enhance everyday life. Specializing in software development, artificial intelligence, and cloud computing, we empower businesses to optimize their operations and drive growth.',
-        password: '12345678',
-        password_confirmation: '12345678',
-        operating_hours: '5',
-        category_id: '1',
-        address: 'dessie',
-        city: 'dessie',
-        region: 'amhara',
-        country: 'ethiopia',
-        contact_phone: '0921212121',
-        contact_email: 'kal@gmail.com',
-        website: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+        name: '',
+        owner_name: '',
+        description: '',
+        password: '',
+        password_confirmation: '',
+        operating_hours: '',
+        category_id: '',
+        address: '',
+        city: '',
+        region: '',
+        country: '',
+        contact_phone: '',
+        contact_email: '',
+        website: '',
+        license_url:'',
         social_media_links: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
         status: 'pending',
         rating_avg: '5',
+        
         images: {},
       },
       socialMediaLinks: {
@@ -493,9 +538,127 @@ export default {
       apiKey: '934859592498419',
       isButtonDisabled: false,
       timeOutDuration: 2000,
+      showPassword:false,
+      isUploading: false,
+      ImageButton:true,
+      errors:{
+        contact_phone: '',
+      },
+      passwordStrengthMessages: [],
+      contact_phone: '',
     };
   },
   methods: {
+
+    validatePhoneNumber(phoneNumber) {
+    
+      const phoneRegex = /^(\+?\d{1,3})?[- ]?(\(?\d{3}\)?[- ]?)?\d{3}[- ]?\d{4}$/;
+    return phoneRegex.test(phoneNumber);
+  },
+
+  updatePhoneNumber() {
+    if (!this.validatePhoneNumber(this.companies.contact_phone)) {
+      this.errors.contact_phone = "Please enter a valid phone number.";
+    } else {
+      this.errors.contact_phone = ""; 
+    }
+  },
+    checkPasswordStrength(password) {
+    const strengthCriteria = [
+      { regex: /.{8,}/, message: "At least 8 characters long." },
+      { regex: /[A-Z]/, message: "At least one uppercase letter." },
+      { regex: /[a-z]/, message: "At least one lowercase letter." },
+      { regex: /[0-9]/, message: "At least one number." },
+      { regex: /[!@#$%^&*(),.?":{}|<>]/, message: "At least one special character." },
+    ];
+
+    const strengthMessages = [];
+    strengthCriteria.forEach(criteria => {
+      if (!criteria.regex.test(password)) {
+        strengthMessages.push(criteria.message);
+      }
+    });
+
+    let strengthLabel = '';
+    let strengthClass = '';
+
+    if (strengthMessages.length === 0) {
+      strengthLabel = "Strong";
+      strengthClass = 'text-green-500'; 
+    } else if (strengthMessages.length <= 4) {
+      strengthLabel = "Medium";
+      strengthClass = 'text-yellow-500'; 
+    } else {
+      strengthLabel = "Weak";
+      strengthClass = 'text-red-500';
+    }
+
+    return { label: strengthLabel, class: strengthClass };
+  },
+
+  updatePasswordStrength() {
+    const { label, class: strengthClass } = this.checkPasswordStrength(this.companies.password);
+    this.passwordStrengthLabel = label;
+    this.passwordStrengthClass = strengthClass;
+  },
+    validateFields() {
+    this.errors = {}; 
+ 
+    if (!this.companies.owner_name) {
+      this.errors.owner_name = 'Owner name is required';
+    }
+    if (!this.companies.name) {
+      this.errors.name = 'Company name is required';
+    }
+    if (!this.companies.description) {
+      this.errors.description = 'Description is required';
+    }
+    if (!this.companies.contact_phone) {
+      this.errors.contact_phone = 'Contact phone is required';
+    }
+    if (!this.companies.password) {
+      this.errors.password = 'password is required';
+    }
+    if (!this.companies.password_confirmation) {
+      this.errors.password_confirmation = 'password confirmation is required';
+    }
+    if (!this.companies.contact_email) {
+      this.errors.contact_email = 'Contact email is required';
+    }
+    if (!this.companies.operating_hours) {
+      this.errors.operating_hours = 'Operating hours are required';
+    }
+    if (!this.companies.country || this.companies.country.length === 0) {
+    this.errors.country = 'country must be selected'; 
+  }
+    if (!this.companies.category_id || this.companies.category_id.length === 0) {
+    this.errors.category_id = 'category must be selected'; 
+  }
+    if (!this.companies.address) {
+      this.errors.address = 'Address is required';
+    }
+    if (!this.companies.region) {
+      this.errors.region = 'Region is required';
+    }
+    if (!this.companies.city) {
+      this.errors.city = 'City is required';
+    }
+    if (!this.companies.license_url) {
+      this.errors.license_url = 'License URL is required';
+    }
+    if (!this.companies.images || this.companies.images.length === 0) {
+    this.errors.images = 'At least one image must be uploaded'; 
+  }
+
+    return Object.keys(this.errors).length === 0; 
+  },
+
+    togglePassword(){
+      this.showPassword= true;
+    },
+    hidepassword(){
+      this.showPassword =false
+    },
     handleFileUpload(event) {
       this.file = event.target.files;
       if (this.file) {
@@ -503,44 +666,53 @@ export default {
       }
     },
     async uploadImage() {
-      if (!this.file || this.file.length === 0) return;
+  
+  if (!this.file || this.file.length === 0) return;
 
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-      this.disableButtons()
-      console.log('cloudinary url', cloudinaryUrl)
-      const promises = [];
+  this.isUploading = true; 
+  this.disableButtons(); 
 
-      for (const singleFile of this.file) {
-        const formData = new FormData();
-        formData.append('file', singleFile);
-        formData.append('upload_preset', 'my_unsigned_preset');
+  const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+  console.log('cloudinary url', cloudinaryUrl);
 
+  const promises = [];
 
-        promises.push(
-          fetch(cloudinaryUrl, {
-            method: 'POST',
-            body: formData,
-          }).then(response => response.json())
-        );
-      }
+ 
+  for (const singleFile of this.file) {
+    const formData = new FormData();
+    formData.append('file', singleFile);
+    formData.append('upload_preset', 'my_unsigned_preset');
 
+    promises.push(
+      fetch(cloudinaryUrl, {
+        method: 'POST',
+        body: formData,
+      }).then(response => response.json())
+    );
+  }
 
-      try {
-        const responses = await Promise.all(promises);
-
-        this.imageUrl = responses.map(data => data.secure_url);
-        this.companies.images = JSON.stringify(this.imageUrl);
-      } catch (error) {
-        console.error('Error uploading images:', error);
-      }
-    },
+  try {
+    const responses = await Promise.all(promises); 
+    this.imageUrl = responses.map(data => data.secure_url); 
+    this.companies.images = JSON.stringify(this.imageUrl);
+  } catch (error) {
+    console.error('Error uploading images:', error);
+  } finally {
+    this.isUploading = false; 
+  }
+},
+  toggleImageButton(){
+    this.ImageButton =false
+  },
     disableButtons() {
       this.isButtonDisabled = true
       setTimeout(() => {
         this.isButtonDisabled = false
       }, this.timeOutDuration)
     },
-
+    checkButtonDisabled() {
+    return !this.validateFields(); // Disable button if fields are invalid
+  },
     async fetchCategories() {
       try {
         const response = await axios.get('https://bizethio-backend-production.up.railway.app/api/categories');
@@ -562,6 +734,7 @@ export default {
       }
     },
     async createCompany() {
+      if (this.validateFields()) {
       this.companies.social_media_links = JSON.stringify(this.socialMediaLinks);
 
 
@@ -581,6 +754,7 @@ export default {
       formData.append('rating_avg', 5);
 
       try {
+        this.showPassword =true
         const response = await axios.post('https://bizethio-backend-production.up.railway.app/api/companies', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -593,6 +767,9 @@ export default {
       } catch (error) {
         this.errorMessage = error.response ? error.response.data.message : 'An error occurred. Please try again.';
         console.error('Error creating company:', this.errorMessage);
+      }}
+      else{
+        console.log('Form is invalid, show errors.');
       }
     },
     resetForm() {

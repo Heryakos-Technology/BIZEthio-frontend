@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="bg-black mt-24 pt-3 px-3 pb-1 text-white sm:px-8 sm:pt-6 sm:mt-32 lg:pt-16"
+    class="bg-black mt-24 pt-3 px-3 pb-1 text-white sm:px-8 sm:pt-6 sm:mt-32 lg:pt-16 lg:mt-2"
   >
     <div
       class="sm:max-w-[640px] mx-auto grid gap-y-8 md:grid-cols-3 md:max-w-full xl:grid-cols-5"
