@@ -69,28 +69,28 @@ const router = createRouter({
       name: 'NextPage',
       component: NextPage,
     },
-    {
-      path: '/verify-email',
-      name: 'Verify',
-      component: Verify,
-    },
-    {
-      path: '/InputValidation',
-      name: 'InputValidation',
-      component: InputValidation,
-    },
+    // {
+    //   path: '/verify-email',
+    //   name: 'Verify',
+    //   component: Verify,
+    // },
+    // {
+    //   path: '/InputValidation',
+    //   name: 'InputValidation',
+    //   component: InputValidation,
+    // },
     
-    {
-      path: '/PasswordVesibility',
-      name: 'PasswordVesibility',
-      component: PasswordVesibility,
-    },
+    // {
+    //   path: '/PasswordVesibility',
+    //   name: 'PasswordVesibility',
+    //   component: PasswordVesibility,
+    // },
     
-    {
-      path: '/PasswordStrength',
-      name: 'PasswordStrength',
-      component: PasswordStrength,
-    },
+    // {
+    //   path: '/PasswordStrength',
+    //   name: 'PasswordStrength',
+    //   component: PasswordStrength,
+    // },
     
     
     {
