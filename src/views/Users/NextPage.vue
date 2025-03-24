@@ -1,6 +1,4 @@
 <template>
- 
-
     <div class="px-2 py-5">
       <div class="bg-white rounded-sm pb-10 lg:hidden">
         <img src="/public/logo.png" alt="" class="mx-auto pt-5">
@@ -17,28 +15,53 @@
               <div><p>Password</p></div>
               <div><p class="text-red-400 mt-1 ml-1">*</p></div>
             </div>
-            <div class="mt-2">
-              <input type="password" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
+            <div class="mt-2 relative">
+              <input :type="isPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password" @input="checkPasswordStrength(),validate()">
+              <span @click="togglePasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
             </div>
+            <div v-if="errors.password" class="text-red-400 mt-1">{{ errors.password }}</div>
+            <p :class="passwordStrengthClass">{{ passwordStrengthMessage }}</p>
+              <ul>
+  <li 
+    :class="{ 'text-green-500': criterion.met, 'text-red-500': !criterion.met }" 
+    v-for="(criterion, index) in passwordCriteria" 
+    :key="index"
+  >
+    <span>
+      {{ criterion.text }} 
+      <span v-if="criterion.met"><i class="fa-solid fa-check"></i></span>
+      <span v-else class="ml-1"><i class="fa-solid fa-xmark"></i></span>
+    </span>
+  </li>
+</ul>
           </div>
           <div class="mt-9">
             <div class="flex">
               <div><p>Confirm password</p></div>
               <div><p class="text-red-400 mt-1 ml-1">*</p></div>
             </div>
-            <div class="mt-2">
-              <input type="password" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
+            <div class="mt-2 relative">
+              <input :type="isConfirmPasswordVisible ? 'text' : 'password'" class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation" @input="validatePasswords(),validate()">
+              <span @click="toggleConfirmPasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="isConfirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
             </div>
           </div>
+          <div v-if="errors.password_confirmation" class="text-red-400 mt-1">{{ errors.password_confirmation }}</div>
+          <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
           <div class="mt-9">
             <div class="flex">
               <div><p>Profile picture</p></div>
              
             </div>
             <div class="mt-2 w-13/13">
-              <input type="file" class="border focus:outline-none  er-2 rounded-md pl-3 pt-1 border-blue-300 w-13/13 md:h-12" @change="handleFileUpload" accept="image/*">
+              <input type="file" class=" focus:outline-none  er-2 rounded-md pl-3 pt-1w-13/13 md:h-12" @change="handleFileUpload" @input="validate" accept="image/*">
+              <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
               <p class="text-center mt-5 text-cyan-500">{{ uploaded }}</p>
               <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-6 py-1 rounded-sm mt-5 w-1/2 text-sm mx-auto cursor-pointer">Upload File</button>
+              <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-5" />
             </div>
             <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5  mx-auto pt-7 pr-4 mt-16 md:w-3/4">
       <div class="flex justify-between">
@@ -49,6 +72,7 @@
               <p class="">Privacy Information</p>
           </div>
       </div>
+  
       <div>
   <p class="w-7/8 md:w-2/3 text-center mx-auto mt-4 text-sm">At [Business Name], 
   we prioritize your privacy and
@@ -59,15 +83,15 @@
   <p class="text-red-400">{{ checkboxMessage }}</p>
   <div class="flex mt-10 md:w-1/2 md:mx-auto" >
     <div class="mr-2 ">
-        <input type="checkbox" class="focus:outline-none pl-3 border border-cyan-300">
+        <input type="checkbox" id="myCheckbox"  class="focus:outline-none pl-3 border border-cyan-300" v-model="isCheckboxChecked">
     </div>
    
     <div class="w-11/12"><p class=" text-sm">agree with terms and agreements</p></div>
   </div>
          
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-
-              <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >Submit</button>
+            <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
+              <button  @click="handleRegister" class="bg-cyan-700 text-white px-8 py-2 rounded-sm cursor-pointer" >{{ submitText}}</button>
 
               
 
@@ -141,11 +165,28 @@
                       <p class="text-red-400 mt-1 ml-1">*</p>
                   </div>
               </div>
-              <div class="mt-2 ">
+              <div class="mt-2 relative">
 
-                  <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password">
-
+                  <input  :type="isPasswordVisible ? 'text' : 'password'" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password"   @input="checkPasswordStrength(),validate()" >
+                  <span @click="togglePasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
               </div>
+              <div v-if="errors.password" class="text-red-400 mt-1">{{ errors.password }}</div>
+              <p :class="passwordStrengthClass">{{ passwordStrengthMessage }}</p>
+              <ul>
+  <li 
+    :class="{ 'text-green-500': criterion.met, 'text-red-500': !criterion.met }" 
+    v-for="(criterion, index) in passwordCriteria" 
+    :key="index"
+  >
+    <span>
+      {{ criterion.text }} 
+      <span v-if="criterion.met"><i class="fa-solid fa-check"></i></span>
+      <span v-else class="ml-1"><i class="fa-solid fa-xmark"></i></span>
+    </span>
+  </li>
+</ul>
           </div>
           <div class="mt-9">
               <div class="flex">
@@ -157,12 +198,16 @@
                       <p class="text-red-400 mt-1 ml-1">*</p>
                   </div>
               </div>
-              <div class="mt-2 ">
+              <div class="mt-2 relative">
 
-                  <input type="password" class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation">
-
+                  <input :type="isConfirmPasswordVisible ? 'text' : 'password'"  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation"  @input="validatePasswords(),validate()">
+                  <span @click="toggleConfirmPasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+            <i :class="isConfirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
               </div>
           </div>
+          <div v-if="errors.password_confirmation" class="text-red-400 mt-1">{{ errors.password_confirmation }}</div>
+          <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
         
           <div class="mt-9">
             <div class="flex">
@@ -172,30 +217,37 @@
                   </div>
                   
               </div>
-              <div class="mt-2 ">
+              <div class="mt-5 ">
 
-                  <input type="file" class="border focus:outline-none pl-3 er-2 rounded-xl  pt-2 border-blue-300 w-13/13 md:h-12 relative" @change="handleFileUpload" accept="image/" >
-                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-8 py-2 rounded-md h-1/17  absolute top-126 left-240 cursor-pointer">Upload File</button>
+                  <input type="file" class="  er-2 rounded-xl  pt-2 w-13/13 md:h-12 relative"   @change="handleFileUpload"  @input="validate" accept="image/" >
+                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-4 py-1 rounded-md h-1/20  cursor-pointer">Upload File</button>
 
               </div>
           </div>
-          <p class="text-center mt-5 text-cyan-500">{{ uploaded }}</p>
+          <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
+          <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p>
+
+          <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/>
           <div class="mt-9">
             <p class="text-red-400">{{ checkboxMessage }}</p>
               <div class="flex w-3/4 mx-auto">
                 <div class="mt-2 ">
-                  <input type="checkbox" id="myCheckbox" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300  md:h-12">
+                  <input type="checkbox" id="myCheckbox" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300  md:h-12" v-model="isCheckboxChecked">
               </div>
               
               <p class="mt-4 ml-3">agree with terms and agreements</p>
               </div>
-              
+              <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
           </div>
         
 
           <div class="mx-auto w-1/2 mt-4 md:w-1/3 md:mx-auto">
-            <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p>
-              <button  @click="handleRegister" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer" >Submit</button>
+            <!-- <p  class="text-red-400 lg:w-25/10 -ml-30 mb-5">{{ errors }}</p> -->
+              <button :disabled="isButtonDisabled" :class="{
+    'bg-gray-200  cursor-not-allowed': isButtonDisabled,
+    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled
+  }"   @click="handleRegister" class="bg-cyan-700 text-white px-10 py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer" >{{ submitText}}</button>
+              <!-- <button  @click="completeRegistration" class="bg-cyan-700 text-white px-14 py-2 rounded-sm text-lg cursor-pointer mt-10" >complate</button> -->
               <p class="text-cyan-500 underline text-center w-12/11 mt-4 cursor-pointer" @click="()=>{this.$router.push('/signup')} ">Back to previous page</p>
 
           </div>
@@ -214,10 +266,12 @@
   <script>
 
 import axios from 'axios';
-import { ref } from 'vue';
-import { login, register } from '../../auth';
+import { ref,onMounted,watch, computed } from 'vue';
+import { login, register ,updateUserPassword} from '../../auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification,signInWithEmailAndPassword ,updatePassword   } from 'firebase/auth'; // Import Firebase Auth functions
 import { useRouter } from 'vue-router';
-import CryptoJS from 'crypto-js'; // Import CryptoJS
+import CryptoJS from 'crypto-js'; 
+// import { updateUserPassword } from './auth';
 
 export default {
   setup() {
@@ -239,6 +293,7 @@ export default {
         is_banned: 1,
       }
     });
+
     const router = useRouter();
     const file = ref(null);
     const uploadPreset = 'ml_default';
@@ -247,7 +302,84 @@ export default {
     const uploaded = ref('');
     const checkboxMessage = ref('');
     const registered = ref(false)
+    const userPhoto = ref('')
+    const passwordError = ref(false);
+    const passwordStrengthMessage = ref('');
+    const passwordStrengthClass = ref('');
+    const isPasswordStrong = ref(false);
+    const isPasswordVisible = ref(false); 
+    const isConfirmPasswordVisible = ref(false);
+    const isLoading = ref('Submit')
+    const isCheckboxChecked = ref(false);
+    const submitText = ref('Submit')
 
+    const errorss = ref('');
+    const validate = () => {
+        errors.value = {}; 
+        if (!model.value.user.password) errors.value.password = 'password is required.';
+        if (!model.value.user.password_confirmation) errors.value.password_confirmation = 'password is required.';
+        if (!model.value.user.profile_picture_url) errors.value.profile_picture_url = 'profile picture is required.';
+      };
+      const isButtonDisabled = computed(() => {
+        return !model.value.user.password || 
+           !model.value.user.password_confirmation || 
+           !model.value.user.profile_picture_url 
+       
+      });
+    watch(isCheckboxChecked, (newValue) => {
+  if (newValue) {
+    checkboxMessage.value = ''; 
+  }
+});
+watch(isButtonDisabled, (newValue) => {
+  if (newValue) {
+    console.log('Button is disabled');
+  } else {
+    console.log('Button is enabled');
+  }
+});
+      const passwordCriteria = ref([
+        { text: 'At least 8 characters', met: false },
+        { text: 'At least one number', met: false },
+        { text: 'At least one uppercase letter', met: false },
+        { text: 'At least one lowercase letter', met: false },
+        { text: 'At least one special character', met: false }
+      ]);
+
+      const checkPasswordStrength = () => {
+        const password = model.value.user.password;
+        const lengthCriteria = password.length >= 8;
+        const numberCriteria = /\d/.test(password);
+        const uppercaseCriteria = /[A-Z]/.test(password);
+        const lowercaseCriteria = /[a-z]/.test(password);
+        const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+        
+        passwordCriteria.value[0].met = lengthCriteria;
+        passwordCriteria.value[1].met = numberCriteria;
+        passwordCriteria.value[2].met = uppercaseCriteria;
+        passwordCriteria.value[3].met = lowercaseCriteria;
+        passwordCriteria.value[4].met = specialCharCriteria;
+  
+       
+        if (lengthCriteria && numberCriteria && uppercaseCriteria && lowercaseCriteria && specialCharCriteria) {
+          passwordStrengthMessage.value = 'Strong Password';
+          passwordStrengthClass.value = 'text-green-500';
+          isPasswordStrong.value = true;
+        } else if (lengthCriteria && (numberCriteria || uppercaseCriteria || lowercaseCriteria)) {
+          passwordStrengthMessage.value = 'Moderate Password';
+          passwordStrengthClass.value = 'text-yellow-500';
+          isPasswordStrong.value = false;
+        } else {
+          passwordStrengthMessage.value = 'Weak Password';
+          passwordStrengthClass.value = 'text-red-500';
+          isPasswordStrong.value = false;
+        }
+      };
+    
+    const validatePasswords = () => {
+      passwordError.value = model.value.user.password !== model.value.user.password_confirmation;
+    };
     const handleFileUpload = (event) => {
       file.value = event.target.files[0];
     };
@@ -275,7 +407,8 @@ export default {
       try {
         const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData);
         uploaded.value = 'Photo Uploaded Successfully';
-        console.log('Upload response:', response.data.secure_url);
+        userPhoto.value = response.data.secure_url;
+        console.log('Upload response:',  userPhoto.value);
         model.value.user.profile_picture_url = response.data.secure_url;
       } catch (error) {
         uploaded.value = 'Failed to upload photo';
@@ -295,63 +428,179 @@ export default {
     };
 
    
-
     const handleRegister = async () => {
+      validate();
+      if (Object.keys(errors.value).length > 0) return;
+      submitText.value = "Loading..."
+  const email = model.value.user.email.trim().toLowerCase(); 
+  const password = model.value.user.password;
+  const name = model.value.user.name;
+  const phone_number = model.value.user.phone_number;
+  const city = model.value.user.city;
+  const sub_city = model.value.user.sub_city;
+  //const location = model.value.user.location;
+  const verification_status =  model.value.user.verification_status;
+  const is_banned =  model.value.user.is_banned;
+  const role =  model.value.user.role;
+  const profile_picture_url= model.value.user.profile_picture_url;
+  const password_confirmation = model.value.user.password_confirmation;
   const checkbox = document.getElementById('myCheckbox');
-  if (!checkbox.checked) {
+
+  if (!isCheckboxChecked.value) {
+      submitText.value = 'Submit'
     checkboxMessage.value = "Please agree to the terms and agreements to proceed";
+    
     return;
   }
 
   checkboxMessage.value = '';
-  const formData = new FormData();
-  formData.append('name', localStorage.getItem('name'));
-  formData.append('email', localStorage.getItem('email'));
-  formData.append('phone_number', localStorage.getItem('phone_number'));
-  formData.append('city', localStorage.getItem('city'));
-  formData.append('sub_city', localStorage.getItem('sub_city'));
 
-  const locationData = localStorage.getItem('location');
-  let parsedLocation;
-  try {
-    parsedLocation = JSON.parse(locationData);
-  } catch (error) {
-    console.error('Error parsing location data:', error);
-  }
-  if (parsedLocation) {
-    formData.append('location', JSON.stringify(parsedLocation));
-  } else {
-    console.warn('No valid location data found to append.');
-  }
+  const userData = {
+    email,
+    password,
+    name,
+    phone_number,
+    city,
+    sub_city,
+    //location,
+    password_confirmation,
+    verification_status,
+    is_banned,
+    role,
+    profile_picture_url
+  };
 
-  formData.append('password', model.value.user.password);
-  formData.append('password_confirmation', model.value.user.password_confirmation);
-  formData.append('verification_status', model.value.user.verification_status);
-  formData.append('is_banned', model.value.user.is_banned);
-  formData.append('role', model.value.user.role);
-  formData.append('profile_picture_url', model.value.user.profile_picture_url);
+  const auth = getAuth();
+ 
 
   try {
-    const response = await axios.post(`${base_url}/register`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    console.log('User created successfully', response.data);
-    registered.value = true;
+  
+    const currentUser = auth.currentUser;
 
-    // Proceed to Firebase registration
-    await register(localStorage.getItem('email'), model.value.user.password);
-    alert('Registered successfully on Firebase!');
+
+    if (!currentUser) {
+      
+      const tempPassword = Math.random().toString(36).slice(-8);
+
     
-    // Redirect after successful registration
-    router.push('/signin');
+      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, tempPassword);
+
+     
+      await sendEmailVerification(userCredential.user);
+      alert('A verification email has been sent. Please check your inbox.');
+
+      
+      localStorage.setItem('temporaryPassword', tempPassword);
+      
+      return; 
+    } else {
+      
+      await currentUser.reload(); 
+
+      if (currentUser.emailVerified) {
+      
+        const tempPassword = localStorage.getItem('temporaryPassword');
+        const success = await updateUserPassword(email, tempPassword, password);
+
+        if (success) {
+          
+          const response = await axios.post(`${base_url}/register`, userData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          console.log('User registered successfully', response.data);
+          submitText.value = 'Registered'
+          registered.value = true;
+
+        
+          localStorage.removeItem('name');
+          localStorage.removeItem('email');
+          localStorage.removeItem('phone_number');
+          localStorage.removeItem('city');
+          localStorage.removeItem('sub_city');
+          localStorage.removeItem('pendingUserData');
+          localStorage.removeItem('temporaryPassword');
+         model.value.user.password = '';
+       model.value.user.password_confirmation = '';
+        model.value.user.profile_picture_url = '';
+         
+
+          isLoading.value = "Submit";
+          router.push('/signin');
+        }
+      } else {
+        alert('Your email is not verified. Please verify your email before registering again.');
+        submitText.value = 'Failed'
+        model.value.user.password = '';
+        model.value.user.password_confirmation = '';
+        model.value.user.profile_picture_url = '';
+      }
+    }
   } catch (error) {
-    console.error('Error creating user:', error.response ? error.response.data.message : 'An error occurred. Please try again.');
-    errors.value = error.response.data.message;
-    console.log('errors', errors.value);
+    console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+    errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+    submitText.value = "Failed";
+    model.value.user.password = '';
+    model.value.user.password_confirmation = '';
+    model.value.user.profile_picture_url = '';
   }
 };
+onMounted(() => {
+  model.value.user.name = localStorage.getItem('name') || '';
+  model.value.user.email = localStorage.getItem('email') || '';
+  model.value.user.phone_number = localStorage.getItem('phone_number') || '';
+  model.value.user.city = localStorage.getItem('city') || '';
+  model.value.user.sub_city = localStorage.getItem('sub_city') || '';
+  model.value.user.location = localStorage.getItem('location') || '';
+});
+
+// Function to complete registration after email verification
+// const completeRegistration = async () => {
+//   const auth = getAuth(); // Get the current auth instance
+//   const user = auth.currentUser; // Get the current user
+//   const userData = JSON.parse(localStorage.getItem('pendingUserData'));
+
+//   if (!userData) {
+//     alert('No pending registration found. Please register first.');
+//     return;
+//   }
+
+//   if (!user || !user.emailVerified) {
+//     alert('Please verify your email address before completing registration.');
+//     return; // Prevent completion if email is not verified
+//   }
+
+//   try {
+//     // Step 3: Register the user's other details in the backend
+//     const response = await axios.post(`${base_url}/register`, userData, {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     });
+
+//     console.log('User registered successfully', response.data);
+//     registered.value = true;
+
+//     // Clear pending user data
+//     localStorage.removeItem('pendingUserData');
+
+//     // Redirect to sign-in page
+//     router.push('/signin');
+//   } catch (error) {
+//     console.error('Error during backend registration:', error.message || 'An error occurred. Please try again.');
+//     errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+//   }
+// };
+
+const togglePasswordVisibility = () => {
+        isPasswordVisible.value = !isPasswordVisible.value;
+      };
+      
+      const toggleConfirmPasswordVisibility = () => {
+        isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
+      };
     return {
       base_url,
       model,
@@ -364,6 +613,23 @@ export default {
       handleFileUpload,
       uploadFile,
       handleRegister,
+      userPhoto,
+      validatePasswords,
+      passwordError,
+      checkPasswordStrength,
+      passwordStrengthMessage,
+      passwordStrengthClass,
+      isPasswordStrong,
+      passwordCriteria,
+      togglePasswordVisibility,
+      toggleConfirmPasswordVisibility,
+      isPasswordVisible,
+      isConfirmPasswordVisible,
+      isLoading,
+      isCheckboxChecked,
+      submitText,
+      isButtonDisabled,
+
       // handleRegister,
     };
   },

@@ -16,7 +16,8 @@
                 
               </div>
               <div class="mt-2 ">
-                  <input type="email" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"  v-model="email">
+                  <input type="email" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"  v-model="email" @input="validateEmail">
+                  <p v-if="emailError" class="text-red-500">{{ emailError }}</p>
                  
               </div>
           </div>
@@ -29,7 +30,8 @@
                  
               </div>
               <div class="mt-2 ">
-                  <input type="password" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12" v-model="password">
+                  <input type="password" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12" v-model="password"  @input="validatePassword">
+                  <p v-if="passwordError" class="text-red-500">{{ passwordError }}</p>
               </div>
           </div>
           <div class="mt-9 flex w-12/12  mx-auto font-light">
@@ -38,7 +40,7 @@
                  <div class="md:text-lg md:w-1/2 md:mx-auto ">
                    <div class="flex w-2/3 mx-auto">
                        <div class="">
-                   <input type="radio" class= " border border-cyan-400"  id="rememberMe">
+                   <input type="checkbox" class= " border border-cyan-400"  id="rememberMe">
                  </div>
                  <div class=" mx-auto">
     
@@ -52,7 +54,13 @@
             </div>
          </div>
          <div class="w-2/3 mx-auto mt-7">
-              <button  @click="() => { handleLogin(); handleLogin2(); }" class="mx-auto bg-cyan-700 text-white px-15  py-2 rounded-xl ">Continue</button>
+              <button  @click="() => { handleLogin(); handleLogin2(); }"  
+                :disabled="isLoginButtonDisabled" 
+                :class="{
+    'bg-gray-200  cursor-not-allowed': isLoginButtonDisabled,
+    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isLoginButtonDisabled
+  }"
+                class="bg-cyan-700 text-white px-8 py-2 rounded-sm" >{{signInMessage}}</button>
           </div>
           <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm  w-12/10 mx-auto -ml-4 lg:text-sm"> Don't have an account ? <span class="text-cyan-500 cursor-pointer" @click="()=>{this.$router.push('/signup')}">Sign Up</span> </p>
@@ -68,7 +76,7 @@
           </div>
   </div>
 
-  <!-- Blue Diagonal Section -->
+ 
   <div class="absolute right-0 top-0 pt-20 left-112 w-1/2 mx-auto h-full bg-[#BDE5F2] transform -skew-x-12">
     <div class="w-2/3 mx-auto ">
         <img src="/public/logolarge.png" alt="" class=" pt-5 w-2/3 mx-auto -ml-8">
@@ -124,7 +132,7 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" id="rememberMe">
+                <input type="checkbox" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 
@@ -135,7 +143,8 @@
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
+              <button @click="() => { handleLogin(); handleLogin2(); }" 
+                class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >{{ signInMessage }}</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 cursor-pointer" @click="()=>{this.$router.push('/signup')}">Sign Up</span> </p>
@@ -197,7 +206,7 @@
               <div class="md:text-xl md:w-2/3 md:mx-auto w-12/11">
                 <div class="flex">
                     <div class="mr-3">
-                <input type="radio" class= " border border-cyan-400" id="rememberMe">
+                <input type="checkbox" class= " border border-cyan-400" id="rememberMe">
               </div>
               <div class="w-12/11">
 
@@ -208,7 +217,12 @@
               </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-              <button @click="() => { handleLogin(); handleLogin2(); }" class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
+              <button @click="() => { handleLogin(); handleLogin2(); }" 
+                :class="{
+    'bg-gray-200  cursor-not-allowed': isLoginButtonDisabled,
+    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isLoginButtonDisabled
+  }"
+                class="bg-cyan-700 text-white px-8 py-2 rounded-sm " >Continue</button>
           </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm text-center w-10/11"> Don't have an account ? <span class="text-cyan-500 ">Sign Up</span> </p>
@@ -236,44 +250,63 @@
   </template>
   
   <script>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted ,computed,watch} from 'vue';
   import { useRouter } from 'vue-router'; 
   import axios from 'axios';
   import { login } from '../../auth'; 
   
   export default {
     setup() {
-      const router = useRouter(); // Initialize the router
+      const router = useRouter();
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
       const email = ref('');
       const password = ref('');
       const currentUser = ref('');
-      const isRemembered = ref(false); // Reactive reference to store the state
+      const isRemembered = ref(false); 
+      const signInMessage = ref('Continue');
+      const emailError = ref('');
+      const passwordError = ref('');
 
-// Function to set the initial state from localStorage
+      const isLoginButtonDisabled = computed(() => {
+      return email.value.trim() === '' || password.value.trim() === '';
+    });
+    const validateEmail = () => {
+      emailError.value = ''; 
+      if (!email.value) {
+        emailError.value = 'Email is required.';
+      } else if (!/\S+@\S+\.\S+/.test(email.value)) {
+        emailError.value = 'Please enter a valid email address.';
+      }
+    };
+    const validatePassword = () => {
+      passwordError.value = ''; 
+      if (!password.value) {
+        passwordError.value = 'Password is required.';
+      }
+    };
 const setRememberMeState = () => {
-  const rememberedValue = localStorage.getItem('rememberMe'); // Get value from localStorage
-  isRemembered.value = rememberedValue === 'true'; // Update reactive state
+  const rememberedValue = localStorage.getItem('rememberMe'); 
+  isRemembered.value = rememberedValue === 'true'; 
   const rememberMe = document.getElementById('rememberMe');
   if (rememberMe) {
-    rememberMe.checked = isRemembered.value; // Set the radio button's checked state
+    rememberMe.checked = isRemembered.value; 
   }
 };
 
-// Function to update localStorage when the radio button changes
+
 const handleRememberMeChange = () => {
-  localStorage.setItem('rememberMe', isRemembered.value); // Save the state to localStorage
+  localStorage.setItem('rememberMe', isRemembered.value); 
 };
 
-// Lifecycle hook to run code after the component is mounted
+
 onMounted(() => {
-  setRememberMeState(); // Set the initial state when component mounts
+  setRememberMeState(); 
 
   const rememberMe = document.getElementById('rememberMe');
   if (rememberMe) {
     rememberMe.addEventListener('change', () => {
-      isRemembered.value = rememberMe.checked; // Update reactive state on change
-      handleRememberMeChange(); // Update localStorage
+      isRemembered.value = rememberMe.checked; 
+      handleRememberMeChange(); 
     });
   }
 });
@@ -288,7 +321,12 @@ onMounted(() => {
       };
   
       const handleLogin = async () => {
+        if(handleLogin2){
+          emailError.value = '';
+        passwordError.value = '';
+        signInMessage.value = "Loading..."
         try {
+        
           const response = await axios.post(`${base_url}/login`, {
             email: email.value,
             password: password.value,
@@ -306,12 +344,18 @@ onMounted(() => {
   
         
           if (token) {
-            console.log('Redirecting to home page...'); 
-            router.push('/'); 
+            signInMessage.value = "Sent"
+            console.log('Redirecting to user profile...'); 
+            router.push('/UserProfile'); 
           }
         } catch (error) {
           console.error(error); 
+          signInMessage.value = "Failed"
+          emailError.value = 'Invalid email or password.'; 
+          passwordError.value = 'Invalid email or password.';
         }
+          }
+        
       };
   
       return {
@@ -321,7 +365,13 @@ onMounted(() => {
         currentUser,
         handleLogin2,
         handleLogin,
-        isRemembered
+        isRemembered,
+        signInMessage,
+        isLoginButtonDisabled,
+      emailError,
+      passwordError,
+      validateEmail,
+      validatePassword
       };
     },
   };
