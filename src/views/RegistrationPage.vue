@@ -81,7 +81,7 @@
             <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"> -->
             <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
               @input="validateFields"
-              class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34"></textarea>
+              class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34 pt-1"></textarea>
             <p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
           </div>
 
@@ -91,7 +91,7 @@
                 <p class="">Contact Phone</p>
                 <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input v-model="companies.contact_phone" type="text" @input="validateFields"
+              <input v-model="companies.contact_phone" type="text" @input="handlePhoneInput"
                 class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
               <p v-if="errors.contact_phone" class="text-red-500 text-sm">{{ errors.contact_phone }}</p>
             </div>
@@ -103,12 +103,12 @@
               </div>
 
               <select name="category" v-model="companies.category_id" @change="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none  hover:bg-[#eaf8ff] placeholder:text-center">
                 <option value="">Select category</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
                 </option>
-                <p v-if="errors.category_id" class="text-red-500 text-sm">{{ errors.category_id }}</p>
               </select>
+              <p v-if="errors.category_id" class="text-red-500 text-sm">{{ errors.category_id }}</p>
             </div>
 
           </div>
@@ -145,14 +145,14 @@
               <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
             <select name="country" v-model="companies.country" @change="validateFields"
-              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none  hover:bg-[#eaf8ff] placeholder:text-center">
               <option value="">Select country</option>
               <option v-for="country in countries" :key="country.id" :value="country.name"
                 class="border-[#84d2ffb7] rounded-lg mt-2">
                 {{ country.name }}
               </option>
-              <p v-if="errors.country" class="text-red-500 text-sm">{{ errors.country }}</p>
             </select>
+            <p v-if="errors.country" class="text-red-500 text-sm">{{ errors.country }}</p>
           </div>
 
           <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
@@ -260,7 +260,7 @@
         <div class=" mt-10 lg:ml-20 -ml-40 md:-ml-10">
           <button @click="registerCompany"
             class="bg-[#2178AC] mb-32 hover: ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
-            next</button>
+            {{ this.changeNaxt }}</button>
 
         </div>
 
@@ -398,6 +398,8 @@ export default {
       contact_phone: '',
       showPasswordField: false,
       showConfirmPasswordField: false,
+      changeNaxt:'next',
+      changeRegister:'Register Company'
     };
   },
   methods: {
@@ -461,6 +463,11 @@ export default {
     handleConfirmPasswordInput() {
       this.validateFields();
     },
+    handlePhoneInput() {
+      this.validateFields();
+      this.updatePhoneNumber();
+    },
+
 
     updatePasswordStrength() {
       const { label, class: strengthClass } = this.checkPasswordStrength(this.companies.password);
@@ -469,8 +476,8 @@ export default {
     },
 
     validateFields() {
-    this.errors = {};
 
+    this.errors = {};
     if (!this.companies.owner_name) this.errors.owner_name = 'Owner name is required';
     if (!this.companies.name) this.errors.name = 'Company name is required';
     if (!this.companies.description) this.errors.description = 'Description is required';
@@ -493,7 +500,6 @@ export default {
     }
 },
     checkButtonState() {
-
       return Object.keys(this.errors).length > 0;
     },
 
@@ -502,21 +508,25 @@ export default {
       if (this.checkButtonState()) {
         console.log('Form is invalid, please correct the errors.');
       } else {
+        this.nextStep = 'next'
         this.showPassword = true;
         this.validateFields();
+        
 
       }
+      
     },
     async registerCompany() {
       const companyData = {
         contact_email: this.companies.contact_email,
       };
 
-      try {
+      try { 
+         this.changeNaxt ='loading...'
         const tempPassword = Math.random().toString(36).slice(-8);
         const auth = getAuth();
         const userCredential = await createUserWithEmailAndPassword(auth, companyData.contact_email, tempPassword);
-
+    
         await sendEmailVerification(userCredential.user);
         alert('A verification email has been sent. Please check your inbox.');
         localStorage.setItem('temporaryPassword', tempPassword);
@@ -527,10 +537,12 @@ export default {
         console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
         this.errors = error.response ? error.response.data.message : 'An error occurred. Please try again.';
         this.nextStep()
+        this.changeNaxt = 'next'
       }
 
     },
     async handleRegister() {
+      
     const name = this.companies.name;
     const owner_name = this.companies.owner_name;
     const description = this.companies.description;
@@ -608,6 +620,7 @@ export default {
                     console.log('Company registered successfully', response.data);
                     this.companies.password = '';
                     this.companies.password_confirmation = '';
+                    this.changeRegister = 'Register Company'
                     this.$router.push('/signin');
                 }
             } else {
@@ -626,6 +639,7 @@ export default {
     submitForm() {
       this.validateFields();
       if (!this.checkButtonState()) {
+        this.changeRegister = 'loading...'
         this.handleRegister();
       }
     },
