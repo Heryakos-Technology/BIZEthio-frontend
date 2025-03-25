@@ -10,40 +10,31 @@
                 </div>
             </div>
                 <div class="flex lg:-ml-20">
-                    <img src="/profilepic.png" alt=""
-                        class="-ml-18 -mt-6 w-16 h-16  rounded-full md:w-24 md:h-24 md:ml-10 lg:w-40 lg:h-40 ">
+                    <img :src="userInformations.profile_picture_url || '/profilepic.png'"  alt=""
+                        class="-ml-18 -mt-6 w-24 h-24  rounded-full md:w-24 md:h-24 md:ml-10 lg:w-40 lg:h-40 ">
                     <i
                         class="fa-solid fa-camera-retro text-gray-200  mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-20 lg:-ml-3"></i>
                     <div class="text-white -mt-6 lg:ml-10 -ml-2 w-11/12">
-                        <p class="ml-8 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20">Selam Belete</p>
-                        <p class=" ml-8 text-[16px]  font-semibold text-gray-100 md:text-[18px] md:ml-20">Ethiopia,
-                            Addis Abeba</p>
+                        <p class="ml-8 lg:ml-10 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20">{{ userInformations.name }}</p>
+                        <p class=" ml-8 lg:ml-10 text-[16px]  font-semibold text-gray-100 md:text-[18px] md:ml-20">{{ userInformations.city }}, {{ userInformations.sub_city }}</p>
                         <div class="flex ml-6  w-56 mt-4 md:ml-20">
-                            <div class="text-[14px] font-normal text-gray-100 md:text-[16px]">
-                                <p class="">Email</p>
-                                <p class="">Phone</p>
-                                <p class="">City</p>
-                                <p class="">Subcity</p>
-                                <p class="">Location</p>
-                            </div>
-                            <div class="text-[14px] font-normal text-gray-100 ml-4 md:text-[16px]">
-                                <p class="">not_realemail@gmail.com</p>
-                                <p class="">+251 9 323232</p>
-                                <p class="">Addis Abeba</p>
-                                <p class="">Megenagna</p>
-                                <p class="">Megenagna Square</p>
+                            <div  class="text-[14px] font-normal text-gray-100 -ml-10 md:text-[16px]">
+                                <p class=""><span class="mr-5">Email</span> {{ userInformations.email }}</p>
+                                <p class=""><span class="mr-4.5">Phone</span> {{ userInformations.phone_number }}</p>
+                                <p class=""><span class="mr-9">City</span> {{ userInformations.city }}</p>
+                                <p class=""><span class="mr-3">Subcity</span> {{ userInformations.sub_city }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex -ml-14 md:-ml- mt-10 lg:mt-8 w-64 lg:w-full md:w-full md:mt-4 md:mx-auto">
-                    <div class="flex bg-[#075E86] w-26 py-2 rounded-lg ">
+                    <div class="flex bg-[#075E86] w-28 pl-2 pt-2  h-10 rounded-lg ">
                         <i class="fa-solid fa-pen mr-2 mt-1 ml-1"></i>
-                        <router-link to="/EditProfile" class=" text-[14px] font-normal  text-white">Edit Profile</router-link>
+                        <router-link to="/EditProfile" class=" text-[13px] font-normal  text-white">Edit Profile</router-link>
                     </div>
-                    <div class="flex ml-20 mt-2 md:ml-72 lg:ml-64 md:mt-4">
-                        <i class="fa-solid fa-right-from-bracket text-red-700"></i>
-                        <p class="text-[14px] -mt-1 font-light text-red-700">Log out</p>
+                    <div class="flex bg-[#b63030] w-28  pl-2 pt-2.5  h-10 rounded-lg ml-72">
+                        <i class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"></i>
+                        <p class=" -mt-1 text-[13px] font-light text-white">Log out</p>
                     </div>
                 </div>
             </div>
@@ -56,7 +47,7 @@
                 search.name }}</p>
             <i class="fa-solid fa-xmark pr-2 mt-3"></i>
         </div>
-        <p class="underline ml-5 text-[#10434f] -mt-4 text-[14px] md:text[15px] lg:text-[15px]">See More</p>
+        <p class="underline ml-2 text-[#10434f] -mt-2 text-[14px] md:text[15px] lg:text-[15px]">See More</p>
     </div>
     <div class="mb-20 w-11/12  lg:w-6/7 lg:mx-auto mx-auto lg:pb-10">
         <p class="text-center mb-4 text-bold text-lg lg:text-xl  lg:text-center">Rated companies</p>
@@ -81,6 +72,7 @@
 </template>
 
 <script>
+import axios from "axios"
 // import Navbar from '@/components/Navbar.vue'
 // import FooterPart from '@/components/FooterPart.vue'
 export default {
@@ -108,9 +100,37 @@ export default {
                 { name: 'Chaka Coffee' },
                 { name: 'Ethiopian Skylight Hotel' },
                 { name: 'Kifiya Financial Technology Head Office' },
-            ]
+            ],
+            userInformations:[],
 
         }
+    },
+    mounted(){
+        this.fetchUserInfo()
+    },
+    methods:{
+        
+        async fetchUserInfo() {
+      try {
+        const userId = localStorage.getItem('user_id'); 
+        if (!userId) {
+          console.error('User ID not found in localStorage');
+          return; 
+        }
+
+        const response = await axios.get(`https://bizethio-backend-production.up.railway.app/api/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` 
+          }
+        });
+
+        this.userInformations = response.data; 
+        console.log('User Informations:', this.userInformations);
+      } catch (error) {
+        console.error('Error fetching user information:', error); 
+      }
+    }
+  
     }
 }
 </script>
