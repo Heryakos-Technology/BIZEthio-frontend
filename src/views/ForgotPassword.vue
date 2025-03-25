@@ -1,4 +1,5 @@
 <template>
+   <UserLayout>
   <div class="px-2 py-10">
     <div class="bg-white rounded-sm pb-10 lg:hidden">
       <img src="/forgotmobile.png" alt="" class="mx-auto pt-5">
@@ -61,15 +62,20 @@
       </div>
     </div>
   </div>
+</UserLayout>
 </template>
 
 <script>
 import { ref } from 'vue'; 
+ import UserLayout from "@/layout/UserLayout.vue"
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth'; 
 import { checkEmailExists } from '../auth'; 
 import { useRouter } from 'vue-router'; 
 
 export default {
+  components: {
+    UserLayout,
+  },
   setup() {
     const email = ref(''); 
     const message = ref(''); 

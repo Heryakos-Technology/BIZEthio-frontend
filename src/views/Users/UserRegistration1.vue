@@ -1,4 +1,5 @@
 <template>
+    <UserLayout>
     <div class="px-2 py-5 pt-10 pb-10">
       <div class="bg-white rounded-sm pb-10 lg:hidden ">
         <img src="/public/logo.png" alt="" class="mx-auto pt-5">
@@ -249,15 +250,19 @@
         </div>
       </div>
     </div>
+  </UserLayout>
   </template>
   
   <script>
   import { ref, computed,onMounted,watch} from 'vue';
+  import UserLayout from "@/layout/UserLayout.vue"
   import { useRouter } from 'vue-router';
   import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
   
   export default {
-    
+    components: {
+    UserLayout,
+  },
     setup() {
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
       const model = ref({

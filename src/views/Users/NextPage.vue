@@ -1,4 +1,5 @@
 <template>
+   <UserLayout>
     <div class="px-2 py-5">
       <div class="bg-white rounded-sm pb-10 lg:hidden">
         <img src="/public/logo.png" alt="" class="mx-auto pt-5">
@@ -260,13 +261,14 @@
   </div>
   </div>
  
-
+</UserLayout>
   </template>
   
   <script>
 
 import axios from 'axios';
 import { ref,onMounted,watch, computed } from 'vue';
+  import UserLayout from "@/layout/UserLayout.vue"
 import { login, register ,updateUserPassword} from '../../auth';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification,signInWithEmailAndPassword ,updatePassword   } from 'firebase/auth'; // Import Firebase Auth functions
 import { useRouter } from 'vue-router';
@@ -274,6 +276,9 @@ import CryptoJS from 'crypto-js';
 // import { updateUserPassword } from './auth';
 
 export default {
+  components: {
+    UserLayout,
+  },
   setup() {
     const base_url = 'https://bizethio-backend-production.up.railway.app/api';
     
