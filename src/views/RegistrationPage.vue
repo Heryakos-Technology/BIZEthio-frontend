@@ -46,7 +46,7 @@
         <img src="/Bottom Desogn Card.png" alt="" class="absolute bottom-0 left-0  mt-44 ">
 
       </div>
-      <!-- /////////////// -->
+     
       <div v-if="!showPassword" class="ml-20 w-2/3 ">
         <p class="text-center text-3xl font-bold mt-4">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
 
