@@ -14,28 +14,28 @@
                         <input 
                             type="password" 
                             v-model="currentPassword" 
-                            class="w-11/12 h-10 mt-2 outline-none rounded-lg bg-white">
+                            class="w-5/6 pl-2 h-10 mt-2 outline-none rounded-lg bg-white">
                     </div>
                     <div class="w-screen px-4 -ml-10 mb-3 md:w-4/5 md:px-4 md:mx-auto">
                         <label class="text-gray-100">New Password</label>
                         <input 
                             type="password" 
                             v-model="newPassword" 
-                            class="w-11/12 h-10 mt-2 outline-none rounded-lg bg-white">
+                            class="w-5/6 pl-2 h-10 mt-2 outline-none rounded-lg bg-white">
                     </div>
                     <div class="w-screen px-4 -ml-10 mb-3 md:w-4/5 md:px-4 md:mx-auto">
                         <label class="text-gray-100">Confirm Password</label>
                         <input 
                             type="password" 
                             v-model="confirmPassword" 
-                            class="w-11/12 h-10 mt-2 outline-none rounded-lg bg-white">
+                            class="w-5/6 pl-2 h-10 mt-2 outline-none rounded-lg bg-white">
                     </div>
                 </div>
                 <div class="flex mx-auto md:h-10 mt-6 lg:mt-2 w-11/12 lg:w-64 md:w-64 md:-mt-1 md:mx-auto">
-                    <div class="flex bg-[#075E86] w-11/12 h-10 py-1 rounded-lg">
+                    <div class="flex bg-[#075E86] cursor-pointer w-3/4 mx-auto pl-12 h-10 py-1 rounded-lg">
                         <button 
-                            @click="changePassword" 
-                            class="text-[14px] text-center px-13 font-normal text-white">Reset Password</button>
+                             
+                            class="text-[14px] text-center cursor-pointer  font-normal text-white">Reset Password</button>
                     </div>
                 </div>
             </div>
