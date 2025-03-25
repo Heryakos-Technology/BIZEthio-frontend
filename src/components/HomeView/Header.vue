@@ -17,11 +17,16 @@ const handleSidebarOpen = () => {
 };
 
 const navLinks = [
-  { name: "RegistrationPage", label: "Campany Registration",path:'registration' },
-  { name: "UserRegistration1", label: "signup" ,path:'signup'},
-  { name: "UserProfile", label: "Profile",path:'UserProfile' },
-  { name: "UserLanding", label: "UserLanding",path:'UserLanding' },
-  { name: "SignIn", label: "sign in",path:'signin' },
+  {
+    name: "RegistrationPage",
+    label: "Campany Registration",
+    path: "registration",
+  },
+  { name: "UserRegistration1", label: "signup", path: "signup" },
+  // { name: "UserProfile", label: "Profile", path: "UserProfile" },
+  { name: "UserLanding", label: "UserLanding", path: "UserLanding" },
+  { name: "SignIn", label: "sign in", path: "signin" },
+  { name: "AdminProfile", label: "AdminProfile", path: "AdminProfile" },
 ];
 
 // const handleScroll = () => {

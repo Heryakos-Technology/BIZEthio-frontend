@@ -1,5 +1,5 @@
 <template>
-
+<UserLayout>
 <div class="hidden lg:block pt-10">
     <div class="pt-10 pb-10">
 
@@ -247,15 +247,20 @@
   
     </div>
     </div>
+  </UserLayout>
   </template>
   
   <script>
   import { ref, onMounted ,computed,watch} from 'vue';
+  import UserLayout from "@/layout/UserLayout.vue"
   import { useRouter } from 'vue-router'; 
   import axios from 'axios';
   import { login } from '../../auth'; 
   
   export default {
+    components: {
+    UserLayout,
+  },
     setup() {
       const router = useRouter();
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
