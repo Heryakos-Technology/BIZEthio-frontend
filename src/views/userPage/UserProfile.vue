@@ -19,7 +19,7 @@
                         <p class=" ml-8 lg:ml-10 text-[16px]  font-semibold text-gray-100 md:text-[18px] md:ml-20">{{ userInformations.city }}, {{ userInformations.sub_city }}</p>
                         <div class="flex ml-6  w-56 mt-4 md:ml-20">
                             <div  class="text-[14px] font-normal text-gray-100 -ml-10 md:text-[16px]">
-                                <p class=""><span class="mr-6">Email</span> {{ userInformations.email }}</p>
+                                <p class=""><span class="mr-5">Email</span> {{ userInformations.email }}</p>
                                 <p class=""><span class="mr-4.5">Phone</span> {{ userInformations.phone_number }}</p>
                                 <p class=""><span class="mr-9">City</span> {{ userInformations.city }}</p>
                                 <p class=""><span class="mr-3">Subcity</span> {{ userInformations.sub_city }}</p>
