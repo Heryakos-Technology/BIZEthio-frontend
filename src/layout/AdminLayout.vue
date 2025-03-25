@@ -267,7 +267,10 @@ onMounted(() => {
               </div>
               Menu
             </li>
-            <li class="flex cursor-pointer gap-x-2 items-center">
+            <RouterLink
+              :to="{ name: 'AdminProfile' }"
+              class="flex cursor-pointer gap-x-2 items-center"
+            >
               <div class="bg-lightBlue p-1 rounded-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -284,7 +287,7 @@ onMounted(() => {
                 </svg>
               </div>
               Profile
-            </li>
+            </RouterLink>
             <li class="flex cursor-pointer gap-x-2 items-center">
               <img :src="DashboardIcon" alt="" class="size-6" />
               Dashboard
@@ -297,9 +300,12 @@ onMounted(() => {
             <li class="flex cursor-pointer gap-x-2 items-center">
               <img :src="userIcons" alt="" class="size-6" />Users
             </li>
-            <li class="flex cursor-pointer gap-x-2 items-center">
+            <RouterLink
+              :to="{ name: 'AdminCategories' }"
+              class="flex cursor-pointer gap-x-2 items-center"
+            >
               <img :src="CompaniesIcon" alt="" class="size-6" />Categories
-            </li>
+            </RouterLink>
             <li class="flex cursor-pointer gap-x-2 items-center">
               <img :src="RatingIcon" alt="" class="size-6" />Rating
             </li>

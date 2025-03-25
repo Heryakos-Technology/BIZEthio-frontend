@@ -19,5 +19,4 @@ onAuthStateChanged(auth, (user) => {
 app.use(createPinia())
 app.use(router)
 app.use(VueApexCharts);
-app.component('apexchart', VueApexCharts);
 app.mount('#app')

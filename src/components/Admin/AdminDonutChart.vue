@@ -58,7 +58,7 @@ const chartOptions = ref({
 </script>
 
 <template>
-  <div class="p-6 w-[90%] max-w-[370px] mx-auto lg:mt-16 lg:max-w-[450px]">
+  <div class="p-6 w-[90%] max-w-[370px] xs:mx-auto lg:mt-16 lg:max-w-[450px]">
     <!-- Donut Chart -->
     <div class="bg-white rounded-lg shadow-md p-4">
       <apexchart
