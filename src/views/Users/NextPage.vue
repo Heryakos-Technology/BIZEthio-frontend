@@ -504,6 +504,7 @@ watch(isButtonDisabled, (newValue) => {
 
       if (currentUser.emailVerified) {
       
+      
         const tempPassword = localStorage.getItem('temporaryPassword');
         const success = await updateUserPassword(email, tempPassword, password);
 
@@ -537,7 +538,7 @@ watch(isButtonDisabled, (newValue) => {
         }
       } else {
         alert('Your email is not verified. Please verify your email before registering again.');
-        submitText.value = 'Failed'
+        submitText.value = 'Submit'
         model.value.user.password = '';
         model.value.user.password_confirmation = '';
         model.value.user.profile_picture_url = '';

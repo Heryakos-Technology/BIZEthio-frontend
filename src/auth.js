@@ -107,7 +107,7 @@ export const updateUserPassword = async (email, tempPassword, newPassword) => {
 
       await updatePassword(currentUser, newPassword);
       console.log('Password updated successfully');
-      alert('User Registered Successfully')
+      alert('Registered Successfully')
       return true; 
     } else {
       throw new Error('Email is not verified. Please verify your email before updating the password.');
