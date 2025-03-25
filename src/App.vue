@@ -5,11 +5,11 @@ import Footer from "@/components/Footer.vue";
 </script>
 
 <template>
-  <Header />
+  <!-- <Header /> -->
   <div
     class="w-full bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff]"
   >
     <RouterView />
   </div>
-  <Footer />
+  <!-- <Footer /> -->
 </template>

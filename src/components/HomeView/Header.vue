@@ -13,7 +13,7 @@ let lastScrollPosition = 0;
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
-  console.log(isSidebarOpen.value);
+  // console.log(isSidebarOpen.value);
 };
 
 const navLinks = [
@@ -23,7 +23,7 @@ const navLinks = [
     path: "registration",
   },
   { name: "UserRegistration1", label: "signup", path: "signup" },
-  // { name: "UserProfile", label: "Profile", path: "UserProfile" },
+  { name: "UserProfile", label: "Profile", path: "UserProfile" },
   { name: "UserLanding", label: "UserLanding", path: "UserLanding" },
   { name: "SignIn", label: "sign in", path: "signin" },
   { name: "AdminProfile", label: "AdminProfile", path: "AdminProfile" },

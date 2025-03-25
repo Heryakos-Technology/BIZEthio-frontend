@@ -2,4 +2,6 @@
 @theme {
   --breakpoint-xs: 425px;
   --color-primaryColor: #1b7590;
+  --color-darkBlue: #0b0f31;
+  --color-lightBlue: #41a5ee;
 }
