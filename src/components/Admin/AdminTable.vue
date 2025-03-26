@@ -40,39 +40,66 @@ const deleteCategory = (id) => {
 </script>
 
 <template>
-  <div class="w-full overflow-x-auto col-span-2 mt-16">
-    <div class="min-w-[600px] max-w-[1000px] w rounded-lg shadow-md">
-      <!-- Table Header -->
-      <div class="grid grid-cols-[50px_150px_1fr_100px] bg-white font-bold">
-        <div
-          class="p-3 lg:py-5 text-sm text-gray-700 sticky left-0 bg-white z-10"
+  <div class="px-4">
+    <div class="mt-16 xs:ml-4">
+      <h1 class="font-bold text-3xl lg:text-4xl my-8 uppercase">categories</h1>
+      <button
+        class="flex font-bold items-center cursor-pointer justify-center gap-x-3 bg-white py-2 rounded-sm mt-2 px-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          fill="#000000"
+          viewBox="0 0 256 256"
         >
+          <path
+            d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"
+          ></path>
+        </svg>
+        Add Category
+      </button>
+    </div>
+  </div>
+  <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
+    <div class="min-w-[600px] max-w-[100%] w rounded-lg shadow-md">
+      <!-- Table Header -->
+      <div
+        class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
+      >
+        <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
           No
         </div>
         <div
-          class="p-3 lg:py-5 text-sm text-gray-700 sticky left-[50px] bg-white z-10"
+          class="p-3 lg:py-5 text-sm text-black sticky left-[50px] bg-white z-10"
         >
           Name
         </div>
-        <div class="p-3 lg:py-5 text-sm text-gray-700">description</div>
-        <div class="p-3 lg:py-5 text-sm text-gray-700">Actions</div>
+        <div class="p-3 lg:py-5 text-sm text-black">description</div>
+        <div class="p-3 lg:py-5 text-sm text-black">Actions</div>
       </div>
 
       <!-- Table Body -->
       <div
         v-for="(category, index) in categories"
         :key="category.id"
-        class="grid grid-cols-[50px_150px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
+        class="grid grid-cols-[50px_140px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
       >
-        <div class="p-3 text-sm text-gray-600 sticky left-0 bg-white z-10">
+        <div
+          class="p-3 text-sm text-black font-bold sticky left-0 bg-white z-10"
+        >
           {{ index + 1 }}
         </div>
-        <div class="p-3 text-sm text-gray-600 sticky left-[50px] bg-white z-10">
+        <div
+          class="p-3 text-sm text-black font-bold sticky left-[50px] bg-white z-10"
+        >
           {{ category.name }}
         </div>
-        <div class="p-3 text-sm text-gray-600">{{ category.description }}</div>
+        <div class="p-3 text-sm text-black font-bold">
+          {{ category.description }}
+        </div>
         <div class="p-3 flex gap-x-2 justify-center">
-          <button class="text-gray-500 hover:text-gray-700" title="Delete">
+          <button class="text-gray-500 hover:text-black" title="Delete">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
