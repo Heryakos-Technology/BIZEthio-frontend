@@ -1,5 +1,6 @@
 <template>
     <!-- <Navbar class="" /> -->
+     <UserLayout>
     <div class="lg:px-20 lg:w-9/10 lg:mx-auto lg:pt-24 ">
     <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl ">
         <p class="font-semibold lg:font-bold lg:ml-4">My profile</p>
@@ -69,16 +70,17 @@
         </div>
     </div>
     <!-- <FooterPart class="" /> -->
+</UserLayout>
 </template>
 
 <script>
 import axios from "axios"
-// import Navbar from '@/components/Navbar.vue'
-// import FooterPart from '@/components/FooterPart.vue'
+ import UserLayout from '@/layout/UserLayout.vue'
 export default {
     components: {
         // Navbar,
         // FooterPart,
+        UserLayout
 
     },
     data() {
