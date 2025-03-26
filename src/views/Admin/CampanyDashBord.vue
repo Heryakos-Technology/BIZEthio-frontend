@@ -98,7 +98,7 @@
 <div class="w-1/8">website</div>
 <div class="w-1/12">actions</div>
       </div>
-      <div class="flex px-5  bg-white py-3 mt-3 text-xs rounded-md px-2">
+      <div class="flex  bg-white py-3 mt-3 text-xs rounded-md px-2">
           <div class="w-1/20">1</div>
 
 <div class="w-1/10">Heryakos
@@ -137,7 +137,7 @@ is a leading provider
 </div>
       </div>
       <div class="flex  bg-white py-3 mt-3 text-xs not-only: rounded-md px-2">
-          <div class="w-1/20">1</div>
+          <div class="w-1/20">2</div>
 
 
           <div class="w-1/10">Heryakos
@@ -176,7 +176,7 @@ is a leading provider
 </div>
         </div>
         <div class="flex  bg-white py-3 mt-3 text-xs not-only: rounded-md px-2">
-            <div class="w-1/20">1</div>
+            <div class="w-1/20">3</div>
 
 <div class="w-1/10">Heryakos
     Technologies</div>
