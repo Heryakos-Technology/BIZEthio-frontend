@@ -1,4 +1,5 @@
 <template>
+<UserLayout>
   <div class="border-b-1 border-b-gray-600 py-2 lg:pt-10 ">
 
   </div>
@@ -326,14 +327,18 @@
     <!-- /end of desktop -->
   </div>
 
-
+</UserLayout>
 </template>
 <script>
 import axios from 'axios';
 import { login, register, updateUserPassword } from '../auth';
+import UserLayout from '@/layout/UserLayout.vue'
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, updatePassword } from 'firebase/auth';
 
 export default {
+  components:{
+  UserLayout
+  },
   computed: {
     buttonClass() {
       return {
