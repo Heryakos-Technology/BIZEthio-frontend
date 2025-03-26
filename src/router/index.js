@@ -119,7 +119,8 @@ const router = createRouter({
       path: '/admin/categories',
       name: 'AdminCategories',
       component: AdminCategories,
-
+    },
+    {
       path: '/admin/AdminRating',
       name: 'AdminRating',
       component: AdminRating,
