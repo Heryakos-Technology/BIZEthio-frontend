@@ -70,7 +70,7 @@ const navLinks = [
   >
     <!-- Mobile Header -->
     <div
-      class="fixed top-0 left-0 z-50 flex w-full items-center justify-between bg-white px-4 p-1 md:hidden"
+      class="fixed top-0 left-0 z-50 flex w-full items-center justify-between bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff] px-4 p-1 md:hidden"
     >
       <Logo class="w-[100px]" />
       <div @click="handleSidebarOpen" class="size-5 cursor-pointer">
