@@ -18,7 +18,11 @@ import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
 import UserProfile from '@/views/userPage/UserProfile.vue'
 import AdminProfile from '@/views/Admin/AdminProfile.vue'
+
+import AdminCategories from '@/views/Admin/AdminCategories.vue'
+
 import AdminRating from '@/views/Admin/AdminRating.vue'
+
 
 
 
@@ -81,20 +85,20 @@ const router = createRouter({
     //   name: 'InputValidation',
     //   component: InputValidation,
     // },
-    
+
     // {
     //   path: '/PasswordVesibility',
     //   name: 'PasswordVesibility',
     //   component: PasswordVesibility,
     // },
-    
+
     // {
     //   path: '/PasswordStrength',
     //   name: 'PasswordStrength',
     //   component: PasswordStrength,
     // },
-    
-    
+
+
     {
       path: '/signin',
       name: 'SignIn',
@@ -111,9 +115,16 @@ const router = createRouter({
       component: AdminProfile,
     },
     {
+
+      path: '/admin/categories',
+      name: 'AdminCategories',
+      component: AdminCategories,
+    },
+    {
       path: '/admin/AdminRating',
       name: 'AdminRating',
       component: AdminRating,
+
     },
 
 
