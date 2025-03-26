@@ -266,6 +266,7 @@
         </div>
 
       </div>
+    
       <div v-if="showPassword" class="w-1/3 mx-auto">
         <p class="text-center text-3xl font-bold mt-16">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
         <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
@@ -281,7 +282,7 @@
                   class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
                 <span @click="togglePasswordVisibility"
                   class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                  <i :class="showPasswordField ? 'fas fa-eye' : 'fas fa-eye-slash'" class="text-gray-800 "></i>
+                  <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'" class="text-gray-800 "></i>
                 </span>
               </div>
               <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
@@ -304,7 +305,7 @@
                   @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
                 <span @click="toggleConfirmPasswordVisibility"
                   class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                  <i :class="showConfirmPasswordField ? 'fas fa-eye' : 'fas fa-eye-slash'" class="text-gray-800 "></i>
+                  <i :class="showConfirmPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'" class="text-gray-800 "></i>
                 </span>
               </div>
               <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{ errors.password_confirmation }}</p>
