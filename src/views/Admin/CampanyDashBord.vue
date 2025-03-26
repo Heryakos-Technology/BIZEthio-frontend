@@ -3,7 +3,7 @@
       
      <!--large screen-->
      <div class="pb-10 px-5">
-        <h1 class="mb-3 text-gray-500 -mt-4">Featured Campaigns</h1>
+        <h1 class="mb-3 text-gray-500 ">Featured Campaigns</h1>
         <hr class="text-gray-300 -mx-9">
       <div class=" shadow-md w-1/3  ml-165 mt-5 text-sm  bg-white mb-3 pb-6 rounded-md">
 <img src="/campanyimage.png" alt="" class="">
