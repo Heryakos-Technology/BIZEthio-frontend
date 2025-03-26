@@ -18,6 +18,7 @@ import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
 import UserProfile from '@/views/userPage/UserProfile.vue'
 import AdminProfile from '@/views/Admin/AdminProfile.vue'
+import CampanyDashBord from '@/views/Admin/CampanyDashBord.vue'
 
 
 
@@ -109,8 +110,12 @@ const router = createRouter({
       name: 'AdminProfile',
       component: AdminProfile,
     },
-
-
+    {
+      path: '/admin/campany',
+      name: 'CampanyDashBord',
+      component: CampanyDashBord,
+    },
+    
 
   ],
 })
