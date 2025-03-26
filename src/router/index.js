@@ -18,6 +18,7 @@ import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
 import UserProfile from '@/views/userPage/UserProfile.vue'
 import AdminProfile from '@/views/Admin/AdminProfile.vue'
+import CampanyDashBord from '@/views/Admin/CampanyDashBord.vue'
 
 import AdminCategories from '@/views/Admin/AdminCategories.vue'
 
@@ -128,6 +129,12 @@ const router = createRouter({
     },
 
 
+    {
+      path: '/admin/campany',
+      name: 'CampanyDashBord',
+      component: CampanyDashBord,
+    },
+    
 
   ],
 })
