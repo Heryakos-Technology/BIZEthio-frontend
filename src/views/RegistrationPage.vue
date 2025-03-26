@@ -1,624 +1,358 @@
 <template>
-  <UserLayout>
-    <div class="border-b-1 border-b-gray-600 py-2 lg:pt-10"></div>
-    <div class="block md:hidden">
-      <p class="text-center text-2xl mt-4">
-        Welcome to <span class="text-[#2178AC]">BIZEthio</span>
-      </p>
-      <p class="text-sm font-medium px-10 text-center mt-2">
-        Connect, Discover, and Grow with AI-Powered Local Business Listings!
-      </p>
-    </div>
-    <!-- mobile view -->
-    <div class="block md:hidden">
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Owner name</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.owner_name"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
+<UserLayout>
+  <div class="border-b-1 border-b-gray-600 py-2 lg:pt-10 ">
 
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Company name</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.name"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
+  </div>
+  <div class="block md:hidden md:mt-96">
+    <p class="text-center text-2xl mt-4">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
+    <p class="text-sm font-medium px-10 text-center mt-2">Connect, Discover, and Grow with AI-Powered Local Business
+      Listings!</p>
+  </div>
 
-      <div class="px-7 mt-4">
-        <div class="flex">
-          <p class="">Description</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.description"
-          type="textArea"
-          class="w-80 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4 md:p-2"
-        />
-      </div>
 
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">passowrd</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.password"
-          type="password"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
+  <!-- desktop -->
 
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Contact Phone</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.contact_phone"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <label class="">category</label><br />
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+  <div class="px-4 ">
+    <div class="flex">
+      <div class="hidden md:block  bg-gradient-to-r from-[#0087e1] to-[#2178AC] relative w-1/3 -ml-4">
+        <p class="text-2xl font-medium text-white mt-16 w-11/12 px-10 text-center">Connect, Discover, and Grow with
+          AI-Powered Local Business Listings!</p>
+        <div style="height: 350px"
+          class=" ml-10 mt-6 rounded-3xl w-56 bg-gradient-to-b from-[#e8fffe] to-[#00D2EA] shadow-sm">
+          <i class="fa-solid fa-robot text-4xl mt-16 text-[#2178AC] ml-4"></i>
+          <p class="font-semibold text-lg ml-6 mt-4">AI-Powered Experience</p>
+          <p class="font-medium text-sm mt-2 mb-2 text-center">Smarter Searches, Better Results</p>
+          <p class="text-xs mt-4 w-48 text-center mx-auto">Our AI-driven platform helps you discover the best businesses
+            with personalized recommendations.</p>
         </div>
 
-        <select
-          name="category"
-          v-model="companies.category_id"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        >
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Email</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.contact_email"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Website</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.website"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">License URL</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.license_url"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Operating Hours</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.operating_hours"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <label for="country">Country</label>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-
-        <select
-          name="country"
-          v-model="companies.country"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        >
-          <option
-            v-for="country in countries"
-            :key="country.alpha2Code"
-            :value="country.name"
-          >
-            {{ country.name }}
-          </option>
-        </select>
-
-        <p v-if="selectedCountry" class="mt-2">
-          You selected: {{ selectedCountry }}
-        </p>
-        <p v-if="error" class="text-red-600">{{ error }}</p>
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Address</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.address"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">Region</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.region"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p class="">City</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.city"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-        />
-      </div>
-      <!-- image -->
-      <div class="px-4 mt-4 w-11/12 mx-auto">
-        <div class="flex">
-          <p>Image</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          v-model="companies.images"
-          type="text"
-          class="w-80 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-          placeholder="Upload an image"
-          readonly
-        />
-        <input type="file" @change="handleFileUpload" class="mt-2" />
-        <button
-          @click="uploadImage"
-          class="mt-2 bg-[#60b5e6] text-white rounded-md px-4 py-2"
-        >
-          Upload
-        </button>
-        <div v-if="imageUrl" class="mt-4">
-          <img
-            :src="imageUrl"
-            alt="Uploaded Image"
-            class="mt-2 w-80 h-auto rounded-md"
-          />
-        </div>
-      </div>
-
-      <!-- end of image -->
-
-      <div class="px-7 mt-4">
-        <div class="flex">
-          <p class="">Social Media Links</p>
-          <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-        </div>
-        <input
-          type="text"
-          class="w-56 h-10 bg-transparent border-2 border-[#60b5e6] rounded-md mb-4"
-        />
-        <input
-          type="text"
-          class="w-56 h-10 bg-transparent border-2 border-[#60b5e6] rounded-md mb-4"
-        />
-        <input
-          type="text"
-          class="w-56 h-10 bg-transparent border-2 border-[#60b5e6] rounded-md mb-4"
-        />
-      </div>
-      <button
-        class="bg-[#2178AC] mb-8 ml-8 py-2 px-2 rounded-md text-white text-sm"
-      >
-        add social media link
-      </button>
-      <div class="">
-        <img src="/footer-image.png" alt="" class="-ml-26 -mt-16" />
-        <div class="-mt-40 -ml-8">
-          <button
-            class="bg-[#2178AC] mb-32 ml-40 py-3 px-10 -mt-80 rounded-md text-white text-md"
-          >
-            Register Company
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- /end of mobile view -->
-
-    <!-- desktop -->
-
-    <div class="hidden md:block px-4">
-      <div class="flex">
-        <div class="bg-gradient-to-r from-[#0087e1] to-[#2178AC] w-1/3 -ml-4">
-          <p
-            class="text-2xl font-medium text-white mt-16 w-11/12 px-10 text-center"
-          >
-            Connect, Discover, and Grow with AI-Powered Local Business Listings!
-          </p>
-          <div
-            style="height: 350px"
-            class="ml-10 mt-6 rounded-3xl w-56 bg-gradient-to-b from-[#e8fffe] to-[#00D2EA] shadow-sm"
-          >
-            <i class="fa-solid fa-robot text-4xl mt-16 text-[#2178AC] ml-4"></i>
-            <p class="font-semibold text-lg ml-6 mt-4">AI-Powered Experience</p>
-            <p class="font-medium text-sm mt-2 mb-2 text-center">
-              Smarter Searches, Better Results
-            </p>
-            <p class="text-xs mt-4 w-48 text-center mx-auto">
-              Our AI-driven platform helps you discover the best businesses with
-              personalized recommendations.
-            </p>
+        <div
+          class="h-56 mb-20 lg:mb-96  mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]">
+          <div class=" flex">
+            <div class="lg:ml-6 md:ml-5 mt-20">
+              <div class="lg:w-16 md:w-10 w-10 h-1 ml-6 bg-[#1b6489] rounded-full mb-3"></div>
+              <div class="lg:w-24 md:w-10 w-10 h-1 -ml-4 bg-gray-300 rounded-full mb-3"></div>
+              <div class="lg:w-24 md:w-10 w-10 -ml-4 h-1 bg-gray-300 rounded-full mb-3"></div>
+              <div class="lg:w-24 md:w-10 w-10 ml-2 h-1 bg-[#1b6489] rounded-full mb-3"></div>
+              <div class="lg:w-24 md:w-10 w-10  h-1 bg-gray-300 rounded-full mb-3"></div>
+            </div>
+            <div class="lg:ml-">
+              <i class="fa-solid fa-key text-4xl ml-20 mt-6 text-[#2178AC]"></i>
+              <p class="text-xs font-bold text-center mt-4 lg:text-sm lg:font-bold lg:text-center lg:mt-4 md:text-xs md:font-bold md:text-center md:mt-4">Your Security, Our Priority</p>
+              <p class="text-xs lg:ml-6 mt-4">We protect your data with advanced encryption, ensuring privacy </p>
+            </div>
           </div>
+        </div>
 
-          <div
-            class="h-56 mb-20 mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]"
-          >
+        <img src="/Bottom Desogn Card.png" alt="" class="absolute bottom-0 left-0  mt-44 ">
+
+      </div>
+     
+      <div v-if="!showPassword" class="ml-20 w-2/3 ">
+        <p class="text-center text-3xl font-bold mt-4">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
+
+        <div class="lg:flex md:flex w-full">
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
             <div class="flex">
-              <div class="ml-10 mt-20">
-                <div class="w-16 h-1 ml-6 bg-[#1b6489] rounded-full mb-3"></div>
-                <div class="w-24 h-1 -ml-4 bg-gray-300 rounded-full mb-3"></div>
-                <div class="w-24 -ml-4 h-1 bg-gray-300 rounded-full mb-3"></div>
-                <div class="w-24 ml-2 h-1 bg-[#1b6489] rounded-full mb-3"></div>
-                <div class="w-24 h-1 bg-gray-300 rounded-full mb-3"></div>
-              </div>
-              <div class="ml-4">
-                <i
-                  class="fa-solid fa-key text-4xl ml-20 mt-6 text-[#2178AC]"
-                ></i>
-                <p class="text-sm font-bold text-center mt-4">
-                  Your Security, Our Priority
-                </p>
-                <p class="text-xs ml-12 mt-4">
-                  We protect your data with advanced encryption, ensuring
-                  privacy
-                </p>
-              </div>
+              <p class="">Owner name</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
+            <input v-model="companies.owner_name" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.owner_name" class="text-red-500 text-sm">{{ errors.owner_name }}</p>
           </div>
 
-          <img src="/Bottom Desogn Card.png" alt="" class="mt-44" />
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">Company name</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.name" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</p>
+          </div>
+
         </div>
-        <div class="ml-20 w-2/3">
-          <p class="text-center text-3xl font-bold mt-4">
-            Welcome to <span class="text-[#2178AC]">BIZEthio</span>
-          </p>
-
-          <div class="flex w-full">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Owner name</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.owner_name"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
+        <div class="lg:flex md:flex">
+          <div class="lg:px-6 md:px-6 px-2.5   mt-4 w-full lg:-ml-2 md:-ml-2">
+            <div class="flex">
+              <p class="">Description</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
             </div>
-
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Company name</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.name"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
+            <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"> -->
+            <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
+              @input="validateFields"
+              class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34 pt-1"></textarea>
+            <p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
           </div>
-          <div class="flex">
-            <div class="px-7 mt-4 w-full -ml-2">
+
+          <div class="container">
+            <div class="lg:px-3 px-3 md:px-3 -ml-1 mr-1  mt-4  mx-auto">
               <div class="flex">
-                <p class="">Description</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+                <p class="">Contact Phone</p>
+                <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <!-- <input v-model="description" type="textArea" class="w-11/12 h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"> -->
-              <textarea
-                v-model="companies.description"
-                name="description"
-                id=""
-                cols="30"
-                rows="6"
-                class="border-2 border-[#60b5e6] rounded-md w-11/12"
-              ></textarea>
+              <input v-model="companies.contact_phone" type="text" @input="handlePhoneInput"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+              <p v-if="errors.contact_phone" class="text-red-500 text-sm">{{ errors.contact_phone }}</p>
             </div>
 
-            <div class="container">
-              <div class="px-4 mt-8 mx-auto">
-                <div class="flex">
-                  <p class="">Contact Phone</p>
-                  <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-                </div>
-                <input
-                  v-model="companies.contact_phone"
-                  type="text"
-                  class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                />
+            <div class="px-3 -ml-1 mr-1 mt-4  mx-auto">
+              <div class="lg:flex md:flex">
+                <label class="">Category</label><br>
+                <p class=" text-red-600 text-2xl font-medium ml-1">*</p>
               </div>
 
-              <div class="px-4 mt-4 mx-auto">
-                <div class="flex">
-                  <label class="">category</label><br />
-                  <p class="text-red-600 text-2xl font-medium ml-1">*</p>
-                </div>
-
-                <select
-                  name="category"
-                  v-model="companies.category_id"
-                  class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                >
-                  <option
-                    v-for="category in categories"
-                    :key="category.id"
-                    :value="category.id"
-                  >
-                    {{ category.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="flex">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Email</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.contact_email"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">passowrd</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.password"
-                type="password"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-          </div>
-          <div class="flex">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">confirm passowrd</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.password_confirmation"
-                type="password"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Operating Hours</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.operating_hours"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-          </div>
-          <div class="flex">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <label class="text-md">Country</label><br />
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <select
-                name="country"
-                v-model="companies.country"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              >
-                <option value="">Select country</option>
-                <option
-                  v-for="country in countries"
-                  :key="country.id"
-                  :value="country.name"
-                  class="border-[#84d2ffb7] rounded-lg mt-2"
-                >
-                  {{ country.name }}
+              <select name="category" v-model="companies.category_id" @change="validateFields"
+                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none  hover:bg-[#eaf8ff] placeholder:text-center">
+                <option value="">Select category</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
                 </option>
               </select>
+              <p v-if="errors.category_id" class="text-red-500 text-sm">{{ errors.category_id }}</p>
             </div>
 
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Address</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.address"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-          </div>
-          <div class="flex">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">Region</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.region"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">City</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.city"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-          </div>
-          <!-- image -->
-          <div class="flex">
-            <div class="px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <p class="">License URL</p>
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <input
-                v-model="companies.license_url"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-            <div class="px-4 mt-6 w-11/12 mx-auto">
-              <div class="flex">
-                <p>Website</p>
-              </div>
-              <input
-                v-model="companies.website"
-                type="text"
-                class="w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              />
-            </div>
-          </div>
-
-          <div class="px-4 mt-4 w-1/2">
-            <div class="flex mb-2">
-              <p>Image</p>
-            </div>
-
-            <input
-              @change="handleFileUpload"
-              multiple
-              type="file"
-              class="cursor-pointer w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-            />
-            <input
-              v-model="companies.images"
-              type="text"
-              class="w-11/12 hidden h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-              placeholder="Upload images"
-              readonly
-            />
-            <div v-if="imageUrl && imageUrl.length" class="mt-4"></div>
-          </div>
-
-          <button
-            :disabled="isButtonDisabled"
-            @click="uploadImage"
-            class="cursor-pointer mt-2 ml-4 bg-[#409cd0] text-white rounded-md px-4 py-2"
-          >
-            <span>Upload</span>
-          </button>
-          <!-- end of image -->
-
-          <div class="px-7 mt-4">
-            <div class="">
-              <div class="md:w-56">
-                <p class="md:text-s md:w-40">Social Media Links</p>
-              </div>
-              <div></div>
-              <div class="flex mt-8 -ml-20">
-                <input
-                  v-model="socialMediaLinks.facebook"
-                  type="text"
-                  placeholder="Facebook "
-                  class="w-56 h-10 bg-transparent pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6"
-                />
-                <input
-                  v-model="socialMediaLinks.Instagram"
-                  type="text"
-                  placeholder="Instagram "
-                  class="w-56 h-10 bg-transparent pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6"
-                />
-                <input
-                  v-model="socialMediaLinks.LinkedIn"
-                  type="text"
-                  placeholder="LinkedIn"
-                  class="w-56 h-10 bg-transparent pl-2 border-2 border-[#60b5e6] rounded-md mb-4"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-6 ml-20">
-            <button
-              @click="createCompany"
-              :disabled="isButtonDisabled"
-              class="bg-[#2178AC] mb-32 ml-40 py-3 cursor-pointer px-40 -mt-80 md:ml-20 rounded-md text-white text-md"
-            >
-              Register Company
-            </button>
           </div>
         </div>
+        <div class="lg:flex md:flex">
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">Email</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.contact_email" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.contact_email" class="text-red-500 text-sm">{{ errors.contact_email }}</p>
+          </div>
+
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">Operating Hours</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.operating_hours" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.operating_hours" class="text-red-500 text-sm">{{ errors.operating_hours }}</p>
+
+          </div>
+
+
+        </div>
+        <div class="lg:flex md:flex">
+
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <label class=" text-md">Country</label><br>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <select name="country" v-model="companies.country" @change="validateFields"
+              class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none  hover:bg-[#eaf8ff] placeholder:text-center">
+              <option value="">Select country</option>
+              <option v-for="country in countries" :key="country.id" :value="country.name"
+                class="border-[#84d2ffb7] rounded-lg mt-2">
+                {{ country.name }}
+              </option>
+            </select>
+            <p v-if="errors.country" class="text-red-500 text-sm">{{ errors.country }}</p>
+          </div>
+
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">Address</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.address" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.address" class="text-red-500 text-sm">{{ errors.address }}</p>
+          </div>
+
+        </div>
+        <div class="lg:flex md:flex">
+
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">Region</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.region" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.region" class="text-red-500 text-sm">{{ errors.region }}</p>
+          </div>
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">City</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.city" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.city" class="text-red-500 text-sm">{{ errors.city }}</p>
+          </div>
+
+        </div>
+        <!-- image -->
+        <div class="lg:flex md:flex">
+
+          <div class="lg:px-4 md:px-4  mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="">License URL</p>
+              <p class=" text-red-600 text-2xl font-medium ml-2">*</p>
+            </div>
+            <input v-model="companies.license_url" type="text" @input="validateFields"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2">
+            <p v-if="errors.license_url" class="text-red-500 text-sm">{{ errors.license_url }}</p>
+          </div>
+          <div class="lg:px-4 md:px-4 mt-4 w-11/12 mx-auto">
+            <div class="flex">
+              <p class="mb-2">Website</p>
+            </div>
+            <input v-model="companies.website" type="text"
+              class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
+            <p v-if="errors.website" class="text-red-500 text-sm">{{ errors.website }}</p>
+          </div>
+        </div>
+
+        <div class="lg:px-4 md:px-4 mt-4 lg:w-1/2  md:w-1/2">
+          <div class="flex">
+            <p class="mb-2">Image</p>
+          </div>
+          <input v-model="companies.images" type="text"
+            class="w-11/12 hidden h-10 bg-transparent border-2 border-[#60b5e6] rounded-md" placeholder="Upload images"
+            readonly />
+          <input type="file" @change="handleFileUpload"
+            class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#60b5e6] hover:bg-[#eaf8ff] placeholder:text-center"
+            placeholder="Upload Image" multiple />
+
+
+          <div v-if="imageUrl && imageUrl.length" class="mt-4">
+            <h3 class="text-green-600">Image Uploaded successfully!</h3>
+            <div v-for="(url, index) in imageUrl" :key="index">
+              <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
+            </div>
+
+          </div>
+        </div>
+        <p v-if="errors.images" class="text-red-500 text-sm">{{ errors.images }}</p>
+        <button @click="uploadImage(); toggleImageButton()" v-if="!isUploading"
+          class="mt-2 ml-4 bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
+          Upload</button>
+        <p v-if="isUploading" class="mt-2 ml-4 text-green-600">Uploading...</p>
+
+        <!-- end of image -->
+
+        <div class=" lg:px-7 md:px-7 mt-4">
+          <div class="">
+            <div class="md:w-56 mt-6">
+              <p class="md:text-s md:w-40 lg:-ml-3">Social Media Links</p>
+            </div>
+            <div>
+            </div>
+            <div class="lg:flex mt-4 -ml-3">
+              <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
+                class="w-56 h-10 bg-transparent outline-none pl-2  border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+              <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
+                class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+              <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
+                class="w-56 h-10 bg-transparent outline-none pl-2  border-2 border-[#60b5e6] rounded-md mb-4" />
+            </div>
+
+          </div>
+
+        </div>
+        <div class=" mt-10 lg:ml-20 -ml-40 md:-ml-10">
+          <button @click="registerCompany"
+            class="bg-[#2178AC] mb-32 hover: ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+            {{ this.changeNaxt }}</button>
+
+        </div>
+
       </div>
-      <!-- /end of desktop -->
+    
+      <div v-if="showPassword" class="w-1/3 mx-auto">
+        <p class="text-center text-3xl font-bold mt-16">Welcome to <span class="text-[#2178AC]">BIZEthio</span></p>
+        <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
+          <div class="w-full">
+            <div class="px-4 mt-4 mx-auto">
+              <div class="flex">
+                <p>Password</p>
+                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+              </div>
+              <div class="relative">
+                <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
+                  @input="handlePasswordInput"
+                  class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+                <span @click="togglePasswordVisibility"
+                  class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                  <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'" class="text-gray-800 "></i>
+                </span>
+              </div>
+              <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
+              <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
+                {{ passwordStrengthLabel }}
+              </div>
+            </div>
+
+            <div class="px-4 mt-4 mx-auto">
+              <div class="flex">
+                <p>Confirm Password</p>
+                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+              </div>
+              <div class="relative">
+                <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
+                  :type="showConfirmPasswordField ? 'text' : 'password'"
+                  class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+                  :class="['outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
+                    isConfirmPasswordFocused && companies.password && companies.password !== companies.password_confirmation ? 'border-red-500' : 'border-[#60b5e6]']"
+                  @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
+                <span @click="toggleConfirmPasswordVisibility"
+                  class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                  <i :class="showConfirmPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'" class="text-gray-800 "></i>
+                </span>
+              </div>
+              <p v-if="errors.password_confirmation" class="text-red-500 text-sm">{{ errors.password_confirmation }}</p>
+            </div>
+          </div>
+
+          <div>
+            <button @click="hidepassword"
+              class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6b8ea1] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">Back</button>
+          </div>
+          <div>
+            <button @click="submitForm"
+              class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">Register
+              Company</button>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </UserLayout>
+    <!-- /end of desktop -->
+  </div>
+
+</UserLayout>
 </template>
 <script>
-import UserLayout from "@/layout/UserLayout.vue";
-import axios from "axios";
+import axios from 'axios';
+import { login, register, updateUserPassword } from '../auth';
+import UserLayout from '@/layout/UserLayout.vue'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, updatePassword } from 'firebase/auth';
 
 export default {
-  created() {},
+  components:{
+  UserLayout
+  },
+  computed: {
+    buttonClass() {
+      return {
+        'bg-gray-400 cursor-not-allowed': this.checkButtonDisabled,
+        'bg-[#2178AC] hover:bg-[#6b8ea1] cursor-pointer': !this.checkButtonDisabled,
+        'mb-32 ml-40 py-3 transition-all duration-300 px-40 rounded-md text-white text-md': true,
+      };
+    }
+  },
   mounted() {
     this.fetchCategories();
     this.fetchCountries();
+    this.checkButtonState();
   },
   data() {
     return {
@@ -627,176 +361,374 @@ export default {
       error: null,
       categories: [],
       companies: {
-        name: "kaltech",
-        owner_name: "kalkidan solomon",
-        description:
-          "cutting-edge technology company dedicated to creating innovative solutions that enhance everyday life. Specializing in software development, artificial intelligence, and cloud computing, we empower businesses to optimize their operations and drive growth.",
-        password: "12345678",
-        password_confirmation: "12345678",
-        operating_hours: "5",
-        category_id: "1",
-        address: "dessie",
-        city: "dessie",
-        region: "amhara",
-        country: "ethiopia",
-        contact_phone: "0921212121",
-        contact_email: "kal@gmail.com",
-        website:
-          "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
-        social_media_links:
-          "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
-        status: "pending",
-        rating_avg: "5",
+        name: '',
+        owner_name: '',
+        description: '',
+        password: '',
+        password_confirmation: '',
+        operating_hours: '',
+        category_id: '',
+        address: '',
+        city: '',
+        region: '',
+        country: '',
+        contact_phone: '',
+        contact_email: '',
+        website: '',
+        license_url: '',
+        social_media_links: 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+        status: 'pending',
+        rating_avg: '5',
+
         images: {},
       },
       socialMediaLinks: {
-        facebook: "",
-        Instagram: "",
-        LinkedIn: "",
+        facebook: '',
+        Instagram: '',
+        LinkedIn: '',
       },
-      images: "",
+      images: '',
       file: null,
       imageUrl: null,
-      cloudName: "dwh8v2zhg",
-      apiKey: "934859592498419",
+      cloudName: 'dwh8v2zhg',
+      apiKey: '934859592498419',
       isButtonDisabled: false,
       timeOutDuration: 2000,
+      showPassword: false,
+      isUploading: false,
+      ImageButton: true,
+      errors: {
+        contact_phone: '',
+      },
+      passwordStrengthMessages: [],
+      contact_phone: '',
+      showPasswordField: false,
+      showConfirmPasswordField: false,
+      changeNaxt:'next',
+      changeRegister:'Register Company'
     };
   },
   methods: {
+    togglePasswordVisibility() {
+      this.showPasswordField = !this.showPasswordField;
+    },
+    toggleConfirmPasswordVisibility() {
+      this.showConfirmPasswordField = !this.showConfirmPasswordField;
+    },
+    validatePhoneNumber(phoneNumber) {
+
+      const phoneRegex = /^(\+?\d{1,3})?[- ]?(\(?\d{3}\)?[- ]?)?\d{3}[- ]?\d{4}$/;
+      return phoneRegex.test(phoneNumber);
+    },
+
+    updatePhoneNumber() {
+      if (!this.validatePhoneNumber(this.companies.contact_phone)) {
+        this.errors.contact_phone = "Please enter a valid phone number.";
+      } else {
+        this.errors.contact_phone = "";
+      }
+    },
+    checkPasswordStrength(password) {
+      const strengthCriteria = [
+        { regex: /.{6,}/, message: "At least 6 characters long." },
+        { regex: /[A-Z]/, message: "At least one uppercase letter." },
+        { regex: /[a-z]/, message: "At least one lowercase letter." },
+        { regex: /[0-9]/, message: "At least one number." },
+        { regex: /[!@#$%^&*(),.?":{}|<>]/, message: "At least one special character." },
+      ];
+
+      const strengthMessages = [];
+      strengthCriteria.forEach(criteria => {
+        if (!criteria.regex.test(password)) {
+          strengthMessages.push(criteria.message);
+        }
+      });
+
+      let strengthLabel = '';
+      let strengthClass = '';
+
+
+      if (strengthMessages.length === 0) {
+        strengthLabel = "Strong";
+        strengthClass = 'text-green-500';
+      } else if (strengthMessages.length <= 2) {
+        strengthLabel = "Medium";
+        strengthClass = 'text-yellow-500';
+      } else {
+        strengthLabel = "Weak";
+        strengthClass = 'text-red-500';
+      }
+
+      return { label: strengthLabel, class: strengthClass };
+    },
+
+    handlePasswordInput() {
+      this.validateFields();
+      this.updatePasswordStrength();
+    },
+    handleConfirmPasswordInput() {
+      this.validateFields();
+    },
+    handlePhoneInput() {
+      this.validateFields();
+      this.updatePhoneNumber();
+    },
+
+
+    updatePasswordStrength() {
+      const { label, class: strengthClass } = this.checkPasswordStrength(this.companies.password);
+      this.passwordStrengthLabel = label;
+      this.passwordStrengthClass = strengthClass;
+    },
+
+    validateFields() {
+
+    this.errors = {};
+    if (!this.companies.owner_name) this.errors.owner_name = 'Owner name is required';
+    if (!this.companies.name) this.errors.name = 'Company name is required';
+    if (!this.companies.description) this.errors.description = 'Description is required';
+    if (!this.companies.contact_phone) this.errors.contact_phone = 'Contact phone is required';
+    if (!this.companies.contact_email) this.errors.contact_email = 'Contact email is required';
+    if (!this.companies.operating_hours) this.errors.operating_hours = 'Operating hours are required';
+    if (!this.companies.country) this.errors.country = 'Country must be selected';
+    if (!this.companies.category_id) this.errors.category_id = 'Category must be selected';
+    if (!this.companies.address) this.errors.address = 'Address is required';
+    if (!this.companies.region) this.errors.region = 'Region is required';
+    if (!this.companies.city) this.errors.city = 'City is required';
+    if (!this.companies.license_url) this.errors.license_url = 'License URL is required';
+    if (!this.companies.images || this.companies.images.length === 0) this.errors.images = 'At least one image must be uploaded';
+
+    if (this.showPassword) {
+        if (!this.companies.password) this.errors.password = 'Password is required';
+        if (!this.companies.password_confirmation) this.errors.password_confirmation = 'Password confirmation is required';
+        if (this.companies.password && this.companies.password_confirmation && this.companies.password !== this.companies.password_confirmation) 
+            this.errors.password_mismatch = 'Passwords do not match';
+    }
+},
+    checkButtonState() {
+      return Object.keys(this.errors).length > 0;
+    },
+
+    nextStep() {
+      this.validateFields();
+      if (this.checkButtonState()) {
+        console.log('Form is invalid, please correct the errors.');
+      } else {
+        this.nextStep = 'next'
+        this.showPassword = true;
+        this.validateFields();
+        
+
+      }
+      
+    },
+    async registerCompany() {
+      const companyData = {
+        contact_email: this.companies.contact_email,
+      };
+
+      try { 
+         this.changeNaxt ='loading...'
+        const tempPassword = Math.random().toString(36).slice(-8);
+        const auth = getAuth();
+        const userCredential = await createUserWithEmailAndPassword(auth, companyData.contact_email, tempPassword);
+    
+        await sendEmailVerification(userCredential.user);
+        alert('A verification email has been sent. Please check your inbox.');
+        localStorage.setItem('temporaryPassword', tempPassword);
+
+        alert('Please verify your email to complete your registration.');
+        continueButton.value = "Sent"
+      } catch (error) {
+        console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+        this.errors = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+        this.nextStep()
+        this.changeNaxt = 'next'
+      }
+
+    },
+    async handleRegister() {
+      
+    const name = this.companies.name;
+    const owner_name = this.companies.owner_name;
+    const description = this.companies.description;
+    const password = this.companies.password;
+    const password_confirmation = this.companies.password_confirmation;
+    const operating_hours = this.companies.operating_hours;
+    const category_id = this.companies.category_id;
+    const address = this.companies.address;
+    const city = this.companies.city;
+    const region = this.companies.region;
+    const country = this.companies.country;
+    const contact_phone = this.companies.contact_phone;
+    const contact_email = this.companies.contact_email.trim().toLowerCase();
+    const website = this.companies.website;
+    const license_url = this.companies.license_url;
+    
+    const socialMediaLinks = {
+        facebook: this.companies.social_media_links || '',
+        instagram: this.companies.social_media_links || '',
+        linkedin: this.companies.social_media_links || ''
+    };
+
+    const status = this.companies.status;
+    const rating_avg = this.companies.rating_avg;
+    const images = this.imageUrl ? JSON.stringify([this.imageUrl]) : JSON.stringify([]);
+
+    const companyData = {
+        name,
+        owner_name,
+        description,
+        password,
+        password_confirmation,
+        operating_hours,
+        category_id,
+        address,
+        city,
+        region,
+        country,
+        contact_phone,
+        contact_email,
+        website,
+        license_url,
+        social_media_links: JSON.stringify(socialMediaLinks), 
+        status,
+        rating_avg,
+        images
+    };
+
+    const auth = getAuth();
+
+    try {
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            const tempPassword = Math.random().toString(36).slice(-8);
+            const userCredential = await createUserWithEmailAndPassword(auth, companyData.contact_email, tempPassword);
+            await sendEmailVerification(userCredential.user);
+            alert('A verification email has been sent. Please check your inbox.');
+            localStorage.setItem('temporaryPassword', tempPassword);
+            return;
+        } else {
+            await currentUser.reload();
+
+            if (currentUser.emailVerified) {
+                const tempPassword = localStorage.getItem('temporaryPassword');
+                const success = await updateUserPassword(contact_email, tempPassword, password);
+
+                if (success) {
+                    const response = await axios.post(`https://bizethio-backend-production.up.railway.app/api/companies`, companyData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    console.log('Company registered successfully', response.data);
+                    this.companies.password = '';
+                    this.companies.password_confirmation = '';
+                    this.changeRegister = 'Register Company'
+                    this.$router.push('/signin');
+                }
+            } else {
+                alert('Your email is not verified. Please verify your email before registering again.');
+                this.companies.password = '';
+                this.companies.password_confirmation = '';
+            }
+        }
+    } catch (error) {
+        console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
+        this.errors = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+        this.companies.password = '';
+        this.companies.password_confirmation = '';
+    }
+},
+    submitForm() {
+      this.validateFields();
+      if (!this.checkButtonState()) {
+        this.changeRegister = 'loading...'
+        this.handleRegister();
+      }
+    },
+
+
+    hidepassword() {
+      this.showPassword = false
+    },
     handleFileUpload(event) {
       this.file = event.target.files;
       if (this.file) {
-        this.images = Array.from(this.file)
-          .map((file) => file.name)
-          .join(", ");
+        this.images = Array.from(this.file).map(file => file.name).join(', ');
       }
     },
     async uploadImage() {
+
       if (!this.file || this.file.length === 0) return;
 
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+      this.isUploading = true;
       this.disableButtons();
-      console.log("cloudinary url", cloudinaryUrl);
+
+      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+      console.log('cloudinary url', cloudinaryUrl);
+
       const promises = [];
+
 
       for (const singleFile of this.file) {
         const formData = new FormData();
-        formData.append("file", singleFile);
-        formData.append("upload_preset", "my_unsigned_preset");
+        formData.append('file', singleFile);
+        formData.append('upload_preset', 'my_unsigned_preset');
 
         promises.push(
           fetch(cloudinaryUrl, {
-            method: "POST",
+            method: 'POST',
             body: formData,
-          }).then((response) => response.json())
+          }).then(response => response.json())
         );
       }
 
       try {
         const responses = await Promise.all(promises);
-
-        this.imageUrl = responses.map((data) => data.secure_url);
+        this.imageUrl = responses.map(data => data.secure_url);
         this.companies.images = JSON.stringify(this.imageUrl);
       } catch (error) {
-        console.error("Error uploading images:", error);
+        console.error('Error uploading images:', error);
+      } finally {
+        this.isUploading = false;
       }
     },
-    disableButtons() {
-      this.isButtonDisabled = true;
-      setTimeout(() => {
-        this.isButtonDisabled = false;
-      }, this.timeOutDuration);
+    toggleImageButton() {
+      this.ImageButton = false
     },
-
+    disableButtons() {
+      this.isButtonDisabled = true
+      setTimeout(() => {
+        this.isButtonDisabled = false
+      }, this.timeOutDuration)
+    },
+    checkButtonDisabled() {
+      return !this.validateFields();
+    },
     async fetchCategories() {
       try {
-        const response = await axios.get(
-          "https://bizethio-backend-production.up.railway.app/api/categories"
-        );
+        const response = await axios.get('https://bizethio-backend-production.up.railway.app/api/categories');
         this.categories = response.data;
-        console.log("categoriessss", this.categories);
+        console.log('categoriessss', this.categories);
       } catch (error) {
-        this.error = "Failed to fetch categories.";
+        this.error = 'Failed to fetch categories.';
         console.error(error);
       }
     },
     async fetchCountries() {
       try {
-        const response = await axios.get("https://restcountries.com/v2/all");
+        const response = await axios.get('https://restcountries.com/v2/all');
         this.countries = response.data;
-        console.log("countryyyy", this.countries);
+        console.log('countryyyy', this.countries);
       } catch (error) {
-        this.error = "Failed to fetch countries.";
+        this.error = 'Failed to fetch countries.';
         console.error(error);
       }
     },
-    async createCompany() {
-      this.companies.social_media_links = JSON.stringify(this.socialMediaLinks);
-
-      if (this.imageUrl) {
-        this.companies.images = JSON.stringify([this.imageUrl]);
-      } else {
-        this.companies.images = JSON.stringify([]);
-      }
-
-      const formData = new FormData();
-      Object.entries(this.companies).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      formData.append("status", "pending");
-      formData.append("rating_avg", 5);
-
-      try {
-        const response = await axios.post(
-          "https://bizethio-backend-production.up.railway.app/api/companies",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Company created successfully", response.data);
-        this.resetForm();
-        this.disableButtons();
-      } catch (error) {
-        this.errorMessage = error.response
-          ? error.response.data.message
-          : "An error occurred. Please try again.";
-        console.error("Error creating company:", this.errorMessage);
-      }
-    },
-    resetForm() {
-      this.companies = {
-        name: "",
-        owner_name: "",
-        description: "",
-        password: "",
-        operating_hours: "",
-        category_id: "",
-        address: "",
-        city: "",
-        region: "",
-        country: "",
-        contact_phone: "",
-        contact_email: "",
-        website: "",
-        social_media_links: "",
-        status: "",
-        rating_avg: "",
-        images: "",
-      };
-      this.socialMediaLinks = {
-        facebook: "",
-        Instagram: "",
-        LinkedIn: "",
-      };
-      this.images = "";
-      this.file = null;
-      this.imageUrl = null;
-    },
+   
   },
 };
 </script>
