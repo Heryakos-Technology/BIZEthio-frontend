@@ -83,22 +83,22 @@ const deleteCategory = (id) => {
       <div
         v-for="(category, index) in categories"
         :key="category.id"
-        class="grid grid-cols-[50px_140px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
+        class="grid grid-cols-[50px_160px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
       >
         <div
-          class="p-3 text-sm text-black font-bold sticky left-0 bg-white z-10"
+          class="p-3 text-sm lg:text-base text-black font-bold sticky left-0 bg-white z-10"
         >
           {{ index + 1 }}
         </div>
         <div
-          class="p-3 text-sm text-black font-bold sticky left-[50px] bg-white z-10"
+          class="p-3 text-sm lg:text-base text-black font-bold sticky left-[50px] bg-white z-10"
         >
           {{ category.name }}
         </div>
-        <div class="p-3 text-sm text-black font-bold">
+        <div class="p-3 text-sm lg:text-base text-black font-bold">
           {{ category.description }}
         </div>
-        <div class="p-3 flex gap-x-2 justify-center">
+        <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
           <button class="text-gray-500 hover:text-black" title="Delete">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@ const deleteCategory = (id) => {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="size-5"
+              class="size-5 lg:size-6"
             >
               <path
                 stroke-linecap="round"
@@ -122,7 +122,7 @@ const deleteCategory = (id) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
+              class="size-5 lg:size-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
