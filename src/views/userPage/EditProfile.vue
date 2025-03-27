@@ -4,15 +4,15 @@
       <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl">
         <p class="font-semibold lg:font-bold lg:ml-4">Edit Profile</p>
         <div class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20">
-          <div class="ml-28">
+          <!-- <div class="ml-28">
             <div class="w-20 h-8 rounded-bl-4xl bg-white absolute top-0 right-0 rounded-tr-xl border-2 border-[#176678] text-[#1B7B90] text-xs font-semibold text-center pt-1">
               <p>Approved</p>
             </div>
-          </div>
+          </div> -->
           <div class="flex lg:-ml-20">
-            <img :src="userInformations.profile_picture_url || '/profilepic.png'" alt="Profile Picture"
-                 class="-ml-18 -mt-6 w-16 h-16 rounded-full md:w-24 md:h-24 md:ml-10 lg:w-40 lg:h-40">
-            <i class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-20 lg:-ml-3"></i>
+            <img :src="userInformations.profile_picture_url" alt="Profile Picture"
+                 class="-ml-18 -mt-6 w-16 h-16 rounded-full md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64 lg:-mt-16">
+            <i class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-32 lg:-ml-8"></i>
             <div class="text-white -mt-6 lg:ml-10 -ml-2 w-11/12">
               <div class="flex ml-4 w-56 mt-6 md:ml-20">
                 <div class="text-[12px] font-normal text-gray-100 md:text-[16px]">
@@ -35,13 +35,13 @@
             </div>
           </div>
           <div class="flex -ml-14 md:h-10 mt-10 lg:mt-2 w-80 lg:w-full md:w-full md:-mt-1 md:mx-auto">
-            <div class="flex bg-[#075E86] w-36 py-2 px-2 rounded-lg">
+            <div class="flex ml-16 bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:-ml-10 lg:w-20 lg:mx-auto">
+              <button @click="backToProfile" class="text-[14px] font-normal text-white lg:text-center ml-2 cursor-pointer">back</button>
+            </div>
+            <div class="flex bg-[#075E86] w-36 py-2 px-2 rounded-lg ">
               <router-link to="/ChangePassword" class="text-[14px] text-center w-30 mx-auto lg:mt- font-normal text-white">Change Password</router-link>
             </div>
-            <div class="flex ml-16 bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:ml-48 lg:w-20 lg:mx-auto">
-              <button @click="backToProfile" class="text-[14px] font-normal text-white lg:text-center ml-2">back</button>
-            </div>
-            <div class="flex ml-16 bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg: lg:w-20 lg:mx-auto">
+            <div class="flex ml-16 bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:ml-10 lg:w-20 lg:mx-auto">
               <button @click="saveUserInfo" class="text-[14px] font-normal text-white lg:text-center ml-2">Save</button>
             </div>
 
@@ -61,11 +61,13 @@
     },
     data() {
       return {
-        userInformations: {}, // Initialize as an object
+        userInformations: {}, 
+
       };
     },
     mounted() {
       this.fetchUserInfo();
+
     },
     methods: {
       async fetchUserInfo() {
@@ -103,6 +105,7 @@
           alert('Failed to update profile.');
         }
       },
+
       backToProfile(){
         this.$router.push('/UserProfile')
       }
