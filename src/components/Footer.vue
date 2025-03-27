@@ -8,23 +8,27 @@
       class="sm:max-w-[640px] mx-auto grid gap-y-8 md:grid-cols-3 md:max-w-full xl:grid-cols-5"
     >
       <div class="font-light text-sm lg:space-y-3">
-        <p class="font-semibold text-base">Exclusive</p>
-        <p class="font-semibold text-base">Subscribe</p>
+        <p class="font-semibold text-base xl:text-xl">Exclusive</p>
+        <p class="font-semibold text-base xl:text-xl">Subscribe</p>
         <p class="">Get 10% off your first order</p>
       </div>
 
       <div class="flex justify-between col-span-2">
         <div class="w-full">
-          <p class="font-semibold text-base">Support</p>
-          <div class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm">
+          <p class="font-semibold text-base xl:text-xl">Support</p>
+          <div
+            class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm xl:text-base 2xl:text-lg"
+          >
             <p class="">123 Bole Road, Addis Abeba, Ethiopia</p>
             <p class="">support@bizethio.com</p>
             <p class="">+251912325678</p>
           </div>
         </div>
         <div class="w-full">
-          <p class="font-semibold text-base">Account</p>
-          <div class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm">
+          <p class="font-semibold text-base xl:text-xl">Account</p>
+          <div
+            class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm xl:text-base 2xl:text-lg"
+          >
             <p class="">My Account</p>
             <p class="">Login / Register</p>
             <p class="">Cart</p>
@@ -38,8 +42,10 @@
         class="flex justify-between w-full col-span-3 md:pr-48 xl:col-span-2"
       >
         <div class="w-full">
-          <p class="font-semibold text-base">Quick Link</p>
-          <div class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm">
+          <p class="font-semibold text-base xl:text-xl">Quick Link</p>
+          <div
+            class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm xl:text-base 2xl:text-lg"
+          >
             <p class="">Privacy Policy</p>
             <p class="">Terms Of Use</p>
             <p class="">FAQ</p>
@@ -54,7 +60,7 @@
         </div>
       </div>
     </div>
-    <p class="text-xs text-center text-gray-400 mt-8 lg:mt-16">
+    <p class="text-xs text-center text-gray-400 mt-8 lg:mt-16 lg:text-base">
       &copy Copyright BizEthio 2025. All right reserved
     </p>
   </div>
