@@ -158,7 +158,7 @@ const navLinks = [
           v-for="(item, index) in navLinks"
           :key="index"
           :to="{ name: item.name }"
-          class="relative py-1 text-lg"
+          class="relative py-1 text-lg hover:font-bold hover:underline transition-all duration-300 ease-linear"
           :class="{
             ' font-semibold': item.name === route.name,
           }"
