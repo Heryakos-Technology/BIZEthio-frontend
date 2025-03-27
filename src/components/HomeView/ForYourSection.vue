@@ -8,6 +8,7 @@ import unityAutoImage from "/images/ForYouSection/unity_auto.jpeg";
 
 const items = [
   {
+    id: 1,
     name: "Addis Cafe",
     image: addisCafeImage,
     rating: 4.7,
@@ -16,6 +17,7 @@ const items = [
     hours: "Mon-Sun, 7 AM - 9 PM",
   },
   {
+    id: 2,
     name: "Ethio Fashion Hub",
     image: ethioFashionImage,
     rating: 4.0,
@@ -24,6 +26,7 @@ const items = [
     hours: "Mon-Sat, 9 AM - 7 PM",
   },
   {
+    id: 3,
     name: "Saba Hair Salon",
     image: sabaSalonImage,
     rating: 4.9,
@@ -32,6 +35,7 @@ const items = [
     hours: "Tue-Sun, 10 AM - 8 PM",
   },
   {
+    id: 4,
     name: "Bole Med Pharmacy",
     image: bolePharmacyImage,
     rating: 4.5,
@@ -40,6 +44,7 @@ const items = [
     hours: "Mon-Sun, 8 AM - 10 PM",
   },
   {
+    id: 51,
     name: "Horizon Hotel",
     image: horizonHotelImage,
     rating: 4.6,
@@ -48,6 +53,7 @@ const items = [
     hours: "24/7",
   },
   {
+    id: 6,
     name: "Unity Auto Repair",
     image: unityAutoImage,
     rating: 4.4,
@@ -81,7 +87,7 @@ function generateStars(rating) {
     <div
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
-      <div
+      <Rou
         v-for="(item, index) in items"
         :key="index"
         class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
@@ -159,13 +165,14 @@ function generateStars(rating) {
           </div>
           <p class="font-semibold">{{ item.category }}</p>
 
-          <div
+          <RouterLink
+            :to="{ name: 'CompanyDetail', params: { id: item.id } }"
             class="bg-primaryColor w-32 flex mt-5 rounded-lg text-white cursor-pointer items-center justify-center py-2"
           >
             View Details
-          </div>
+          </RouterLink>
         </div>
-      </div>
+      </Rou>
     </div>
   </div>
 </template>

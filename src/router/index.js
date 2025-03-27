@@ -23,6 +23,7 @@ import CampanyDashBord from '@/views/Admin/CampanyDashBord.vue'
 import AdminCategories from '@/views/Admin/AdminCategories.vue'
 
 import AdminRating from '@/views/Admin/AdminRating.vue'
+import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 
 
 
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/forgot',
       name: 'ForgotPassword',
       component: ForgotPassword,
+    },
+    {
+      path: '/signin',
+      name: 'SignIn',
+      component: SignIn,
     },
 
 
@@ -100,11 +106,7 @@ const router = createRouter({
     // },
 
 
-    {
-      path: '/signin',
-      name: 'SignIn',
-      component: SignIn,
-    },
+
     {
       path: '/EditProfile',
       name: 'EditProfile',
@@ -134,7 +136,12 @@ const router = createRouter({
       name: 'CampanyDashBord',
       component: CampanyDashBord,
     },
-    
+    {
+      path: '/company/:id',
+      name: 'CompanyDetail',
+      component: CompanyDetail,
+    },
+
 
   ],
 })

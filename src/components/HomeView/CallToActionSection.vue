@@ -26,12 +26,18 @@ import CTA_Graphics from "/images/CTA_Graphics.png";
     <div
       class="text-white uppercase gap-4 md:gap-8 flex flex-col mt-10 md:flex-row lg:mt-18"
     >
-      <div class="w-[170px] bg-[#2FC7A1] py-4 flex items-center justify-center">
+      <RouterLink
+        :to="{ name: 'UserRegistration1' }"
+        class="w-[170px] bg-[#2FC7A1] py-4 flex items-center justify-center"
+      >
         Join us client
-      </div>
-      <div class="w-[170px] bg-[#674DF0] py-4 flex items-center justify-center">
+      </RouterLink>
+      <RouterLink
+        :to="{ name: 'RegistrationPage' }"
+        class="w-[170px] bg-[#674DF0] py-4 flex items-center justify-center"
+      >
         Join us company
-      </div>
+      </RouterLink>
     </div>
     <div
       :style="{ backgroundImage: `url(${CTA_Graphics})` }"
