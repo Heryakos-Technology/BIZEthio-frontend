@@ -17,7 +17,7 @@
               </div>
               <div class="mt-2 ">
                   <input type="email" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"  v-model="email" @input="validateEmail">
-                  <p v-if="emailError" class="text-red-500">{{ emailError }}</p>
+                  <p v-if="emailError" class="text-red-500 mt-5">{{ emailError }}</p>
                  
               </div>
           </div>
@@ -31,7 +31,7 @@
               </div>
               <div class="mt-2 ">
                   <input type="password" class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12" v-model="password"  @input="validatePassword">
-                  <p v-if="passwordError" class="text-red-500">{{ passwordError }}</p>
+                  <p v-if="passwordError" class="text-red-500 mt-5">{{ passwordError }}</p>
               </div>
           </div>
           <div class="mt-9 flex w-12/12  mx-auto font-light">
@@ -358,9 +358,11 @@ onMounted(() => {
           }
         } catch (error) {
           console.error(error); 
-          signInMessage.value = "Failed"
+          signInMessage.value = "Continue"
           emailError.value = 'Invalid email or password.'; 
           passwordError.value = 'Invalid email or password.';
+          email.value = ''
+          password.value = ''
         }
           }
         

@@ -58,11 +58,39 @@
              
             </div>
             <div class="mt-2 w-13/13">
-              <input type="file" class=" focus:outline-none  er-2 rounded-md pl-3 pt-1w-13/13 md:h-12" @change="handleFileUpload" @input="validate" accept="image/*">
-              <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
-              <p class="text-center mt-5 text-cyan-500">{{ uploaded }}</p>
-              <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-6 py-1 rounded-sm mt-5 w-1/2 text-sm mx-auto cursor-pointer">Upload File</button>
-              <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-5" />
+              <div class="mt-5">
+            <div><p class="mb-4">Profile picture</p></div>
+        <input 
+            type="file" 
+            class="hidden" 
+            @change="handleFileUpload" 
+            accept="image/*" 
+            id="fileInput"
+        >
+        <label 
+            for="fileInput" 
+            class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+            style="display: inline-block;"
+        >
+            Browse
+        </label>
+        <p class="text-gray-500 mt-2">or drag a file here</p>
+
+        <div 
+            class="border-dashed border-2 border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+            @dragover.prevent="handleDragOver" 
+            @drop.prevent="handleFileDrop"  
+            @click="triggerFileInput" 
+        >
+            <p class="text-gray-400">Drop your files here</p>
+        </div>
+        <p v-if="uploaded" class="mb-4">{{ uploaded }}</p>
+        <div v-if="userPhoto" class="mt-4">
+            <img :src="userPhoto" alt="Uploaded Image" class="max-w-full h-auto rounded-md" />
+        </div>
+
+       
+    </div> 
             </div>
             <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5  mx-auto pt-7 pr-4 mt-16 md:w-3/4">
       <div class="flex justify-between">
@@ -200,7 +228,7 @@
                   </div>
               </div>
               <div class="mt-2 relative">
-
+               
                   <input :type="isConfirmPasswordVisible ? 'text' : 'password'"  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-13/13 md:h-12" v-model="model.user.password_confirmation"  @input="validatePasswords(),validate()">
                   <span @click="toggleConfirmPasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
             <i :class="isConfirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -210,25 +238,68 @@
           <div v-if="errors.password_confirmation" class="text-red-400 mt-1">{{ errors.password_confirmation }}</div>
           <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
         
-          <div class="mt-9">
-            <div class="flex">
-                  <div>
-  
-                      <p>Profile picture </p>
-                  </div>
-                  
-              </div>
-              <div class="mt-5 ">
+          <div class="mt-5">
+            <div><p class="mb-4">Profile picture</p></div>
+            <div class="-ml-48 mt-10">
+              <div 
+            class=" border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+            @dragover.prevent="handleDragOver" 
+            @drop.prevent="handleFileDrop"  
+            @click="triggerFileInput" 
+        >
+        <img src="/dragfile.png" alt="" class="w-1/2">
+            
+        </div>
+        <input 
+            type="file" 
+            class="hidden" 
+            @change="handleFileUpload" 
+            accept="image/*" 
+            id="fileInput"
+        >
+        <label 
+            for="fileInput" 
+            class="bg-cyan-500 ml-65 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
+            style="display: inline-block;"
+        >
+            Browse
+        </label>
+        <p class="text-gray-500 mt-2 text-center font-semibold text-lg">or drag a file here</p>
 
-                  <input type="file" class="  er-2 rounded-xl  pt-2 w-13/13 md:h-12 relative"   @change="handleFileUpload"  @input="validate" accept="image/" >
-                  <button @click="uploadFile" style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class=" text-black px-4 py-1 rounded-md h-1/20  cursor-pointer">Upload File</button>
+            </div>
+            
+       
+        <p v-if="uploaded" class="mb-4 mt-4 text-cyan-400">{{ uploaded }}</p>
+        <div v-if="userPhoto" class="mt-4">
+            <img :src="userPhoto" alt="Uploaded Image" class="max-w-full h-auto rounded-md" />
+        </div>
 
+     
+    </div> 
+    <!-- <div class="col-span-full">
+          <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Cover photo</label>
+          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+            <div class="text-center">
+              <svg class="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" />
+              </svg>
+              <div class="mt-4 flex text-sm/6 text-gray-600">
+                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
+                  <span>Upload a file</span>
+                  <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                </label>
+                <p class="pl-1">or drag and drop</p>
               </div>
+              <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+            </div>
           </div>
-          <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
-          <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p>
+        </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+ <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">{{ errors.profile_picture_url }}</div>
+          <!-- <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p> -->
 
-          <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/>
+          <!-- <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/> -->
           <div class="mt-9">
             <p class="text-red-400">{{ checkboxMessage }}</p>
               <div class="flex w-3/4 mx-auto">
@@ -320,7 +391,7 @@ export default {
 
     const errorss = ref('');
     const validate = () => {
-        errors.value = {}; 
+        errors.value = ''; 
         if (!model.value.user.password) errors.value.password = 'password is required.';
         if (!model.value.user.password_confirmation) errors.value.password_confirmation = 'password is required.';
         if (!model.value.user.profile_picture_url) errors.value.profile_picture_url = 'profile picture is required.';
@@ -387,6 +458,9 @@ watch(isButtonDisabled, (newValue) => {
     };
     const handleFileUpload = (event) => {
       file.value = event.target.files[0];
+      if(file.value){
+        uploadFile();
+      }
     };
 
     const uploadFile = async () => {
@@ -420,7 +494,19 @@ watch(isButtonDisabled, (newValue) => {
         console.error('Error uploading file:', error.response.data);
       }
     };
-
+const handleFileDrop = (event)=>{
+  const files = event.dataTransfer.files;
+        if (files.length) {
+            file.value = files[0];
+            uploadFile(); 
+        }
+};
+const handleDragOver = (event)=> {
+        event.preventDefault(); 
+    };
+const triggerFileInput = ()=> {
+        document.getElementById('fileInput').click(); 
+    };
     const generateSignature = (params) => {
       const apiSecret = 'A5D7SF1aLxGmy_TUAao-iA5C3rM';
       const sortedParams = Object.entries(params)
@@ -504,6 +590,7 @@ watch(isButtonDisabled, (newValue) => {
 
       if (currentUser.emailVerified) {
       
+      
         const tempPassword = localStorage.getItem('temporaryPassword');
         const success = await updateUserPassword(email, tempPassword, password);
 
@@ -537,7 +624,7 @@ watch(isButtonDisabled, (newValue) => {
         }
       } else {
         alert('Your email is not verified. Please verify your email before registering again.');
-        submitText.value = 'Failed'
+        submitText.value = 'Submit'
         model.value.user.password = '';
         model.value.user.password_confirmation = '';
         model.value.user.profile_picture_url = '';
@@ -545,8 +632,8 @@ watch(isButtonDisabled, (newValue) => {
     }
   } catch (error) {
     console.error('Error during registration:', error.message || 'An error occurred. Please try again.');
-    errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
-    submitText.value = "Failed";
+    errors.value = error.response ? error.response.data.message : 'The Email is already taken.';
+    submitText.value = "Submit";
     model.value.user.password = '';
     model.value.user.password_confirmation = '';
     model.value.user.profile_picture_url = '';
@@ -634,6 +721,9 @@ const togglePasswordVisibility = () => {
       isCheckboxChecked,
       submitText,
       isButtonDisabled,
+      handleFileDrop,
+      triggerFileInput,
+      handleDragOver
 
       // handleRegister,
     };
