@@ -199,9 +199,12 @@ onMounted(() => {
             </li>
           </ul>
           <ul class="ml-8 text-xl mt-8 space-y-8">
-            <li class="flex cursor-pointer gap-x-2 items-center">
+            <RouterLink
+              :to="{ name: 'CampanyDashBord' }"
+              class="flex cursor-pointer gap-x-2 items-center"
+            >
               <img :src="RatingIcon" alt="" class="size-6" />Companies
-            </li>
+            </RouterLink>
             <li class="flex cursor-pointer gap-x-2 items-center">
               <img :src="userIcons" alt="" class="size-6" />Users
             </li>
