@@ -198,7 +198,7 @@ const navLinks = [
             </svg>
           </RouterLink>
 
-          <RouterLink v-if="!authStore.user" :to="{ name: 'SignIn' }">
+          <RouterLink v-if="!authStore.user" :to="{ name: 'AdminProfile' }">
             <button
               class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
             >
