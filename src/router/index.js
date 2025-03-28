@@ -130,7 +130,7 @@ const router = createRouter({
       component: AdminCategories,
     },
     {
-      path: '/admin/AdminRating',
+      path: '/admin/Rating',
       name: 'AdminRating',
       component: AdminRating,
 
