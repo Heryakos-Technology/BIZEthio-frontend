@@ -30,13 +30,13 @@ import CTA_Graphics from "/images/CTA_Graphics.png";
         :to="{ name: 'UserRegistration1' }"
         class="w-[170px] bg-[#2FC7A1] py-4 flex items-center justify-center"
       >
-        Join us client
+        Join as a client
       </RouterLink>
       <RouterLink
         :to="{ name: 'RegistrationPage' }"
         class="w-[170px] bg-[#674DF0] py-4 flex items-center justify-center"
       >
-        Join us company
+        Join as a company
       </RouterLink>
     </div>
     <div

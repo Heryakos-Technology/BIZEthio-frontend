@@ -5,6 +5,16 @@ import sabaSalonImage from "/images/ForYouSection/saba_salon.jpeg";
 import bolePharmacyImage from "/images/ForYouSection/bole_pharmacy.jpeg";
 import horizonHotelImage from "/images/ForYouSection/horizon_hotel.jpeg";
 import unityAutoImage from "/images/ForYouSection/unity_auto.jpeg";
+import { onMounted, ref } from "vue";
+import { useCompanyStore } from "@/stores/company";
+
+const companies = ref([]);
+const { getAllCompanies } = useCompanyStore();
+
+onMounted(async () => {
+  companies.value = await getAllCompanies();
+  console.log(companies.value);
+});
 
 const items = [
   {
