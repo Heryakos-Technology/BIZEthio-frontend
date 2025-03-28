@@ -412,7 +412,7 @@
           </div>
         </div>
 
-        <div v-if="showPassword" class="w-1/3 mx-auto">
+        <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
           <p class="text-center text-3xl font-bold mt-16">
             Welcome to <span class="text-[#2178AC]">BIZEthio</span>
           </p>
@@ -513,7 +513,7 @@
                 @click="submitForm"
                 class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md"
               >
-                Register Company
+                {{ this.changeRegister }}
               </button>
             </div>
           </div>
@@ -736,6 +736,7 @@ export default {
         this.nextStep = "next";
         this.showPassword = true;
         this.validateFields();
+        this.$refs.cardSection.scrollIntoView({behavoir: 'smooth', block: 'start'})
       }
     },
     async registerCompany() {
@@ -769,6 +770,7 @@ export default {
           : "An error occurred. Please try again.";
         this.nextStep();
         this.changeNaxt = "next";
+        
       }
     },
     async handleRegister() {
