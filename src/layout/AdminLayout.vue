@@ -7,22 +7,29 @@ import RatingIcon from "/images/AdminPage/rating_icon.png";
 import userIcons from "/images/AdminPage/users_icon.png";
 import userIcon from "/images/AdminPage/user_icon.png";
 import CategoriesIcon from "/images/AdminPage/categories_icon.png";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+const user = ref(null);
+
+onMounted(async () => {
+  await authStore.getUser();
+  user.value = authStore.user;
+
+  console.log(user.value);
+});
 
 const isSidebarOpen = ref(false);
 const sidebar = ref(null);
 
-// Toggle sidebar visibility
 const handleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
 
-// Watch for changes in isSidebarOpen to toggle body scroll
 watch(isSidebarOpen, (newValue) => {
   if (newValue) {
-    // Disable scrolling on the body when sidebar is open
     document.body.classList.add("no-scroll");
   } else {
-    // Re-enable scrolling when sidebar is closed
     document.body.classList.remove("no-scroll");
   }
 });
@@ -60,7 +67,7 @@ onMounted(() => {
           ></path>
         </svg>
         <div class="flex gap-x-4 items-center">
-          <p class="font-semibold">Welcome, Temesgen</p>
+          <p class="font-semibold">Welcome, {{ user?.name }}</p>
           <div class="flex gap-x-1 items-end">
             <img :src="userIcon" alt="" class="size-6" />
             <svg
