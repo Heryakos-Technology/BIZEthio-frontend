@@ -1,49 +1,115 @@
 <script setup>
-import { ref } from "vue";
+import { useCategoryStore } from "@/stores/category";
+import { onMounted, ref } from "vue";
 
-// Sample table data
-const categories = ref([
-  {
-    id: 1,
-    name: "Technology",
-    description: "All companies related to technology and innovation.",
-  },
-  {
-    id: 2,
-    name: "Healthcare",
-    description: "Companies providing health-related products and services.",
-  },
-  {
-    id: 3,
-    name: "Hotels",
-    description:
-      "Provide accommodation services for travelers, often with amenities.",
-  },
-  {
-    id: 4,
-    name: "Travel Agencies",
-    description:
-      "Companies that assist customers in planning and booking travel arrangements.",
-  },
-  {
-    id: 5,
-    name: "Catering Services",
-    description:
-      "Companies that provide food and beverage services for events and gatherings.",
-  },
-]);
+const categoryStore = useCategoryStore();
+const { getAllCategories, deleteCategory, createCategory } = categoryStore;
 
-const deleteCategory = (id) => {
-  categories.value = categories.value.filter((category) => category.id !== id);
-  console.log(`Deleted category with id: ${id}`);
+const isAddOpen = ref(false);
+
+const categories = ref([]);
+const formdata = ref({
+  name: "",
+  description: "",
+});
+
+onMounted(async () => {
+  await fetchCategories();
+});
+
+const fetchCategories = async () => {
+  categories.value = await getAllCategories();
+  console.log(categories.value);
+};
+
+const handleDelete = async (id) => {
+  await deleteCategory(id);
+  await fetchCategories();
+};
+
+const handleAddCategory = async () => {
+  const newFormData = new FormData();
+  newFormData.append("name", formdata.value.name);
+  newFormData.append("description", formdata.value.description);
+
+  await createCategory(newFormData);
+
+  formdata.value.name = "";
+  formdata.value.description = "";
+
+  isAddOpen.value = false;
+
+  await fetchCategories();
+};
+
+const toggleAddForm = () => {
+  isAddOpen.value = !isAddOpen.value;
 };
 </script>
 
 <template>
-  <div class="px-4">
+  <div class="px-4 relative">
+    <div
+      v-if="isAddOpen"
+      class="w-[90%] bg-white shadow-lg left-[-10px] xs:left-0 absolute p-4 z-50"
+    >
+      <div class="flex justify-between mb-2">
+        <h2 class="text-lg font-semibold">Add New Category</h2>
+        <button
+          @click="toggleAddForm"
+          class="text-gray-500 hover:text-gray-800"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="mb-2">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-1"
+          >Name:</label
+        >
+        <input
+          type="text"
+          id="name"
+          v-model="formdata.name"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div>
+        <label
+          for="description"
+          class="block text-gray-700 text-sm font-bold mb-1"
+          >Description:</label
+        >
+        <textarea
+          id="description"
+          v-model="formdata.description"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ></textarea>
+      </div>
+      <button
+        @click="handleAddCategory"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+      >
+        Add
+      </button>
+    </div>
+
     <div class="mt-16 xs:ml-4">
       <h1 class="font-bold text-3xl lg:text-4xl my-8 uppercase">categories</h1>
       <button
+        @click="toggleAddForm"
         class="flex font-bold items-center cursor-pointer justify-center gap-x-3 bg-white py-2 rounded-sm mt-2 px-2"
       >
         <svg
@@ -99,7 +165,7 @@ const deleteCategory = (id) => {
           {{ category.description }}
         </div>
         <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
-          <button class="text-gray-500 hover:text-black" title="Delete">
+          <button class="text-gray-500 hover:text-black" title="Edit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -116,7 +182,7 @@ const deleteCategory = (id) => {
             </svg>
           </button>
           <button
-            @click="deleteCategory(category.id)"
+            @click="handleDelete(category.id)"
             class="text-red-500 hover:text-red-700"
             title="Delete"
           >
