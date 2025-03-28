@@ -4,6 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
 
 import UserRegistration1 from '../views/Users/UserRegistration1.vue'
+import Social from '../views/Users/Social.vue'
+
 import FileUpload from '../views/Users/FileUpload.vue'
 
 import ForgotPassword from '../views/ForgotPassword.vue'
@@ -72,6 +74,12 @@ const router = createRouter({
       name: 'NextPage',
       component: NextPage,
     },
+    {
+      path: '/Social',
+      name: 'Social',
+      component: Social,
+    },
+    
     // {
     //   path: '/verify-email',
     //   name: 'Verify',
