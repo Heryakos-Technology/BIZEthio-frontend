@@ -30,10 +30,31 @@ export const useAuthStore = defineStore("authStore", {
         );
 
         this.user = response.data;
-        console.log("User Information:", this.user);
+        // console.log("User Information:", this.user);
       } catch (error) {
         console.error("Error fetching user information:", error);
         this.errors = error.response?.data || { message: "Failed to fetch user" };
+      }
+    },
+
+    /********************* Logout User ********************** */
+    async logout() {
+      try {
+
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("token");
+
+        // Clear user state
+        this.user = null;
+
+        // Navigate to sign in page
+        router.push("/signin");
+
+        return true;
+      } catch (error) {
+        console.error("Logout failed:", error);
+        this.errors = error.response?.data || { message: "Failed to logout" };
+        return false;
       }
     },
   },
