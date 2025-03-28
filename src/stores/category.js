@@ -21,7 +21,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.errors) {
         this.errors = data.errors;
       } else {
@@ -41,7 +41,7 @@ export const useCategoryStore = defineStore("categoryStore", {
         body: formData,
       });
       const data = await res.json();
-      console.log(data)
+      // console.log(data)
 
       if (data.errors) {
         this.errors = data.errors;
@@ -60,7 +60,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 
       });
       const data = res.status !== 204 ? await res.json() : {};
-      console.log(data);
+      // console.log(data);
 
       if (data.errors) {
         this.errors = data.errors;

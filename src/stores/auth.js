@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("authStore", {
         );
 
         this.user = response.data;
-        console.log("User Information:", this.user);
+        // console.log("User Information:", this.user);
       } catch (error) {
         console.error("Error fetching user information:", error);
         this.errors = error.response?.data || { message: "Failed to fetch user" };

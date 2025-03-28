@@ -4,6 +4,7 @@ import technology_icon from "/images/AdminPage/technology_icon.png";
 import Catering_Services from "/images/AdminPage/Catering_Services.png";
 import AdminDonutChart from "@/components/Admin/AdminDonutChart.vue";
 import AdminTable from "@/components/Admin/AdminTable.vue";
+import { useAuthStore } from "@/stores/auth";
 </script>
 
 <template>

@@ -15,8 +15,6 @@ const user = ref(null);
 onMounted(async () => {
   await authStore.getUser();
   user.value = authStore.user;
-
-  console.log(user.value);
 });
 
 const isSidebarOpen = ref(false);

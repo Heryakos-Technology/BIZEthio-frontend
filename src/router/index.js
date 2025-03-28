@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+import { useAuthStore } from "@/stores/auth";
 import RegistrationPage from '../views/RegistrationPage.vue'
 
 import UserRegistration1 from '../views/Users/UserRegistration1.vue'
@@ -39,6 +39,8 @@ const router = createRouter({
       path: '/',
       name: 'Home',
       component: HomeView,
+      meta: { welcome: true },
+
     },
 
     {
@@ -46,17 +48,23 @@ const router = createRouter({
       path: '/registration',
       name: 'RegistrationPage',
       component: RegistrationPage,
+      meta: { guest: true },
+
     },
     {
 
       path: '/forgot',
       name: 'ForgotPassword',
       component: ForgotPassword,
+      meta: { auth: true },
+
     },
     {
       path: '/signin',
       name: 'SignIn',
       component: SignIn,
+      meta: { guest: true },
+
     },
 
 
@@ -64,6 +72,8 @@ const router = createRouter({
       path: '/signup',
       name: 'UserRegistration1',
       component: UserRegistration1,
+      meta: { guest: true },
+
     },
     {
       path: '/ChangePassword',
@@ -91,7 +101,7 @@ const router = createRouter({
       name: 'Social',
       component: Social,
     },
-    
+
     // {
     //   path: '/verify-email',
     //   name: 'Verify',
@@ -122,7 +132,7 @@ const router = createRouter({
       name: 'FileUpload',
       component: FileUpload,
     },
-    
+
     {
       path: '/EditProfile',
       name: 'EditProfile',
@@ -161,5 +171,25 @@ const router = createRouter({
 
   ],
 })
+
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore();
+  await authStore.getUser();
+
+  if (authStore.user?.role === "admin" && to.meta.guest) {
+    return { name: "AdminProfile" };
+  }
+  if (authStore.user?.role === "admin" && to.meta.auth) {
+    return { name: "AdminProfile" };
+  }
+  if (authStore.user?.role === "admin" && to.meta.welcome) {
+    return { name: "AdminProfile" };
+  }
+
+  if (!authStore.user && to.meta.auth) {
+    return { name: "SignIn" };
+  }
+});
+
 
 export default router

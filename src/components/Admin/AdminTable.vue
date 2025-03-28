@@ -19,7 +19,7 @@ onMounted(async () => {
 
 const fetchCategories = async () => {
   categories.value = await getAllCategories();
-  console.log(categories.value);
+  // console.log(categories.value);
 };
 
 const handleDelete = async (id) => {
