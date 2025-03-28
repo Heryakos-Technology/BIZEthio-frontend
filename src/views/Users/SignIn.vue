@@ -68,10 +68,10 @@
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-5">
             <div class="w-3/4">
-                <button  @click="signInWithGoogle" style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with Google</button>
+                <button style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with Google</button>
             </div>
             <div class="mt-3 w-3/4">
-             <button  @click="signInWithFacebook" style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
+             <button style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
             </div>
           </div>
   </div>
@@ -253,8 +253,6 @@
   <script>
   import { ref, onMounted ,computed,watch} from 'vue';
   import UserLayout from "@/layout/UserLayout.vue"
-  // import firebase from 'firebase/app';
-  //  import 'firebase/auth';
   import { useRouter } from 'vue-router'; 
   import axios from 'axios';
   import { login } from '../../auth'; 
@@ -264,38 +262,6 @@
     UserLayout,
   },
     setup() {
-      const googleProvider = new firebase.auth.GoogleAuthProvider();
-
-const signInWithGoogle = async () => {
-  try {
-    const result = await firebase.auth().signInWithPopup(googleProvider);
-    console.log('Google Sign-In successful:', result);
-  } catch (error) {
-    console.error('Error during Google Sign-In:', error);
-  }
-};
-
-const signInWithFacebook = () => {
-  // Check if FB object is available
-  if (window.FB) {
-    window.FB.login(async (response) => {
-      if (response.authResponse) {
-        const credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
-        try {
-          const result = await firebase.auth().signInWithCredential(credential);
-          console.log('Facebook Sign-In successful:', result);
-        } catch (error) {
-          console.error('Error during Facebook Sign-In:', error);
-        }
-      } else {
-        console.error('User cancelled login or did not fully authorize.');
-      }
-    }, { scope: 'public_profile,email' });
-  } else {
-    console.error('Facebook SDK not loaded.');
-  }
-};
-
       const router = useRouter();
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
       const email = ref('');
@@ -339,15 +305,6 @@ const handleRememberMeChange = () => {
 
 
 onMounted(() => {
-  window.fbAsyncInit = function () {
-        window.FB.init({
-          appId: '1308498420409531',
-          cookie: true,
-          xfbml: true,
-          version: 'v10.0', 
-        });
-      };
-  
   setRememberMeState(); 
 
   const rememberMe = document.getElementById('rememberMe');
@@ -375,7 +332,7 @@ onMounted(() => {
         signInMessage.value = "Loading..."
         try {
         
-          const response = await axios.post(`${base_url}/users/login`, {
+          const response = await axios.post(`${base_url}/login`, {
             email: email.value,
             password: password.value,
           });
