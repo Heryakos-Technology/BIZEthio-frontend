@@ -22,7 +22,6 @@
         measurementId: "G-9WPEFMJ0YP"
       };
   
-      // Initialize Firebase only if it hasn't been initialized yet
       const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const googleProvider = new GoogleAuthProvider();
