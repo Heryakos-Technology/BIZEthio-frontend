@@ -596,7 +596,7 @@ const triggerFileInput = ()=> {
 
         if (success) {
           
-          const response = await axios.post(`${base_url}/register`, userData, {
+          const response = await axios.post(`${base_url}/users/register`, userData, {
             headers: {
               'Content-Type': 'application/json'
             }
