@@ -280,15 +280,16 @@
       return email.value.trim() === '' || password.value.trim() === '';
     });
    const signInWithGoogle = async() => {
-        try {
-          await signInWithPopup(auth, googleProvider);
-          console.log("Google sign-in successful");
-          
-        } catch (error) {
-          console.error("Error during Google sign-in:", error);
-          authError.value = error.message;
-          alert(authError.value);
-        }
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      
+      const user = result.user;
+      console.log('User signed in:', user);
+    
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+     
+    }
       };
       const signInWithFacebook =  async()=> {
         try {
