@@ -4,6 +4,8 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import Logo from "@/components/icons/Logo.vue";
 import { useAuthStore } from "@/stores/auth";
+// Fix: Import the CompanyDetail component if you want to use it as a component
+// import CompanyDetail from '@/views/Company/CompanyDetail.vue';
 
 const authStore = useAuthStore();
 
@@ -180,9 +182,8 @@ const navLinks = [
               d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
             />
           </svg>
-          <RouterLink :to="{ name: 'UserProfile' }">
+          <RouterLink :to="{ name: 'UserProfile' }" v-if="authStore.user">
             <svg
-              v-if="authStore.user"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -198,12 +199,12 @@ const navLinks = [
             </svg>
           </RouterLink>
 
-          <RouterLink v-if="!authStore.user" :to="{ name: 'SignIn' }">
-            <button
-              class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
-            >
-              Get Started
-            </button>
+          <RouterLink
+            v-if="!authStore.user"
+            :to="{ name: 'SignIn' }"
+            class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
+          >
+            Get Started
           </RouterLink>
         </div>
       </div>
