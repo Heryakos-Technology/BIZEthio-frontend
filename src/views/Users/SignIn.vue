@@ -265,6 +265,7 @@
     UserLayout,
   },
     setup() {
+      const authError = ref(null);
       const router = useRouter();
       const base_url = 'https://bizethio-backend-production.up.railway.app/api';
       const email = ref('');
@@ -278,13 +279,15 @@
       const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === '' || password.value.trim() === '';
     });
-   const signInWithGoogle = async()=> {
+   const signInWithGoogle = async() => {
         try {
           await signInWithPopup(auth, googleProvider);
           console.log("Google sign-in successful");
           
         } catch (error) {
           console.error("Error during Google sign-in:", error);
+          authError.value = error.message;
+          alert(authError.value);
         }
       };
       const signInWithFacebook =  async()=> {
@@ -295,7 +298,8 @@
       
         } catch (error) {
           console.error("Error during Facebook sign-in:", error);
-          alert(error)
+          authError.value = error.message;
+          alert(authError.value);
         }
       };
     const validateEmail = () => {
@@ -406,7 +410,8 @@ onMounted(() => {
       validateEmail,
       validatePassword,
       signInWithGoogle,
-      signInWithFacebook
+      signInWithFacebook,
+      authError
       };
     },
   };
