@@ -142,17 +142,21 @@ const router = createRouter({
       path: '/admin/profile',
       name: 'AdminProfile',
       component: AdminProfile,
+      meta: { admin: true },
+
     },
     {
 
       path: '/admin/categories',
       name: 'AdminCategories',
       component: AdminCategories,
+      meta: { admin: true },
     },
     {
       path: '/admin/Rating',
       name: 'AdminRating',
       component: AdminRating,
+      meta: { admin: true },
 
     },
 
@@ -161,6 +165,7 @@ const router = createRouter({
       path: '/admin/campany',
       name: 'CampanyDashBord',
       component: CampanyDashBord,
+      meta: { admin: true },
     },
     {
       path: '/company/:id',
