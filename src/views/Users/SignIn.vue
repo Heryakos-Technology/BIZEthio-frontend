@@ -332,7 +332,7 @@ onMounted(() => {
         signInMessage.value = "Loading..."
         try {
         
-          const response = await axios.post(`${base_url}/login`, {
+          const response = await axios.post(`${base_url}/users/login`, {
             email: email.value,
             password: password.value,
           });
