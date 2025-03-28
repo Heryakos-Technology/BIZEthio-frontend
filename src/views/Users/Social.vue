@@ -27,15 +27,18 @@
   
   export default {
     methods: {
-      async signInWithGoogle() {
-        try {
-          await signInWithPopup(auth, googleProvider);
-          console.log("Google sign-in successful");
-          
-        } catch (error) {
-          console.error("Error during Google sign-in:", error);
-        }
-      },
+        async signInWithGoogle() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      // You can access the signed-in user's info here
+      const user = result.user;
+      console.log('User signed in:', user);
+      // Handle user sign-in (e.g., redirect, store user info)
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+      // Handle errors (e.g., show a message)
+    }
+  },
       async signInWithFacebook() {
         try {
           await signInWithPopup(auth, facebookProvider);
