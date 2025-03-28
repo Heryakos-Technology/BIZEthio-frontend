@@ -194,6 +194,9 @@ router.beforeEach(async (to, from) => {
   if (!authStore.user && to.meta.auth) {
     return { name: "SignIn" };
   }
+  if (authStore.user && to.meta.guest) {
+    return { name: "Home" };
+  }
 });
 
 
