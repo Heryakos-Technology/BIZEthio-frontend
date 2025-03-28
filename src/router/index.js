@@ -84,6 +84,8 @@ const router = createRouter({
       path: '/UserProfile',
       name: 'UserProfile',
       component: UserProfile,
+      meta: { auth: true },
+
     },
     {
       path: '/UserLanding',
