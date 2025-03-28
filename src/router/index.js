@@ -22,6 +22,13 @@ import ChangePassword from '@/views/userPage/ChangePassword.vue'
 import UserLanding from '@/views/userPage/UserLanding.vue'
 import UserProfile from '@/views/userPage/UserProfile.vue'
 import AdminProfile from '@/views/Admin/AdminProfile.vue'
+import CampanyDashBord from '@/views/Admin/CampanyDashBord.vue'
+
+import AdminCategories from '@/views/Admin/AdminCategories.vue'
+
+import AdminRating from '@/views/Admin/AdminRating.vue'
+import CompanyDetail from '@/views/Company/CompanyDetail.vue'
+
 
 
 
@@ -45,6 +52,11 @@ const router = createRouter({
       path: '/forgot',
       name: 'ForgotPassword',
       component: ForgotPassword,
+    },
+    {
+      path: '/signin',
+      name: 'SignIn',
+      component: SignIn,
     },
 
 
@@ -90,25 +102,21 @@ const router = createRouter({
     //   name: 'InputValidation',
     //   component: InputValidation,
     // },
-    
+
     // {
     //   path: '/PasswordVesibility',
     //   name: 'PasswordVesibility',
     //   component: PasswordVesibility,
     // },
-    
+
     // {
     //   path: '/PasswordStrength',
     //   name: 'PasswordStrength',
     //   component: PasswordStrength,
     // },
-    
-    
-    {
-      path: '/signin',
-      name: 'SignIn',
-      component: SignIn,
-    },
+
+
+
     {
       path: '/FileUpload',
       name: 'FileUpload',
@@ -125,7 +133,30 @@ const router = createRouter({
       name: 'AdminProfile',
       component: AdminProfile,
     },
+    {
 
+      path: '/admin/categories',
+      name: 'AdminCategories',
+      component: AdminCategories,
+    },
+    {
+      path: '/admin/Rating',
+      name: 'AdminRating',
+      component: AdminRating,
+
+    },
+
+
+    {
+      path: '/admin/campany',
+      name: 'CampanyDashBord',
+      component: CampanyDashBord,
+    },
+    {
+      path: '/company/:id',
+      name: 'CompanyDetail',
+      component: CompanyDetail,
+    },
 
 
   ],

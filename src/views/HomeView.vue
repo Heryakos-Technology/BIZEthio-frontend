@@ -5,11 +5,16 @@ import ForYourSection from "@/components/HomeView/ForYourSection.vue";
 import Header from "@/components/HomeView/Header.vue";
 import HeroSection from "@/components/HomeView/HeroSection.vue";
 import UserLayout from "@/layout/UserLayout.vue";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
 </script>
 
 <template>
   <UserLayout>
-    <div class="pt-[90px]">
+    <div class="pt-[20px]">
       <HeroSection />
       <CategoriesSection />
       <ForYourSection />

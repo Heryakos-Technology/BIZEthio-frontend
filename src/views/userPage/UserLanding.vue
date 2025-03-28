@@ -1,5 +1,5 @@
 <template>
- 
+ <UserLayout>
   <div class="">
     <div class="categories  lg:w-full mx-auto lg:mb-20">
         <div class="lg:pt-44 lg:ml-4">
@@ -277,14 +277,17 @@
         </div>
     </div>
   </div>
+</UserLayout>
 </template>
 
 <script>
 
 import MapModal from '@/components/MapModal.vue';
+ import UserLayout from '@/layout/UserLayout.vue'
 export default {
 components:{
-    MapModal
+    MapModal,
+    UserLayout
 },
 data(){
     return{

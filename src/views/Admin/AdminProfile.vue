@@ -8,7 +8,7 @@ import AdminNotification from "@/components/Admin/AdminNotification.vue";
 
 <template>
   <AdminLayout>
-    <div class="grid lg:grid-cols-2 pb-16">
+    <div class="grid lg:grid-cols-2 pb-16 pt-16">
       <div
         class="bg-white relative grid max-w-[400px] w-full pt-16 mt-32 mx-auto"
       >

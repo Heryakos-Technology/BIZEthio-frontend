@@ -33,15 +33,15 @@ import HeroImage from "/images/Hero_Image.png";
         connect with owners, and other companies.
       </p>
     </div>
-
-    <div class="w-fit bg-[#1B7590]/80 p-1.5 my-6 rounded-4xl mx-auto">
-      <div
-        class="innerShadow innerShadow2 w-full bg-primaryColor py-2 px-4 text-white rounded-4xl xl:px-5 2xl:px-7 2xl:py-3"
-      >
-        Start Your Journey
+    <RouterLink :to="{ name: 'SignIn' }">
+      <div class="w-fit bg-[#1B7590]/80 p-1.5 my-6 rounded-4xl mx-auto">
+        <div
+          class="innerShadow innerShadow2 w-full bg-primaryColor py-2 px-4 text-white rounded-4xl xl:px-5 2xl:px-7 2xl:py-3"
+        >
+          Start Your Journey
+        </div>
       </div>
-    </div>
-
+    </RouterLink>
     <div
       class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px] drop-shadow-2xl"
       :style="{ backgroundImage: `url(${HeroImage})` }"
