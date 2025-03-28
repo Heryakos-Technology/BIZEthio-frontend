@@ -54,12 +54,21 @@
           <p v-if="passwordError" class="text-red-500 mt-2">Passwords do not match.</p>
           <div class="mt-9">
             <div class="flex">
-              <div><p>Profile picture</p></div>
              
             </div>
             <div class="mt-2 w-13/13">
               <div class="mt-5">
             <div><p class="mb-4">Profile picture</p></div>
+            <div class="-ml-48 mt-10">
+              <div 
+            class=" border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+            @dragover.prevent="handleDragOver" 
+            @drop.prevent="handleFileDrop"  
+            @click="triggerFileInput" 
+        >
+        <img src="/dragfile.png" alt="" class="w-1/2">
+            
+        </div>
         <input 
             type="file" 
             class="hidden" 
@@ -69,28 +78,23 @@
         >
         <label 
             for="fileInput" 
-            class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+            class="bg-cyan-500 ml-65 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
             style="display: inline-block;"
         >
             Browse
         </label>
-        <p class="text-gray-500 mt-2">or drag a file here</p>
+        <p class="text-gray-500 mt-2 text-center font-semibold text-lg">or drag a file here</p>
 
-        <div 
-            class="border-dashed border-2 border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
-            @dragover.prevent="handleDragOver" 
-            @drop.prevent="handleFileDrop"  
-            @click="triggerFileInput" 
-        >
-            <p class="text-gray-400">Drop your files here</p>
-        </div>
-        <p v-if="uploaded" class="mb-4">{{ uploaded }}</p>
+            </div>
+            
+       
+        <p v-if="uploaded" class="mb-4 mt-4 text-cyan-400">{{ uploaded }}</p>
         <div v-if="userPhoto" class="mt-4">
             <img :src="userPhoto" alt="Uploaded Image" class="max-w-full h-auto rounded-md" />
         </div>
 
-       
-    </div> 
+     
+    </div>  
             </div>
             <div style="background: linear-gradient(to bottom left, #8AE4FF 0%, #FFFFFF 48%, #00D2EA 98%);" class="rounded-xl shadow-md w-13/14 pb-5  mx-auto pt-7 pr-4 mt-16 md:w-3/4">
       <div class="flex justify-between">

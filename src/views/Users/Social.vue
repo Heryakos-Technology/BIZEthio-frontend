@@ -1,71 +1,56 @@
 <template>
-    <div>
-      <button @click="signInWithGoogle">Sign in with Google</button>
-      <button @click="signInWithFacebook">Sign in with Facebook</button>
+    <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
+      <div>
+        <button
+          @click="signInWithGoogle"
+          style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);"
+          class="p1-1 py-2 rounded-md w-11/11 text-sm"
+        >
+          <i class="fa-brands fa-google -ml-6 mr-1"></i> Sign in with Google
+        </button>
+      </div>
+      <div class="mt-3">
+        <button
+          @click="signInWithFacebook"
+          style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);"
+          class="pl-1 py-2 rounded-md w-11/11 text-sm"
+        >
+          <i class="fa-brands fa-facebook-f -ml-4 mr-1"></i> Sign in with Facebook
+        </button>
+      </div>
     </div>
   </template>
   
   <script>
-  import { initializeApp, getApp, getApps } from 'firebase/app';
-  import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
-  import { onMounted } from 'vue';
+  import { auth, googleProvider, facebookProvider } from '..//../firebase';
+  import { signInWithPopup } from 'firebase/auth';
   
   export default {
-    setup() {
-      const firebaseConfig = {
-        apiKey: "AIzaSyATMyBqsslwYAQwCeCBYLaNMjvxovmZB94",
-        authDomain: "bizethio-60df1.firebaseapp.com",
-        projectId: "bizethio-60df1",
-        storageBucket: "bizethio-60df1.appspot.com",
-        messagingSenderId: "340021224315",
-        appId: "1:340021224315:web:bb62c25d4d72b4834853de",
-        measurementId: "G-9WPEFMJ0YP"
-      };
-  
-      const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const googleProvider = new GoogleAuthProvider();
-      const facebookProvider = new FacebookAuthProvider();
-  
-      const signInWithGoogle = async () => {
+    methods: {
+      async signInWithGoogle() {
         try {
-          const result = await signInWithPopup(auth, googleProvider);
-          console.log('Google Sign-In successful:', result);
+          await signInWithPopup(auth, googleProvider);
+          console.log("Google sign-in successful");
+          
         } catch (error) {
-          console.error('Error during Google Sign-In:', error);
-          alert(error.message);
+          console.error("Error during Google sign-in:", error);
         }
-      };
-  
-      const signInWithFacebook = async () => {
+      },
+      async signInWithFacebook() {
         try {
-    const result = await signInWithPopup(auth, facebookProvider);
-    console.log('Facebook Sign-In successful:', result);
-  } catch (error) {
-    if (error.code === 'auth/popup-closed-by-user') {
-      alert('The login popup was closed before completion. Please try again.');
-    } else {
-      console.error('Error during Facebook Sign-In:', error);
-      alert(error.message);
+          await signInWithPopup(auth, facebookProvider);
+          console.log("Facebook sign-in successful");
+          router.push('/signin');
+      
+        } catch (error) {
+          console.error("Error during Facebook sign-in:", error);
+          alert(error)
+        }
+      }
     }
   }
-      };
-  
-      onMounted(() => {
-        window.fbAsyncInit = function () {
-          window.FB.init({
-            appId: '1205146000958902',
-            cookie: true,
-            xfbml: true,
-            version: 'v10.0',
-          });
-        };
-      });
-  
-      return {
-        signInWithGoogle,
-        signInWithFacebook,
-      };
-    },
-  };
   </script>
+  
+  <style scoped>
+  /* Add any necessary styles here */
+  </style>

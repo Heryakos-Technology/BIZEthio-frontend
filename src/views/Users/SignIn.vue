@@ -68,10 +68,10 @@
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-5">
             <div class="w-3/4">
-                <button style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with Google</button>
+                <button  @click="signInWithGoogle" style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with Google</button>
             </div>
             <div class="mt-3 w-3/4">
-             <button style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
+             <button  @click="signInWithFacebook" style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-3xl w-7/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
             </div>
           </div>
   </div>
@@ -152,10 +152,10 @@
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
             <div>
-                <button style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-twitter -ml-6 mr-1"></i>  Sign in with Twitter</button>
+                <button @click="signInWithGoogle" style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with Google</button>
             </div>
             <div class="mt-3">
-             <button style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
+             <button  @click="signInWithFacebook" style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
             </div>
           </div>
          
@@ -230,10 +230,10 @@
           </div>
           <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
             <div>
-                <button style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-twitter -ml-6 mr-1"></i>  Sign in with Twitter</button>
+                <button  @click="signInWithGoogle" style="background: linear-gradient(to bottom left, #57B4D3 0%,  48%, #57B4D3 98%);" class="p1-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-google -ml-6 mr-1"></i>  Sign in with google</button>
             </div>
             <div class="mt-3">
-             <button style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
+             <button  @click="signInWithFacebook" style="background: linear-gradient(to bottom left, #4584D7 0%,  48%, #6B94C9 98%);" class="pl-1 py-2 rounded-md w-11/11 text-sm"><i class="fa-brands fa-facebook-f -ml-4 mr-1"></i>  Sign in with Facebook </button>
             </div>
           </div>
          
@@ -256,6 +256,9 @@
   import { useRouter } from 'vue-router'; 
   import axios from 'axios';
   import { login } from '../../auth'; 
+  import { auth, googleProvider, facebookProvider } from '..//../firebase';
+  import { signInWithPopup } from 'firebase/auth';
+  
   
   export default {
     components: {
@@ -275,6 +278,26 @@
       const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === '' || password.value.trim() === '';
     });
+   const signInWithGoogle = async()=> {
+        try {
+          await signInWithPopup(auth, googleProvider);
+          console.log("Google sign-in successful");
+          
+        } catch (error) {
+          console.error("Error during Google sign-in:", error);
+        }
+      };
+      const signInWithFacebook =  async()=> {
+        try {
+          await signInWithPopup(auth, facebookProvider);
+          console.log("Facebook sign-in successful");
+          router.push('/signin');
+      
+        } catch (error) {
+          console.error("Error during Facebook sign-in:", error);
+          alert(error)
+        }
+      };
     const validateEmail = () => {
       emailError.value = ''; 
       if (!email.value) {
@@ -381,7 +404,9 @@ onMounted(() => {
       emailError,
       passwordError,
       validateEmail,
-      validatePassword
+      validatePassword,
+      signInWithGoogle,
+      signInWithFacebook
       };
     },
   };
