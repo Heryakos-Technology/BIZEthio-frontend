@@ -29,11 +29,17 @@
           <div
             class="font-light text-xs space-y-2 mt-2 lg:mt-4 xs:text-sm xl:text-base 2xl:text-lg"
           >
-            <p class="">My Account</p>
-            <p class="">Login / Register</p>
-            <p class="">Cart</p>
-            <p class="">Wishlist</p>
-            <p class="">Shop</p>
+            <RouterLink :to="{ name: 'UserProfile' }" class="block"
+              >My Account</RouterLink
+            >
+            <RouterLink :to="{ name: 'SignIn' }" class="block"
+              >Login
+            </RouterLink>
+            <RouterLink :to="{ name: 'Home' }" class="block">Cart</RouterLink>
+            <RouterLink :to="{ name: 'Home' }" class="block"
+              >Wishlist</RouterLink
+            >
+            <RouterLink :to="{ name: 'Home' }" class="block">Shop</RouterLink>
           </div>
         </div>
       </div>
