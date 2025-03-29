@@ -28,6 +28,7 @@ import AdminCategories from '@/views/Admin/AdminCategories.vue'
 
 import AdminRating from '@/views/Admin/AdminRating.vue'
 import CompanyDetail from '@/views/Company/CompanyDetail.vue'
+import AdminUsers from '@/views/Admin/AdminUsers.vue';
 
 
 
@@ -161,6 +162,13 @@ const router = createRouter({
       meta: { admin: true },
 
     },
+    {
+      path: '/admin/users',
+      name: 'AdminUsers',
+      component: AdminUsers,
+      meta: { admin: true },
+
+    },
 
 
     {
@@ -169,6 +177,7 @@ const router = createRouter({
       component: CampanyDashBord,
       meta: { admin: true },
     },
+
     {
       path: '/company/:id',
       name: 'CompanyDetail',
