@@ -19,8 +19,16 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://bizethio-backend-production-944c.up.railway.app/",
+        changeOrigin: true,
+      },
+    },
+  },
   base: process.env.NODE_ENV === 'production'
-  ? '/BIZEthio-frontend/'
-  : '/',
+    ? '/BIZEthio-frontend/'
+    : '/',
 })
 

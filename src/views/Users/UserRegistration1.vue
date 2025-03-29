@@ -407,7 +407,7 @@ export default {
     Logo,
   },
   setup() {
-    const base_url = "https://bizethio-backend-production.up.railway.app/api";
+    const base_url = "#";
     const model = ref({
       user: {
         name: "",
