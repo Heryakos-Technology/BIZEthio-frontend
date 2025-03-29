@@ -852,15 +852,11 @@ export default {
             );
 
             if (success) {
-              const response = await axios.post(
-                `https://bizethio-backend-production.up.railway.app/api/companies`,
-                companyData,
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
+              const response = await axios.post(`/api/companies`, companyData, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
 
               console.log("Company registered successfully", response.data);
               this.companies.password = "";
@@ -955,9 +951,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await axios.get(
-          "https://bizethio-backend-production.up.railway.app/api/categories"
-        );
+        const response = await axios.get("/api/categories");
         this.categories = response.data;
         console.log("categoriessss", this.categories);
       } catch (error) {

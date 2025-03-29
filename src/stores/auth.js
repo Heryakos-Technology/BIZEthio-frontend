@@ -21,7 +21,7 @@ export const useAuthStore = defineStore("authStore", {
         }
 
         const response = await axios.get(
-          `https://bizethio-backend-production.up.railway.app/api/users/${userId}`,
+          `/api/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

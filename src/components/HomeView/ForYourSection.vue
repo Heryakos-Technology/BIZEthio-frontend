@@ -16,6 +16,21 @@ onMounted(async () => {
   console.log(companies.value);
 });
 
+const getImageUrl = (images) => {
+  if (images) {
+    try {
+      const parsedImages = JSON.parse(images);
+      return parsedImages.length > 0
+        ? parsedImages[0]
+        : "/defalt-company-image.jpg";
+    } catch (error) {
+      console.error("Error parsing image URL:", error);
+      return "/defalt-company-image.jpg";
+    }
+  }
+  return "/defalt-company-image.jpg";
+};
+
 const items = [
   {
     id: 1,
@@ -98,18 +113,18 @@ function generateStars(rating) {
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
       <Rou
-        v-for="(item, index) in items"
+        v-for="(item, index) in companies"
         :key="index"
         class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
       >
         <div
           class="w-full h-[250px] hover:scale-105 transition-all duration-300 ease-linear bg-cover rounded-t-xl"
-          :style="{ backgroundImage: `url(${item.image})` }"
+          :style="{ backgroundImage: `url(${getImageUrl(item.images)})` }"
         ></div>
         <div class="mt-3 space-y-2">
           <div class="flex">
             <div
-              v-for="(star, index) in generateStars(item.rating)"
+              v-for="(star, index) in generateStars(item.rating_avg)"
               :key="index"
             >
               <svg
@@ -145,7 +160,7 @@ function generateStars(rating) {
               </svg>
             </div>
 
-            <p class="mx-3">({{ item.rating }})</p>
+            <p class="mx-3">({{ item.rating_avg }})</p>
           </div>
           <h1 class="font-semibold ml-1">{{ item.name }}</h1>
           <div class="flex gap-x-2 items-center">
@@ -158,7 +173,7 @@ function generateStars(rating) {
                 d="M232,136.66A104.12,104.12,0,1,1,119.34,24,8,8,0,0,1,120.66,40,88.12,88.12,0,1,0,216,135.34,8,8,0,0,1,232,136.66ZM120,72v56a8,8,0,0,0,8,8h56a8,8,0,0,0,0-16H136V72a8,8,0,0,0-16,0Zm40-24a12,12,0,1,0-12-12A12,12,0,0,0,160,48Zm36,24a12,12,0,1,0-12-12A12,12,0,0,0,196,72Zm24,36a12,12,0,1,0-12-12A12,12,0,0,0,220,108Z"
               ></path>
             </svg>
-            <p class="">{{ item.hours }}</p>
+            <p class="">{{ item.operating_hours }}</p>
           </div>
 
           <div class="flex gap-x-2 text-sm">
@@ -171,9 +186,9 @@ function generateStars(rating) {
                 d="M200,224H150.54A266.56,266.56,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25a88,88,0,0,0-176,0c0,31.4,14.51,64.68,42,96.25A266.56,266.56,0,0,0,105.46,224H56a8,8,0,0,0,0,16H200a8,8,0,0,0,0-16ZM56,104a72,72,0,0,1,144,0c0,57.23-55.47,105-72,118C111.47,209,56,161.23,56,104Zm112,0a40,40,0,1,0-40,40A40,40,0,0,0,168,104Zm-64,0a24,24,0,1,1,24,24A24,24,0,0,1,104,104Z"
               ></path>
             </svg>
-            <p class="">{{ item.location }}</p>
+            <p class="">{{ item.region }}</p>
           </div>
-          <p class="font-semibold">{{ item.category }}</p>
+          <p class="font-semibold">{{ item.category.name }}</p>
 
           <RouterLink
             :to="{ name: 'CompanyDetail', params: { id: item.id } }"

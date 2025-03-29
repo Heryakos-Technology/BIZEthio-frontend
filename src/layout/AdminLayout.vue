@@ -83,7 +83,7 @@ onMounted(() => {
         <div class="flex gap-x-4 items-center relative">
           <p class="font-semibold">Welcome, {{ user?.name }}</p>
           <div
-            class="flex gap-x-1 items-end cursor-pointer"
+            class="flex gap-x-1 items-end cursor-pointer hover:font-bold transition-all ease-linear duration-200"
             @click="toggleDropdown"
           >
             <img :src="userIcon" alt="" class="size-6" />
@@ -105,7 +105,7 @@ onMounted(() => {
           >
             <div
               @click="handleLogout"
-              class="flex items-center gap-x-2 text-red-600 cursor-pointer py-1 hover:bg-gray-100 px-1 rounded"
+              class="flex items-center gap-x-2 text-red-600 cursor-pointer hover:font-bold transition-all ease-linear duration-200 py-1 hover:bg-gray-100 px-1 rounded"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,7 @@ onMounted(() => {
 
       <div class="md:hidden">
         <!-- Mobile sidebar content -->
-        <!-- ... existing code ... -->
+
         <div
           class="absolute bottom-0 z-50 text-white h-screen w-full pt-2 px-4 left-0 bg-darkBlue overscroll-contain overflow-y-auto max-w-[425px]"
           ref="sidebar"
@@ -146,7 +146,9 @@ onMounted(() => {
         <Logo class="w-[180px] fill-white" />
         <div class="px-8 mt-16">
           <ul class="text-2xl space-y-10">
-            <li class="flex cursor-pointer items-center gap-2">
+            <li
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 items-center gap-2"
+            >
               <div class="bg-lightBlue p-2 rounded-lg">
                 <svg
                   class="size-4 fill-white"
@@ -162,7 +164,7 @@ onMounted(() => {
             </li>
             <RouterLink
               :to="{ name: 'AdminProfile' }"
-              class="flex cursor-pointer gap-x-2 items-center"
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
             >
               <div class="bg-lightBlue p-1 rounded-full">
                 <svg
@@ -181,7 +183,9 @@ onMounted(() => {
               </div>
               Profile
             </RouterLink>
-            <li class="flex cursor-pointer gap-x-2 items-center">
+            <li
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
+            >
               <img :src="DashboardIcon" alt="" class="size-6" />
               Dashboard
             </li>
@@ -189,22 +193,24 @@ onMounted(() => {
           <ul class="ml-8 text-xl mt-8 space-y-8">
             <RouterLink
               :to="{ name: 'CampanyDashBord' }"
-              class="flex cursor-pointer gap-x-2 items-center"
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
             >
               <img :src="RatingIcon" alt="" class="size-6" />Companies
             </RouterLink>
-            <li class="flex cursor-pointer gap-x-2 items-center">
+            <li
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
+            >
               <img :src="userIcons" alt="" class="size-6" />Users
             </li>
             <RouterLink
               :to="{ name: 'AdminCategories' }"
-              class="flex cursor-pointer gap-x-2 items-center"
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
             >
               <img :src="CompaniesIcon" alt="" class="size-6" />Categories
             </RouterLink>
             <RouterLink
               :to="{ name: 'AdminRating' }"
-              class="flex cursor-pointer gap-x-2 items-center"
+              class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
             >
               <img :src="CompaniesIcon" alt="" class="size-6" />Rating
             </RouterLink>
@@ -213,7 +219,7 @@ onMounted(() => {
           <!-- Logout button in sidebar -->
           <div
             @click="handleLogout"
-            class="flex items-center gap-x-2 text-red-400 cursor-pointer mt-12 hover:text-red-300"
+            class="flex items-center gap-x-2 text-red-400 cursor-pointer hover:font-bold transition-all ease-linear duration-200 mt-12 hover:text-red-300"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
