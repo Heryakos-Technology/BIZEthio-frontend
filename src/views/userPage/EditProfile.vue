@@ -8,11 +8,11 @@
         <div
           class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20"
         >
-          <!-- <div class="ml-28">
+          <div class="ml-28">
             <div class="w-20 h-8 rounded-bl-4xl bg-white absolute top-0 right-0 rounded-tr-xl border-2 border-[#176678] text-[#1B7B90] text-xs font-semibold text-center pt-1">
-              <p>Approved</p>
+              <p>{{ userInformations.verification_status }}</p>
             </div>
-          </div> -->
+          </div>
           <div class="flex lg:-ml-20">
             <img
               :src="userInformations.profile_picture_url"
