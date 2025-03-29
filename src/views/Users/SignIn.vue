@@ -479,27 +479,42 @@ export default {
     const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === "" || password.value.trim() === "";
     });
+    
     const signInWithGoogle = async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
-
         const user = result.user;
         console.log("User signed in:", user);
+       await registerUser(user);
+        
       } catch (error) {
         console.error("Error signing in with Google:", error);
+       
       }
     };
     const signInWithFacebook = async () => {
       try {
-        await signInWithPopup(auth, facebookProvider);
-        console.log("Facebook sign-in successful");
-        router.push("/signin");
+        const result = await signInWithPopup(auth, facebookProvider);
+        const user = result.user;
+        console.log('User signed in:', user);
+        await registerUser(user); 
       } catch (error) {
         console.error("Error during Facebook sign-in:", error);
-        authError.value = error.message;
-        alert(authError.value);
+       
       }
     };
+    const registerUser = async (user)=>{
+      try {
+        const response = await axios.post(`api/users/register`, {
+          name: user.displayName,
+          email: user.email,
+        
+        });
+        console.log('User registered in backend:', response.data);
+      } catch (error) {
+        console.error('Error registering user:', error);
+      }
+    }
     const validateEmail = () => {
       emailError.value = "";
       if (!email.value) {
@@ -604,6 +619,7 @@ export default {
       signInWithGoogle,
       signInWithFacebook,
       authError,
+      registerUser
     };
   },
 };
