@@ -68,7 +68,7 @@
               >
             </div>
             <div
-              class="flex bg-[#b63030] w-28 pl-2 pt-2.5 h-10 rounded-lg ml-72"
+              class="flex bg-[#b63030] w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
             >
               <i
                 class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"
