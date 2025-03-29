@@ -3,12 +3,30 @@ import { useCategoryStore } from "@/stores/category";
 import { onMounted, ref } from "vue";
 
 const categoryStore = useCategoryStore();
-const { getAllCategories, deleteCategory, createCategory } = categoryStore;
+const { getAllCategories, deleteCategory, createCategory, updateCategory } =
+  categoryStore;
 
 const isAddOpen = ref(false);
+const isEditOpen = ref(false);
+const isDeleteConfirmOpen = ref(false);
+const selectedCategory = ref(null);
+const errorMessage = ref(""); // To display errors
+
+// Loading states for each operation
+const loading = ref({
+  add: false,
+  update: false,
+  delete: false,
+});
 
 const categories = ref([]);
 const formdata = ref({
+  name: "",
+  description: "",
+});
+
+const editFormData = ref({
+  id: null,
   name: "",
   description: "",
 });
@@ -19,36 +37,103 @@ onMounted(async () => {
 
 const fetchCategories = async () => {
   categories.value = await getAllCategories();
-  // console.log(categories.value);
 };
 
-const handleDelete = async (id) => {
-  await deleteCategory(id);
-  await fetchCategories();
+const handleDelete = async (category) => {
+  selectedCategory.value = category;
+  isDeleteConfirmOpen.value = true;
+};
+
+const confirmDelete = async () => {
+  if (selectedCategory.value) {
+    loading.value.delete = true;
+    try {
+      await deleteCategory(selectedCategory.value.id);
+      await fetchCategories();
+    } finally {
+      loading.value.delete = false;
+      isDeleteConfirmOpen.value = false;
+      selectedCategory.value = null;
+    }
+  }
 };
 
 const handleAddCategory = async () => {
-  const newFormData = new FormData();
-  newFormData.append("name", formdata.value.name);
-  newFormData.append("description", formdata.value.description);
+  loading.value.add = true;
+  try {
+    const newFormData = new FormData();
+    newFormData.append("name", formdata.value.name);
+    newFormData.append("description", formdata.value.description);
 
-  await createCategory(newFormData);
+    await createCategory(newFormData);
 
-  formdata.value.name = "";
-  formdata.value.description = "";
+    formdata.value.name = "";
+    formdata.value.description = "";
+    isAddOpen.value = false;
 
-  isAddOpen.value = false;
+    await fetchCategories();
+  } finally {
+    loading.value.add = false;
+  }
+};
 
-  await fetchCategories();
+const handleEdit = (category) => {
+  selectedCategory.value = category;
+  editFormData.value = {
+    id: category.id,
+    name: category.name,
+    description: category.description,
+  };
+  isEditOpen.value = true;
+};
+
+const handleUpdateCategory = async () => {
+  loading.value.update = true;
+  errorMessage.value = ""; // Clear previous errors
+  try {
+    const updatedFormData = new FormData();
+    updatedFormData.append("name", editFormData.value.name);
+    updatedFormData.append("description", editFormData.value.description);
+
+    const response = await updateCategory(
+      updatedFormData,
+      editFormData.value.id
+    );
+
+    if (response.error) {
+      errorMessage.value = response.message || "Failed to update category";
+    } else {
+      isEditOpen.value = false;
+      selectedCategory.value = null;
+      await fetchCategories();
+    }
+  } catch (error) {
+    errorMessage.value =
+      "An unexpected error occurred while updating the category.";
+  } finally {
+    loading.value.update = false;
+  }
 };
 
 const toggleAddForm = () => {
   isAddOpen.value = !isAddOpen.value;
 };
+
+const closeEditForm = () => {
+  isEditOpen.value = false;
+  selectedCategory.value = null;
+  errorMessage.value = ""; // Clear errors when closing
+};
+
+const closeDeleteConfirm = () => {
+  isDeleteConfirmOpen.value = false;
+  selectedCategory.value = null;
+};
 </script>
 
 <template>
   <div class="px-4 relative">
+    <!-- Add Category Form -->
     <div
       v-if="isAddOpen"
       class="w-[90%] bg-white shadow-lg left-[-10px] xs:left-0 absolute p-4 z-50"
@@ -58,6 +143,7 @@ const toggleAddForm = () => {
         <button
           @click="toggleAddForm"
           class="text-gray-500 hover:text-gray-800"
+          :disabled="loading.add"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +170,7 @@ const toggleAddForm = () => {
           id="name"
           v-model="formdata.name"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          :disabled="loading.add"
         />
       </div>
       <div>
@@ -96,21 +183,216 @@ const toggleAddForm = () => {
           id="description"
           v-model="formdata.description"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          :disabled="loading.add"
         ></textarea>
       </div>
       <button
         @click="handleAddCategory"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2 transition duration-200 flex items-center"
+        :disabled="loading.add"
       >
-        Add
+        <span v-if="!loading.add">Add</span>
+        <span v-else class="flex items-center">
+          <svg
+            class="animate-spin h-5 w-5 mr-2 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Adding...
+        </span>
       </button>
+    </div>
+
+    <!-- Edit Category Pop-over Dialog -->
+    <div
+      v-if="isEditOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-darkBlue">Edit Category</h3>
+          <button
+            @click="closeEditForm"
+            class="text-gray-600 hover:text-gray-800"
+            :disabled="loading.update"
+          >
+            <svg
+              class="w-5 h-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <!-- Display error message if any -->
+        <div
+          v-if="
+            errorMessage ||
+            categoryStore.errors.name ||
+            categoryStore.errors.description
+          "
+          class="mb-4 p-3 bg-red-100 text-red-700 rounded"
+        >
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+          <p v-if="categoryStore.errors.name">
+            {{ categoryStore.errors.name[0] }}
+          </p>
+          <p v-if="categoryStore.errors.description">
+            {{ categoryStore.errors.description[0] }}
+          </p>
+        </div>
+        <div class="mb-4">
+          <label
+            for="edit-name"
+            class="block text-gray-700 text-sm font-bold mb-1"
+            >Name:</label
+          >
+          <input
+            type="text"
+            id="edit-name"
+            v-model="editFormData.name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            :disabled="loading.update"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="edit-description"
+            class="block text-gray-700 text-sm font-bold mb-1"
+            >Description:</label
+          >
+          <textarea
+            id="edit-description"
+            v-model="editFormData.description"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            :disabled="loading.update"
+          ></textarea>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button
+            @click="closeEditForm"
+            class="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100 transition duration-200"
+            :disabled="loading.update"
+          >
+            Cancel
+          </button>
+          <button
+            @click="handleUpdateCategory"
+            class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 flex items-center"
+            :disabled="loading.update"
+          >
+            <span v-if="!loading.update">Update</span>
+            <span v-else class="flex items-center">
+              <svg
+                class="animate-spin h-5 w-5 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Updating...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Pop-over Dialog -->
+    <div
+      v-if="isDeleteConfirmOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+        <h3 class="text-lg font-bold text-darkBlue mb-4">Confirm Deletion</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Are you sure you want to delete the category "{{
+            selectedCategory?.name
+          }}"?
+        </p>
+        <div class="flex justify-end space-x-2">
+          <button
+            @click="closeDeleteConfirm"
+            class="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100 transition duration-200"
+            :disabled="loading.delete"
+          >
+            Cancel
+          </button>
+          <button
+            @click="confirmDelete"
+            class="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 transition duration-200 flex items-center"
+            :disabled="loading.delete"
+          >
+            <span v-if="!loading.delete">Delete</span>
+            <span v-else class="flex items-center">
+              <svg
+                class="animate-spin h-5 w-5 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Deleting...
+            </span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="mt-16 xs:ml-4">
       <h1 class="font-bold text-3xl lg:text-4xl my-8 uppercase">categories</h1>
       <button
         @click="toggleAddForm"
-        class="flex font-bold items-center cursor-pointer justify-center gap-x-3 bg-white py-2 rounded-sm mt-2 px-2"
+        class="flex font-bold items-center cursor-pointer justify-center gap-x-3 bg-white py-2 rounded-sm mt-2 px-2 hover:bg-gray-100 transition duration-200"
+        :disabled="loading.add || loading.update || loading.delete"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -127,8 +409,9 @@ const toggleAddForm = () => {
       </button>
     </div>
   </div>
+
   <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
-    <div class="min-w-[600px] max-w-[100%] w rounded-lg shadow-md">
+    <div class="min-w-[600px] max-w-[100%] rounded-lg shadow-md">
       <!-- Table Header -->
       <div
         class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
@@ -141,7 +424,7 @@ const toggleAddForm = () => {
         >
           Name
         </div>
-        <div class="p-3 lg:py-5 text-sm text-black">description</div>
+        <div class="p-3 lg:py-5 text-sm text-black">Description</div>
         <div class="p-3 lg:py-5 text-sm text-black">Actions</div>
       </div>
 
@@ -165,7 +448,12 @@ const toggleAddForm = () => {
           {{ category.description }}
         </div>
         <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
-          <button class="text-gray-500 hover:text-black" title="Edit">
+          <button
+            @click="handleEdit(category)"
+            class="text-gray-500 hover:text-blue-600 transition duration-200"
+            title="Edit"
+            :disabled="loading.add || loading.update || loading.delete"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -182,9 +470,10 @@ const toggleAddForm = () => {
             </svg>
           </button>
           <button
-            @click="handleDelete(category.id)"
-            class="text-red-500 hover:text-red-700"
+            @click="handleDelete(category)"
+            class="text-red-500 hover:text-red-700 transition duration-200"
             title="Delete"
+            :disabled="loading.add || loading.update || loading.delete"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
