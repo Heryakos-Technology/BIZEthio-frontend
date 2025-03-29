@@ -8,6 +8,9 @@ import entertainmentIcon from "/images/categoriesIcons/entertainment.png";
 import automotiveIcon from "/images/categoriesIcons/automotive.png";
 import educationIcon from "/images/categoriesIcons/education.png";
 import pharmacyIcon from "/images/categoriesIcons/pharmacy.png";
+import { useCategoryStore } from "@/stores/category";
+
+const { getAllCategories } = useCategoryStore();
 
 const categories = [
   {
