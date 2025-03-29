@@ -71,23 +71,23 @@
       </div>
       <div class="mb-10 w-full ml-10">
         <div class="bg-white w-9/10 flex pl-10 mb-6">
-          <p class="h-16 pt-5 font-bold mr-50">No</p>
-          <p class="h-16 pt-5 font-bold mr-46">Name</p>
-          <p class="h-16 pt-5 font-bold mr-42 ml-26">Average Client Ratting</p>
-          <p class="h-16 pt-5 font-bold ml-">Actions</p>
+          <p class="h-16 pt-5 font-bold text-[13px] w-1/5">No</p>
+          <p class="h-16 pt-5 font-bold text-[13px] w-1/4">Name</p>
+          <p class="h-16 pt-5 font-bold text-[13px] w-1/2">Average Client Ratting</p>
+          <p class="h-16 pt-5 font-bold text-[13px] w-1/4">Actions</p>
         </div>
         <div
           v-for="(company, index) in companies"
           :key="index"
           class="bg-white w-9/10 mb-6 flex"
         >
-          <p class="h-16 ml-10 pt-5 mr-50 font-bold">{{ index + 1 }}</p>
-          <p class="h-16 pt-5 -ml-8 w-56 mr-30">{{ company.name }}</p>
-          <i class="fa-solid fa-star text-yellow-400 mr-2 mt-6 ml-24"></i>
-          <p class="h-16 pt-5 mr-42 ml-">{{ company.rating_avg }}</p>
+          <p class="h-16 ml-10 pt-5  font-bold w-1/5">{{ index + 1 }}</p>
+          <p class="h-16 pt-5  w-1/4 ml- ">{{ company.name }}</p>
+          <i class="fa-solid fa-star text-yellow-400 ml-18  mt-6"></i>
+          <p class="h-16 pt-5 w-1/4">{{ company.rating_avg }}</p>
           <i
             @click="showCard(company)"
-            class="fa-regular mt-6 ml-22 cursor-pointer hover:scale-105 hover:text-green-600"
+            class="fa-regular mt-6 w-1/4 ml-48 cursor-pointer hover:scale-105 hover:text-green-600"
             :class="
               changeEyeIcon[company.id]
                 ? 'fa-regular fa-eye text-yellow-400'

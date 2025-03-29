@@ -113,7 +113,7 @@ export default {
       showCurrentPassword: false,
       showNewPassowrd: false,
       showConfirmedPassword: false,
-      userInformations: {}, // Assuming you have user information here
+      userInformations: {}, 
     };
   },
   methods: {
@@ -135,28 +135,23 @@ export default {
         return;
       }
 
-      try {
-        // Re-authenticate user
+   
         const credential = EmailAuthProvider.credential(
           user.email,
           this.currentPassword
         );
         await reauthenticateWithCredential(user, credential);
 
-        // Update password
+
         await updatePassword(user, this.newPassword);
         alert("Password changed successfully!");
 
-        // Update user information including the new password
-        this.userInformations.password = this.newPassword; // Add the new password to user information
-        await this.saveUserInfo(); // Call the existing method to save user info
-      } catch (error) {
-        console.error("Error changing password:", error);
-        alert("Error changing password: " + error.message);
-      }
+        
+        this.userInformations.password = this.newPassword; 
+        await this.saveUserInfo(); 
+     
     },
     async saveUserInfo() {
-      try {
         const userId = localStorage.getItem("user_id");
         const response = await axios.put(
           `/api/users/${userId}`,
@@ -167,12 +162,12 @@ export default {
             },
           }
         );
+        this.currentPassword = ''
+        this.confirmPassword = ''
+        this.newPassword = ''
         console.log("User Information updated:", response.data);
         alert("Profile updated successfully!");
-      } catch (error) {
-        console.error("Error updating user information:", error);
-        alert("Failed to update profile.");
-      }
+      
     },
   },
 };
