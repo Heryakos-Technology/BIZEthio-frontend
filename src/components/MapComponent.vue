@@ -1,0 +1,61 @@
+<template>
+    <div class="mt-16">
+      <div id="map" style="height: 400px;"></div>
+      <button class="float-right cursor-pointer" @click="close">X</button>
+      <button class="bg-orange-400 text-white pointer-cursor hover:bg-amber-300 px-8 rounded-lg py-2" @click="saveLocation">Save Location</button>
+    </div>
+  </template>
+  
+  <script>
+  import L from 'leaflet';
+  
+  export default {
+    data() {
+      return {
+        map: null,
+        marker: null,
+        selectedLocation: {
+          lat: null,
+          lng: null,
+        },
+      };
+    },
+    mounted() {
+      this.initMap();
+    },
+    methods: {
+      initMap() {
+        this.map = L.map('map').setView([51.505, -0.09], 13);
+  
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+        }).addTo(this.map);
+  
+        this.map.on('click', (e) => {
+          this.addMarker(e.latlng);
+        });
+      },
+      close() {
+        this.$emit('close');
+      },
+      addMarker(latlng) {
+        if (this.marker) {
+          this.marker.setLatLng(latlng);
+        } else {
+          this.marker = L.marker(latlng).addTo(this.map);
+        }
+        this.selectedLocation = latlng;
+      },
+      saveLocation() {
+        this.$emit('location-selected', this.selectedLocation);
+      },
+    },
+  };
+  </script>
+  
+  <style>
+  #map {
+    width: 100%;
+    height: 400px;
+  }
+  </style>
