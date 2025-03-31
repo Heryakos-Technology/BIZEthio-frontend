@@ -526,7 +526,7 @@ export default {
     };
     const registerUser = async (user)=>{
       try {
-        const response = await axios.post(`api/users/register`, {
+        const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/register`, {
           name: user.displayName,
           email: user.email,
         
@@ -590,7 +590,7 @@ export default {
         passwordError.value = "";
         signInMessage.value = "Loading...";
         try {
-          const response = await axios.post(`api/users/login`, {
+          const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/login`, {
             email: email.value,
             password: password.value,
           });
@@ -640,7 +640,7 @@ export default {
       signInWithGoogle,
       signInWithFacebook,
       authError,
-      registerUser
+      registerUser,
       togglePasswordVisibility,
       isPasswordVisible
     };

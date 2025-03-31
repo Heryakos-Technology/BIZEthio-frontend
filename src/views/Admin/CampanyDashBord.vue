@@ -319,7 +319,7 @@ export default {
       console.log('You Clicked Me')
       loadingCampanies3.value[id] = true;
   try {
-    const response = await axios.put(`api/companies/${id}`, {
+    const response = await axios.put(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${id}`, {
       status: 'approved' 
     });
     if (singleampany.value.id === id) {
@@ -344,7 +344,7 @@ export default {
 const rejectCampany = async (id) => {
   loadingCampanies4.value[id] = true;
   try {
-    const response = await axios.put(`api/companies/${id}`, {
+    const response = await axios.put(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${id}`, {
       status: 'rejected' 
     });
     if (singleampany.value.id === id) {
@@ -371,7 +371,7 @@ const rejectCampany = async (id) => {
     };
     const fetchCampanies = async () => {
       try {
-        const response = await axios.get(`api/companies`);
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/companies`);
         campanies.value = response.data;
         console.log("campanies", campanies.value);
         loadingCampanies.value = false;
@@ -387,7 +387,7 @@ const rejectCampany = async (id) => {
         behavior: "smooth",
       });
       loadingCampanies2.value = true
-      const response = await axios.get(`api/companies/${id}`);
+      const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${id}`);
       singleampany.value = response.data;
       console.log("single campany", singleampany.value);
       loadingCampanies2.value = false
