@@ -97,9 +97,9 @@ const fetchratedCompany = async () => {
               alt=""
               class="-ml-18 -mt-6 w-24 h-24 rounded-full md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64"
             />
-            <i
+            <!-- <i
               class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-40 lg:-ml-8"
-            ></i>
+            ></i> -->
             <div class="text-white -mt-6 lg:ml-10 -ml-2 w-11/12 lg:mt-6">
               <p
                 class="ml-8 lg:ml-10 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20"
@@ -136,7 +136,7 @@ const fetchratedCompany = async () => {
           <div
             class="flex -ml-14 md:-ml- mt-10 lg:mt-4 w-64 lg:w-full md:w-full md:mt-4 md:mx-auto"
           >
-            <div class="flex bg-[#075E86] w-28 pl-2 pt-2 h-10 rounded-lg">
+            <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-28 pl-2 pt-2 h-10 rounded-lg">
               <i class="fa-solid fa-pen mr-2 mt-1 ml-1"></i>
               <router-link
                 to="/EditProfile"
@@ -144,9 +144,10 @@ const fetchratedCompany = async () => {
                 >Edit Profile</router-link
               >
             </div>
-            <div
-              @click="handleLogout"
-              class="flex bg-[#b63030] w-28 pl-2 pt-2.5 h-10 rounded-lg ml-72 cursor-pointer hover:bg-[#a12727] transition-colors"
+
+            <div  @click="handleLogout"
+              class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
+
             >
               <i
                 class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"
@@ -209,5 +210,95 @@ const fetchratedCompany = async () => {
     <!-- <FooterPart class="" /> -->
   </UserLayout>
 </template>
+
+
+<script>
+import axios from "axios";
+import UserLayout from "@/layout/UserLayout.vue";
+import { logout } from "../../auth";
+
+export default {
+  components: {
+    // Navbar,
+    // FooterPart,
+    UserLayout,
+  },
+  data() {
+    return {
+      userInformations: [],
+      companies: [],
+    };
+  },
+  mounted() {
+    this.fetchUserInfo();
+    this.fetchratedCompany();
+  },
+  methods: {
+    getImageUrl(images) {
+      if (images) {
+        try {
+          const parsedImages = JSON.parse(images);
+          return parsedImages.length > 0
+            ? parsedImages[0]
+            : "/defalt-company-image.jpg";
+        } catch (error) {
+          console.error("Error parsing image URL:", error);
+          return "/defalt-company-image.jpg";
+        }
+      }
+      return "/defalt-company-image.jpg";
+    },
+    async fetchUserInfo() {
+      try {
+        const userId = localStorage.getItem("user_id");
+        if (!userId) {
+          console.error("User ID not found in localStorage");
+          return;
+        }
+
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        this.userInformations = response.data;
+        console.log("User Informations:", this.userInformations);
+      } catch (error) {
+        console.error("Error fetching user information:", error);
+      }
+    },
+    async fetchratedCompany() {
+      try {
+        const response = await axios.get("https://bizethio-backend-production-944c.up.railway.app/api/companies", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        this.companies = response.data;
+        console.log("companies", this.companies);
+      } catch (error) {
+        console.error("error fetching company data");
+      }
+    },
+    async handleLogout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (!confirmLogout) {
+        return;
+      }
+      try {
+        await logout(); 
+        console.log("User signed out successfully.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        this.$router.push("/signup"); 
+      } catch (error) {
+        console.error("Error during logout:", error.message);
+      }
+    },
+  },
+};
+</script>
+
 
 <style></style>

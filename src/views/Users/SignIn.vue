@@ -500,27 +500,42 @@ export default {
       isPasswordVisible.value = !isPasswordVisible.value;
     };
 
+    
     const signInWithGoogle = async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
-
         const user = result.user;
         console.log("User signed in:", user);
+       await registerUser(user);
+        
       } catch (error) {
         console.error("Error signing in with Google:", error);
+       
       }
     };
     const signInWithFacebook = async () => {
       try {
-        await signInWithPopup(auth, facebookProvider);
-        console.log("Facebook sign-in successful");
-        router.push("/signin");
+        const result = await signInWithPopup(auth, facebookProvider);
+        const user = result.user;
+        console.log('User signed in:', user);
+        await registerUser(user); 
       } catch (error) {
         console.error("Error during Facebook sign-in:", error);
-        authError.value = error.message;
-        alert(authError.value);
+       
       }
     };
+    const registerUser = async (user)=>{
+      try {
+        const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/register`, {
+          name: user.displayName,
+          email: user.email,
+        
+        });
+        console.log('User registered in backend:', response.data);
+      } catch (error) {
+        console.error('Error registering user:', error);
+      }
+    }
     const validateEmail = () => {
       emailError.value = "";
       if (!email.value) {
@@ -575,7 +590,7 @@ export default {
         passwordError.value = "";
         signInMessage.value = "Loading...";
         try {
-          const response = await axios.post(`api/users/login`, {
+          const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/login`, {
             email: email.value,
             password: password.value,
           });
@@ -625,6 +640,7 @@ export default {
       signInWithGoogle,
       signInWithFacebook,
       authError,
+      registerUser,
       togglePasswordVisibility,
       isPasswordVisible
     };
