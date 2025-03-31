@@ -31,17 +31,25 @@
                   <p>Password</p>
                 </div>
               </div>
-              <div class="mt-2">
+              <div class="mt-2 relative">
                 <input
-                  type="password"
+                  :type="isPasswordVisible ? 'text' : 'password'"
                   class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"
                   v-model="password"
                   @input="validatePassword"
                 />
-                <p v-if="passwordError" class="text-red-500 mt-5">
-                  {{ passwordError }}
-                </p>
-              </div>
+                <span
+                @click="togglePasswordVisibility"
+                class="absolute top-5 right-80 transform -translate-y-1/2 cursor-pointer"
+              >
+                <i
+                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                ></i>
+              </span>
+            </div>
+            <p v-if="passwordError" class="text-red-500 mt-5">
+              {{ passwordError }}
+            </p>
             </div>
             <div class="mt-9 flex w-12/12 mx-auto font-light">
               <div class="md:text-lg md:w-1/2 md:mx-auto">
@@ -198,12 +206,20 @@
                 <p>Password</p>
               </div>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 relative">
               <input
-                type="password"
+                :type="isPasswordVisible ? 'text' : 'password'"
                 class="border-2 rounded-md focus:outline-none pl-3 border-blue-300 w-13/13 md:h-12"
                 v-model="password"
               />
+              <span
+                @click="togglePasswordVisibility"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+              >
+                <i
+                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                ></i>
+              </span>
             </div>
           </div>
 
@@ -475,10 +491,15 @@ export default {
     const signInMessage = ref("Continue");
     const emailError = ref("");
     const passwordError = ref("");
+    const isPasswordVisible = ref(false);
 
     const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === "" || password.value.trim() === "";
     });
+    const togglePasswordVisibility = () => {
+      isPasswordVisible.value = !isPasswordVisible.value;
+    };
+
     
     const signInWithGoogle = async () => {
       try {
@@ -620,6 +641,8 @@ export default {
       signInWithFacebook,
       authError,
       registerUser
+      togglePasswordVisibility,
+      isPasswordVisible
     };
   },
 };

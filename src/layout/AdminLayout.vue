@@ -197,11 +197,12 @@ onMounted(() => {
             >
               <img :src="RatingIcon" alt="" class="size-6" />Companies
             </RouterLink>
-            <li
+            <RouterLink
+              :to="{ name: 'AdminUsers' }"
               class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
             >
               <img :src="userIcons" alt="" class="size-6" />Users
-            </li>
+            </RouterLink>
             <RouterLink
               :to="{ name: 'AdminCategories' }"
               class="flex cursor-pointer hover:font-bold transition-all ease-linear duration-200 gap-x-2 items-center"
