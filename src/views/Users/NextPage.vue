@@ -764,7 +764,7 @@ export default {
 
             if (success) {
               const response = await axios.post(
-                `api/users/register`,
+                `https://bizethio-backend-production-944c.up.railway.app/api/users/register`,
                 userData,
                 {
                   headers: {
