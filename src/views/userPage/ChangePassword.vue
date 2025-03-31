@@ -76,10 +76,10 @@
           <div
             class="flex mx-auto md:h-10 mt-6 lg:mt-2 w-11/12 lg:w-64 md:w-64 md:-mt-1 md:mx-auto"
           >
-            <div class="flex bg-[#075E86] w-11/12 h-10 py- px-2 rounded-lg">
+            <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-11/12 h-10 py- px-2 rounded-lg">
               <button
                 @click="changePassword"
-                class="text-[14px] text-center px-13 font-normal text-white"
+                class="text-[14px] text-center px-13 font-normal cursor-pointer hover:scale-105 text-white"
               >
                 Reset Password
               </button>
@@ -149,6 +149,7 @@ export default {
         
         this.userInformations.password = this.newPassword; 
         await this.saveUserInfo(); 
+        
      
     },
     async saveUserInfo() {
@@ -167,6 +168,7 @@ export default {
         this.newPassword = ''
         console.log("User Information updated:", response.data);
         alert("Profile updated successfully!");
+        this.$router.push('/UserProfile')
       
     },
   },
