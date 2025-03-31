@@ -45,7 +45,7 @@ const confirmDelete = async () => {
   if (userToDelete.value) {
     loading.value.delete = true;
     try {
-      await deleteUser(userToDelete.value);
+      await deleteUser(userToDelete.value.id);
       users.value = await getAllUsers();
     } finally {
       loading.value.delete = false;
