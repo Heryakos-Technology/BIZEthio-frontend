@@ -59,7 +59,7 @@
           <div
             class="flex -ml-14 md:-ml- mt-10 lg:mt-4 w-64 lg:w-full md:w-full md:mt-4 md:mx-auto"
           >
-            <div class="flex bg-[#075E86] w-28 pl-2 pt-2 h-10 rounded-lg">
+            <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-28 pl-2 pt-2 h-10 rounded-lg">
               <i class="fa-solid fa-pen mr-2 mt-1 ml-1"></i>
               <router-link
                 to="/EditProfile"
@@ -68,7 +68,7 @@
               >
             </div>
             <div  @click="handleLogout"
-              class="flex bg-[#b63030] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
+              class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
             >
               <i
                 class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"

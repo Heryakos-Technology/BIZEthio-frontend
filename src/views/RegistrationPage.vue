@@ -293,7 +293,7 @@
             </div>
             <div class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
               <button @click="registerCompany"
-                class="bg-[#2178AC] mb-32 hover: ml-40 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+                class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300  px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
                 {{ this.changeNaxt }}
               </button>
             </div>
@@ -363,14 +363,14 @@
 
               <div>
                 <button @click="hidepassword"
-                  class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6b8ea1] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
+                  class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
                   Back
                 </button>
               </div>
               <p v-if="showRegistrationError" class="text-red-600">An error occured. please try again!</p>
               <div>
                 <button @click="submitForm"
-                  class="bg-[#2178AC] mb-32 hover:bg-[#6b8ea1] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
+                  class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
                   {{ this.changeRegister }}
                 </button>
               </div>

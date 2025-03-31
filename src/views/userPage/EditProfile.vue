@@ -85,31 +85,14 @@
               </div>
             </div>
           </div>
-          <div class="text-white  lg:ml-48  -ml-2 w-11/12">
-          <div class="flex ml-4 w-56 mt-6 md:ml-20">
-            <div class="text-[12px] font-normal text-gray-100 md:text-[16px]">
-              <p class="mb-3">Location</p>
-            </div>
-            <div class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4 ml-5 md:text-[16px]">
-              <button 
-                @click="showMap = !showMap" 
-                class="border-b-2 w-56 outline-none h-9 cursor-pointer bg-white text-black"
-              >
-                {{ userInformations.location || 'Select Location' }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div v-if="showMap">
-          <MapComponent @location-selected="handleLocationSelected" />
-        </div>
+          
         
           
           <div
-            class="flex -ml-14 absolute md:h-10 mt-10 lg:ml-20 lg:mt-2 w-80 lg:w-full md:w-full md:-mt-1 md:mx-auto"
+            class="flex -ml-14 absolute md:h-10 mt-10 lg:ml-8 lg:mt-16 w-80 lg:w-full md:w-full md:-mt-1 md:mx-auto"
           >
             <div
-              class="flex ml-16 bg-[#075E86] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:ml-6 lg:w-20 lg:mx-auto"
+              class="flex ml-16 bg-[#075E86] hover:bg-[#6291a7] rounded-lg px-4 w-16 h-10 md:10 md:ml-72 lg:ml-6 lg:w-20 lg:mx-auto"
             >
               <button
                 @click="backToProfile"
@@ -118,7 +101,7 @@
                 back
               </button>
             </div>
-            <div class="flex bg-[#075E86] w-36 py-2 px-2 rounded-lg">
+            <div class="flex bg-[#075E86]  hover:bg-[#6291a7] w-36 py-2 px-2 rounded-lg">
               <router-link
                 to="/ChangePassword"
                 class="text-[14px] text-center w-30 mx-auto lg:mt- font-normal text-white"
@@ -126,7 +109,7 @@
               >
             </div>
             <div
-              class="flex ml-16 bg-[#075E86] rounded-lg px-4 lg:px-6 w-16 h-10 md:10 md:ml-72 lg:ml-10 lg:w-20 lg:mx-auto"
+              class="flex ml-16 bg-[#075E86] hover:bg-[#6291a7] rounded-lg px-4 lg:px-6 w-16 h-10 md:10 md:ml-72 lg:ml-10 lg:w-20 lg:mx-auto"
             >
               <button
                
@@ -139,6 +122,25 @@
               </button>
             </div>
           </div>
+
+          <div class="text-white  lg:ml-48 lg:-mt-4 -ml-2 w-11/12">
+          <div class="flex ml-4 w-56 mt-6 md:ml-20">
+            <div class="text-[12px] font-normal text-gray-100 md:text-[16px]">
+              <p class="mb-3">Location</p>
+            </div>
+            <div class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4 ml-5 md:text-[16px]">
+              <button 
+                @click="showMap = !showMap" 
+                class=" text-xs bg-[#075E86] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-9 cursor-pointer  text-white"
+              >
+                {{ userInformations.location || 'Select Location' }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-if="showMap">
+          <MapComponent @close="handleClose" @location-selected="handleLocationSelected" />
+        </div>
           <!-- //////// -->
         </div>
         </div>
@@ -169,6 +171,9 @@ export default {
     this.fetchUserInfo();
   },
   methods: {
+    handleClose() {
+      this.showMap = false;
+    },
     handleLocationSelected(latlng) {
   this.selectedLatLng = latlng;
   this.userInformations.location = {
