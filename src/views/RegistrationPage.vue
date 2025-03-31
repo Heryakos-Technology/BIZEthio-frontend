@@ -715,7 +715,7 @@ export default {
             );
 
             if (success) {
-              const response = await axios.post(`/api/companies`, companyData, {
+              const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/companies`, companyData, {
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -822,7 +822,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await axios.get("/api/categories");
+        const response = await axios.get("https://bizethio-backend-production-944c.up.railway.app/api/categories");
         this.categories = response.data;
         console.log("categoriessss", this.categories);
       } catch (error) {

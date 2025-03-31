@@ -155,7 +155,7 @@ export default {
     async saveUserInfo() {
         const userId = localStorage.getItem("user_id");
         const response = await axios.put(
-          `/api/users/${userId}`,
+          `https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`,
           this.userInformations,
           {
             headers: {
