@@ -57,7 +57,6 @@
 
           <img src="/Bottom Desogn Card.png" alt="" class="absolute bottom-0 left-0 mt-44" />
         </div>
-
         <div v-if="!showPassword" class="ml-20 w-2/3">
           <p class="text-center text-3xl font-bold mt-4">
             Welcome to <span class="text-[#2178AC]">BIZEthio</span>
@@ -299,9 +298,11 @@
               </button>
             </div>
           </div>
+        <!-- <CompRegformview /> -->
 
-          <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
-            <p class="text-center text-3xl font-bold mt-16">
+        <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
+          <!-- <CompRegPasswordView /> -->
+          <p class="text-center text-3xl font-bold mt-16">
               Welcome to <span class="text-[#2178AC]">BIZEthio</span>
             </p>
             <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
@@ -374,28 +375,31 @@
                 </button>
               </div>
             </div>
-          </div>
         </div>
-        <!-- /end of desktop -->
       </div>
+
+    </div>
   </UserLayout>
 </template>
 <script>
 import axios from "axios";
+// import CompRegPasswordView from '@/components/CompRegistration/CompRegPasswordView.vue'
+// import CompRegformview from '@/components/CompRegistration/CompRegformview.vue'
 import { login, register, updateUserPassword } from "../auth";
 import UserLayout from "@/layout/UserLayout.vue";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  signInWithEmailAndPassword,
-  updatePassword,
+
 } from "firebase/auth";
-import { errorMessages } from "vue/compiler-sfc";
+
 
 export default {
   components: {
     UserLayout,
+    // CompRegPasswordView,
+    // CompRegformview
   },
   computed: {
     buttonClass() {
@@ -465,7 +469,7 @@ export default {
       showConfirmPasswordField: false,
       changeNaxt: "next",
       changeRegister: "Register Company",
-      showRegistrationError:false
+      showRegistrationError: false
     };
   },
   methods: {
@@ -732,8 +736,8 @@ export default {
           }
         }
       } catch (error) {
-        let errorMessage ='An error occured. please try again'
-        if(error.response){
+        let errorMessage = 'An error occured. please try again'
+        if (error.response) {
           errorMessage = error.response.data.message || errorMessage
         }
         this.showError(errorMessage);
@@ -744,7 +748,7 @@ export default {
     showError(message) {
       this.errors = message;
       this.changeRegister = "Register Company";
-      this.showRegistrationError =true
+      this.showRegistrationError = true
     },
     submitForm() {
       this.validateFields();
@@ -765,7 +769,7 @@ export default {
     },
 
     handleFileChange(event) {
-      this.file = event.target.files; 
+      this.file = event.target.files;
       this.uploadImage();
     },
 
@@ -804,70 +808,6 @@ export default {
         this.isUploading = false;
       }
     },
-    // async handleFileUpload(event) {
-    //   const files = event.target.files;
-    //   if (files.length > 0) {
-    //     this.isUploading = true;
-    //     this.errors.images = null; // Clear previous errors
-
-    //     try {
-    //       const uploadPromises = Array.from(files).map(file => this.uploadImageToCloudinary(file));
-    //       const urls = await Promise.all(uploadPromises);
-
-    //       this.imageUrl = [...this.imageUrl, ...urls]; // Add new URLs to existing ones
-    //       this.companies.images = JSON.stringify(this.imageUrl); // Store URLs in the companies object
-    //     } catch (error) {
-    //       this.errors.images = "Failed to upload images. Please try again.";
-    //     } finally {
-    //       this.isUploading = false;
-    //     }
-    //   }
-    // },
-    // async uploadImageToCloudinary(file) {
-    //   const formData = new FormData();
-    //   formData.append('file', file);
-    //   formData.append('upload_preset', 'my_unsigned_preset');
-
-    //   const response = await axios.post('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', formData);
-    //   return response.data.secure_url; 
-    // },
-    // triggerFileInput() {
-    //   this.$refs.fileInput.click();
-    // },
-    // async uploadImage() {
-    //   if (!this.file || this.file.length === 0) return;
-
-    //   this.isUploading = true;
-    //   this.disableButtons();
-
-    //   const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-    //   console.log("cloudinary url", cloudinaryUrl);
-
-    //   const promises = [];
-
-    //   for (const singleFile of this.file) {
-    //     const formData = new FormData();
-    //     formData.append("file", singleFile);
-    //     formData.append("upload_preset", "my_unsigned_preset");
-
-    //     promises.push(
-    //       fetch(cloudinaryUrl, {
-    //         method: "POST",
-    //         body: formData,
-    //       }).then((response) => response.json())
-    //     );
-    //   }
-
-    //   try {
-    //     const responses = await Promise.all(promises);
-    //     this.imageUrl = responses.map((data) => data.secure_url);
-    //     this.companies.images = JSON.stringify(this.imageUrl);
-    //   } catch (error) {
-    //     console.error("Error uploading images:", error);
-    //   } finally {
-    //     this.isUploading = false;
-    //   }
-    // },
     toggleImageButton() {
       this.ImageButton = false;
     },

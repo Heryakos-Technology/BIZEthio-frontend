@@ -20,9 +20,9 @@
               alt=""
               class="-ml-18 -mt-6 w-24 h-24 rounded-full md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64"
             />
-            <i
+            <!-- <i
               class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-40 lg:-ml-8"
-            ></i>
+            ></i> -->
             <div class="text-white -mt-6 lg:ml-10 -ml-2 w-11/12 lg:mt-6">
               <p
                 class="ml-8 lg:ml-10 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20"
@@ -67,8 +67,8 @@
                 >Edit Profile</router-link
               >
             </div>
-            <div
-              class="flex bg-[#b63030] w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
+            <div  @click="handleLogout"
+              class="flex bg-[#b63030] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
             >
               <i
                 class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"
@@ -135,6 +135,8 @@
 <script>
 import axios from "axios";
 import UserLayout from "@/layout/UserLayout.vue";
+import { logout } from "../../auth";
+
 export default {
   components: {
     // Navbar,
@@ -197,6 +199,21 @@ export default {
         console.log("companies", this.companies);
       } catch (error) {
         console.error("error fetching company data");
+      }
+    },
+    async handleLogout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (!confirmLogout) {
+        return;
+      }
+      try {
+        await logout(); 
+        console.log("User signed out successfully.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        this.$router.push("/signup"); 
+      } catch (error) {
+        console.error("Error during logout:", error.message);
       }
     },
   },
