@@ -176,7 +176,7 @@ export default {
           return;
         }
 
-        const response = await axios.get(`/api/users/${userId}`, {
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -190,7 +190,7 @@ export default {
     },
     async fetchratedCompany() {
       try {
-        const response = await axios.get("/api/companies", {
+        const response = await axios.get("https://bizethio-backend-production-944c.up.railway.app/api/companies", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

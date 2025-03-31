@@ -190,7 +190,7 @@ export default {
           return;
         }
 
-        const response = await axios.get(`/api/users/${userId}`, {
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -228,7 +228,7 @@ export default {
           location: locationString,
         };
 
-        const response = await axios.put(`/api/users/${userId}`, userData, {
+        const response = await axios.put(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, userData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
