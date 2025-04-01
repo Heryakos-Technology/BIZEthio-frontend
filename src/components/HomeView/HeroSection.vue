@@ -1,9 +1,18 @@
 <script setup>
 import HeroImage from "/images/Hero_Image.png";
+import ai_health_brain from "/images/HeroSection/ai_health_brain.png";
+import handshake from "/images/HeroSection/handshake.png";
+import network_home from "/images/HeroSection/network_home.png";
+import remote_location_medical from "/images/HeroSection/remote_location_medical.png";
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="mb-52  relative">
+
+  <img :src="network_home"   class="left-[0] -top-[40px] absolute size-[50px] md:size-[80px] lg:size-[100px] min-[470px]:left-[5%] min-[470px]:top-[-25px] md:top-[-50px] xl:left-[8%] " alt="">
+  <img :src="remote_location_medical"   class="absolute right-0 -top-[40px]  size-[50px] md:size-[80px] lg:size-[100px] min-[470px]:right-[5%] min-[470px]:top-[-25px] md:top-[-50px] xl:right-[8%]" alt="">
+  <img :src="handshake"   class="absolute left-[5px] bottom-0 size-[50px] md:size-[80px] lg:size-[100px] min-[470px]:left-[5%] min-[470px]:bottom-[5px] xl:left-[8%] " alt="">
+  <img :src="ai_health_brain"   class="absolute size-[50px] md:size-[80px] lg:size-[100px] right-0 bottom-0 min-[470px]:right-[5%] min-[470px]:bottom-[5px] xl:right-[8%]" alt="">
     <div
       class="text-center text-2xl space-y-2 font-semibold px-2 xs:text-3xl max-w-[425px] mx-auto sm:max-w-[640px] sm:text-5xl md:mt-6 lg:max-w-[900px] lg:text-6xl lg:space-y-3 xl:max-w-[1120px] xl:text-7xl xl:mt-8 2xl:mt-10 2xl:text-8xl 2xl:space-y-5"
     >
@@ -42,10 +51,10 @@ import HeroImage from "/images/Hero_Image.png";
         </div>
       </div>
     </RouterLink>
-    <div
+    <!-- <div
       class="w-[90%] mx-auto h-fit aspect-video bg-no-repeat bg-left bg-cover lg:rounded-[35px] mt-1 max-w-[430px] sm:max-w-[660px] lg:max-w-[950px] xl:max-w-[1200px] xl:max-h-[550px] drop-shadow-2xl"
       :style="{ backgroundImage: `url(${HeroImage})` }"
-    ></div>
+    ></div> -->
   </div>
 </template>
 <style scoped>

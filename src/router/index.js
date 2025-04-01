@@ -188,6 +188,7 @@ const router = createRouter({
   ],
 })
 
+ 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
   const userId = localStorage.getItem("user_id");
@@ -212,6 +213,6 @@ router.beforeEach(async (to, from) => {
     return { name: "Home" };
   }
 });
-
+ 
 
 export default router
