@@ -12,8 +12,12 @@ const companies = ref([]);
 const { getAllCompanies } = useCompanyStore();
 
 onMounted(async () => {
-  companies.value = await getAllCompanies();
-  console.log(companies.value);
+  try {
+    companies.value = await getAllCompanies();
+    console.log(companies.value);
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+  }
 });
 
 const getImageUrl = (images) => {
@@ -112,7 +116,7 @@ function generateStars(rating) {
     <div
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
-      <Rou
+      <div
         v-for="(item, index) in companies"
         :key="index"
         class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
@@ -197,7 +201,7 @@ function generateStars(rating) {
             View Details
           </RouterLink>
         </div>
-      </Rou>
+      </div>
     </div>
   </div>
 </template>
