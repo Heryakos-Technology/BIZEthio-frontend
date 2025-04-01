@@ -14,11 +14,13 @@ const { getAllCompanies } = useCompanyStore();
 
 onMounted(async () => {
   try {
+ 
     loading.value = true;
     companies.value = await getAllCompanies();
     console.log(companies.value);
   } catch (error) {
     console.error("Error fetching companies:", error);
+
   } finally {
     loading.value = false;
   }
@@ -81,7 +83,7 @@ function generateStars(rating) {
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
       <div
-        :to="{ name: 'CompanyDetail', params: { id: item.id } }"
+
         v-for="(item, index) in companies"
         :key="index"
         class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2 shadow-md hover:shadow-lg transition-shadow"

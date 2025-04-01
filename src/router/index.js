@@ -188,27 +188,31 @@ const router = createRouter({
   ],
 })
 
-// router.beforeEach(async (to, from) => {
-//   const authStore = useAuthStore();
-//   await authStore.getUser();
+ 
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore();
+  const userId = localStorage.getItem("user_id");
+  if (authStore.user?.id !== userId) {
+    await authStore.getUser();
+  }
 
-//   if (authStore.user?.role === "admin" && to.meta.guest) {
-//     return { name: "AdminProfile" };
-//   }
-//   if (authStore.user?.role === "admin" && to.meta.auth) {
-//     return { name: "AdminProfile" };
-//   }
-//   if (authStore.user?.role === "admin" && to.meta.welcome) {
-//     return { name: "AdminProfile" };
-//   }
+  if (authStore.user?.role === "admin" && to.meta.guest) {
+    return { name: "AdminProfile" };
+  }
+  if (authStore.user?.role === "admin" && to.meta.auth) {
+    return { name: "AdminProfile" };
+  }
+  if (authStore.user?.role === "admin" && to.meta.welcome) {
+    return { name: "AdminProfile" };
+  }
 
-//   if (!authStore.user && to.meta.auth) {
-//     return { name: "SignIn" };
-//   }
-//   if (authStore.user && to.meta.guest) {
-//     return { name: "Home" };
-//   }
-// });
-
+  if (!authStore.user && to.meta.auth) {
+    return { name: "SignIn" };
+  }
+  if (authStore.user && to.meta.guest) {
+    return { name: "Home" };
+  }
+});
+ 
 
 export default router

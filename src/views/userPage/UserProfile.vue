@@ -1,3 +1,78 @@
+<script setup>
+import UserLayout from "@/layout/UserLayout.vue";
+import { useAuthStore } from "@/stores/auth";
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const authStore = useAuthStore();
+const userInformations = ref([]);
+const companies = ref([]);
+
+onMounted(() => {
+  fetchUserInfo();
+  fetchratedCompany();
+});
+
+const handleLogout = async () => {
+  try {
+    await authStore.logout();
+    // The router navigation is handled in the store
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
+
+const getImageUrl = (images) => {
+  if (images) {
+    try {
+      const parsedImages = JSON.parse(images);
+      return parsedImages.length > 0
+        ? parsedImages[0]
+        : "/defalt-company-image.jpg";
+    } catch (error) {
+      console.error("Error parsing image URL:", error);
+      return "/defalt-company-image.jpg";
+    }
+  }
+  return "/defalt-company-image.jpg";
+};
+
+const fetchUserInfo = async () => {
+  try {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
+    const response = await axios.get(`/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    userInformations.value = response.data;
+    console.log("User Informations:", userInformations.value);
+  } catch (error) {
+    console.error("Error fetching user information:", error);
+  }
+};
+
+const fetchratedCompany = async () => {
+  try {
+    const response = await axios.get("/api/companies", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    companies.value = response.data;
+    console.log("companies", companies.value);
+  } catch (error) {
+    console.error("error fetching company data");
+  }
+};
+</script>
+
 <template>
   <!-- <Navbar class="" /> -->
   <UserLayout>
@@ -10,10 +85,12 @@
           class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20"
         >
           <div class="ml-28">
-                <div class="w-20 h-8 rounded-bl-4xl bg-white absolute top-0 right-0 rounded-tr-xl border-2 border-[#176678] text-[#1B7B90] text-xs font-semibold text-center pt-1">
-                    <p>{{ userInformations.verification_status }}</p>
-                </div>
+            <div
+              class="w-20 h-8 rounded-bl-4xl bg-white absolute top-0 right-0 rounded-tr-xl border-2 border-[#176678] text-[#1B7B90] text-xs font-semibold text-center pt-1"
+            >
+              <p>{{ userInformations.verification_status }}</p>
             </div>
+          </div>
           <div class="flex lg:-ml-20 lg:-mt-10">
             <img
               :src="userInformations.profile_picture_url"
@@ -67,8 +144,10 @@
                 >Edit Profile</router-link
               >
             </div>
+
             <div  @click="handleLogout"
               class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
+
             >
               <i
                 class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"
@@ -131,6 +210,7 @@
     <!-- <FooterPart class="" /> -->
   </UserLayout>
 </template>
+
 
 <script>
 import axios from "axios";
@@ -219,5 +299,6 @@ export default {
   },
 };
 </script>
+
 
 <style></style>
