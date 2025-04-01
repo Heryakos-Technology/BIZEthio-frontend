@@ -9,11 +9,19 @@ import { onMounted, ref } from "vue";
 import { useCompanyStore } from "@/stores/company";
 
 const companies = ref([]);
+const loading = ref(true); // Add loading state
 const { getAllCompanies } = useCompanyStore();
 
 onMounted(async () => {
-  companies.value = await getAllCompanies();
-  console.log(companies.value);
+  try {
+    loading.value = true;
+    companies.value = await getAllCompanies();
+    console.log(companies.value);
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+  } finally {
+    loading.value = false;
+  }
 });
 
 const getImageUrl = (images) => {
@@ -30,63 +38,6 @@ const getImageUrl = (images) => {
   }
   return "/defalt-company-image.jpg";
 };
-
-const items = [
-  {
-    id: 1,
-    name: "Addis Cafe",
-    image: addisCafeImage,
-    rating: 4.7,
-    category: "Restaurants & Cafes",
-    location: "Bole, Addis Ababa",
-    hours: "Mon-Sun, 7 AM - 9 PM",
-  },
-  {
-    id: 2,
-    name: "Ethio Fashion Hub",
-    image: ethioFashionImage,
-    rating: 4.0,
-    category: "Retail Shops",
-    location: "Piassa, Addis Ababa",
-    hours: "Mon-Sat, 9 AM - 7 PM",
-  },
-  {
-    id: 3,
-    name: "Saba Hair Salon",
-    image: sabaSalonImage,
-    rating: 4.9,
-    category: "Service Providers",
-    location: "Kazanchis, Addis Ababa",
-    hours: "Tue-Sun, 10 AM - 8 PM",
-  },
-  {
-    id: 4,
-    name: "Bole Med Pharmacy",
-    image: bolePharmacyImage,
-    rating: 4.5,
-    category: "Health & Wellness",
-    location: "Bole Medhanialem, Addis Ababa",
-    hours: "Mon-Sun, 8 AM - 10 PM",
-  },
-  {
-    id: 51,
-    name: "Horizon Hotel",
-    image: horizonHotelImage,
-    rating: 4.6,
-    category: "Hotels & Accommodations",
-    location: "Mexico Square, Addis Ababa",
-    hours: "24/7",
-  },
-  {
-    id: 6,
-    name: "Unity Auto Repair",
-    image: unityAutoImage,
-    rating: 4.4,
-    category: "Automotive Services",
-    location: "Arat Kilo, Addis Ababa",
-    hours: "Mon-Sat, 8 AM - 6 PM",
-  },
-];
 
 function generateStars(rating) {
   const fullStars = Math.floor(rating);
@@ -109,13 +60,31 @@ function generateStars(rating) {
 <template>
   <div class="px-4 xl:max-w-[1200px] mx-auto sm:mt-16">
     <h1 class="text-primaryColor text-lg font-bold md:text-3xl">For You</h1>
+    
+    <!-- Loading spinner while fetching data -->
+    <div v-if="loading" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+    </div>
+    
+    <!-- No companies found state -->
+    <div v-else-if="companies.length === 0" class="py-20 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+      </svg>
+      <h3 class="mt-2 text-lg font-medium text-gray-900">No companies found</h3>
+      <p class="mt-1 text-gray-500">We couldn't find any companies to display at the moment.</p>
+    </div>
+    
+    <!-- Companies grid -->
     <div
+      v-else
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
-      <Rou
+      <RouterLink
+        :to="{ name: 'CompanyDetail', params: { id: item.id } }"
         v-for="(item, index) in companies"
         :key="index"
-        class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2"
+        class="bg-white w-full max-w-[400px] min-h-[450px] pt-2 pb-4 rounded-xl px-2 shadow-md hover:shadow-lg transition-shadow"
       >
         <div
           class="w-full h-[250px] hover:scale-105 transition-all duration-300 ease-linear bg-cover rounded-t-xl"
@@ -160,7 +129,7 @@ function generateStars(rating) {
               </svg>
             </div>
 
-            <p class="mx-3">({{ item.rating_avg }})</p>
+            <p class="mx-3">({{ item.rating_avg || 0 }})</p>
           </div>
           <h1 class="font-semibold ml-1">{{ item.name }}</h1>
           <div class="flex gap-x-2 items-center">
@@ -188,16 +157,31 @@ function generateStars(rating) {
             </svg>
             <p class="">{{ item.region }}</p>
           </div>
-          <p class="font-semibold">{{ item.category.name }}</p>
+          <p class="font-semibold">{{ item.category?.name || 'Uncategorized' }}</p>
 
-          <RouterLink
-            :to="{ name: 'CompanyDetail', params: { id: item.id } }"
+          <div
             class="bg-primaryColor w-32 flex mt-5 rounded-lg text-white cursor-pointer items-center justify-center py-2"
           >
             View Details
-          </RouterLink>
+          </div>
         </div>
-      </Rou>
+      </RouterLink>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Additional styles for loader animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>
