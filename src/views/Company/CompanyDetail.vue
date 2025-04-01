@@ -42,20 +42,6 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
-// Business data (static)
-const business = {
-  name: "Horizon Hotel",
-  category: "Restaurant & Cafe",
-  description:
-    "Horizon Hotel Restaurant & Cafe is a modern and welcoming establishment located in the heart of Addis Ababa at Mexico Square. Offering a blend of comfortable accommodations, delicious dining, and a cozy cafe experience, Horizon is the perfect spot for travelers, business professionals, and locals alike. Our hotel features well-appointed rooms with stunning views of the city, while our restaurant serves a mix of authentic Ethiopian cuisine and international dishes. The cafe is a popular spot for enjoying freshly brewed Ethiopian coffee, pastries, and light meals in a relaxed atmosphere. Whether you’re staying with us or just stopping by for a meal, Horizon Hotel Restaurant & Cafe promises exceptional",
-  location: "Mexico Square, Lideta Sub-City, Woreda 02, Addis Ababa, Ethiopia",
-  operatingHours:
-    "Hotel: 24/7 check-in and reception\nRestaurant: Monday–Sunday, 7:00 AM–10:00 PM\nCafe: Monday–Sunday, 6:00 AM–8:00 PM",
-  phone: "+251 91 123 4567",
-  email: "info@horizonhoteladdis.com",
-  website: "www.horizonhoteladdis.com",
-  averageRating: 4.2,
-};
 
 // Reviews data (static)
 const reviews = [
