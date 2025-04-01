@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
   <UserLayout>
-    <div class="pt-[20px]">
+    <div class="pt-7">
       <HeroSection />
       <CategoriesSection />
       <ForYourSection />
