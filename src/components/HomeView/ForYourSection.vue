@@ -80,7 +80,7 @@ function generateStars(rating) {
       v-else
       class="grid gap-y-8 place-items-center mt-10 gap-x-4 xl:gap-x-8 md:grid-cols-2 lg:grid-cols-3"
     >
-      <RouterLink
+      <div
         :to="{ name: 'CompanyDetail', params: { id: item.id } }"
         v-for="(item, index) in companies"
         :key="index"
@@ -159,13 +159,13 @@ function generateStars(rating) {
           </div>
           <p class="font-semibold">{{ item.category?.name || 'Uncategorized' }}</p>
 
-          <div
+          <RouterLink :to="{ name: 'CompanyDetail', params: { id: item.id } }"
             class="bg-primaryColor w-32 flex mt-5 rounded-lg text-white cursor-pointer items-center justify-center py-2"
           >
             View Details
-          </div>
+          </RouterLink>
         </div>
-      </RouterLink>
+      </div>
     </div>
   </div>
 </template>
