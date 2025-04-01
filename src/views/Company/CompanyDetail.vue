@@ -9,17 +9,20 @@ const { getCompany } = useCompanyStore();
 
 const route = useRoute();
 const company = ref(null);
-const loading = ref(true); // Add loading state
+const loading = ref(true);  
 
-onMounted(async () => {
+onMounted(()=>{
   window.scrollTo(0, 0);
+
+})
+onMounted(async () => {
   try {
     company.value = await getCompany(route.params.id);
   } catch (error) {
     console.error("Error fetching company:", error);
-    // Handle error appropriately, e.g., display an error message
+     
   } finally {
-    loading.value = false; // Set loading to false when data is fetched or on error
+    loading.value = false;  
   }
   console.log(company.value);
 });
@@ -261,7 +264,7 @@ const ratingDistribution = [
             <!-- Reviews and Ratings Section (UI Only) -->
             <div class="mt-12 space-y-6">
               <h2 class="text-2xl font-bold text-darkBlue">
-                Reviews And Ratings
+                Reviews And Ratings ({{company?.rating_avg}})
               </h2>
 
               <!-- Rating Distribution -->
