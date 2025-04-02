@@ -547,6 +547,7 @@ export default {
     // Get the token from Firebase
     const token = await userCredential.user.getIdToken();
     console.log("User Token:", token); 
+    localStorage.setItem('token',token)
 
     // Combine user data with the token
     const userWithToken = {

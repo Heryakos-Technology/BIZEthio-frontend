@@ -9,6 +9,7 @@ const userInformations = ref([]);
 const companies = ref([]);
 
 onMounted(() => {
+  localStorage.getItem("user_id");
   fetchUserInfo();
   fetchratedCompany();
 });
@@ -256,7 +257,7 @@ export default {
           return;
         }
 
-        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

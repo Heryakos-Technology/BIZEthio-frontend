@@ -103,8 +103,8 @@
               <button
                 @click="
                   () => {
-                    // handleLogin();
-                    handleLogin2();
+                     handleLogin();
+                   
                   }
                 "
                 :disabled="isLoginButtonDisabled"
@@ -270,8 +270,7 @@
             <button
               @click="
                 () => {
-                  handleLogin();
-                  handleLogin2();
+                  handleLogin
                 }
               "
               class="bg-cyan-700 text-white px-8 py-2 rounded-sm"
@@ -415,8 +414,7 @@
                 <button
                   @click="
                     () => {
-                      handleLogin();
-                      handleLogin2();
+                      handleLogin
                     }
                   "
                   :class="{
@@ -492,7 +490,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { login } from "../../auth";
 import { auth, googleProvider, facebookProvider } from "..//../firebase";
-import { signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, fetchSignInMethodsForEmail  } from "firebase/auth";
 
 
 export default {
@@ -521,40 +519,104 @@ export default {
 
     //google
     const signInWithGoogle = async () => {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-        console.log("User signed in:", user);
-       await registerUser(user);
-        
-      } catch (error) {
-        console.error("Error signing in with Google:", error);
-       
-      }
-    };
-    const signInWithFacebook = async () => {
-      try {
-        const result = await signInWithPopup(auth, facebookProvider);
-        const user = result.user;
-        console.log('User signed in:', user);
-        await registerUser(user); 
-      } catch (error) {
-        console.error("Error during Facebook sign-in:", error);
-       
-      }
-    };
-    const registerUser = async (user)=>{
-      try {
-        const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/register`, {
-          name: user.displayName,
-          email: user.email,
-        
-        });
-        console.log('User registered in backend:', response.data);
-      } catch (error) {
-        console.error('Error registering user:', error);
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    console.log("User signed in:", user);
+
+    // Get the Firebase token
+    const token = await user.getIdToken();
+    console.log("Firebase Token:", token); 
+    localStorage.setItem('token',token)
+
+    if (!token) {
+      console.error("Failed to retrieve token.");
+      return;
+    }
+
+    // Register the user with the backend, including the token
+    await registerUser(user, token);
+    
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+  }
+};
+
+
+const auth = getAuth();
+const facebookProvider = new FacebookAuthProvider();
+
+
+
+const signInWithFacebook = async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    const user = result.user;
+    console.log('User signed in:', user);
+
+    const token = await user.getIdToken();
+    console.log("Firebase Token:", token);
+    localStorage.setItem('token',token)
+
+    if (!token) {
+      console.error("Failed to retrieve token.");
+      return;
+    }
+
+    await registerUser(user, token); // Ensure registerUser properly handles the token
+  } catch (error) {
+    console.error("Error signing in with Facebook:", error);
+
+    if (error.code === "auth/account-exists-with-different-credential") {
+      const email = error.customData?.email; // Check email in customData
+      const pendingCred = FacebookAuthProvider.credentialFromError(error); // Store pending Facebook credential
+
+      if (email) {
+        try {
+          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+          console.log(`Account exists with the following providers: ${signInMethods.join(', ')}`);
+
+          if (signInMethods.includes('google.com')) {
+            const provider = new GoogleAuthProvider();
+            const googleResult = await signInWithPopup(auth, provider);
+            const existingUser = googleResult.user;
+            console.log('User signed in with Google:', existingUser);
+
+            // Link the Facebook credential after successful Google sign-in
+            if (pendingCred) {
+              await existingUser.linkWithCredential(pendingCred);
+              console.log("Facebook account linked to Google account.");
+            }
+
+            await registerUser(existingUser, await existingUser.getIdToken());
+          } else {
+            console.error("Existing provider not handled.");
+            alert("Please sign in with the provider you used before.");
+          }
+        } catch (fetchError) {
+          console.error('Error fetching sign-in methods:', fetchError);
+        }
+      } else {
+        console.error("No email identifier found in the error.");
+        alert("An account with this email exists but we can't determine the provider. Please sign in using another method.");
       }
     }
+  }
+};
+
+
+const registerUser = async (user, token) => {
+  try {
+    const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
+      name: user.displayName,
+      email: user.email,
+      token: token, 
+    });
+    console.log('User registered in backend:', response.data);
+  } catch (error) {
+    console.error('Error registering user:', error.response ? error.response.data : error.message);
+  }
+};
     const validateEmail = () => {
       emailError.value = "";
       if (!email.value) {
@@ -621,9 +683,20 @@ export default {
 //     alert(error.message);
 //   }
 // };
-const handleLogin2 = async () => {
+const handleLogin = async () => {
+  emailError.value = "";
+  passwordError.value = "";
+  signInMessage.value = "Loading...";
+
+  // Basic email validation
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email.value)) {
+    emailError.value = "Invalid email format.";
+    return;
+  }
+
   try {
-    signInMessage.value = "Loading...";
+    // First, call handleLogin2 to log in with Firebase and get the token
     const { userCredential, role } = await login(email.value, password.value);
     const user = userCredential.user;
 
@@ -633,10 +706,33 @@ const handleLogin2 = async () => {
       localStorage.setItem("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       alert("Logged in successfully!");
-      signInMessage.value = "Sent";
-      console.log('token',token)
+      signInMessage.value = "Loading";
+      console.log('token', token);
       console.log("Redirecting to user profile with role:", role);
-      router.push("/UserProfile");
+
+      // Now, call your backend with the token
+      const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
+        email: email.value,
+        password: password.value,
+        token: token // Include the token from Firebase
+      });
+
+      const backendToken = response.data.token;
+      const userData = response.data.user;
+
+      console.log("Token from backend:", backendToken);
+      console.log("User from backend:", userData);
+    //  localStorage.setItem("token", backendToken);
+      localStorage.setItem("user_id", userData.id); // Store user ID
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${backendToken}`;
+
+      if (token) {
+        
+        console.log("Redirecting to user profile...");
+        router.push("/UserProfile");
+        signInMessage.value = "Sent";
+      }
     } else {
       alert("User is not authenticated.");
     }
@@ -691,7 +787,7 @@ const handleLogin2 = async () => {
       email,
       password,
       currentUser,
-      handleLogin2,
+      // handleLogin2,
       handleLogin,
       isRemembered,
       signInMessage,
