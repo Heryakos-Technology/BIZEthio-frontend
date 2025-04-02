@@ -1,6 +1,8 @@
 <script setup>
 import { useCategoryStore } from "@/stores/category";
 import { onMounted, ref } from "vue";
+import axios from "axios";
+import CryptoJS from "crypto-js";
 
 const categoryStore = useCategoryStore();
 const { getAllCategories, deleteCategory, createCategory, updateCategory } =
@@ -10,19 +12,22 @@ const isAddOpen = ref(false);
 const isEditOpen = ref(false);
 const isDeleteConfirmOpen = ref(false);
 const selectedCategory = ref(null);
-const errorMessage = ref(""); // To display errors
+const errorMessage = ref("");
 
 // Loading states for each operation
 const loading = ref({
   add: false,
   update: false,
   delete: false,
+  fetch: true,
 });
 
 const categories = ref([]);
 const formdata = ref({
   name: "",
   description: "",
+  image: null, // Add image field
+  image_link: null,
 });
 
 const editFormData = ref({
@@ -31,12 +36,26 @@ const editFormData = ref({
   description: "",
 });
 
+// Cloudinary configuration
+const uploadPreset = "ml_default";
+const cloudName = "dzofoegwf";
+const file = ref(null);
+const uploaded = ref("");
+const previewImage = ref(null);
+
 onMounted(async () => {
   await fetchCategories();
 });
 
 const fetchCategories = async () => {
-  categories.value = await getAllCategories();
+  try {
+    loading.value.fetch = true;
+    categories.value = await getAllCategories();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  } finally {
+    loading.value.fetch = false;
+  }
 };
 
 const handleDelete = async (category) => {
@@ -64,11 +83,17 @@ const handleAddCategory = async () => {
     const newFormData = new FormData();
     newFormData.append("name", formdata.value.name);
     newFormData.append("description", formdata.value.description);
+    if (formdata.value.image_link) {
+      newFormData.append("image_link", formdata.value.image_link);
+    }
 
     await createCategory(newFormData);
 
     formdata.value.name = "";
     formdata.value.description = "";
+    formdata.value.image = null;
+    formdata.value.image_link = null;
+    previewImage.value = null;
     isAddOpen.value = false;
 
     await fetchCategories();
@@ -102,6 +127,7 @@ const handleUpdateCategory = async () => {
 
     if (response.error) {
       errorMessage.value = response.message || "Failed to update category";
+      console.log(response);
     } else {
       isEditOpen.value = false;
       selectedCategory.value = null;
@@ -128,6 +154,60 @@ const closeEditForm = () => {
 const closeDeleteConfirm = () => {
   isDeleteConfirmOpen.value = false;
   selectedCategory.value = null;
+};
+
+const onFileSelected = (event) => {
+  file.value = event.target.files[0];
+  if (file.value) {
+    previewImage.value = URL.createObjectURL(file.value);
+    uploadFile();
+  } else {
+    previewImage.value = null;
+  }
+};
+
+const uploadFile = async () => {
+  uploaded.value = "Uploading Wait a Sec...";
+  if (!file.value) return;
+
+  const timestamp = Math.floor(Date.now() / 1000);
+  const params = {
+    timestamp,
+    upload_preset: uploadPreset,
+  };
+
+  const { signature } = generateSignature(params);
+
+  const formData = new FormData();
+  formData.append("file", file.value);
+  formData.append("upload_preset", uploadPreset);
+  formData.append("timestamp", timestamp);
+  formData.append("signature", signature);
+  formData.append("api_key", "734174595538154");
+
+  try {
+    const response = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      formData
+    );
+    uploaded.value = "Photo Uploaded Successfully";
+    formdata.value.image_link = response.data.secure_url;
+  } catch (error) {
+    uploaded.value = "Failed to upload photo";
+    console.error("Error uploading file:", error.response.data);
+  }
+};
+
+const generateSignature = (params) => {
+  const apiSecret = "A5D7SF1aLxGmy_TUAao-iA5C3rM";
+  const sortedParams =
+    Object.entries(params)
+      .sort()
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&") + apiSecret;
+
+  const signature = CryptoJS.SHA1(sortedParams).toString(CryptoJS.enc.Hex);
+  return { signature };
 };
 </script>
 
@@ -186,6 +266,35 @@ const closeDeleteConfirm = () => {
           :disabled="loading.add"
         ></textarea>
       </div>
+
+      <!-- Image Upload -->
+      <div class="mb-2">
+        <label for="image" class="block text-gray-700 text-sm font-bold mb-1"
+          >Image:</label
+        >
+        <div
+          class="relative w-52 h-36 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-100"
+        >
+          <input
+            type="file"
+            id="image"
+            class="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer"
+            @change="onFileSelected"
+            accept="image/*"
+          />
+          <img
+            v-if="previewImage"
+            :src="previewImage"
+            alt="Preview"
+            class="max-w-full max-h-full object-cover"
+          />
+          <div v-else class="text-gray-700 text-sm text-center p-2">
+            Click or drag image here to upload
+          </div>
+        </div>
+        <p v-if="uploaded" class="mt-2 text-green-500">{{ uploaded }}</p>
+      </div>
+
       <button
         @click="handleAddCategory"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2 transition duration-200 flex items-center"
@@ -411,85 +520,91 @@ const closeDeleteConfirm = () => {
   </div>
 
   <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
-    <div class="min-w-[600px] max-w-[100%] rounded-lg shadow-md">
-      <!-- Table Header -->
-      <div
-        class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
-      >
-        <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
-          No
-        </div>
-        <div
-          class="p-3 lg:py-5 text-sm text-black sticky left-[50px] bg-white z-10"
-        >
-          Name
-        </div>
-        <div class="p-3 lg:py-5 text-sm text-black">Description</div>
-        <div class="p-3 lg:py-5 text-sm text-black">Actions</div>
-      </div>
+    <div v-if="loading.fetch" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+    </div>
 
-      <!-- Table Body -->
-      <div
-        v-for="(category, index) in categories"
-        :key="category.id"
-        class="grid grid-cols-[50px_160px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
-      >
+    <div v-else class="">
+      <div class="min-w-[600px] max-w-[100%] rounded-lg shadow-md">
+        <!-- Table Header -->
         <div
-          class="p-3 text-sm lg:text-base text-black font-bold sticky left-0 bg-white z-10"
+          class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
         >
-          {{ index + 1 }}
+          <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
+            No
+          </div>
+          <div
+            class="p-3 lg:py-5 text-sm text-black sticky left-[50px] bg-white z-10"
+          >
+            Name
+          </div>
+          <div class="p-3 lg:py-5 text-sm text-black">Description</div>
+          <div class="p-3 lg:py-5 text-sm text-black">Actions</div>
         </div>
+
+        <!-- Table Body -->
         <div
-          class="p-3 text-sm lg:text-base text-black font-bold sticky left-[50px] bg-white z-10"
+          v-for="(category, index) in categories"
+          :key="category.id"
+          class="grid grid-cols-[50px_160px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
         >
-          {{ category.name }}
-        </div>
-        <div class="p-3 text-sm lg:text-base text-black font-bold">
-          {{ category.description }}
-        </div>
-        <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
-          <button
-            @click="handleEdit(category)"
-            class="text-gray-500 hover:text-blue-600 transition duration-200"
-            title="Edit"
-            :disabled="loading.add || loading.update || loading.delete"
+          <div
+            class="p-3 text-sm lg:text-base text-black font-bold sticky left-0 bg-white z-10"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-5 lg:size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-              />
-            </svg>
-          </button>
-          <button
-            @click="handleDelete(category)"
-            class="text-red-500 hover:text-red-700 transition duration-200"
-            title="Delete"
-            :disabled="loading.add || loading.update || loading.delete"
+            {{ index + 1 }}
+          </div>
+          <div
+            class="p-3 text-sm lg:text-base text-black font-bold sticky left-[50px] bg-white z-10"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="size-5 lg:size-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            {{ category.name }}
+          </div>
+          <div class="p-3 text-sm lg:text-base text-black font-bold">
+            {{ category.description }}
+          </div>
+          <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
+            <button
+              @click="handleEdit(category)"
+              class="text-gray-500 hover:text-blue-600 transition duration-200"
+              title="Edit"
+              :disabled="loading.add || loading.update || loading.delete"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4M4 7h16m-4 4v6m-4-6v6"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-5 lg:size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                />
+              </svg>
+            </button>
+            <button
+              @click="handleDelete(category)"
+              class="text-red-500 hover:text-red-700 transition duration-200"
+              title="Delete"
+              :disabled="loading.add || loading.update || loading.delete"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-5 lg:size-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4M4 7h16m-4 4v6m-4-6v6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

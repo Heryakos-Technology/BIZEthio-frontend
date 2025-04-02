@@ -34,6 +34,8 @@ export const useCategoryStore = defineStore("categoryStore", {
         body: formData,
       });
       const data = await res.json();
+      console.log(formData);
+      console.log(data);
       if (data.errors) {
         this.errors = data.errors;
       } else {
