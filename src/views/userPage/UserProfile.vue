@@ -174,7 +174,7 @@ export default {
           return;
         }
 
-        const response = await axios.get(`/api/users/${userId}`, {
+        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

@@ -6,9 +6,12 @@ import { getAuth,
          sendEmailVerification, 
          fetchSignInMethodsForEmail, 
          updatePassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore"; 
+
+const db = getFirestore();
 
 
-export const register = async (email, newPassword) => {
+export const register = async (email, newPassword,role) => {
   try {
     
     const exists = await checkEmailExists(email);
@@ -25,7 +28,10 @@ export const register = async (email, newPassword) => {
 
 
     const userCredential = await createUserWithEmailAndPassword(auth, email, newPassword);
-    
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      email: userCredential.user.email,
+      role: role 
+    });
 
     return userCredential; 
   } catch (error) {
@@ -37,14 +43,24 @@ export const register = async (email, newPassword) => {
 
 export const login = async (email, password) => {
   try {
-    return await signInWithEmailAndPassword(auth, email, password);
+    // Attempt to sign in with email and password
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+    // Retrieve user document from Firestore
+    const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+    
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log("User role:", userData.role);
+      return { userCredential, role: userData.role }; 
+    } else {
+      throw new Error("User role not found.");
+    }
   } catch (error) {
     console.error('Error during login:', error.message);
-    throw error; 
+    throw error; // Rethrow for handling in the calling function
   }
 };
-
-
 export const logout = async () => {
   try {
     await signOut(auth); 
@@ -117,3 +133,4 @@ export const updateUserPassword = async (email, tempPassword, newPassword) => {
     throw error; 
   }
 };
+

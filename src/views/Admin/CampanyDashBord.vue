@@ -283,6 +283,7 @@ import AdminLayout from "@/layout/AdminLayout.vue";
 import { defineComponent, onMounted, ref } from "vue";
 import BarChart from "@/components/BarChart.vue";
 import axios from "axios";
+
 export default {
   components: {
     AdminLayout,
