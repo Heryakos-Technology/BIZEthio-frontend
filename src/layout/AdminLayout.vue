@@ -11,13 +11,13 @@ import { useAuthStore } from "@/stores/auth";
 // Removed import { logout } from "@/auth";
 
 const authStore = useAuthStore();
-const user = ref(null);
+ 
 const showDropdown = ref(false);
 
-onMounted(async () => {
-  await authStore.getUser();
-  user.value = authStore.user;
-});
+const user_name = localStorage.getItem("user_name");
+
+
+ 
 
 const isSidebarOpen = ref(false);
 const sidebar = ref(null);
@@ -30,11 +30,11 @@ const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value;
 };
 
-// Updated logout handler to use the auth store
+ 
 const handleLogout = async () => {
   try {
     await authStore.logout();
-    // The router navigation is now handled in the store
+  
   } catch (error) {
     console.error("Logout failed:", error);
   }
@@ -81,7 +81,7 @@ onMounted(() => {
           ></path>
         </svg>
         <div class="flex gap-x-4 items-center relative">
-          <p class="font-semibold">Welcome, {{ user?.name }}</p>
+          <p class="font-semibold">Welcome, {{ user_name }}</p>
           <div
             class="flex gap-x-1 items-end cursor-pointer hover:font-bold transition-all ease-linear duration-200"
             @click="toggleDropdown"

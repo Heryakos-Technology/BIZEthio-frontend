@@ -602,8 +602,10 @@ export default {
           console.log("User:", user);
           console.log("response:", response);
           localStorage.setItem("token", token);
-          console.log("user_id", user.id);
+         
           localStorage.setItem("user_id", user.id);
+          localStorage.setItem("user_role", user.role);
+          localStorage.setItem("user_name", user.name);
 
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
