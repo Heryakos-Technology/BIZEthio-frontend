@@ -29,6 +29,23 @@ export const useCompanyStore = defineStore("companyStore", {
         return data
       }
     },
+    async getCompany(company) {
+      const res = await fetch(`/api/companies/${company}`, {
+        method: "Get",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.errors) {
+        this.errors = data.errors;
+      } else {
+        this.errors = {};
+        return data
+      }
+    },
 
 
 

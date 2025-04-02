@@ -188,9 +188,13 @@ const router = createRouter({
   ],
 })
 
+ 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
-  await authStore.getUser();
+  const userId = localStorage.getItem("user_id");
+  if (authStore.user?.id !== userId) {
+    await authStore.getUser();
+  }
 
   if (authStore.user?.role === "admin" && to.meta.guest) {
     return { name: "AdminProfile" };
@@ -209,6 +213,6 @@ router.beforeEach(async (to, from) => {
     return { name: "Home" };
   }
 });
-
+ 
 
 export default router

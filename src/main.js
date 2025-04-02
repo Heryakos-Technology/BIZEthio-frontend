@@ -7,6 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import VueApexCharts from 'vue3-apexcharts';
 import App from './App.vue'
 import router from './router'
+import 'leaflet/dist/leaflet.css';
 
 const app = createApp(App)
 onAuthStateChanged(auth, (user) => {
