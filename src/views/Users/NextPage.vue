@@ -694,6 +694,7 @@ export default {
       submitText.value = "Loading...";
       const email = model.value.user.email.trim().toLowerCase();
       const password = model.value.user.password;
+      const token = localStorage.getItem('token');
       const name = model.value.user.name;
       const phone_number = model.value.user.phone_number;
       const city = model.value.user.city;
@@ -718,17 +719,18 @@ export default {
 
       const userData = {
         email,
-        password,
+        //password,
         name,
         phone_number,
         city,
         sub_city,
         //location,
-        password_confirmation,
+       // password_confirmation,
         verification_status,
         is_banned,
         role,
         profile_picture_url,
+        token
       };
 
       const auth = getAuth();
@@ -764,7 +766,7 @@ export default {
 
             if (success) {
               const response = await axios.post(
-                `https://bizethio-backend-production-944c.up.railway.app/api/users/register`,
+                `https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`,
                 userData,
                 {
                   headers: {
