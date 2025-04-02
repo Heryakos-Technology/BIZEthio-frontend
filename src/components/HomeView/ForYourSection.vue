@@ -9,7 +9,7 @@ import { onMounted, ref } from "vue";
 import { useCompanyStore } from "@/stores/company";
 
 const companies = ref([]);
-const loading = ref(true); // Add loading state
+const loading = ref(true);  
 const { getAllCompanies } = useCompanyStore();
 
 onMounted(async () => {
