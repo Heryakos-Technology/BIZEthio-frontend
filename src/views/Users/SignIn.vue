@@ -527,9 +527,8 @@ export default {
     // Get the Firebase token
     const token = await user.getIdToken();
     console.log("Firebase Token:", token); 
-    localStorage.setItem('token',token)// Log the token
+    localStorage.setItem('token',token)
 
-    // Check if the token is retrieved successfully
     if (!token) {
       console.error("Failed to retrieve token.");
       return;
