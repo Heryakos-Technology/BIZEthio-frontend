@@ -519,7 +519,7 @@ export default {
       isPasswordVisible.value = !isPasswordVisible.value;
     };
 
-    
+    //google
     const signInWithGoogle = async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
