@@ -365,14 +365,14 @@
 
             <div class="mt-5">
               <div><p class="mb-4">Profile picture</p></div>
-              <div class="-ml-48 mt-10">
+              <div class="-ml-40 mt-10">
                 <div
                   class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
                   @dragover.prevent="handleDragOver"
                   @drop.prevent="handleFileDrop"
                   @click="triggerFileInput"
                 >
-                  <img src="/dragfile.png" alt="" class="w-1/2" />
+                  <img src="/dragfile.png" alt="" class="w-1/2 mx-auto" />
                 </div>
                 <input
                   type="file"

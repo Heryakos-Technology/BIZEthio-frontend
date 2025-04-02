@@ -16,7 +16,7 @@
               <div class="mt-2">
                 <input
                   type="email"
-                  class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"
+                  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-7/13 md:h-12"
                   v-model="email"
                   @input="validateEmail"
                 />
@@ -31,7 +31,7 @@
                   <p>Password</p>
                 </div>
               </div>
-              <div class="mt-2 relative">
+              <!-- <div class="mt-2 relative">
                 <input
                   :type="isPasswordVisible ? 'text' : 'password'"
                   class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"
@@ -40,13 +40,31 @@
                 />
                 <span
                 @click="togglePasswordVisibility"
-                class="absolute top-5 right-80 transform -translate-y-1/2 cursor-pointer"
+                class="absolute top-6 right-70 transform -translate-y-1/2 cursor-pointer text-gray-500"
               >
                 <i
                   :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
                 ></i>
               </span>
-            </div>
+            </div> -->
+            <div class="mt-2 relative">
+                <input
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-7/13 md:h-12"
+                  v-model="password"
+                  @input="validatePassword()"
+                />
+                <span
+                  @click="togglePasswordVisibility"
+                  class=" transform -translate-y-1/2 cursor-pointer"
+                >
+                  <i
+                    :class="
+                      isPasswordVisible ? 'fas fa-eye-slash w-1/3 -ml-10 z-10 text-gray-500' : 'fas fa-eye w-1/3 -ml-10 z-10 text-gray-500'
+                    "
+                  ></i>
+                </span>
+              </div>
             <p v-if="passwordError" class="text-red-500 mt-5">
               {{ passwordError }}
             </p>
@@ -85,7 +103,7 @@
               <button
                 @click="
                   () => {
-                    handleLogin();
+                    // handleLogin();
                     handleLogin2();
                   }
                 "
@@ -217,7 +235,7 @@
                 class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
               >
                 <i
-                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye text-gray-500'"
                 ></i>
               </span>
             </div>
@@ -476,6 +494,7 @@ import { login } from "../../auth";
 import { auth, googleProvider, facebookProvider } from "..//../firebase";
 import { signInWithPopup } from "firebase/auth";
 
+
 export default {
   components: {
     UserLayout,
@@ -500,7 +519,7 @@ export default {
       isPasswordVisible.value = !isPasswordVisible.value;
     };
 
-    
+    //google
     const signInWithGoogle = async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -575,15 +594,57 @@ export default {
       }
     });
 
-    const handleLogin2 = async () => {
-      try {
-        await login(email.value, password.value);
-        alert("Logged in successfully!");
-      } catch (error) {
-        alert(error.message);
-      }
-    };
+    // const handleLogin2 = async () => {
+    //   try {
+    //     await login(email.value, password.value);
+    //     alert("Logged in successfully!");
+    //   } catch (error) {
+    //     alert(error.message);
+    //   }
+    // };
+//     const handleLogin2 = async () => {
+//   try {
+//     signInMessage.value = "Loading...";
+//     const userCredential = await login(email.value, password.value); 
+//     const user = userCredential.user; 
+//     const token = await user.getIdToken(); 
+//     localStorage.setItem("token", token);
+//     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+//     alert("Logged in successfully!");
+//     if (token) {
+//             signInMessage.value = "Sent";
+//             console.log("Redirecting to user profile...");
+//             router.push("/UserProfile");
+//           }
+//     console.log("User Token:", token); 
+//   } catch (error) {
+//     alert(error.message);
+//   }
+// };
+const handleLogin2 = async () => {
+  try {
+    signInMessage.value = "Loading...";
+    const { userCredential, role } = await login(email.value, password.value);
+    const user = userCredential.user;
 
+    // Check if user is authenticated
+    if (user) {
+      const token = await user.getIdToken();
+      localStorage.setItem("token", token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      alert("Logged in successfully!");
+      signInMessage.value = "Sent";
+      console.log('token',token)
+      console.log("Redirecting to user profile with role:", role);
+      router.push("/UserProfile");
+    } else {
+      alert("User is not authenticated.");
+    }
+  } catch (error) {
+    console.error("Login error:", error.message);
+    alert(error.message);
+  }
+};
     const handleLogin = async () => {
       if (handleLogin2) {
         emailError.value = "";

@@ -400,6 +400,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 
 export default {
   components: {
@@ -451,79 +452,130 @@ export default {
         !model.value.user.location
       );
     });
-    //     const userData = {
-    //   email: model.user.email,
-    //   // email: localStorage.getItem('email'),
-    //   // phone_number: localStorage.getItem('phone_number'),
-    //   // city: localStorage.getItem('city'),
-    //   // sub_city: localStorage.getItem('sub_city'),
-    //   // password: model.value.user.password,
-    //   // password_confirmation: model.value.user.password_confirmation,
-    //   // verification_status: model.value.user.verification_status,
-    //   // is_banned: model.value.user.is_banned,
-    //   // role: model.value.user.role,
-    //   // profile_picture_url: model.value.user.profile_picture_url,
+
+
+    // const registerUser = async () => {
+    //   validate();
+    //   if (Object.keys(errors.value).length > 0) return;
+
+    //   Object.keys(model.value.user).forEach((key) => {
+    //     localStorage.setItem(key, model.value.user[key]);
+    //   });
+    //   continueButton.value = "Loading...";
+    //   const userData = {
+    //     email: model.value.user.email,
+    //     role : "user"
+      
+    //   };
+
+    //   try {
+    //     const tempPassword = Math.random().toString(36).slice(-8);
+    //     localStorage.setItem("temporaryPassword", tempPassword);
+    //     localStorage.setItem("name", model.value.user.name);
+    //     localStorage.setItem("email", model.value.user.email);
+    //     localStorage.setItem("phone_number", model.value.user.phone_number);
+    //     localStorage.setItem("city", model.value.user.city);
+    //     localStorage.setItem("sub_city", model.value.user.sub_city);
+    //     localStorage.setItem("location", model.value.user.location);
+
+    //     // isLoading.value = 'Submitting'
+    //     const auth = getAuth();
+    //     const userCredential = await createUserWithEmailAndPassword(
+    //       auth,
+    //       userData.email,
+    //       userData.role,
+    //       tempPassword
+    //     );
+
+    //     await sendEmailVerification(userCredential.user);
+    //     alert("A verification email has been sent. Please check your inbox.");
+
+    //     alert("Please verify your email to complete your registration.");
+    //     continueButton.value = "Sent";
+    //   } catch (error) {
+    //     console.error(
+    //       "Error during registration:",
+    //       error.message || "An error occurred. Please try again."
+    //     );
+    //     errorss.value = error.response
+    //       ? error.response.data.message
+    //       : "An error occurred. Please try again.";
+    //     // isLoading.value = 'Failed'
+    //     continueButton.value = "Failed";
+    //   }
+    //   router.push("/next");
     // };
-
     const registerUser = async () => {
-      validate();
-      if (Object.keys(errors.value).length > 0) return;
+  validate();
+  if (Object.keys(errors.value).length > 0) return;
 
-      Object.keys(model.value.user).forEach((key) => {
-        localStorage.setItem(key, model.value.user[key]);
-      });
-      continueButton.value = "Loading...";
-      const userData = {
-        email: model.value.user.email,
-        // email: localStorage.getItem('email'),
-        // phone_number: localStorage.getItem('phone_number'),
-        // city: localStorage.getItem('city'),
-        // sub_city: localStorage.getItem('sub_city'),
-        // password: model.value.user.password,
-        // password_confirmation: model.value.user.password_confirmation,
-        // verification_status: model.value.user.verification_status,
-        // is_banned: model.value.user.is_banned,
-        // role: model.value.user.role,
-        // profile_picture_url: model.value.user.profile_picture_url,
-      };
+  // Store user data in local storage
+  Object.keys(model.value.user).forEach((key) => {
+    localStorage.setItem(key, model.value.user[key]);
+  });
 
-      try {
-        const tempPassword = Math.random().toString(36).slice(-8);
-        localStorage.setItem("temporaryPassword", tempPassword);
-        localStorage.setItem("name", model.value.user.name);
-        localStorage.setItem("email", model.value.user.email);
-        localStorage.setItem("phone_number", model.value.user.phone_number);
-        localStorage.setItem("city", model.value.user.city);
-        localStorage.setItem("sub_city", model.value.user.sub_city);
-        localStorage.setItem("location", model.value.user.location);
+  continueButton.value = "Loading...";
 
-        // isLoading.value = 'Submitting'
-        const auth = getAuth();
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          userData.email,
-          tempPassword
-        );
+  const userData = {
+    email: model.value.user.email,
+    role: "user",
+    name: model.value.user.name,
+    phone_number: model.value.user.phone_number,
+    city: model.value.user.city,
+    sub_city: model.value.user.sub_city,
+    location: model.value.user.location
+  };
 
-        await sendEmailVerification(userCredential.user);
-        alert("A verification email has been sent. Please check your inbox.");
+  try {
+    // Generate a temporary password
+    const tempPassword = Math.random().toString(36).slice(-8);
+    localStorage.setItem("temporaryPassword", tempPassword);
 
-        alert("Please verify your email to complete your registration.");
-        continueButton.value = "Sent";
-      } catch (error) {
-        console.error(
-          "Error during registration:",
-          error.message || "An error occurred. Please try again."
-        );
-        errorss.value = error.response
-          ? error.response.data.message
-          : "An error occurred. Please try again.";
-        // isLoading.value = 'Failed'
-        continueButton.value = "Failed";
-      }
-      router.push("/next");
+    const auth = getAuth();
+    
+    // Create user with email and temporary password
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      userData.email,
+      tempPassword 
+    );
+
+    const db = getFirestore();
+    // Store user role and info in Firestore
+    await setDoc(doc(db, "users", userCredential.user.uid), userData);
+
+    // Get the token from Firebase
+    const token = await userCredential.user.getIdToken();
+    console.log("User Token:", token); 
+
+    // Combine user data with the token
+    const userWithToken = {
+      ...userData,
+      token
     };
+    console.log("User Data with Token:", userWithToken);
 
+    // Optionally store this combined object in localStorage
+    localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
+
+    // Send email verification
+    await sendEmailVerification(userCredential.user);
+    alert("A verification email has been sent. Please check your inbox.");
+
+    // Redirect to the next page after successful registration
+    continueButton.value = "Sent";
+    router.push("/next");
+  } catch (error) {
+    console.error(
+      "Error during registration:",
+      error.message || "An error occurred. Please try again."
+    );
+    errors.value = error.response
+      ? error.response.data.message
+      : "An error occurred. Please try again.";
+    continueButton.value = "Failed";
+  }
+};
     watch(isButtonDisabled, (newValue) => {
       if (newValue) {
         console.log("Button is disabled");
