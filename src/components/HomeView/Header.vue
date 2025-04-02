@@ -3,11 +3,10 @@ import router from "@/router";
 import { ref, onMounted, onUnmounted, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import Logo from "@/components/icons/Logo.vue";
-import { useAuthStore } from "@/stores/auth";
-// Fix: Import the CompanyDetail component if you want to use it as a component
-// import CompanyDetail from '@/views/Company/CompanyDetail.vue';
+ 
 
-const authStore = useAuthStore();
+const userId = localStorage.getItem("user_id");
+
 
 const route = useRoute();
 
@@ -18,7 +17,7 @@ let lastScrollPosition = 0;
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
-  // console.log(isSidebarOpen.value);
+ 
 };
 
 const navLinks = [
@@ -35,36 +34,7 @@ const navLinks = [
   { name: "Home", label: "About Us" },
 ];
 
-// const handleScroll = () => {
-//   const currentScrollPosition = window.scrollY;
 
-//   if (
-//     currentScrollPosition > lastScrollPosition &&
-//     currentScrollPosition > 30
-//   ) {
-//     isNavbarVisible.value = false;
-//   } else if (currentScrollPosition < lastScrollPosition) {
-//     isNavbarVisible.value = true;
-//   }
-
-//   lastScrollPosition = currentScrollPosition;
-// };
-
-// onMounted(() => {
-//   window.addEventListener("scroll", handleScroll);
-// });
-
-// onUnmounted(() => {
-//   window.removeEventListener("scroll", handleScroll);
-// });
-
-// watch(isSidebarOpen, (newValue) => {
-//   document.body.style.overflow = newValue ? "hidden" : "auto";
-// });
-
-// onUnmounted(() => {
-//   document.body.style.overflow = "auto";
-// });
 </script>
 
 <template>
@@ -182,7 +152,7 @@ const navLinks = [
               d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
             />
           </svg>
-          <RouterLink :to="{ name: 'UserProfile' }" v-if="authStore.user">
+          <RouterLink :to="{ name: 'UserProfile' }" v-if="userId">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -200,7 +170,7 @@ const navLinks = [
           </RouterLink>
 
           <RouterLink
-            v-if="!authStore.user"
+            v-if="!userId"
             :to="{ name: 'SignIn' }"
             class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
           >
