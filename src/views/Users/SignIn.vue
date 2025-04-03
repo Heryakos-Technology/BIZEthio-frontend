@@ -741,46 +741,46 @@ const handleLogin = async () => {
     alert(error.message);
   }
 };
-    const handleLogin = async () => {
-      if (handleLogin2) {
-        emailError.value = "";
-        passwordError.value = "";
-        signInMessage.value = "Loading...";
-        try {
-          const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/login`, {
-            email: email.value,
-            password: password.value,
-          });
+    // const handleLogin = async () => {
+    //   if (handleLogin2) {
+    //     emailError.value = "";
+    //     passwordError.value = "";
+    //     signInMessage.value = "Loading...";
+    //     try {
+    //       const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/users/login`, {
+    //         email: email.value,
+    //         password: password.value,
+    //       });
 
-          const token = response.data.token;
-          const user = response.data.user;
+    //       const token = response.data.token;
+    //       const user = response.data.user;
 
-          console.log("Token:", token);
-          console.log("User:", user);
-          console.log("response:", response);
-          localStorage.setItem("token", token);
+    //       console.log("Token:", token);
+    //       console.log("User:", user);
+    //       console.log("response:", response);
+    //       localStorage.setItem("token", token);
          
-          localStorage.setItem("user_id", user.id);
-          localStorage.setItem("user_role", user.role);
-          localStorage.setItem("user_name", user.name);
+    //       localStorage.setItem("user_id", user.id);
+    //       localStorage.setItem("user_role", user.role);
+    //       localStorage.setItem("user_name", user.name);
 
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-          if (token) {
-            signInMessage.value = "Sent";
-            console.log("Redirecting to user profile...");
-            router.push("/UserProfile");
-          }
-        } catch (error) {
-          console.error(error);
-          signInMessage.value = "Continue";
-          emailError.value = "Invalid email or password.";
-          passwordError.value = "Invalid email or password.";
-          email.value = "";
-          password.value = "";
-        }
-      }
-    };
+    //       if (token) {
+    //         signInMessage.value = "Sent";
+    //         console.log("Redirecting to user profile...");
+    //         router.push("/UserProfile");
+    //       }
+    //     } catch (error) {
+    //       console.error(error);
+    //       signInMessage.value = "Continue";
+    //       emailError.value = "Invalid email or password.";
+    //       passwordError.value = "Invalid email or password.";
+    //       email.value = "";
+    //       password.value = "";
+    //     }
+    //   }
+    // };
 
     return {
       base_url,
