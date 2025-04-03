@@ -724,8 +724,7 @@ export default {
         phone_number,
         city,
         sub_city,
-        //location,
-       // password_confirmation,
+        
         verification_status,
         is_banned,
         role,
