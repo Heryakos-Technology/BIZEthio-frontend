@@ -9,20 +9,19 @@ const { getCompany } = useCompanyStore();
 
 const route = useRoute();
 const company = ref(null);
-const loading = ref(true);  
+const loading = ref(true);
+const showSharePopup = ref(false); // Ref to control the visibility of the share popup
 
-onMounted(()=>{
+onMounted(() => {
   window.scrollTo(0, 0);
-
-})
+});
 onMounted(async () => {
   try {
     company.value = await getCompany(route.params.id);
   } catch (error) {
     console.error("Error fetching company:", error);
-     
   } finally {
-    loading.value = false;  
+    loading.value = false;
   }
   console.log(company.value);
 });
@@ -42,6 +41,65 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
+// Share functionality
+const shareToSocialMedia = (platform) => {
+  const currentUrl = window.location.href;
+  let shareUrl = "";
+
+  switch (platform) {
+    case "facebook":
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        currentUrl
+      )}`;
+      break;
+    case "twitter":
+      shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        currentUrl
+      )}&text=${encodeURIComponent(
+        `Check out ${company.value?.name} on BIZEthio!`
+      )}`;
+      break;
+    case "linkedin":
+      shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        currentUrl
+      )}`;
+      break;
+    case "telegram":
+      shareUrl = `https://telegram.me/share/url?url=${encodeURIComponent(
+        currentUrl
+      )}&text=${encodeURIComponent(
+        `Check out ${company.value?.name} on BIZEthio!`
+      )}`;
+      break;
+    // Add more platforms as needed
+  }
+
+  if (shareUrl) {
+    window.open(shareUrl, "_blank");
+    closeSharePopup(); // Close the popup after sharing
+  }
+};
+
+const copyRoute = () => {
+  const currentUrl = window.location.href;
+  navigator.clipboard
+    .writeText(currentUrl)
+    .then(() => {
+      alert("Link copied to clipboard!");
+      closeSharePopup(); // Close the popup after copying
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+};
+
+const openSharePopup = () => {
+  showSharePopup.value = true;
+};
+
+const closeSharePopup = () => {
+  showSharePopup.value = false;
+};
 
 // Reviews data (static)
 const reviews = [
@@ -94,7 +152,9 @@ const ratingDistribution = [
     <div class="min-h-screen px-4 sm:pt-5 lg:pt-10 md:pb-16">
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center py-20">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+        ></div>
       </div>
 
       <!-- Content when not loading -->
@@ -107,7 +167,9 @@ const ratingDistribution = [
 
         <!-- Business Details -->
         <div class="w-[90%] mx-auto lg:max-w-[780px] xl:max-w-[1025px]">
-          <div class="flex flex-col mt-8 gap-y-4 lg:gap-y-6 xl:gap-y-10 xl:mt-12">
+          <div
+            class="flex flex-col mt-8 gap-y-4 lg:gap-y-6 xl:gap-y-10 xl:mt-12"
+          >
             <div class="flex gap-x-4 sm:items-end">
               <div class="sm:flex items-end gap-x-2 sm:gap-x-4">
                 <h1
@@ -121,21 +183,12 @@ const ratingDistribution = [
               </div>
 
               <div class="flex gap-x-4 mt-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="size-5 stroke-black hover:fill-red-500 cursor-pointer transition-colors duration-200"
-                  viewBox="0 0 256 256"
-                  fill="transparent"
-                >
-                  <path
-                    d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                    stroke-width="10"
-                  ></path>
-                </svg>
+                <!-- Share Button (SVG) -->
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="size-5 hover:fill-primaryColor cursor-pointer"
                   viewBox="0 0 256 256"
+                  @click="openSharePopup"
                 >
                   <path
                     d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"
@@ -250,7 +303,7 @@ const ratingDistribution = [
             <!-- Reviews and Ratings Section (UI Only) -->
             <div class="mt-12 space-y-6">
               <h2 class="text-2xl font-bold text-darkBlue">
-                Reviews And Ratings ({{company?.rating_avg}})
+                Reviews And Ratings ({{ company?.rating_avg }})
               </h2>
 
               <!-- Rating Distribution -->
@@ -384,6 +437,43 @@ const ratingDistribution = [
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Share Popup -->
+      <div
+        v-if="showSharePopup"
+        class="fixed inset-0 flex items-center justify-center z-50"
+      >
+        <!-- Subtle Backdrop -->
+        <div class="absolute inset-0 bg-black opacity-25" @click="closeSharePopup"></div>
+
+        <!-- Floating Card -->
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md  relative">
+          <h3 class="text-2xl font-semibold text-darkBlue mb-4">Share this Company</h3>
+          <div class="flex justify-around">
+            <button @click="shareToSocialMedia('facebook')" class=" cursor-pointer text-blue-600 hover:text-blue-800 transition duration-200">
+              <i class="fab fa-facebook-f mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('twitter')" class=" cursor-pointer text-blue-400 hover:text-blue-600 transition duration-200">
+              <i class="fab fa-twitter mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('linkedin')" class=" cursor-pointer text-blue-800 hover:text-blue-900 transition duration-200">
+              <i class="fab fa-linkedin-in mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('telegram')" class=" cursor-pointer text-blue-500 hover:text-blue-700 transition duration-200">
+              <i class="fab fa-telegram-plane mr-2"></i> 
+            </button>
+            <button @click="copyRoute" class="text-gray-600 cursor-pointer hover:text-gray-800 transition duration-200">
+              <i class="fas fa-link mr-2"></i> Copy  
+            </button>
+          </div>
+          <button
+            @click="closeSharePopup"
+            class="mt-4 px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100 transition duration-200"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

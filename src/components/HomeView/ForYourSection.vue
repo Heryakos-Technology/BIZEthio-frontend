@@ -92,7 +92,7 @@ function generateStars(rating) {
           class="w-full h-[250px] hover:scale-105 transition-all duration-300 ease-linear bg-cover rounded-t-xl"
           :style="{ backgroundImage: `url(${getImageUrl(item.images)})` }"
         ></div>
-        <div class="mt-3 space-y-2">
+        <div class="mt-3 space-y-2 pl-2">
           <div class="flex">
             <div
               v-for="(star, index) in generateStars(item.rating_avg)"
@@ -133,7 +133,7 @@ function generateStars(rating) {
 
             <p class="mx-3">({{ item.rating_avg || 0 }})</p>
           </div>
-          <h1 class="font-semibold ml-1">{{ item.name }}</h1>
+          <h1 class="font-semibold ml-1 uppercase">{{ item.name }}</h1>
           <div class="flex gap-x-2 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
