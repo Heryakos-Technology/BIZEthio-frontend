@@ -53,7 +53,7 @@ export const useReviewStore = defineStore("reviewStore", {
         body: JSON.stringify(reviewData),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.errors) {
         this.errors = data.errors;
       } else {

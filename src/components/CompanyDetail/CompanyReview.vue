@@ -35,7 +35,7 @@ const submitReview = async () => {
   }
 
   const reviewData = {
-    user_id: userId.value,
+    user_id: 7,
     company_id: props.company.id,
     rating: rating.value,
     comment: comment.value,
@@ -43,12 +43,12 @@ const submitReview = async () => {
     is_spam: false,
   };
 
-  isSubmitting.value = true; // Set submitting state to true
+  isSubmitting.value = true;  
 
   try {
     const response = await reviewStore.createReview(reviewData);
 
-    console.log(errors)
+    console.log(response.message)
 
     if (response && response.error) {
       // Check for specific error messages
@@ -208,10 +208,8 @@ const ratingDistribution = ref([
         </div>
       </div>
       <p class="text-sm text-gray-600 mt-2">{{ review.comment }}</p>
-      <div class="flex items-center justify-between mt-2">
-        <span class="text-sm text-gray-600">
-          Helpful? Yes (2) No (0)
-        </span>
+      <div class="flex items-center justify-end mt-2">
+        
         <span class="text-sm text-gray-600">{{ review.date }}</span>
       </div>
     </div>
