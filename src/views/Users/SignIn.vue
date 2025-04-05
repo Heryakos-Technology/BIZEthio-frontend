@@ -781,8 +781,12 @@ const handleLogin = async () => {
 
       console.log("Token from backend:", backendToken);
       console.log("User from backend:", userData);
-    //  localStorage.setItem("token", backendToken);
+
+    //localStorage.setItem("token", backendToken);
       localStorage.setItem("user_id", userData.id); 
+      localStorage.setItem("user_role", userData.role);
+      localStorage.setItem("user_name", userData.name);
+
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${backendToken}`;
 
