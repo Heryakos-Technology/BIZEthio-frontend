@@ -372,7 +372,7 @@
                   @drop.prevent="handleFileDrop"
                   @click="triggerFileInput"
                 >
-                  <img src="/dragfile.png" alt="" class="w-1/2 mx-auto" />
+                  <img src="/dragfile.png" alt="" class="w-1/2 ml-3" />
                 </div>
                 <input
                   type="file"
@@ -424,9 +424,9 @@
         </div> -->
             <!-- </div> -->
             <!-- </div> -->
-            <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">
+            <!-- <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">
               {{ errors.profile_picture_url }}
-            </div>
+            </div> -->
             <!-- <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p> -->
 
             <!-- <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/> -->
@@ -461,7 +461,7 @@
                     !isButtonDisabled,
                 }"
                 @click="handleRegister"
-                class="bg-cyan-700 text-white px-10 py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer"
+                class="bg-cyan-700 text-white  py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer"
               >
                 {{ submitText }}
               </button>
@@ -544,21 +544,21 @@ export default {
     const isCheckboxChecked = ref(false);
     const submitText = ref("Submit");
 
-    const errorss = ref("");
+ 
     const validate = () => {
       errors.value = "";
       if (!model.value.user.password)
         errors.value.password = "password is required.";
       if (!model.value.user.password_confirmation)
         errors.value.password_confirmation = "password is required.";
-      if (!model.value.user.profile_picture_url)
-        errors.value.profile_picture_url = "profile picture is required.";
+      // if (!model.value.user.profile_picture_url)
+      //   errors.value.profile_picture_url = "profile picture is required.";
     };
     const isButtonDisabled = computed(() => {
       return (
         !model.value.user.password ||
-        !model.value.user.password_confirmation ||
-        !model.value.user.profile_picture_url
+        !model.value.user.password_confirmation 
+       // !model.value.user.profile_picture_url
       );
     });
     watch(isCheckboxChecked, (newValue) => {
@@ -658,6 +658,7 @@ export default {
         userPhoto.value = response.data.secure_url;
         console.log("Upload response:", userPhoto.value);
         model.value.user.profile_picture_url = response.data.secure_url;
+        console.log('profile picture',model.value.user.profile_picture_url )
       } catch (error) {
         uploaded.value = "Failed to upload photo";
         console.error("Error uploading file:", error.response.data);
@@ -705,6 +706,7 @@ export default {
       const role = model.value.user.role;
       const profile_picture_url = model.value.user.profile_picture_url;
       const password_confirmation = model.value.user.password_confirmation;
+      
       const checkbox = document.getElementById("myCheckbox");
 
       if (!isCheckboxChecked.value) {
@@ -724,7 +726,6 @@ export default {
         phone_number,
         city,
         sub_city,
-        
         verification_status,
         is_banned,
         role,
@@ -748,7 +749,7 @@ export default {
 
           await sendEmailVerification(userCredential.user);
           alert("A verification email has been sent. Please check your inbox.");
-
+submitText.value = "Submit";
           localStorage.setItem("temporaryPassword", tempPassword);
 
           return;
@@ -757,13 +758,7 @@ export default {
 
           if (currentUser.emailVerified) {
             const tempPassword = localStorage.getItem("temporaryPassword");
-            const success = await updateUserPassword(
-              email,
-              tempPassword,
-              password
-            );
-
-            if (success) {
+            try{
               const response = await axios.post(
                 `https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`,
                 userData,
@@ -785,12 +780,26 @@ export default {
               localStorage.removeItem("sub_city");
               localStorage.removeItem("pendingUserData");
               localStorage.removeItem("temporaryPassword");
+              localStorage.removeItem("registereduser");
               model.value.user.password = "";
               model.value.user.password_confirmation = "";
               model.value.user.profile_picture_url = "";
 
               isLoading.value = "Submit";
+              alert('Registered Successfully')
               router.push("/signin");
+
+            }catch(error){
+              errors.value = error.response.data.message
+            }
+             const success = await updateUserPassword(
+              email,
+              tempPassword,
+              password
+            );
+
+            if (success) {
+           console.log('success')
             }
           } else {
             alert(
@@ -807,9 +816,7 @@ export default {
           "Error during registration:",
           error.message || "An error occurred. Please try again."
         );
-        errors.value = error.response
-          ? error.response.data.message
-          : "The Email is already taken.";
+        //errors.value = error.message
         submitText.value = "Submit";
         model.value.user.password = "";
         model.value.user.password_confirmation = "";
@@ -902,6 +909,7 @@ export default {
       handleFileDrop,
       triggerFileInput,
       handleDragOver,
+      
 
       // handleRegister,
     };

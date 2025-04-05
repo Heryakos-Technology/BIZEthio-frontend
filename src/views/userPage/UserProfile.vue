@@ -17,7 +17,7 @@ onMounted(() => {
 const handleLogout = async () => {
   try {
     await authStore.logout();
-    // The router navigation is handled in the store
+    
   } catch (error) {
     console.error("Logout failed:", error);
   }
