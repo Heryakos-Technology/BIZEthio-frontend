@@ -567,14 +567,14 @@ export default {
       // User already exists, store user ID and redirect
       localStorage.setItem('user_id', response.userId);
       console.log("User already exists. Redirecting to user profile...");
-      router.push("/UserLanding");
+      router.push("/UserProfile");
       loading.value = false
       signInMessage.value = "Sent";
     } else {
       // User does not exist, register the user
       await registerUser(user, token);
       console.log("User registered successfully. Redirecting to user profile...");
-      router.push("/UserLanding");
+      router.push("/UserProfile");
       loading.value = false
       signInMessage.value = "Sent";
     }
@@ -623,13 +623,13 @@ const signInWithFacebook = async () => {
       // User already exists, store user ID and redirect
       localStorage.setItem('user_id', response.userId);
       console.log("User already exists. Redirecting to user profile...");
-      router.push("/UserLanding");
+      router.push("/UserProfile");
       signInMessage.value = "Sent";
     } else {
       // User does not exist, register the user
       await registerUser(user, token);
       console.log("User registered successfully. Redirecting to user profile...");
-      router.push("/UserLanding");
+      router.push("/UserProfile");
       signInMessage.value = "Sent";
     }
 
@@ -735,7 +735,7 @@ const registerUser = async (user, token) => {
 //     if (token) {
 //             signInMessage.value = "Sent";
 //             console.log("Redirecting to user profile...");
-//             router.push("/UserLanding");
+//             router.push("/UserProfile");
 //           }
 //     console.log("User Token:", token); 
 //   } catch (error) {
@@ -793,7 +793,7 @@ const handleLogin = async () => {
       if (token) {
         
         console.log("Redirecting to user profile...");
-        router.push("/UserLanding");
+        router.push("/UserProfile");
         loading2.value = false
         signInMessage.value = "Sent";
       }
@@ -841,7 +841,7 @@ const handleLogin = async () => {
     //       if (token) {
     //         signInMessage.value = "Sent";
     //         console.log("Redirecting to user profile...");
-    //         router.push("/UserLanding");
+    //         router.push("/UserProfile");
     //       }
     //     } catch (error) {
     //       console.error(error);
