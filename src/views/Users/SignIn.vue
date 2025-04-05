@@ -603,6 +603,7 @@ const facebookProvider = new FacebookAuthProvider();
 
 const signInWithFacebook = async () => {
   try {
+    loading.value = true
     const result = await signInWithPopup(auth, facebookProvider);
     const user = result.user;
     console.log("User signed in:", user);
@@ -624,6 +625,7 @@ const signInWithFacebook = async () => {
       localStorage.setItem('user_id', response.userId);
       console.log("User already exists. Redirecting to user profile...");
       router.push("/UserLanding");
+      loading.value = false
       signInMessage.value = "Sent";
     } else {
       // User does not exist, register the user
@@ -635,6 +637,7 @@ const signInWithFacebook = async () => {
 
   } catch (error) {
     if (error.code === 'auth/account-exists-with-different-credential') {
+      loading.value = false
       // Handle the case where the user is linked to another provider
       const email = error.email; // Get the email from the error
       const methods = await fetchSignInMethodsForEmail(auth, email); // Check linked providers
@@ -643,6 +646,7 @@ const signInWithFacebook = async () => {
       signInMessage.value = "This email is linked to another account. Please sign in with that provider.";
     } else {
       console.error("Error signing in with Facebook:", error);
+      loading.value = false
       signInMessage.value = ""; // Clear loading message on error
     }
   }
