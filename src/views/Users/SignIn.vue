@@ -276,7 +276,7 @@
             <button
               @click="
                 () => {
-                  handleLogin
+                  handleLogin();
                 }
               "
               class="bg-cyan-700 text-white px-8 py-2 rounded-sm"
