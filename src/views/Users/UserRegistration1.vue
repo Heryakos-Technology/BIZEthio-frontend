@@ -48,7 +48,7 @@
               type="email"
               class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12"
               v-model="model.user.email"
-              @input="validate"
+              @input="handleInput "
             />
             <div v-if="errors.email" class="text-red-400 mt-1">
               {{ errors.email }}
@@ -137,6 +137,7 @@
 
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
             <button
+            v-if="!registeredUser"
               :disabled="isButtonDisabled"
               :class="{
                 'bg-gray-200  cursor-not-allowed': isButtonDisabled,
@@ -149,7 +150,16 @@
               {{ continueButton }}
             </button>
           </div>
-
+          <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+ 
+ <button
+   v-if="registeredUser"
+   class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+   @click="registeredUser2"
+ >
+   Next
+ </button>
+</div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
             <p class="md:text-lg text-sm text-center">
               Do you have an account?
@@ -251,6 +261,7 @@
                   <div>
                     <p>Email</p>
                   </div>
+                 
                   <div>
                     <p class="text-red-400 mt-1 ml-1">*</p>
                   </div>
@@ -260,7 +271,7 @@
                     type="text"
                     class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-13/13 md:h-12"
                     v-model="model.user.email"
-                    @input="validate"
+                    @input="handleInput"
                   />
                 </div>
                 <div v-if="errors.email" class="text-red-400 mt-1">
@@ -352,19 +363,30 @@
                 </div>
               </div>
               <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-                <button
-                  :disabled="isButtonDisabled"
-                  :class="{
-                    'bg-gray-200  cursor-not-allowed': isButtonDisabled,
-                    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer':
-                      !isButtonDisabled,
-                  }"
-                  class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
-                  @click="registerUser"
-                >
-                  {{ continueButton }}
-                </button>
-              </div>
+
+    <button
+      v-if="!registeredUser"
+      :disabled="isButtonDisabled"
+      :class="{
+        'bg-gray-200 cursor-not-allowed': isButtonDisabled,
+        'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled,
+      }"
+      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+      @click="registerUser"
+    >
+      {{ continueButton }}
+    </button>
+  </div>
+  <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+ 
+    <button
+      v-if="registeredUser"
+      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+      @click="registeredUser2"
+    >
+      Next
+    </button>
+  </div>
               <!-- <p v-if="isButtonDisabled">The button is currently disabled.</p>
 <p v-else>The button is enabled.</p> -->
               <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
@@ -378,8 +400,10 @@
                       }
                     "
                     >Login</span
+                  
                   >
                 </p>
+               
               </div>
             </div>
           </div>
@@ -422,12 +446,37 @@ export default {
     const errorss = ref("");
     const router = useRouter();
     const errors = ref({});
-    const continueButton = ref("Continue");
+    const registeredUser = ref(false)
+    const continueButton = ref("Continue")
+    const currentEmail = ref('');
+    const storedEmail = ref('');
+    const handleInput = () => {
+      validate();
+      updateCurrentEmail();
+    };
     onMounted(() => {
       Object.keys(model.value.user).forEach((key) => {
         model.value.user[key] = localStorage.getItem(key) || "";
       });
-    });
+      registeredUser.value =  localStorage.getItem('registereduser')
+     console.log('registerd user',localStorage.getItem('registereduser'))
+     
+    }); 
+
+    const updateCurrentEmail = () => {
+      storedEmail.value = localStorage.getItem('email'); 
+     console.log('stored email',storedEmail.value)
+     // Adjust this key as needed
+     currentEmail.value = model.value.user.email
+     console.log('email',currentEmail.value)
+      currentEmail.value = model.value.user.email;
+      registeredUser.value = false
+    };
+  // Check if the email has changed
+  if (currentEmail !== storedEmail) {
+    registeredUser.value = false; // Set registeredUser to false if the email has changed
+  }
+
 
     const validate = () => {
       errors.value = {};
@@ -505,6 +554,17 @@ export default {
     //   }
     //   router.push("/next");
     // };
+    const registeredUser2 = ()=>{
+    
+  if (Object.keys(errors.value).length > 0) return;
+
+  // Store user data in local storage
+  Object.keys(model.value.user).forEach((key) => {
+    localStorage.setItem(key, model.value.user[key]);
+  });
+
+      router.push("/next");
+    }
     const registerUser = async () => {
   validate();
   if (Object.keys(errors.value).length > 0) return;
@@ -555,26 +615,31 @@ export default {
       token
     };
     console.log("User Data with Token:", userWithToken);
-
-    // Optionally store this combined object in localStorage
-    localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
-
-    // Send email verification
+    localStorage.setItem("userWithToken", JSON.stringify(userWithToken));   
     await sendEmailVerification(userCredential.user);
     alert("A verification email has been sent. Please check your inbox.");
-
-    // Redirect to the next page after successful registration
+    registeredUser.value = true
+    localStorage.setItem('registereduser',registeredUser.value )
+    
     continueButton.value = "Sent";
     router.push("/next");
   } catch (error) {
-    console.error(
+    console.error( 
+      
       "Error during registration:",
       error.message || "An error occurred. Please try again."
     );
     errors.value = error.response
-      ? error.response.data.message
-      : "An error occurred. Please try again.";
-    continueButton.value = "Failed";
+    ? error.response.data.message
+    : "An error occurred. Please try again.";
+    alert(error.message)
+    continueButton.value = "Submit";
+
+// Use setTimeout to change the value back to "Submit" after 1 second
+// setTimeout(() => {
+//     continueButton.value = "Submit";
+// }, 1000);
+
   }
 };
     watch(isButtonDisabled, (newValue) => {
@@ -593,6 +658,11 @@ export default {
       errors,
       validate,
       continueButton,
+      registeredUser,
+      registeredUser2,
+      currentEmail,
+      handleInput
+
     };
   },
 };

@@ -99,7 +99,7 @@
                 </p>
               </div>
             </div>
-            <div class="w-2/3 mx-auto mt-7">
+            <div class="w-2/3 mx-auto mt-7" v-if="!loading2">
               <button
                 @click="
                   () => {
@@ -118,6 +118,9 @@
                 {{ signInMessage }}
               </button>
             </div>
+            <div v-if="loading2" class="w-1/2 mx-auto py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div>
             <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm w-12/10 mx-auto -ml-4 lg:text-sm">
                 Don't have an account ?
@@ -135,7 +138,7 @@
                 Or connect with social media
               </p>
             </div>
-            <div class="w-4/5 mx-auto text-white bg-cyan mt-5">
+            <div class="w-4/5 mx-auto text-white bg-cyan mt-5" v-if="!loading">
               <div class="w-3/4">
                 <button
                   @click="signInWithGoogle"
@@ -171,6 +174,9 @@
                 </button>
               </div>
             </div>
+            <div v-if="loading" class="w-1/2 mx-auto py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"></div>
+        </div>
           </div>
 
           <div
@@ -295,7 +301,7 @@
               Or connect with social media
             </p>
           </div>
-          <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
+          <div class="w-4/5 mx-auto text-white bg-cyan mt-10" v-if="!loading">
             <div>
               <button
                 @click="signInWithGoogle"
@@ -331,6 +337,9 @@
               </button>
             </div>
           </div>
+          <div v-if="loading" class="w-1/2 mx-auto py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div>
         </div>
       </div>
 
@@ -436,7 +445,7 @@
                   Or connect with social media
                 </p>
               </div>
-              <div class="w-4/5 mx-auto text-white bg-cyan mt-10">
+              <div class="w-4/5 mx-auto text-white bg-cyan mt-10"  v-if="!loading">
                 <div>
                   <button
                     @click="signInWithGoogle"
@@ -472,6 +481,9 @@
                   </button>
                 </div>
               </div>
+              <div v-if="loading" class="w-1/2 mx-auto py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div>
             </div>
           </div>
           <!-- <div class="w-1 h-full bg-black transform  absolute left-171 rotate-6">
@@ -480,6 +492,17 @@
         </div>
       </div>
     </div>
+    <!--  -->
+    <!-- <div v-if="loading" class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div> -->
+        <!-- <div v-else-if="!userInformations || userInformations == null || userInformations == ''" class=" justify-center items-center py-20 -mt-8">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+          </svg>
+          <p class="text-gray-400 ml-32 lg:ml-76 ">no user information yet!</p>
+        </div> -->
+
   </UserLayout>
 </template>
 
@@ -509,6 +532,8 @@ export default {
     const emailError = ref("");
     const passwordError = ref("");
     const isPasswordVisible = ref(false);
+    const loading = ref(false)
+    const loading2 = ref(false)
 
     const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === "" || password.value.trim() === "";
@@ -521,89 +546,118 @@ export default {
     const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
+   loading.value = true
     const user = result.user;
     console.log("User signed in:", user);
 
     // Get the Firebase token
     const token = await user.getIdToken();
     console.log("Firebase Token:", token); 
-    localStorage.setItem('token',token)
+    localStorage.setItem('token', token);
 
     if (!token) {
       console.error("Failed to retrieve token.");
       return;
     }
 
-    // Register the user with the backend, including the token
-    await registerUser(user, token);
-    
+    // Check if the user already exists in your backend
+    const response = await checkUserExists(user.email); // Implement this function
+
+    if (response.exists) {
+      // User already exists, store user ID and redirect
+      localStorage.setItem('user_id', response.userId);
+      console.log("User already exists. Redirecting to user profile...");
+      router.push("/UserLanding");
+      loading.value = false
+      signInMessage.value = "Sent";
+    } else {
+      // User does not exist, register the user
+      await registerUser(user, token);
+      console.log("User registered successfully. Redirecting to user profile...");
+      router.push("/UserLanding");
+      loading.value = false
+      signInMessage.value = "Sent";
+    }
+
   } catch (error) {
     console.error("Error signing in with Google:", error);
+    loading.value = false
+    alert(error)
   }
 };
 
+// Example function to check if user exists
+const checkUserExists = async (email) => {
+  try {
+    const response = await axios.post('https://your-backend-url/api/check-user', { email });
+    return { exists: response.data.exists, userId: response.data.userId };
+  } catch (error) {
+    console.error("Error checking user existence:", error);
+    return { exists: false };
+  }
+};
 
 const auth = getAuth();
 const facebookProvider = new FacebookAuthProvider();
-
 
 
 const signInWithFacebook = async () => {
   try {
     const result = await signInWithPopup(auth, facebookProvider);
     const user = result.user;
-    console.log('User signed in:', user);
+    console.log("User signed in:", user);
 
+    // Get the Firebase token
     const token = await user.getIdToken();
-    console.log("Firebase Token:", token);
-    localStorage.setItem('token',token)
+    localStorage.setItem('token', token);
 
     if (!token) {
       console.error("Failed to retrieve token.");
       return;
     }
 
-    await registerUser(user, token); // Ensure registerUser properly handles the token
+    // Check if the user already exists in your backend
+    const response = await checkUserExists(user.email);
+
+    if (response.exists) {
+      // User already exists, store user ID and redirect
+      localStorage.setItem('user_id', response.userId);
+      console.log("User already exists. Redirecting to user profile...");
+      router.push("/UserLanding");
+      signInMessage.value = "Sent";
+    } else {
+      // User does not exist, register the user
+      await registerUser(user, token);
+      console.log("User registered successfully. Redirecting to user profile...");
+      router.push("/UserLanding");
+      signInMessage.value = "Sent";
+    }
+
   } catch (error) {
-    console.error("Error signing in with Facebook:", error);
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      // Handle the case where the user is linked to another provider
+      const email = error.email; // Get the email from the error
+      const methods = await fetchSignInMethodsForEmail(auth, email); // Check linked providers
 
-    if (error.code === "auth/account-exists-with-different-credential") {
-      const email = error.customData?.email; // Check email in customData
-      const pendingCred = FacebookAuthProvider.credentialFromError(error); // Store pending Facebook credential
-
-      if (email) {
-        try {
-          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-          console.log(`Account exists with the following providers: ${signInMethods.join(', ')}`);
-
-          if (signInMethods.includes('google.com')) {
-            const provider = new GoogleAuthProvider();
-            const googleResult = await signInWithPopup(auth, provider);
-            const existingUser = googleResult.user;
-            console.log('User signed in with Google:', existingUser);
-
-            // Link the Facebook credential after successful Google sign-in
-            if (pendingCred) {
-              await existingUser.linkWithCredential(pendingCred);
-              console.log("Facebook account linked to Google account.");
-            }
-
-            await registerUser(existingUser, await existingUser.getIdToken());
-          } else {
-            console.error("Existing provider not handled.");
-            alert("Please sign in with the provider you used before.");
-          }
-        } catch (fetchError) {
-          console.error('Error fetching sign-in methods:', fetchError);
-        }
-      } else {
-        console.error("No email identifier found in the error.");
-        alert("An account with this email exists but we can't determine the provider. Please sign in using another method.");
-      }
+      console.log("User exists with different credential providers:", methods);
+      signInMessage.value = "This email is linked to another account. Please sign in with that provider.";
+    } else {
+      console.error("Error signing in with Facebook:", error);
+      signInMessage.value = ""; // Clear loading message on error
     }
   }
 };
 
+// Example function to check if user exists
+// const checkUserExists = async (email) => {
+//   try {
+//     const response = await axios.post('https://your-backend-url/api/check-user', { email });
+//     return { exists: response.data.exists, userId: response.data.userId };
+//   } catch (error) {
+//     console.error("Error checking user existence:", error);
+//     return { exists: false };
+//   }
+// };
 
 const registerUser = async (user, token) => {
   try {
@@ -611,8 +665,13 @@ const registerUser = async (user, token) => {
       name: user.displayName,
       email: user.email,
       token: token, 
+      // phone_number:'0988283088',
+      is_banned:1,
+      role: "user",
+      verification_status: "unverified",
     });
-    console.log('User registered in backend:', response.data);
+    console.log('User registered in backend:', response.data.user);
+    localStorage.setItem('user_id',response.data.user.id)
   } catch (error) {
     console.error('Error registering user:', error.response ? error.response.data : error.message);
   }
@@ -676,7 +735,7 @@ const registerUser = async (user, token) => {
 //     if (token) {
 //             signInMessage.value = "Sent";
 //             console.log("Redirecting to user profile...");
-//             router.push("/UserProfile");
+//             router.push("/UserLanding");
 //           }
 //     console.log("User Token:", token); 
 //   } catch (error) {
@@ -696,25 +755,25 @@ const handleLogin = async () => {
   }
 
   try {
-    // First, call handleLogin2 to log in with Firebase and get the token
+   
     const { userCredential, role } = await login(email.value, password.value);
     const user = userCredential.user;
 
-    // Check if user is authenticated
+   
     if (user) {
       const token = await user.getIdToken();
       localStorage.setItem("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      alert("Logged in successfully!");
-      signInMessage.value = "Loading";
+      //alert("Logged in successfully!");
+      signInMessage.value = "Continue";
       console.log('token', token);
       console.log("Redirecting to user profile with role:", role);
-
-      // Now, call your backend with the token
+      
+      loading2.value = true
       const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
         email: email.value,
         password: password.value,
-        token: token // Include the token from Firebase
+        token: token 
       });
 
       const backendToken = response.data.token;
@@ -722,24 +781,35 @@ const handleLogin = async () => {
 
       console.log("Token from backend:", backendToken);
       console.log("User from backend:", userData);
+
     //localStorage.setItem("token", backendToken);
       localStorage.setItem("user_id", userData.id); 
       localStorage.setItem("user_role", userData.role);
       localStorage.setItem("user_name", userData.name);
+
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${backendToken}`;
 
       if (token) {
         
         console.log("Redirecting to user profile...");
-        router.push("/UserProfile");
+        router.push("/UserLanding");
+        loading2.value = false
         signInMessage.value = "Sent";
       }
     } else {
       alert("User is not authenticated.");
+      loading2.value = false
+      signInMessage.value = "Submit";
+      email.value = '',
+      password.value = ''
     }
   } catch (error) {
+    signInMessage.value = "Submit";
     console.error("Login error:", error.message);
+    loading2.value = false
+     email.value = '',
+      password.value = ''
     alert(error.message);
   }
 };
@@ -771,7 +841,7 @@ const handleLogin = async () => {
     //       if (token) {
     //         signInMessage.value = "Sent";
     //         console.log("Redirecting to user profile...");
-    //         router.push("/UserProfile");
+    //         router.push("/UserLanding");
     //       }
     //     } catch (error) {
     //       console.error(error);
@@ -803,7 +873,9 @@ const handleLogin = async () => {
       authError,
       registerUser,
       togglePasswordVisibility,
-      isPasswordVisible
+      isPasswordVisible,
+      loading,
+      loading2
     };
   },
 };

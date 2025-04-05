@@ -24,6 +24,7 @@ const handleLogout = async () => {
 
   try {
     await authStore.logout();
+
   } catch (error) {
     console.error("Logout failed:", error);
   }
