@@ -140,7 +140,7 @@
                 <p class="">Email</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input v-model="companies.contact_email" type="text" @input="validateFields"
+              <input v-model="companies.contact_email" type="text" @input="handleEmail"
                 class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.contact_email" class="text-red-500 text-sm">
                 {{ errors.contact_email }}
@@ -272,113 +272,123 @@
                 Uploading...
               </p>
             </div>
-            </div>
-            <!-- end of image -->
+          </div>
+          <!-- end of image -->
 
-            <div class="lg:px-7 md:px-7 mt-4">
-              <div class="">
-                <div class="md:w-56 mt-6">
-                  <p class="md:text-s md:w-40 lg:-ml-3">Social Media Links</p>
-                </div>
-                <div></div>
-                <div class="lg:flex mt-4 -ml-3">
-                  <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
-                    class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
-                  <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
-                    class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
-                  <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
-                    class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4" />
-                </div>
+          <div class="lg:px-7 md:px-7 mt-4">
+            <div class="">
+              <div class="md:w-56 mt-6">
+                <p class="md:text-s md:w-40 lg:-ml-3">Social Media Links</p>
+              </div>
+              <div></div>
+              <div class="lg:flex mt-4 -ml-3">
+                <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4" />
               </div>
             </div>
-            <div class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-              <button @click="registerCompany"
-                class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300  px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
-                {{ this.changeNaxt }}
-              </button>
-            </div>
           </div>
-        <!-- <CompRegformview /> -->
+          <div  v-if="!registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
+  <button @click="registerCompany"
+ 
+    class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+    {{ changeNaxt }}
+  </button>
+  <p v-if="emailError" class="text-red-500 mt-2">{{ emailError }}</p>
+</div>
+<div v-if="registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
+<button @click="registeredUser2"
 
+    class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+    {{ changeNaxt }}
+  </button>
+  <p v-if="emailError" class="text-red-500 mt-2">{{ emailError }}</p>
+</div>
+</div>
+        
         <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
           <!-- <CompRegPasswordView /> -->
           <p class="text-center text-3xl font-bold mt-16">
-              Welcome to <span class="text-[#2178AC]">BIZEthio</span>
-            </p>
-            <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
-              <div class="w-full">
-                <div class="px-4 mt-4 mx-auto">
-                  <div class="flex">
-                    <p>Password</p>
-                    <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-                  </div>
-                  <div class="relative">
-                    <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
-                      @input="handlePasswordInput"
-                      class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
-                    <span @click="togglePasswordVisibility"
-                      class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                      <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
-                        " class="text-gray-800"></i>
-                    </span>
-                  </div>
-                  <p v-if="errors.password" class="text-red-500 text-sm">
-                    {{ errors.password }}
-                  </p>
-                  <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
-                    {{ passwordStrengthLabel }}
-                  </div>
+            Welcome to <span class="text-[#2178AC]">BIZEthio</span>
+          </p>
+          <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
+            <div class="w-full">
+              <div class="px-4 mt-4 mx-auto">
+                <div class="flex">
+                  <p>Password</p>
+                  <p class="text-red-600 text-2xl font-medium ml-2">*</p>
                 </div>
-
-                <div class="px-4 mt-4 mx-auto">
-                  <div class="flex">
-                    <p>Confirm Password</p>
-                    <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-                  </div>
-                  <div class="relative">
-                    <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
-                      :type="showConfirmPasswordField ? 'text' : 'password'"
-                      class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                      :class="[
-                        'outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
-                        isConfirmPasswordFocused &&
-                          companies.password &&
-                          companies.password !== companies.password_confirmation
-                          ? 'border-red-500'
-                          : 'border-[#60b5e6]',
-                      ]" @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
-                    <span @click="toggleConfirmPasswordVisibility"
-                      class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                      <i :class="showConfirmPasswordField
-                          ? 'fas fa-eye-slash'
-                          : 'fas fa-eye'
-                        " class="text-gray-800"></i>
-                    </span>
-                  </div>
-                  <p v-if="errors.password_confirmation" class="text-red-500 text-sm">
-                    {{ errors.password_confirmation }}
-                  </p>
+                <div class="relative">
+                  <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
+                    @input="handlePasswordInput"
+                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+                  <span @click="togglePasswordVisibility"
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
+                      " class="text-gray-800"></i>
+                  </span>
+                </div>
+                <p v-if="errors.password" class="text-red-500 text-sm">
+                  {{ errors.password }}
+                </p>
+                <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
+                  {{ passwordStrengthLabel }}
                 </div>
               </div>
 
-              <div>
-                <button @click="hidepassword"
-                  class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
-                  Back
-                </button>
-              </div>
-              <p v-if="showRegistrationError" class="text-red-600">An error occured. please try again!</p>
-              <div>
-                <button @click="submitForm"
-                  class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-20 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
-                  {{ this.changeRegister }}
-                </button>
+              <div class="px-4 mt-4 mx-auto">
+                <div class="flex">
+                  <p>Confirm Password</p>
+                  <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+                </div>
+                <div class="relative">
+                  <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
+                    :type="showConfirmPasswordField ? 'text' : 'password'"
+                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+                    :class="[
+                      'outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
+                      isConfirmPasswordFocused &&
+                        companies.password &&
+                        companies.password !== companies.password_confirmation
+                        ? 'border-red-500'
+                        : 'border-[#60b5e6]',
+                    ]" @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
+                  <span @click="toggleConfirmPasswordVisibility"
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i :class="showConfirmPasswordField
+                      ? 'fas fa-eye-slash'
+                      : 'fas fa-eye'
+                      " class="text-gray-800"></i>
+                  </span>
+                </div>
+                <p v-if="errors.password_confirmation" class="text-red-500 text-sm">
+                  {{ errors.password_confirmation }}
+                </p>
               </div>
             </div>
+
+            <div>
+              <button @click="hidepassword"
+                class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
+                Back
+              </button>
+            </div>
+            <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!</p>
+            <div class="-mt-2">
+              <button @click="submitForm"
+                class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
+                {{ this.changeRegister }}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+      </div>
 
-    </div>
+    
   </UserLayout>
 </template>
 <script>
@@ -387,10 +397,12 @@ import axios from "axios";
 // import CompRegformview from '@/components/CompRegistration/CompRegformview.vue'
 import { login, register, updateUserPassword } from "../auth";
 import UserLayout from "@/layout/UserLayout.vue";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  sendEmailVerification,
+  fetchSignInMethodsForEmail,
+  sendEmailVerification
 
 } from "firebase/auth";
 
@@ -442,6 +454,7 @@ export default {
           "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
         status: "pending",
         rating_avg: "5",
+        // token : '',
 
         images: {},
       },
@@ -462,6 +475,7 @@ export default {
       ImageButton: true,
       errors: {
         contact_phone: "",
+        password:''
       },
       passwordStrengthMessages: [],
       contact_phone: "",
@@ -469,10 +483,43 @@ export default {
       showConfirmPasswordField: false,
       changeNaxt: "next",
       changeRegister: "Register Company",
-      showRegistrationError: false
+      showRegistrationError: false,
+      emailInUse: false,
+      registeredUser: false,
+      currentEmail: '',
+      storedEmail: ''
+      
+
     };
   },
   methods: {
+    handleEmail() {
+  if (this.validateFields()) {
+    this.updateCurrentEmail();
+  } else {
+    console.log('Validation failed');
+  }
+},
+
+registeredUser2() {
+  this.showPassword = true;
+},
+
+updateCurrentEmail() {
+  this.storedEmail = localStorage.getItem('email');
+  console.log('Stored email:', this.storedEmail);
+
+  // Assuming companies.contact_email is correctly defined and accessible
+  if (this.companies && this.companies.contact_email) {
+    this.currentEmail = this.companies.contact_email;
+    console.log('Current email:', this.currentEmail);
+  } else {
+    console.error('Contact email is not available');
+  }
+
+  this.registeredUser = false;
+},
+
     togglePasswordVisibility() {
       this.showPasswordField = !this.showPasswordField;
     },
@@ -591,7 +638,7 @@ export default {
       return Object.keys(this.errors).length > 0;
     },
 
-    nextStep() {
+    nextShow() {
       this.validateFields();
       if (this.checkButtonState()) {
         console.log("Form is invalid, please correct the errors.");
@@ -599,43 +646,59 @@ export default {
         this.nextStep = "next";
         this.showPassword = true;
         this.validateFields();
-        this.$refs.cardSection.scrollIntoView({ behavoir: 'smooth', block: 'start' })
+        // this.$refs.cardSection.scrollIntoView({ behavoir: 'smooth', block: 'start' })
       }
     },
     async registerCompany() {
-      const companyData = {
-        contact_email: this.companies.contact_email,
-      };
+  const companyData = {
+    contact_email: this.companies.contact_email,
+    password: this.companies.password,
+  };
 
-      try {
-        this.changeNaxt = "loading...";
-        const tempPassword = Math.random().toString(36).slice(-8);
-        const auth = getAuth();
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          companyData.contact_email,
-          tempPassword
-        );
+  try {
+    this.changeNaxt = "loading...";
+    this.emailError = ""; 
 
-        await sendEmailVerification(userCredential.user);
-        alert("A verification email has been sent. Please check your inbox.");
-        localStorage.setItem("temporaryPassword", tempPassword);
+    const auth = getAuth();
 
-        alert("Please verify your email to complete your registration.");
-        continueButton.value = "Sent";
-      } catch (error) {
-        console.error(
-          "Error during registration:",
-          error.message || "An error occurred. Please try again."
-        );
-        this.errors = error.response
-          ? error.response.data.message
-          : "An error occurred. Please try again.";
-        this.nextStep();
-        this.changeNaxt = "next";
+   
+    const signInMethods = await fetchSignInMethodsForEmail(auth, companyData.contact_email);
+    if (signInMethods.length > 0) {
+ 
+      this.emailInUse = true; 
+      this.emailError = "Email is already in use. Please use a different email.";
+      this.changeNaxt = "Next Page"; 
+      return; 
+    }
 
-      }
-    },
+    const tempPassword = Math.random().toString(36).slice(-8);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      companyData.contact_email,
+      tempPassword
+    );
+
+    await sendEmailVerification(userCredential.user);
+  alert("A verification email has been sent. Please check your inbox.");
+
+  localStorage.setItem("temporaryPassword", tempPassword);
+
+  const token = await userCredential.user.getIdToken();
+  localStorage.setItem("firebaseToken", token);
+  console.log("User Token:", token);
+
+  localStorage.setItem("email", companyData.contact_email);
+  
+  localStorage.setItem("token", token);
+
+    alert("Please verify your email to complete your registration.");
+    this.changeNaxt = "Next"; 
+    this.nextShow()
+  } catch (error) {
+    console.error("Error during registration:", error.message);
+    this.emailError = error.message || "An error occurred. Please try again.";
+  }
+},
     async handleRegister() {
       const name = this.companies.name;
       const owner_name = this.companies.owner_name;
@@ -652,6 +715,7 @@ export default {
       const contact_email = this.companies.contact_email.trim().toLowerCase();
       const website = this.companies.website;
       const license_url = this.companies.license_url;
+      const token = localStorage.getItem('token')
 
       const socialMediaLinks = {
         facebook: this.companies.social_media_links || "",
@@ -669,8 +733,8 @@ export default {
         name,
         owner_name,
         description,
-        password,
-        password_confirmation,
+        // password,
+        // password_confirmation,
         operating_hours,
         category_id,
         address,
@@ -685,6 +749,7 @@ export default {
         status,
         rating_avg,
         images,
+        token
       };
 
       const auth = getAuth();
@@ -705,7 +770,7 @@ export default {
           return;
         } else {
           await currentUser.reload();
-
+          const password = this.companies.password
           if (currentUser.emailVerified) {
             const tempPassword = localStorage.getItem("temporaryPassword");
             const success = await updateUserPassword(
@@ -715,7 +780,7 @@ export default {
             );
 
             if (success) {
-              const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/companies`, companyData, {
+              const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/company/register`, companyData, {
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -762,6 +827,7 @@ export default {
     hidepassword() {
       this.showPassword = false;
       this.changeNaxt = "next";
+      this.registeredUser =true
     },
 
     triggerFileInput() {
@@ -830,16 +896,21 @@ export default {
         console.error(error);
       }
     },
+
     async fetchCountries() {
-      try {
-        const response = await axios.get("https://restcountries.com/v2/all");
-        this.countries = response.data;
-        console.log("countryyyy", this.countries);
-      } catch (error) {
-        this.error = "Failed to fetch countries.";
-        console.error(error);
+  try {
+    const response = await axios.get("https://api.countrylayer.com/v2/all", {
+      params: {
+        access_key: "40e89f1514cb8cc8aac3f4d45c0451ff" 
       }
-    },
+    });
+    
+    this.countries = response.data;
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching countries:", error);
+  }
+}
   },
 };
 </script>

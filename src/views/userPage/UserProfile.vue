@@ -5,19 +5,26 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 
 const authStore = useAuthStore();
-const userInformations = ref([]);
+const userInformations = ref([null]);
 const companies = ref([]);
+const loading = ref(true); 
+
 
 onMounted(() => {
   localStorage.getItem("user_id");
   fetchUserInfo();
   fetchratedCompany();
+  console.log('tokennn',localStorage.getItem('token'))
 });
-
 const handleLogout = async () => {
+  const confirmLogout = confirm("Are you sure you want to log out?");
+  if (!confirmLogout) {
+    return; 
+  }
+
   try {
     await authStore.logout();
-    
+
   } catch (error) {
     console.error("Logout failed:", error);
   }
@@ -25,20 +32,21 @@ const handleLogout = async () => {
 
 const getImageUrl = (images) => {
   if (images) {
-    try {
-      const parsedImages = JSON.parse(images);
-      return parsedImages.length > 0
-        ? parsedImages[0]
-        : "/defalt-company-image.jpg";
-    } catch (error) {
-      console.error("Error parsing image URL:", error);
+        try {
+          const parsedImages = JSON.parse(images);
+          return parsedImages.length > 0
+            ? parsedImages[0]
+            : "/defalt-company-image.jpg";
+        } catch (error) {
+          console.error("Error parsing image URL:", error);
+          return "/defalt-company-image.jpg";
+        }
+      }
       return "/defalt-company-image.jpg";
-    }
-  }
-  return "/defalt-company-image.jpg";
 };
 
 const fetchUserInfo = async () => {
+  loading.value = true;
   try {
     const userId = localStorage.getItem("user_id");
     if (!userId) {
@@ -57,9 +65,13 @@ const fetchUserInfo = async () => {
   } catch (error) {
     console.error("Error fetching user information:", error);
   }
+  finally {
+    loading.value = false; 
+  }
 };
 
 const fetchratedCompany = async () => {
+  loading.value = true;
   try {
     const response = await axios.get("/api/companies", {
       headers: {
@@ -70,6 +82,9 @@ const fetchratedCompany = async () => {
     console.log("companies", companies.value);
   } catch (error) {
     console.error("error fetching company data");
+  }
+  finally {
+    loading.value = false; 
   }
 };
 </script>
@@ -92,16 +107,26 @@ const fetchratedCompany = async () => {
               <p>{{ userInformations.verification_status }}</p>
             </div>
           </div>
-          <div class="flex lg:-ml-20 lg:-mt-10">
+
+          <div v-if="loading" class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div>
+        <div v-else-if="!userInformations || userInformations == null || userInformations == ''" class=" justify-center items-center py-20 -mt-8">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+          </svg>
+          <p class="text-gray-400 ml-32 lg:ml-76 ">no user information yet!</p>
+        </div>
+          <div v-else class="flex lg:-ml-20 lg:-mt-10">
             <img
               :src="userInformations.profile_picture_url"
               alt=""
-              class="-ml-18 -mt-6 w-24 h-24 rounded-full md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64"
+              class="-ml-18 -mt-6 w-24 h-24 rounded-md md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64"
             />
             <!-- <i
               class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-40 lg:-ml-8"
             ></i> -->
-            <div class="text-white -mt-6 lg:ml-10 -ml-2 w-11/12 lg:mt-6">
+            <div class="text-white -mt-6 lg:ml-10 ml-32 md:ml-32 w-11/12 lg:mt-6">
               <p
                 class="ml-8 lg:ml-10 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20"
               >
@@ -135,44 +160,45 @@ const fetchratedCompany = async () => {
             </div>
           </div>
           <div
-            class="flex -ml-14 md:-ml- mt-10 lg:mt-4 w-64 lg:w-full md:w-full md:mt-4 md:mx-auto"
+            class="flex ml-10 md:-ml- mt-10 lg:mt-4  md:mt-4"
           >
-            <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-28 pl-2 pt-2 h-10 rounded-lg">
-              <i class="fa-solid fa-pen mr-2 mt-1 ml-1"></i>
+            <div class="flex bg-[#075E86] hover:bg-[#6291a7] lg:w-28  md:w-32 w-32 pl-2 pt-2 h-10 rounded-lg">
+              <i class="fa-solid fa-pen mr-2 text-[12px] lg:text-[13px] lg:mt-1 mt-2  lg:ml-1 -ml-1"></i>
               <router-link
                 to="/EditProfile"
-                class="text-[13px] font-normal text-white"
+                class="lg:text-[13px] text-[10px] mt- font-normal text-white"
                 >Edit Profile</router-link
               >
             </div>
 
             <div  @click="handleLogout"
-              class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer w-28 pl-3 pt-3 h-10 rounded-lg ml-72"
+              class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer -mt-0.5 md:w-32 lg:w-28 w-28 pl-3 pt-3 h-10 rounded-lg ml-10 lg:ml-72"
 
             >
               <i
-                class="fa-solid fa-right-from-bracket text-md ml-3 mr-2 font-light text-white"
+                class="fa-solid fa-right-from-bracket lg:text-md text-xs md:text-sm  lg:ml-3 ml-3 mt-  mr-2 font-light text-white"
               ></i>
-              <p class="-mt-1 text-[13px] font-light text-white">Log out</p>
+              <p class="lg:-mt-1 lg:text-[13px] text-[10px] -ml-1 mt-0.5 font-light text-white">Log out</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- <div class="mb-6 w-72 md:w-2/5 lg:w-2/7 mx-auto">
-        <p class="text-center mb-4 text-bold text-lg">Recent Activity</p>
-        <div v-for="search in searched" :key="search" class="bg-white mx-auto  mb-4 h-11 rounded-full flex">
-            <p class="ml-4 mt-1 lg:mt-2 md:mt-1 w-7/8 md:w-8/9 lg:w-11/12 mr-10 text-[13px] md:text-[14px] lg:text-[14px]">{{
-                search.name }}</p>
-            <i class="fa-solid fa-xmark pr-2 mt-3"></i>
-        </div>
-        <p class="underline ml-2 text-[#10434f] -mt-2 text-[14px] md:text[15px] lg:text-[15px]">See More</p>
-    </div> -->
+
     <div class="mb-20 w-11/12 lg:w-6/7 lg:mx-auto mx-auto lg:pb-10">
       <p class="text-center mb-4 text-bold text-lg lg:text-xl lg:text-center">
         Rated companies
       </p>
-      <div class="flex flex-wrap">
+      <div v-if="loading" class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+        </div>
+        <div v-else-if="!companies || companies == null || companies == '' " class=" justify-center items-center py-20">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+          </svg>
+          <p class="text-gray-500 text-center">No Companies Yet!</p>
+        </div>
+      <div v-else class="flex flex-wrap">
         <div
           v-for="(company, index) in companies"
           :key="index"
@@ -211,95 +237,3 @@ const fetchratedCompany = async () => {
     <!-- <FooterPart class="" /> -->
   </UserLayout>
 </template>
-
-
-<script>
-import axios from "axios";
-import UserLayout from "@/layout/UserLayout.vue";
-import { logout } from "../../auth";
-
-export default {
-  components: {
-    // Navbar,
-    // FooterPart,
-    UserLayout,
-  },
-  data() {
-    return {
-      userInformations: [],
-      companies: [],
-    };
-  },
-  mounted() {
-    this.fetchUserInfo();
-    this.fetchratedCompany();
-  },
-  methods: {
-    getImageUrl(images) {
-      if (images) {
-        try {
-          const parsedImages = JSON.parse(images);
-          return parsedImages.length > 0
-            ? parsedImages[0]
-            : "/defalt-company-image.jpg";
-        } catch (error) {
-          console.error("Error parsing image URL:", error);
-          return "/defalt-company-image.jpg";
-        }
-      }
-      return "/defalt-company-image.jpg";
-    },
-    async fetchUserInfo() {
-      try {
-        const userId = localStorage.getItem("user_id");
-        if (!userId) {
-          console.error("User ID not found in localStorage");
-          return;
-        }
-
-        const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        this.userInformations = response.data;
-        console.log("User Informations:", this.userInformations);
-      } catch (error) {
-        console.error("Error fetching user information:", error);
-      }
-    },
-    async fetchratedCompany() {
-      try {
-        const response = await axios.get("https://bizethio-backend-production-944c.up.railway.app/api/companies", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        this.companies = response.data;
-        console.log("companies", this.companies);
-      } catch (error) {
-        console.error("error fetching company data");
-      }
-    },
-    async handleLogout() {
-      const confirmLogout = confirm("Are you sure you want to log out?");
-      if (!confirmLogout) {
-        return;
-      }
-      try {
-        await logout(); 
-        console.log("User signed out successfully.");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user_id");
-        this.$router.push("/signup"); 
-      } catch (error) {
-        console.error("Error during logout:", error.message);
-      }
-    },
-  },
-};
-</script>
-
-
-<style></style>

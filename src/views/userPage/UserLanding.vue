@@ -1,8 +1,8 @@
 <template>
- <UserLayout>
+ <UserLayoutUser>
   <div class="">
     <div class="categories  lg:w-full mx-auto lg:mb-20">
-        <div class="lg:pt-44 lg:ml-4">
+        <div class="lg:pt-10 lg:ml-4">
            <p class="text-center lg:font-semibold lg:text-lg lg:-ml-14">Quick search</p>
         <div class="flex w-72 lg:w-80 mt-4 mx-auto">
             <input v-model="search" type="text" class="w-56 lg:w-72 lg:-ml-10 lg:h-10  pl-12 h-9 bg-[#F0EEFF] outline-none rounded-tl-full rounded-br-full "/>
@@ -277,17 +277,17 @@
         </div>
     </div>
   </div>
-</UserLayout>
+</UserLayoutUser>
 </template>
 
 <script>
 
 import MapModal from '@/components/MapModal.vue';
- import UserLayout from '@/layout/UserLayout.vue'
+ import UserLayoutUser from '@/layout/UserLayoutUser.vue'
 export default {
 components:{
     MapModal,
-    UserLayout
+    UserLayoutUser
 },
 data(){
     return{
