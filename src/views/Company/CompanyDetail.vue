@@ -4,25 +4,25 @@ import UserLayout from "@/layout/UserLayout.vue";
 import horizon_hotel from "/images/ForYouSection/horizon_hotel.jpeg";
 import { useRoute } from "vue-router";
 import { useCompanyStore } from "@/stores/company";
+import CompanyReview from "@/components/CompanyDetail/CompanyReview.vue"; // Import the new component
 
 const { getCompany } = useCompanyStore();
 
 const route = useRoute();
 const company = ref(null);
-const loading = ref(true);  
+const loading = ref(true);
+const showSharePopup = ref(false);
 
-onMounted(()=>{
+onMounted(() => {
   window.scrollTo(0, 0);
-
-})
+});
 onMounted(async () => {
   try {
     company.value = await getCompany(route.params.id);
   } catch (error) {
     console.error("Error fetching company:", error);
-     
   } finally {
-    loading.value = false;  
+    loading.value = false;
   }
   console.log(company.value);
 });
@@ -42,51 +42,65 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
+// Share functionality
+const shareToSocialMedia = (platform) => {
+  const currentUrl = window.location.href;
+  let shareUrl = "";
 
-// Reviews data (static)
-const reviews = [
-  {
-    userName: "Abebe T.",
-    verified: true,
-    rating: 4,
-    comment:
-      "I stayed at Horizon Hotel for a business trip, and it was fantastic! The rooms are clean and spacious, and the staff were incredibly friendly. The restaurant’s injera and tibs were delicious, and I loved the coffee at the cafe. Highly recommend!",
-    date: "Nov 12, 2024",
-  },
-  {
-    userName: "Sarah M.",
-    verified: true,
-    rating: 3,
-    comment:
-      "The location is great, right in Mexico Square, but the Wi-Fi was a bit slow in the rooms. The food at the restaurant was amazing, though—especially the breakfast buffet.",
-    date: "Feb 12, 2025",
-  },
-  {
-    userName: "Tewodros K.",
-    verified: true,
-    rating: 5,
-    comment:
-      "Horizon Hotel exceeded my expectations! The view from my room was breathtaking, and the staff went above and beyond to make my stay comfortable. The cafe’s Ethiopian coffee is the best I’ve ever had. I’ll definitely be back!",
-    date: "Mar 15, 2025",
-  },
-  {
-    userName: "Lydia B.",
-    verified: true,
-    rating: 2,
-    comment:
-      "The hotel has a great location, but I was disappointed with the service. The check-in process was slow, and my room wasn’t ready on time. The food was good, but I expected better overall for the price.",
-    date: "Jan 20, 2025",
-  },
-];
+  switch (platform) {
+    case "facebook":
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        currentUrl
+      )}`;
+      break;
+    case "twitter":
+      shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        currentUrl
+      )}&text=${encodeURIComponent(
+        `Check out ${company.value?.name} on BIZEthio!`
+      )}`;
+      break;
+    case "linkedin":
+      shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        currentUrl
+      )}`;
+      break;
+    case "telegram":
+      shareUrl = `https://telegram.me/share/url?url=${encodeURIComponent(
+        currentUrl
+      )}&text=${encodeURIComponent(
+        `Check out ${company.value?.name} on BIZEthio!`
+      )}`;
+      break;
+    // Add more platforms as needed
+  }
 
-// Rating distribution (static)
-const ratingDistribution = [
-  { stars: 5, count: 50 },
-  { stars: 4, count: 20 },
-  { stars: 3, count: 10 },
-  { stars: 2, count: 3 },
-  { stars: 1, count: 2 },
-];
+  if (shareUrl) {
+    window.open(shareUrl, "_blank");
+    closeSharePopup(); // Close the popup after sharing
+  }
+};
+
+const copyRoute = () => {
+  const currentUrl = window.location.href;
+  navigator.clipboard
+    .writeText(currentUrl)
+    .then(() => {
+      alert("Link copied to clipboard!");
+      closeSharePopup(); // Close the popup after copying
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+};
+
+const openSharePopup = () => {
+  showSharePopup.value = true;
+};
+
+const closeSharePopup = () => {
+  showSharePopup.value = false;
+};
 </script>
 
 <template>
@@ -94,7 +108,9 @@ const ratingDistribution = [
     <div class="min-h-screen px-4 sm:pt-5 lg:pt-10 md:pb-16">
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center py-20">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+        ></div>
       </div>
 
       <!-- Content when not loading -->
@@ -107,7 +123,9 @@ const ratingDistribution = [
 
         <!-- Business Details -->
         <div class="w-[90%] mx-auto lg:max-w-[780px] xl:max-w-[1025px]">
-          <div class="flex flex-col mt-8 gap-y-4 lg:gap-y-6 xl:gap-y-10 xl:mt-12">
+          <div
+            class="flex flex-col mt-8 gap-y-4 lg:gap-y-6 xl:gap-y-10 xl:mt-12"
+          >
             <div class="flex gap-x-4 sm:items-end">
               <div class="sm:flex items-end gap-x-2 sm:gap-x-4">
                 <h1
@@ -121,21 +139,12 @@ const ratingDistribution = [
               </div>
 
               <div class="flex gap-x-4 mt-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="size-5 stroke-black hover:fill-red-500 cursor-pointer transition-colors duration-200"
-                  viewBox="0 0 256 256"
-                  fill="transparent"
-                >
-                  <path
-                    d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                    stroke-width="10"
-                  ></path>
-                </svg>
+                <!-- Share Button (SVG) -->
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="size-5 hover:fill-primaryColor cursor-pointer"
                   viewBox="0 0 256 256"
+                  @click="openSharePopup"
                 >
                   <path
                     d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"
@@ -247,145 +256,49 @@ const ratingDistribution = [
               </div>
             </div>
 
-            <!-- Reviews and Ratings Section (UI Only) -->
-            <div class="mt-12 space-y-6">
-              <h2 class="text-2xl font-bold text-darkBlue">
-                Reviews And Ratings ({{company?.rating_avg}})
-              </h2>
-
-              <!-- Rating Distribution -->
-              <div class="space-y-2">
-                <div
-                  v-for="rating in ratingDistribution"
-                  :key="rating.stars"
-                  class="flex items-center space-x-2 max-w-[540px]"
-                >
-                  <span class="text-sm text-gray-600"
-                    >{{ rating.stars }} Star{{
-                      rating.stars > 1 ? "s" : ""
-                    }}</span
-                  >
-                  <div class="flex-1 h-2 bg-gray-200 rounded">
-                    <div
-                      :style="{
-                        width: `${
-                          (rating.count /
-                            Math.max(...ratingDistribution.map((r) => r.count))) *
-                          100
-                        }%`,
-                      }"
-                      class="h-2 bg-yellow-400 rounded"
-                    ></div>
-                  </div>
-                  <span class="text-sm text-gray-600">{{ rating.count }}</span>
-                </div>
-              </div>
-
-              <!-- Review List -->
-              <div class="space-y-6 grid lg:grid-cols-2 gap-x-10 mt-8">
-                <div
-                  v-for="review in reviews"
-                  :key="review.id"
-                  class="py-4 px-2 space-y-8 rounded-md bg-white max-w-[410px] lg:max-w-[480px] h-[275px]"
-                >
-                  <div class="flex justify-between">
-                    <div class="space-y-2">
-                      <span class="text-sm font-medium text-gray-800">{{
-                        review.userName
-                      }}</span>
-                      <p v-if="review.verified" class="text-xs text-green-600">
-                        Verified User
-                      </p>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-1">
-                      <span class="text-yellow-500">
-                        <span v-for="n in 5" :key="n" class="inline-block">
-                          <svg
-                            v-if="n <= review.rating"
-                            class="w-4 h-4 fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                            />
-                          </svg>
-                          <svg
-                            v-else
-                            class="w-4 h-4 fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              d="M12 15.4l-4.6 2.4 1-4.9-3.8-3.3 5-1L12 4l1.4 4.6 5 1-3.8 3.3 1 4.9z"
-                            />
-                          </svg>
-                        </span>
-                      </span>
-                      <span class="text-sm text-gray-600"
-                        >({{ review.rating }}/5)</span
-                      >
-                    </div>
-                  </div>
-                  <p class="text-sm text-gray-600 mt-2">{{ review.comment }}</p>
-                  <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm text-gray-600"
-                      >Helpful? Yes (2) No (0)</span
-                    >
-                    <span class="text-sm text-gray-600">{{ review.date }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Rate The Company Block (Inline) -->
-              <div class="mt-6 p-6 bg-white rounded-lg shadow-sm max-w-[420px]">
-                <h3 class="text-lg font-bold text-darkBlue mb-2">
-                  Rate The Company!
-                </h3>
-                <p class="text-sm text-gray-600 mb-4">
-                  Help us improve our service to best suit your needs by rating
-                  us here!
-                </p>
-                <div class="flex items-center justify-between space-x-2 mb-4">
-                  <span v-for="n in 5" :key="n" class="cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-10"
-                      viewBox="0 0 256 256"
-                    >
-                      <path
-                        d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"
-                      ></path>
-                    </svg>
-                  </span>
-                </div>
-                <div class="mb-4">
-                  <label class="block text-sm text-gray-600 mb-2"
-                    >Can you tell us more?</label
-                  >
-                  <textarea
-                    class="w-full p-2 border rounded-md"
-                    rows="2"
-                    placeholder="Add feedback"
-                  ></textarea>
-                </div>
-                <div class="flex justify-end space-x-2">
-                  <button
-                    class="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    class="px-4 py-2 text-white bg-lightBlue rounded-md hover:bg-blue-700"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </div>
+            <!-- Company Review Component -->
+            <CompanyReview :company="company" />
           </div>
+        </div>
+      </div>
+
+      <!-- Share Popup -->
+      <div
+        v-if="showSharePopup"
+        class="fixed inset-0 flex items-center justify-center z-50"
+      >
+        <!-- Subtle Backdrop -->
+        <div class="absolute inset-0 bg-black opacity-25" @click="closeSharePopup"></div>
+
+        <!-- Floating Card -->
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md  relative">
+          <h3 class="text-2xl font-semibold text-darkBlue mb-4">Share this Company</h3>
+          <div class="flex justify-around">
+            <button @click="shareToSocialMedia('facebook')" class=" cursor-pointer text-blue-600 hover:text-blue-800 transition duration-200">
+              <i class="fab fa-facebook-f mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('twitter')" class=" cursor-pointer text-blue-400 hover:text-blue-600 transition duration-200">
+              <i class="fab fa-twitter mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('linkedin')" class=" cursor-pointer text-blue-800 hover:text-blue-900 transition duration-200">
+              <i class="fab fa-linkedin-in mr-2"></i> 
+            </button>
+            <button @click="shareToSocialMedia('telegram')" class=" cursor-pointer text-blue-500 hover:text-blue-700 transition duration-200">
+              <i class="fab fa-telegram-plane mr-2"></i> 
+            </button>
+            <button @click="copyRoute" class="text-gray-600 cursor-pointer hover:text-gray-800 transition duration-200">
+              <i class="fas fa-link mr-2"></i> Copy  
+            </button>
+          </div>
+          <button
+            @click="closeSharePopup"
+            class="mt-4 px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100 transition duration-200"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   </UserLayout>
 </template>
+

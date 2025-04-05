@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { auth } from './firebase';
+import ToastPlugin from 'vue-toast-notification';
 import { onAuthStateChanged } from "firebase/auth";
 import VueApexCharts from 'vue3-apexcharts';
 import App from './App.vue'
@@ -20,4 +21,5 @@ onAuthStateChanged(auth, (user) => {
 app.use(createPinia())
 app.use(router)
 app.use(VueApexCharts);
+app.use(ToastPlugin);
 app.mount('#app')
