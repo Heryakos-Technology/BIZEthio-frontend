@@ -27,6 +27,7 @@ import AdminRating from '@/views/Admin/AdminRating.vue'
 import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
 import MoreCategories from '@/views/Company/MoreCategories.vue';
+import CategoryPage from '@/views/Company/CategoryPage.vue';
 
 
 
@@ -151,6 +152,11 @@ const router = createRouter({
       path: '/company/categories',
       name: 'MoreCategories',
       component: MoreCategories,
+    },
+    {
+      path: '/company/categories/:name',
+      name: 'CategoryPage',
+      component: CategoryPage,
     },
 
 

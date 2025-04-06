@@ -14,7 +14,7 @@ const { getAllCategories } = useCategoryStore();
 
 const categories = [
   {
-    name: "Restaurants & Cafes",
+    name: "Catering Service",
     iconSrc: restaurantIcon,
   },
   {
@@ -22,7 +22,7 @@ const categories = [
     iconSrc: retailIcon,
   },
   {
-    name: "Electronics",
+    name: "Technology",
     iconSrc: electronicsIcon,
   },
   {
@@ -54,7 +54,7 @@ const categories = [
 
 <template>
   <div
-    class=" pb-4 xs:translate-y-0 md:mt-8 px-2 lg:mt-32 xl:max-w-[1200px] mx-auto"
+    class="pb-4 xs:translate-y-0 md:mt-8 px-2 lg:mt-32 xl:max-w-[1200px] mx-auto"
   >
     <div
       class="flex justify-between items-center text-sm xs:text-base xs:px-4 sm:px-8 md:px-0"
@@ -86,12 +86,17 @@ const categories = [
       <div
         v-for="(category, index) in categories"
         :key="index"
-        class="flex gap-x-4 bg-primaryColor/80 items-center w-full max-w-[300px] px-4 py-5 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 ease-linear"
+        class="flex gap-x-4 bg-primaryColor/80 items-center w-full max-w-[300px] px-4 py-5 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 ease-linear relative"
       >
         <div class="size-12">
           <img :src="category.iconSrc" class="w-full" :alt="category.name" />
         </div>
         <p class="text-white">{{ category.name }}</p>
+
+        <RouterLink
+          :to="{ name: 'CategoryPage', params: { name: category.name } }"
+          class="inset-0 absolute z-10"
+        ></RouterLink>
       </div>
     </div>
   </div>
