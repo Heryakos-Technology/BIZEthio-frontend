@@ -1,4 +1,5 @@
 <script setup>
+import UserLayout from '@/layout/UserLayout.vue';
 import restaurantIcon from "/images/categoriesIcons/restaurant.png";
 import retailIcon from "/images/categoriesIcons/retail.png";
 import electronicsIcon from "/images/categoriesIcons/electronics.png";
@@ -53,31 +54,16 @@ const categories = [
 </script>
 
 <template>
-  <div
-    class=" pb-4 xs:translate-y-0 md:mt-8 px-2 lg:mt-32 xl:max-w-[1200px] mx-auto"
+  <UserLayout>
+    <div
+    class=" pb-4 xs:translate-y-0 md:mt-8 px-2 lg:my-16  xl:max-w-[1200px] mx-auto"
   >
     <div
-      class="flex justify-between items-center text-sm xs:text-base xs:px-4 sm:px-8 md:px-0"
+      class="flex justify-center items-center text-sm xs:text-base xs:px-4 sm:px-8 md:px-0"
     >
-      <h1 class="text-primaryColor font-bold md:text-center md:text-3xl">
-        Browse By Categories
+      <h1 class="text-primaryColor uppercase font-bold md:text-center md:text-3xl">
+        All Categories
       </h1>
-
-      <RouterLink
-        :to="{ name: 'MoreCategories' }"
-        class="text-primaryColor font-bold flex items-center md:text-2xl"
-      >
-        More Categories
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="fill-primaryColor size-5 md:size-8 md:mt-1"
-          viewBox="0 0 256 256"
-        >
-          <path
-            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"
-          ></path>
-        </svg>
-      </RouterLink>
     </div>
 
     <div
@@ -95,4 +81,5 @@ const categories = [
       </div>
     </div>
   </div>
+  </UserLayout>
 </template>
