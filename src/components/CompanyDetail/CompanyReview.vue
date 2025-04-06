@@ -12,51 +12,52 @@ const props = defineProps({
   },
 });
 
-const {getAllReviews} = useReviewStore();
+const {getACompanyReviews} = useReviewStore();
 
-// const reviews =ref([]);
+const reviews =ref([]);
 
-// onMounted( async()=>{
-//   reviews.value = await getAllReviews();
+onMounted( async()=>{
+  
+  reviews.value = await getACompanyReviews(props.company.id);
 
-//   console.log(reviews.value);
-// })
+  console.log(reviews.value);
+})
 
 
-const reviews = ref([
-  {
-    userName: "Abebe T.",
-    verified: true,
-    rating: 4,
-    comment:
-      "I stayed at Horizon Hotel for a business trip, and it was fantastic! The rooms are clean and spacious, and the staff were incredibly friendly. The restaurant’s injera and tibs were delicious, and I loved the coffee at the cafe. Highly recommend!",
-    date: "Nov 12, 2024",
-  },
-  {
-    userName: "Sarah M.",
-    verified: true,
-    rating: 3,
-    comment:
-      "The location is great, right in Mexico Square, but the Wi-Fi was a bit slow in the rooms. The food at the restaurant was amazing, though—especially the breakfast buffet.",
-    date: "Feb 12, 2025",
-  },
-  {
-    userName: "Tewodros K.",
-    verified: true,
-    rating: 5,
-    comment:
-      "Horizon Hotel exceeded my expectations! The view from my room was breathtaking, and the staff went above and beyond to make my stay comfortable. The cafe’s Ethiopian coffee is the best I’ve ever had. I’ll definitely be back!",
-    date: "Mar 15, 2025",
-  },
-  {
-    userName: "Lydia B.",
-    verified: true,
-    rating: 2,
-    comment:
-      "The hotel has a great location, but I was disappointed with the service. The check-in process was slow, and my room wasn’t ready on time. The food was good, but I expected better overall for the price.",
-    date: "Jan 20, 2025",
-  },
-]);
+// const reviews = ref([
+//   {
+//     userName: "Abebe T.",
+//     verified: true,
+//     rating: 4,
+//     comment:
+//       "I stayed at Horizon Hotel for a business trip, and it was fantastic! The rooms are clean and spacious, and the staff were incredibly friendly. The restaurant’s injera and tibs were delicious, and I loved the coffee at the cafe. Highly recommend!",
+//     date: "Nov 12, 2024",
+//   },
+//   {
+//     userName: "Sarah M.",
+//     verified: true,
+//     rating: 3,
+//     comment:
+//       "The location is great, right in Mexico Square, but the Wi-Fi was a bit slow in the rooms. The food at the restaurant was amazing, though—especially the breakfast buffet.",
+//     date: "Feb 12, 2025",
+//   },
+//   {
+//     userName: "Tewodros K.",
+//     verified: true,
+//     rating: 5,
+//     comment:
+//       "Horizon Hotel exceeded my expectations! The view from my room was breathtaking, and the staff went above and beyond to make my stay comfortable. The cafe’s Ethiopian coffee is the best I’ve ever had. I’ll definitely be back!",
+//     date: "Mar 15, 2025",
+//   },
+//   {
+//     userName: "Lydia B.",
+//     verified: true,
+//     rating: 2,
+//     comment:
+//       "The hotel has a great location, but I was disappointed with the service. The check-in process was slow, and my room wasn’t ready on time. The food was good, but I expected better overall for the price.",
+//     date: "Jan 20, 2025",
+//   },
+// ]);
 
 const ratingDistribution = ref([
   { stars: 5, count: 50 },
@@ -70,11 +71,11 @@ const ratingDistribution = ref([
 <template>
 
     <h2 class="text-2xl font-bold text-darkBlue">
-      Reviews And Ratings ({{company?.rating_avg}})
+      Reviews And Ratings ({{company?.rating_avg}}/5) 
     </h2>
 
     <!-- Rating Distribution -->
-    <div class="space-y-2">
+    <!-- <div class="space-y-2">
       <div
         v-for="rating in ratingDistribution"
         :key="rating.stars"
@@ -99,7 +100,7 @@ const ratingDistribution = ref([
         </div>
         <span class="text-sm text-gray-600">{{ rating.count }}</span>
       </div>
-    </div>
+    </div> -->
   
 
   <!-- Review List -->

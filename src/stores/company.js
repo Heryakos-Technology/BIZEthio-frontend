@@ -21,7 +21,7 @@ export const useCompanyStore = defineStore("companyStore", {
 
       });
       const data = await res.json();
-      console.log(data);
+
       if (data.errors) {
         this.errors = data.errors;
       } else {
@@ -38,7 +38,7 @@ export const useCompanyStore = defineStore("companyStore", {
 
       });
       const data = await res.json();
-      console.log(data);
+
       if (data.errors) {
         this.errors = data.errors;
       } else {

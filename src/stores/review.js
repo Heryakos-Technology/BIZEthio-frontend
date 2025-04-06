@@ -26,8 +26,8 @@ export const useReviewStore = defineStore("reviewStore", {
       }
     },
 
-    async getReview(reviewId) {
-      const res = await fetch(`/api/reviews/${reviewId}`, {
+    async getACompanyReviews(companyId) {
+      const res = await fetch(`/api/reviews/company/${companyId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -42,6 +42,9 @@ export const useReviewStore = defineStore("reviewStore", {
         return data;
       }
     },
+
+
+
 
     async createReview(reviewData) {
       const res = await fetch("/api/reviews", {

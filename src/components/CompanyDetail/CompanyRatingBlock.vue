@@ -35,7 +35,7 @@ const submitReview = async () => {
   }
 
   const reviewData = {
-    user_id: 7,
+    user_id: userId.value,
     company_id: props.company.id,
     rating: rating.value,
     comment: comment.value,

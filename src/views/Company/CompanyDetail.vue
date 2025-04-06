@@ -24,7 +24,7 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-  console.log(company.value);
+  // console.log(company.value);
 });
 
 const getImageUrl = (images) => {
