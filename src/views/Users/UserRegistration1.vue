@@ -578,7 +578,7 @@ export default {
 
   const userData = {
     email: model.value.user.email,
-    role: "user",
+   // role: "admin",
     name: model.value.user.name,
     phone_number: model.value.user.phone_number,
     city: model.value.user.city,

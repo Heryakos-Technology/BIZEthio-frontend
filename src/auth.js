@@ -11,7 +11,7 @@ import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 const db = getFirestore();
 
 
-export const register = async (email, newPassword,role) => {
+export const register = async (email, newPassword) => {
   try {
     
     const exists = await checkEmailExists(email);
@@ -30,7 +30,7 @@ export const register = async (email, newPassword,role) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, newPassword);
     await setDoc(doc(db, "users", userCredential.user.uid), {
       email: userCredential.user.email,
-      role: role 
+      //role: role 
     });
 
     return userCredential; 
@@ -52,7 +52,8 @@ export const login = async (email, password) => {
     if (userDoc.exists()) {
       const userData = userDoc.data();
       console.log("User role:", userData.role);
-      return { userCredential, role: userData.role }; 
+      // return { userCredential, role: userData.role }; 
+       return { userCredential }; 
     } else {
       throw new Error("User role not found.");
     }
