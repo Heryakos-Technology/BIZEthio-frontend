@@ -12,12 +12,12 @@ const props = defineProps({
   },
 });
 
-const { getAllReviews } = useReviewStore();
+const { getReview } = useReviewStore();
 
 const reviews = ref([]);
 
 onMounted(async () => {
-  reviews.value = await getAllReviews();
+  reviews.value = await getReview(props.co);
 
   console.log("reviews", reviews.value);
 });
@@ -44,8 +44,12 @@ const formatDate = (dateString) => {
     Reviews And Ratings ({{ company?.rating_avg }})
   </h2>
 
+  <div v-if="reviews.length === 0" class="font-bold text-primaryColor text-xl">
+      No ratings found. Be the first to comment!
+    </div>
+
   <!-- Rating Distribution -->
-  <div class="space-y-2">
+  <div v-else class="space-y-2">
     <div
       v-for="rating in ratingDistribution"
       :key="rating.stars"
@@ -68,11 +72,13 @@ const formatDate = (dateString) => {
       </div>
       <span class="text-sm text-gray-600">{{ rating.count }}</span>
     </div>
-  </div>
+ 
 
   <!-- Review List -->
   <div class="space-y-6 grid lg:grid-cols-2 gap-x-10 mt-8">
+   
     <div
+    
       v-for="review in reviews"
       :key="review.id"
       class="py-4 px-2 space-y-8 rounded-md bg-white max-w-[410px] lg:max-w-[480px] h-[175px]"
@@ -122,5 +128,7 @@ const formatDate = (dateString) => {
       </div>
     </div>
   </div>
+
+</div>
   <CompanyRatingBlock :company="props.company" />
 </template>
