@@ -12,6 +12,7 @@ const isAddOpen = ref(false);
 const isEditOpen = ref(false);
 const isDeleteConfirmOpen = ref(false);
 const selectedCategory = ref(null);
+const selectedCategoryId = ref(null);
 const errorMessage = ref("");
 
 // Loading states for each operation
@@ -31,7 +32,6 @@ const formdata = ref({
 });
 
 const editFormData = ref({
-  id: null,
   name: "",
   description: "",
 });
@@ -104,8 +104,8 @@ const handleAddCategory = async () => {
 
 const handleEdit = (category) => {
   selectedCategory.value = category;
+  selectedCategoryId.value= category.id,
   editFormData.value = {
-    id: category.id,
     name: category.name,
     description: category.description,
   };
@@ -116,13 +116,15 @@ const handleUpdateCategory = async () => {
   loading.value.update = true;
   errorMessage.value = ""; // Clear previous errors
   try {
+
     const updatedFormData = new FormData();
     updatedFormData.append("name", editFormData.value.name);
     updatedFormData.append("description", editFormData.value.description);
-
+ 
+    
     const response = await updateCategory(
       updatedFormData,
-      editFormData.value.id
+      selectedCategoryId.value
     );
 
     if (response.error) {
@@ -528,7 +530,7 @@ const generateSignature = (params) => {
       <div class="min-w-[600px] max-w-[100%] rounded-lg shadow-md">
         <!-- Table Header -->
         <div
-          class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
+          class="grid grid-cols-[50px_140px_100px_1fr_100px] bg-white uppercase font-bold"
         >
           <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
             No
@@ -538,6 +540,7 @@ const generateSignature = (params) => {
           >
             Name
           </div>
+          <div class="p-3 lg:py-5 text-sm text-black">Icons</div>
           <div class="p-3 lg:py-5 text-sm text-black">Description</div>
           <div class="p-3 lg:py-5 text-sm text-black">Actions</div>
         </div>
@@ -546,7 +549,7 @@ const generateSignature = (params) => {
         <div
           v-for="(category, index) in categories"
           :key="category.id"
-          class="grid grid-cols-[50px_160px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
+          class="grid grid-cols-[50px_140px_100px_1fr_100px] last:-b-0 my-3 bg-white font-semibold lg:py-2"
         >
           <div
             class="p-3 text-sm lg:text-base text-black font-bold sticky left-0 bg-white z-10"
@@ -558,13 +561,21 @@ const generateSignature = (params) => {
           >
             {{ category.name }}
           </div>
+
+          <div class="size-8 ml-8 text-sm lg:text-base text-black font-bold">
+          <img
+            :src="category.image_link"
+            class="w-full"
+            :alt="category.name"
+          />
+        </div>
           <div class="p-3 text-sm lg:text-base text-black font-bold">
             {{ category.description }}
           </div>
           <div class="p-3 flex gap-x-2 lg:gap-x-4 justify-center">
             <button
               @click="handleEdit(category)"
-              class="text-gray-500 hover:text-blue-600 transition duration-200"
+              class="text-gray-500 hover:text-blue-600 transition duration-200 cursor-pointer"
               title="Edit"
               :disabled="loading.add || loading.update || loading.delete"
             >
@@ -585,7 +596,7 @@ const generateSignature = (params) => {
             </button>
             <button
               @click="handleDelete(category)"
-              class="text-red-500 hover:text-red-700 transition duration-200"
+              class="text-red-500 hover:text-red-700 cursor-pointer transition duration-200"
               title="Delete"
               :disabled="loading.add || loading.update || loading.delete"
             >

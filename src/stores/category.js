@@ -64,7 +64,7 @@ export const useCategoryStore = defineStore("categoryStore", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: formData,
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (data.errors) {
