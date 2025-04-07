@@ -10,7 +10,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 
   actions: {
     async getAllCategories() {
-      const res = await fetch("/api/categories", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

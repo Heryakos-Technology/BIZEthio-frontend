@@ -3,6 +3,7 @@ import { useCategoryStore } from "@/stores/category";
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import CryptoJS from "crypto-js";
+import CategoryUpdateModal from "./CategoryUpdateModal.vue"; // Import the new component
 
 const categoryStore = useCategoryStore();
 const { getAllCategories, deleteCategory, createCategory, updateCategory } =
@@ -30,11 +31,11 @@ const formdata = ref({
   image_link: null,
 });
 
-const editFormData = ref({
-  id: null,
-  name: "",
-  description: "",
-});
+// const editFormData = ref({  // Remove this
+//   id: null,
+//   name: "",
+//   description: "",
+// });
 
 // Cloudinary configuration
 const uploadPreset = "ml_default";
@@ -104,26 +105,23 @@ const handleAddCategory = async () => {
 
 const handleEdit = (category) => {
   selectedCategory.value = category;
-  editFormData.value = {
-    id: category.id,
-    name: category.name,
-    description: category.description,
-  };
+  // editFormData.value = {  // Remove this
+  //   id: category.id,
+  //   name: category.name,
+  //   description: category.description,
+  // };
   isEditOpen.value = true;
 };
 
-const handleUpdateCategory = async () => {
+const handleUpdateCategory = async (updatedFormData) => {
   loading.value.update = true;
   errorMessage.value = ""; // Clear previous errors
   try {
-    const updatedFormData = new FormData();
-    updatedFormData.append("name", editFormData.value.name);
-    updatedFormData.append("description", editFormData.value.description);
+    const formData = new FormData();
+    formData.append("name", updatedFormData.name);
+    formData.append("description", updatedFormData.description);
 
-    const response = await updateCategory(
-      updatedFormData,
-      editFormData.value.id
-    );
+    const response = await updateCategory(formData, updatedFormData.id);
 
     if (response.error) {
       errorMessage.value = response.message || "Failed to update category";
@@ -328,119 +326,14 @@ const generateSignature = (params) => {
     </div>
 
     <!-- Edit Category Pop-over Dialog -->
-    <div
-      v-if="isEditOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-bold text-darkBlue">Edit Category</h3>
-          <button
-            @click="closeEditForm"
-            class="text-gray-600 hover:text-gray-800"
-            :disabled="loading.update"
-          >
-            <svg
-              class="w-5 h-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <!-- Display error message if any -->
-        <div
-          v-if="
-            errorMessage ||
-            categoryStore.errors.name ||
-            categoryStore.errors.description
-          "
-          class="mb-4 p-3 bg-red-100 text-red-700 rounded"
-        >
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-          <p v-if="categoryStore.errors.name">
-            {{ categoryStore.errors.name[0] }}
-          </p>
-          <p v-if="categoryStore.errors.description">
-            {{ categoryStore.errors.description[0] }}
-          </p>
-        </div>
-        <div class="mb-4">
-          <label
-            for="edit-name"
-            class="block text-gray-700 text-sm font-bold mb-1"
-            >Name:</label
-          >
-          <input
-            type="text"
-            id="edit-name"
-            v-model="editFormData.name"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            :disabled="loading.update"
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            for="edit-description"
-            class="block text-gray-700 text-sm font-bold mb-1"
-            >Description:</label
-          >
-          <textarea
-            id="edit-description"
-            v-model="editFormData.description"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            :disabled="loading.update"
-          ></textarea>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button
-            @click="closeEditForm"
-            class="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-100 transition duration-200"
-            :disabled="loading.update"
-          >
-            Cancel
-          </button>
-          <button
-            @click="handleUpdateCategory"
-            class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 flex items-center"
-            :disabled="loading.update"
-          >
-            <span v-if="!loading.update">Update</span>
-            <span v-else class="flex items-center">
-              <svg
-                class="animate-spin h-5 w-5 mr-2 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Updating...
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <CategoryUpdateModal
+      :is-open="isEditOpen"
+      :category="selectedCategory"
+      :loading="loading.update"
+      :error-message="errorMessage"
+      @close="closeEditForm"
+      @update="handleUpdateCategory"
+    />
 
     <!-- Delete Confirmation Pop-over Dialog -->
     <div
@@ -521,7 +414,9 @@ const generateSignature = (params) => {
 
   <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
     <div v-if="loading.fetch" class="flex justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+      ></div>
     </div>
 
     <div v-else class="">
@@ -530,7 +425,9 @@ const generateSignature = (params) => {
         <div
           class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
         >
-          <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
+          <div
+            class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10"
+          >
             No
           </div>
           <div
