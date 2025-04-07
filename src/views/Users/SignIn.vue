@@ -671,7 +671,7 @@ const registerUser = async (user, token) => {
       token: token, 
       // phone_number:'0988283088',
       is_banned:1,
-      role: "user",
+     // : "admin",
       verification_status: "unverified",
     });
     console.log('User registered in backend:', response.data.user);
@@ -719,33 +719,7 @@ const registerUser = async (user, token) => {
       }
     });
 
-    // const handleLogin2 = async () => {
-    //   try {
-    //     await login(email.value, password.value);
-    //     alert("Logged in successfully!");
-    //   } catch (error) {
-    //     alert(error.message);
-    //   }
-    // };
-//     const handleLogin2 = async () => {
-//   try {
-//     signInMessage.value = "Loading...";
-//     const userCredential = await login(email.value, password.value); 
-//     const user = userCredential.user; 
-//     const token = await user.getIdToken(); 
-//     localStorage.setItem("token", token);
-//     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-//     alert("Logged in successfully!");
-//     if (token) {
-//             signInMessage.value = "Sent";
-//             console.log("Redirecting to user profile...");
-//             router.push("/UserLanding");
-//           }
-//     console.log("User Token:", token); 
-//   } catch (error) {
-//     alert(error.message);
-//   }
-// };
+   
 const handleLogin = async () => {
   emailError.value = "";
   passwordError.value = "";
@@ -760,7 +734,7 @@ const handleLogin = async () => {
 
   try {
    
-    const { userCredential, role } = await login(email.value, password.value);
+    const { userCredential,  } = await login(email.value, password.value);
     const user = userCredential.user;
 
    
@@ -771,7 +745,7 @@ const handleLogin = async () => {
       //alert("Logged in successfully!");
       signInMessage.value = "Continue";
       console.log('token', token);
-      console.log("Redirecting to user profile with role:", role);
+      console.log("Redirecting to user profile with :");
       
       loading2.value = true
       const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
@@ -788,7 +762,7 @@ const handleLogin = async () => {
 //local storage
     //localStorage.setItem("token", backendToken);
       localStorage.setItem("user_id", userData.id); 
-      localStorage.setItem("user_role", userData.role);
+      // localStorage.setItem("user_", userData.role);
       localStorage.setItem("user_name", userData.name);
 
 
@@ -837,7 +811,7 @@ const handleLogin = async () => {
     //       localStorage.setItem("token", token);
          
     //       localStorage.setItem("user_id", user.id);
-    //       localStorage.setItem("user_role", user.role);
+    //       localStorage.setItem("user_", user.);
     //       localStorage.setItem("user_name", user.name);
 
     //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
