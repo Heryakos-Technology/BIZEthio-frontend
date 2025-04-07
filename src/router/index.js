@@ -92,6 +92,8 @@ const router = createRouter({
       path: '/UserLanding',
       name: 'UserLanding',
       component: UserLanding,
+      meta: { auth: true },
+
     },
     {
       path: '/EditProfile',
@@ -184,10 +186,10 @@ router.beforeEach(async (to, from) => {
   if (!userId && to.meta.auth) {
     return { name: "SignIn" };
   }
-  if (userId && to.meta.welcome) {
+  if (user_role === "user" && to.meta.welcome) {
     return { name: "UserLanding" };
   }
-  if (userId && to.meta.guest) {
+  if (user_role === "user" && to.meta.guest) {
     return { name: "UserLanding" };
   }
 });
