@@ -10,7 +10,7 @@ export const useReviewStore = defineStore("reviewStore", {
 
   actions: {
     async getAllReviews() {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/reviews", {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -27,7 +27,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async getReview(reviewId) {
-      const res = await fetch(`/api/reviews/${reviewId}`, {
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/reviews/${reviewId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -44,7 +44,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async createReview(reviewData) {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/reviews", {
         method: "Post",
         headers: {
           "Content-Type": "application/json",

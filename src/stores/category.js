@@ -10,7 +10,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 
   actions: {
     async getAllCategories() {
-      const res = await fetch("/api/categories", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -26,7 +26,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async createCategory(formData) {
-      const res = await fetch("/api/categories", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -44,7 +44,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async deleteCategory(categoryId) {
-      const res = await fetch(`/api/categories/${categoryId}`, {
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/categories/${categoryId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,7 +59,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async updateCategory(formData, categoryId) {
-      const res = await fetch(`/api/categories/${categoryId}`, {
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/categories/${categoryId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

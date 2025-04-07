@@ -3,6 +3,7 @@ import { useCategoryStore } from "@/stores/category";
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import CryptoJS from "crypto-js";
+import CategoryUpdateModal from "./CategoryUpdateModal.vue"; // Import the new component
 
 const categoryStore = useCategoryStore();
 const { getAllCategories, deleteCategory, createCategory, updateCategory } =
@@ -30,11 +31,11 @@ const formdata = ref({
   image_link: null,
 });
 
-const editFormData = ref({
-  id: null,
-  name: "",
-  description: "",
-});
+// const editFormData = ref({  // Remove this
+//   id: null,
+//   name: "",
+//   description: "",
+// });
 
 // Cloudinary configuration
 const uploadPreset = "ml_default";
@@ -104,26 +105,23 @@ const handleAddCategory = async () => {
 
 const handleEdit = (category) => {
   selectedCategory.value = category;
-  editFormData.value = {
-    id: category.id,
-    name: category.name,
-    description: category.description,
-  };
+  // editFormData.value = {  // Remove this
+  //   id: category.id,
+  //   name: category.name,
+  //   description: category.description,
+  // };
   isEditOpen.value = true;
 };
 
-const handleUpdateCategory = async () => {
+const handleUpdateCategory = async (updatedFormData) => {
   loading.value.update = true;
   errorMessage.value = ""; // Clear previous errors
   try {
-    const updatedFormData = new FormData();
-    updatedFormData.append("name", editFormData.value.name);
-    updatedFormData.append("description", editFormData.value.description);
+    const formData = new FormData();
+    formData.append("name", updatedFormData.name);
+    formData.append("description", updatedFormData.description);
 
-    const response = await updateCategory(
-      updatedFormData,
-      editFormData.value.id
-    );
+    const response = await updateCategory(formData, updatedFormData.id);
 
     if (response.error) {
       errorMessage.value = response.message || "Failed to update category";
@@ -441,6 +439,14 @@ const generateSignature = (params) => {
         </div>
       </div>
     </div>
+    <CategoryUpdateModal
+      :is-open="isEditOpen"
+      :category="selectedCategory"
+      :loading="loading.update"
+      :error-message="errorMessage"
+      @close="closeEditForm"
+      @update="handleUpdateCategory"
+    />
 
     <!-- Delete Confirmation Pop-over Dialog -->
     <div
@@ -524,6 +530,9 @@ const generateSignature = (params) => {
       <div
         class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
       ></div>
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+      ></div>
     </div>
 
     <div v-else class="">
@@ -532,6 +541,9 @@ const generateSignature = (params) => {
         <div
           class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
         >
+          <div
+            class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10"
+          >
           <div
             class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10"
           >
@@ -614,3 +626,4 @@ const generateSignature = (params) => {
     </div>
   </div>
 </template>
+
