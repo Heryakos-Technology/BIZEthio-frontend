@@ -23,7 +23,7 @@
             <div class="mt-2 relative">
               <input
                 :type="isPasswordVisible ? 'text' : 'password'"
-                class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12"
+                class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12 "
                 v-model="model.user.password"
                 @input="checkPasswordStrength(), validate()"
               />
@@ -36,20 +36,22 @@
                 ></i>
               </span>
             </div>
-            <div v-if="errors.password" class="text-red-400 mt-1">
+            <div v-if="errors.password" class="text-red-400 mt-2">
               {{ errors.password }}
             </div>
-            <p :class="passwordStrengthClass">{{ passwordStrengthMessage }}</p>
+            <p :class="passwordStrengthClass" class="mt-2">{{ passwordStrengthMessage }}</p>
             <ul>
               <li
                 :class="{
                   'text-green-500': criterion.met,
                   'text-red-500': !criterion.met,
+                  
                 }"
+               
                 v-for="(criterion, index) in passwordCriteria"
                 :key="index"
               >
-                <span>
+                <span class="mt-10">
                   {{ criterion.text }}
                   <span v-if="criterion.met"
                     ><i class="fa-solid fa-check"></i
@@ -404,32 +406,7 @@
                 />
               </div>
             </div>
-            <!-- <div class="col-span-full">
-          <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Cover photo</label>
-          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-            <div class="text-center">
-              <svg class="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
-                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" />
-              </svg>
-              <div class="mt-4 flex text-sm/6 text-gray-600">
-                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
-                  <span>Upload a file</span>
-                  <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                </label>
-                <p class="pl-1">or drag and drop</p>
-              </div>
-              <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-            </div>
-          </div>
-        </div> -->
-            <!-- </div> -->
-            <!-- </div> -->
-            <!-- <div v-if="errors.profile_picture_url" class="text-red-400 mt-1">
-              {{ errors.profile_picture_url }}
-            </div> -->
-            <!-- <p class="text-center mt-10 -ml-57 text-cyan-500">{{ uploaded }}</p> -->
 
-            <!-- <img v-if="userPhoto" :src="userPhoto" alt="Uploaded Photo" class="mt-10 "/> -->
             <div class="mt-9">
               <p class="text-red-400">{{ checkboxMessage }}</p>
               <div class="flex w-3/4 mx-auto">
@@ -659,8 +636,9 @@ export default {
         model.value.user.profile_picture_url = response.data.secure_url;
         console.log('profile picture',model.value.user.profile_picture_url )
       } catch (error) {
-        uploaded.value = "Failed to upload photo";
+        uploaded.value = "Failed to upload photo Try again";
         console.error("Error uploading file:", error.response.data);
+        userPhoto.value = ''
       }
     };
     const handleFileDrop = (event) => {
@@ -699,7 +677,7 @@ export default {
       const phone_number = model.value.user.phone_number;
       const city = model.value.user.city;
       const sub_city = model.value.user.sub_city;
-      //const location = model.value.user.location;
+      const location = model.value.user.location;
       const verification_status = model.value.user.verification_status;
       const is_banned = model.value.user.is_banned;
       // const role = model.value.user.role;
@@ -729,7 +707,8 @@ export default {
         is_banned,
         // role,
         profile_picture_url,
-        token
+        token,
+        location
       };
 
       const auth = getAuth();
@@ -777,12 +756,19 @@ submitText.value = "Submit";
               localStorage.removeItem("phone_number");
               localStorage.removeItem("city");
               localStorage.removeItem("sub_city");
+              localStorage.removeItem("location");
               localStorage.removeItem("pendingUserData");
               localStorage.removeItem("temporaryPassword");
               localStorage.removeItem("registereduser");
+              localStorage.removeItem("locationInfo");
+              localStorage.removeItem("locationMessage");
+              
+              
               model.value.user.password = "";
               model.value.user.password_confirmation = "";
               model.value.user.profile_picture_url = "";
+              userPhoto.value = "";
+              uploaded.value = ''
 
               isLoading.value = "Submit";
               alert('Registered Successfully')
@@ -808,6 +794,16 @@ submitText.value = "Submit";
             model.value.user.password = "";
             model.value.user.password_confirmation = "";
             model.value.user.profile_picture_url = "";
+            userPhoto.value = "";
+            uploaded.value = ''
+            
+      passwordCriteria.value[0].met = false;
+      passwordCriteria.value[1].met = false;
+      passwordCriteria.value[2].met = false;
+      passwordCriteria.value[3].met = false;
+      passwordCriteria.value[4].met = false;
+      passwordStrengthMessage.value = "";
+        uploaded.value = ''
           }
         }
       } catch (error) {
@@ -820,6 +816,15 @@ submitText.value = "Submit";
         model.value.user.password = "";
         model.value.user.password_confirmation = "";
         model.value.user.profile_picture_url = "";
+        userPhoto.value = "";
+        passwordCriteria.value[0].met = false;
+      passwordCriteria.value[1].met = false;
+      passwordCriteria.value[2].met = false;
+      passwordCriteria.value[3].met = false;
+      passwordCriteria.value[4].met = false;
+      passwordStrengthMessage.value = "";
+    
+        uploaded.value = ''
       }
     };
     onMounted(() => {
@@ -830,6 +835,8 @@ submitText.value = "Submit";
       model.value.user.city = localStorage.getItem("city") || "";
       model.value.user.sub_city = localStorage.getItem("sub_city") || "";
       model.value.user.location = localStorage.getItem("location") || "";
+      console.log('location',model.value.user.location)
+
     });
 
 
