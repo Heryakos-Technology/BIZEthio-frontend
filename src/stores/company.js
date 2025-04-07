@@ -13,7 +13,7 @@ export const useCompanyStore = defineStore("companyStore", {
 
 
     async getAllCompanies() {
-      const res = await fetch("/api/companies", {
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/companies", {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
