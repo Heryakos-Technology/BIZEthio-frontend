@@ -27,7 +27,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async getReview(companyId) {
-      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/reviews/${companyId}`, {
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/reviews/company/${companyId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
