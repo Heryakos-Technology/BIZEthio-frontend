@@ -1,13 +1,4 @@
 <script setup>
-import restaurantIcon from "/images/categoriesIcons/restaurant.png";
-import retailIcon from "/images/categoriesIcons/retail.png";
-import electronicsIcon from "/images/categoriesIcons/electronics.png";
-import hotelsIcon from "/images/categoriesIcons/hotels.png";
-import healthIcon from "/images/categoriesIcons/health.png";
-import entertainmentIcon from "/images/categoriesIcons/entertainment.png";
-import automotiveIcon from "/images/categoriesIcons/automotive.png";
-import educationIcon from "/images/categoriesIcons/education.png";
-import pharmacyIcon from "/images/categoriesIcons/pharmacy.png";
 import { useCategoryStore } from "@/stores/category";
 import { onMounted, ref } from "vue";
 
@@ -83,7 +74,7 @@ const getImageUrl = (images) => {
       class="grid gap-y-4 mt-8 md:mt-16 place-items-center sm:grid-cols-2 lg:grid-cols-3"
     >
       <div
-        v-for="(category, index) in categories"
+        v-for="(category, index) in categories.slice(0, 9)"
         :key="index"
         class="flex gap-x-4 bg-primaryColor/80 items-center w-full max-w-[300px] px-4 py-5 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 ease-linear relative"
       >

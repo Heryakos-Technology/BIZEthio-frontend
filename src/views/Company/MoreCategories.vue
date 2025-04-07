@@ -1,90 +1,89 @@
 <script setup>
-import UserLayout from '@/layout/UserLayout.vue';
-import restaurantIcon from "/images/categoriesIcons/restaurant.png";
-import retailIcon from "/images/categoriesIcons/retail.png";
-import electronicsIcon from "/images/categoriesIcons/electronics.png";
-import hotelsIcon from "/images/categoriesIcons/hotels.png";
-import healthIcon from "/images/categoriesIcons/health.png";
-import entertainmentIcon from "/images/categoriesIcons/entertainment.png";
-import automotiveIcon from "/images/categoriesIcons/automotive.png";
-import educationIcon from "/images/categoriesIcons/education.png";
-import pharmacyIcon from "/images/categoriesIcons/pharmacy.png";
+import UserLayout from "@/layout/UserLayout.vue";
 import { useCategoryStore } from "@/stores/category";
+import { onMounted, ref } from "vue";
 
 const { getAllCategories } = useCategoryStore();
+const categories = ref([]);
+const loading = ref(true);
 
-const categories = [
-  {
-    name: "Catering Service",
-    iconSrc: restaurantIcon,
-  },
-  {
-    name: "Retail Shops",
-    iconSrc: retailIcon,
-  },
-  {
-    name: "Technology",
-    iconSrc: electronicsIcon,
-  },
-  {
-    name: "Hotels & Accommodations",
-    iconSrc: hotelsIcon,
-  },
-  {
-    name: "Health & Wellness",
-    iconSrc: healthIcon,
-  },
-  {
-    name: "Entertainment & Events",
-    iconSrc: entertainmentIcon,
-  },
-  {
-    name: "Automotive Services",
-    iconSrc: automotiveIcon,
-  },
-  {
-    name: "Education & Training",
-    iconSrc: educationIcon,
-  },
-  {
-    name: "Pharmacy",
-    iconSrc: pharmacyIcon,
-  },
-];
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
+
+onMounted(async () => {
+  try {
+    loading.value = true;
+    categories.value = await getAllCategories();
+    console.log(categories.value);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  } finally {
+    loading.value = false;
+  }
+});
+
+const getImageUrl = (images) => {
+  if (images) {
+    try {
+      const parsedImages = JSON.parse(images);
+      return parsedImages.length > 0
+        ? parsedImages[0]
+        : "/defalt-company-image.jpg";
+    } catch (error) {
+      console.error("Error parsing image URL:", error);
+      return "/defalt-company-image.jpg";
+    }
+  }
+  return "/defalt-company-image.jpg";
+};
 </script>
 
 <template>
   <UserLayout>
     <div
-    class=" pb-4 xs:translate-y-0 md:mt-8 px-2 lg:my-16  xl:max-w-[1200px] mx-auto"
-  >
-    <div
-      class="flex justify-center items-center text-sm xs:text-base xs:px-4 sm:px-8 md:px-0"
-    >
-      <h1 class="text-primaryColor uppercase font-bold md:text-center md:text-3xl">
-        All Categories
-      </h1>
-    </div>
-
-    <div
-      class="grid gap-y-4 mt-8 md:mt-16 place-items-center sm:grid-cols-2 lg:grid-cols-3"
+      class="pb-4 xs:translate-y-0 md:mt-8 px-2 lg:my-16 xl:max-w-[1200px] mx-auto"
     >
       <div
-        v-for="(category, index) in categories"
-        :key="index"
-        class="flex gap-x-4 bg-primaryColor/80 items-center w-full max-w-[300px] px-4 py-5 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 ease-linear relative"
+        class="flex justify-center items-center text-sm xs:text-base xs:px-4 sm:px-8 md:px-0"
       >
-        <div class="size-12">
-          <img :src="category.iconSrc" class="w-full" :alt="category.name" />
-        </div>
-        <p class="text-white">{{ category.name }}</p>
+        <h1
+          class="text-primaryColor uppercase font-bold md:text-center md:text-3xl"
+        >
+          All Categories
+        </h1>
+      </div>
 
-        <RouterLink
-          :to="{ name: 'CategoryPage', params: { name: category.name } }"
-          class="inset-0 absolute z-10"
-        ></RouterLink>
+      <!-- Loading spinner while fetching data -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+        ></div>
+      </div>
+
+      <div
+        class="grid gap-y-4 mt-8 md:mt-16 place-items-center sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <div
+          v-for="(category, index) in categories"
+          :key="index"
+          class="flex gap-x-4 bg-primaryColor/80 items-center w-full max-w-[300px] px-4 py-5 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 ease-linear relative"
+        >
+          <div class="size-12">
+            <img
+              :src="category.image_link"
+              class="w-[80%]"
+              :alt="category.name"
+            />
+          </div>
+          <p class="text-white">{{ category.name }}</p>
+
+          <RouterLink
+            :to="{ name: 'CategoryPage', params: { name: category.name } }"
+            class="inset-0 absolute z-10"
+          ></RouterLink>
+        </div>
       </div>
     </div>
-  </div>
   </UserLayout>
 </template>
