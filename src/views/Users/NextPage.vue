@@ -520,7 +520,7 @@ export default {
         password_confirmation: "",
         verification_status: "unverified",
         profile_picture_url: "",
-        role: "user",
+        // role: "admin",
         is_banned: 1,
       },
     });
@@ -551,14 +551,13 @@ export default {
         errors.value.password = "password is required.";
       if (!model.value.user.password_confirmation)
         errors.value.password_confirmation = "password is required.";
-      // if (!model.value.user.profile_picture_url)
-      //   errors.value.profile_picture_url = "profile picture is required.";
+
     };
     const isButtonDisabled = computed(() => {
       return (
         !model.value.user.password ||
         !model.value.user.password_confirmation 
-       // !model.value.user.profile_picture_url
+   
       );
     });
     watch(isCheckboxChecked, (newValue) => {
@@ -703,7 +702,7 @@ export default {
       //const location = model.value.user.location;
       const verification_status = model.value.user.verification_status;
       const is_banned = model.value.user.is_banned;
-      const role = model.value.user.role;
+      // const role = model.value.user.role;
       const profile_picture_url = model.value.user.profile_picture_url;
       const password_confirmation = model.value.user.password_confirmation;
       
@@ -728,7 +727,7 @@ export default {
         sub_city,
         verification_status,
         is_banned,
-        role,
+        // role,
         profile_picture_url,
         token
       };
@@ -833,43 +832,6 @@ submitText.value = "Submit";
       model.value.user.location = localStorage.getItem("location") || "";
     });
 
-    // Function to complete registration after email verification
-    // const completeRegistration = async () => {
-    //   const auth = getAuth(); // Get the current auth instance
-    //   const user = auth.currentUser; // Get the current user
-    //   const userData = JSON.parse(localStorage.getItem('pendingUserData'));
-
-    //   if (!userData) {
-    //     alert('No pending registration found. Please register first.');
-    //     return;
-    //   }
-
-    //   if (!user || !user.emailVerified) {
-    //     alert('Please verify your email address before completing registration.');
-    //     return; // Prevent completion if email is not verified
-    //   }
-
-    //   try {
-    //     // Step 3: Register the user's other details in the backend
-    //     const response = await axios.post(`${base_url}/register`, userData, {
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //       }
-    //     });
-
-    //     console.log('User registered successfully', response.data);
-    //     registered.value = true;
-
-    //     // Clear pending user data
-    //     localStorage.removeItem('pendingUserData');
-
-    //     // Redirect to sign-in page
-    //     router.push('/signin');
-    //   } catch (error) {
-    //     console.error('Error during backend registration:', error.message || 'An error occurred. Please try again.');
-    //     errors.value = error.response ? error.response.data.message : 'An error occurred. Please try again.';
-    //   }
-    // };
 
     const togglePasswordVisibility = () => {
       isPasswordVisible.value = !isPasswordVisible.value;
