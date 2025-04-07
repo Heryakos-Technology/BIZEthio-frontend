@@ -1,6 +1,6 @@
 <template>
-  <UserLayout>
-    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto lg:pt-24 lg:pb-40">
+  <UserLayoutUser>
+    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto  lg:pb-40">
       <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl">
         <p class="font-semibold lg:font-bold lg:ml-4 mb-2">Change Password</p>
         <div class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[370px] lg:w-8/9 mx-auto mb-4 rounded-2xl p-8">
@@ -73,13 +73,13 @@
         </div>
       </div>
     </div>
-  </UserLayout>
+  </UserLayoutUser>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useRouter } from 'vue-router';
 
 const currentPassword = ref("");

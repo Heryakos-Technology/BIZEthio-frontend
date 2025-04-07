@@ -36,20 +36,16 @@ export default {
   },
   methods: {
     initMap() {
-      // Initialize the map centered on the current location
       this.map = L.map('map').setView([this.currentLocation.lat, this.currentLocation.lng], 13);
 
-      // Add tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
       }).addTo(this.map);
 
-      // Add a marker for the current location
       this.marker = L.marker([this.currentLocation.lat, this.currentLocation.lng]).addTo(this.map)
         .bindPopup('You are here!')
         .openPopup();
 
-      // Allow adding a new marker on map click
       this.map.on('click', (e) => {
         this.addMarker(e.latlng);
       });
