@@ -330,7 +330,7 @@ const generateSignature = (params) => {
     <!-- Edit Category Pop-over Dialog -->
     <div
       v-if="isEditOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
     >
       <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <div class="flex justify-between items-center mb-4">
@@ -521,7 +521,9 @@ const generateSignature = (params) => {
 
   <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
     <div v-if="loading.fetch" class="flex justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+      ></div>
     </div>
 
     <div v-else class="">
@@ -530,7 +532,9 @@ const generateSignature = (params) => {
         <div
           class="grid grid-cols-[50px_140px_1fr_100px] bg-white uppercase font-bold"
         >
-          <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
+          <div
+            class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10"
+          >
             No
           </div>
           <div
