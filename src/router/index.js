@@ -11,10 +11,7 @@ import FileUpload from '../views/Users/FileUpload.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import NextPage from '../views/Users/NextPage.vue'
 import SignIn from '../views/Users/SignIn.vue'
-// import Verify from '../views/Users/Verify.vue'
-// import PasswordStrength from '../views/Users/PasswordStrength.vue'
-// import PasswordVesibility from '../views/Users/PasswordVesibility.vue'
-// import InputValidation from '../views/Users/InputValidation.vue'
+
 
 
 import EditProfile from '@/views/userPage/EditProfile.vue'
@@ -29,6 +26,8 @@ import AdminCategories from '@/views/Admin/AdminCategories.vue'
 import AdminRating from '@/views/Admin/AdminRating.vue'
 import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
+import MoreCategories from '@/views/Company/MoreCategories.vue';
+import CategoryPage from '@/views/Company/CategoryPage.vue';
 
 
 
@@ -44,54 +43,24 @@ const router = createRouter({
 
     },
 
+    // Auth Related Routes
     {
-
       path: '/registration',
       name: 'RegistrationPage',
       component: RegistrationPage,
       meta: { guest: true },
-
-    },
-    {
-
-      path: '/forgot',
-      name: 'ForgotPassword',
-      component: ForgotPassword,
-      meta: { auth: true },
-
     },
     {
       path: '/signin',
       name: 'SignIn',
       component: SignIn,
       meta: { guest: true },
-
     },
-
-
     {
       path: '/signup',
       name: 'UserRegistration1',
       component: UserRegistration1,
       meta: { guest: true },
-
-    },
-    {
-      path: '/ChangePassword',
-      name: 'ChangePassword',
-      component: ChangePassword,
-    },
-    {
-      path: '/UserProfile',
-      name: 'UserProfile',
-      component: UserProfile,
-      meta: { auth: true },
-
-    },
-    {
-      path: '/UserLanding',
-      name: 'UserLanding',
-      component: UserLanding,
     },
 
     {
@@ -99,57 +68,56 @@ const router = createRouter({
       name: 'NextPage',
       component: NextPage,
     },
+
+    {
+      path: '/forgot',
+      name: 'ForgotPassword',
+      component: ForgotPassword,
+      meta: { auth: true },
+    },
+    {
+      path: '/ChangePassword',
+      name: 'ChangePassword',
+      component: ChangePassword,
+    },
+
+    // User Related Routes
+    {
+      path: '/UserProfile',
+      name: 'UserProfile',
+      component: UserProfile,
+      meta: { auth: true },
+    },
+    {
+      path: '/UserLanding',
+      name: 'UserLanding',
+      component: UserLanding,
+    },
+    {
+      path: '/EditProfile',
+      name: 'EditProfile',
+      component: EditProfile,
+    },
+
     {
       path: '/Social',
       name: 'Social',
       component: Social,
     },
-
-    // {
-    //   path: '/verify-email',
-    //   name: 'Verify',
-    //   component: Verify,
-    // },
-    // {
-    //   path: '/InputValidation',
-    //   name: 'InputValidation',
-    //   component: InputValidation,
-    // },
-
-    // {
-    //   path: '/PasswordVesibility',
-    //   name: 'PasswordVesibility',
-    //   component: PasswordVesibility,
-    // },
-
-    // {
-    //   path: '/PasswordStrength',
-    //   name: 'PasswordStrength',
-    //   component: PasswordStrength,
-    // },
-
-
-
     {
       path: '/FileUpload',
       name: 'FileUpload',
       component: FileUpload,
     },
 
-    {
-      path: '/EditProfile',
-      name: 'EditProfile',
-      component: EditProfile,
-    },
+    // Admin Related Routes
     {
       path: '/admin/profile',
       name: 'AdminProfile',
       component: AdminProfile,
       meta: { admin: true },
-
     },
     {
-
       path: '/admin/categories',
       name: 'AdminCategories',
       component: AdminCategories,
@@ -160,17 +128,13 @@ const router = createRouter({
       name: 'AdminRating',
       component: AdminRating,
       meta: { admin: true },
-
     },
     {
       path: '/admin/users',
       name: 'AdminUsers',
       component: AdminUsers,
       meta: { admin: true },
-
     },
-
-
     {
       path: '/admin/campany',
       name: 'CampanyDashBord',
@@ -178,10 +142,21 @@ const router = createRouter({
       meta: { admin: true },
     },
 
+    // Company Related Routes
     {
       path: '/company/:id',
       name: 'CompanyDetail',
       component: CompanyDetail,
+    },
+    {
+      path: '/company/categories',
+      name: 'MoreCategories',
+      component: MoreCategories,
+    },
+    {
+      path: '/company/categories/:name',
+      name: 'CategoryPage',
+      component: CategoryPage,
     },
 
 
