@@ -47,7 +47,7 @@
                 ></i>
               </span>
             </div> -->
-            <div class="mt-2 relative">
+              <div class="mt-2 relative">
                 <input
                   :type="isPasswordVisible ? 'text' : 'password'"
                   class="border focus:outline-none pl-3 er-2 rounded-xl border-blue-300 w-7/13 md:h-12"
@@ -56,18 +56,20 @@
                 />
                 <span
                   @click="togglePasswordVisibility"
-                  class=" transform -translate-y-1/2 cursor-pointer"
+                  class="transform -translate-y-1/2 cursor-pointer"
                 >
                   <i
                     :class="
-                      isPasswordVisible ? 'fas fa-eye-slash w-1/3 -ml-10 z-10 text-gray-500' : 'fas fa-eye w-1/3 -ml-10 z-10 text-gray-500'
+                      isPasswordVisible
+                        ? 'fas fa-eye-slash w-1/3 -ml-10 z-10 text-gray-500'
+                        : 'fas fa-eye w-1/3 -ml-10 z-10 text-gray-500'
                     "
                   ></i>
                 </span>
               </div>
-            <p v-if="passwordError" class="text-red-500 mt-5">
-              {{ passwordError }}
-            </p>
+              <p v-if="passwordError" class="text-red-500 mt-5">
+                {{ passwordError }}
+              </p>
             </div>
             <div class="mt-9 flex w-12/12 mx-auto font-light">
               <div class="md:text-lg md:w-1/2 md:mx-auto">
@@ -103,8 +105,7 @@
               <button
                 @click="
                   () => {
-                     handleLogin();
-                   
+                    handleLogin();
                   }
                 "
                 :disabled="isLoginButtonDisabled"
@@ -119,8 +120,10 @@
               </button>
             </div>
             <div v-if="loading2" class="w-1/2 mx-auto py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
+              <div
+                class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
+              ></div>
+            </div>
             <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm w-12/10 mx-auto -ml-4 lg:text-sm">
                 Don't have an account ?
@@ -175,8 +178,10 @@
               </div>
             </div>
             <div v-if="loading" class="w-1/2 mx-auto py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"></div>
-        </div>
+              <div
+                class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"
+              ></div>
+            </div>
           </div>
 
           <div
@@ -241,7 +246,11 @@
                 class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
               >
                 <i
-                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye text-gray-500'"
+                  :class="
+                    isPasswordVisible
+                      ? 'fas fa-eye-slash'
+                      : 'fas fa-eye text-gray-500'
+                  "
                 ></i>
               </span>
             </div>
@@ -338,8 +347,10 @@
             </div>
           </div>
           <div v-if="loading" class="w-1/2 mx-auto py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
+            <div
+              class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
+            ></div>
+          </div>
         </div>
       </div>
 
@@ -423,7 +434,7 @@
                 <button
                   @click="
                     () => {
-                      handleLogin
+                      handleLogin;
                     }
                   "
                   :class="{
@@ -445,7 +456,10 @@
                   Or connect with social media
                 </p>
               </div>
-              <div class="w-4/5 mx-auto text-white bg-cyan mt-10"  v-if="!loading">
+              <div
+                class="w-4/5 mx-auto text-white bg-cyan mt-10"
+                v-if="!loading"
+              >
                 <div>
                   <button
                     @click="signInWithGoogle"
@@ -482,8 +496,10 @@
                 </div>
               </div>
               <div v-if="loading" class="w-1/2 mx-auto py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
+                <div
+                  class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
+                ></div>
+              </div>
             </div>
           </div>
           <!-- <div class="w-1 h-full bg-black transform  absolute left-171 rotate-6">
@@ -496,13 +512,12 @@
     <!-- <div v-if="loading" class="flex justify-center items-center py-20">
           <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
         </div> -->
-        <!-- <div v-else-if="!userInformations || userInformations == null || userInformations == ''" class=" justify-center items-center py-20 -mt-8">
+    <!-- <div v-else-if="!userInformations || userInformations == null || userInformations == ''" class=" justify-center items-center py-20 -mt-8">
           <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
           </svg>
           <p class="text-gray-400 ml-32 lg:ml-76 ">no user information yet!</p>
         </div> -->
-
   </UserLayout>
 </template>
 
@@ -513,8 +528,13 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { login } from "../../auth";
 import { auth, googleProvider, facebookProvider } from "..//../firebase";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, fetchSignInMethodsForEmail  } from "firebase/auth";
-
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
 
 export default {
   components: {
@@ -532,8 +552,8 @@ export default {
     const emailError = ref("");
     const passwordError = ref("");
     const isPasswordVisible = ref(false);
-    const loading = ref(false)
-    const loading2 = ref(false)
+    const loading = ref(false);
+    const loading2 = ref(false);
 
     const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === "" || password.value.trim() === "";
@@ -544,142 +564,156 @@ export default {
 
     //google
     const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-   loading.value = true
-    const user = result.user;
-    console.log("User signed in:", user);
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        loading.value = true;
+        const user = result.user;
+        console.log("User signed in:", user);
 
-    // Get the Firebase token
-    const token = await user.getIdToken();
-    console.log("Firebase Token:", token); 
-    localStorage.setItem('token', token);
+        // Get the Firebase token
+        const token = await user.getIdToken();
+        console.log("Firebase Token:", token);
+        localStorage.setItem("token", token);
 
-    if (!token) {
-      console.error("Failed to retrieve token.");
-      return;
-    }
+        if (!token) {
+          console.error("Failed to retrieve token.");
+          return;
+        }
 
-    // Check if the user already exists in your backend
-    const response = await checkUserExists(user.email); // Implement this function
+        // Check if the user already exists in your backend
+        const response = await checkUserExists(user.email); // Implement this function
 
-    if (response.exists) {
-      // User already exists, store user ID and redirect
-      localStorage.setItem('user_id', response.userId);
-      console.log("User already exists. Redirecting to user profile...");
-      router.push("/UserLanding");
-      loading.value = false
-      signInMessage.value = "Sent";
-    } else {
-      // User does not exist, register the user
-      await registerUser(user, token);
-      console.log("User registered successfully. Redirecting to user profile...");
-      router.push("/UserLanding");
-      loading.value = false
-      signInMessage.value = "Sent";
-    }
+        if (response.exists) {
+          // User already exists, store user ID and redirect
+          localStorage.setItem("user_id", response.userId);
+          console.log("User already exists. Redirecting to user profile...");
+          router.push("/UserLanding");
+          loading.value = false;
+          signInMessage.value = "Sent";
+        } else {
+          // User does not exist, register the user
+          await registerUser(user, token);
+          console.log(
+            "User registered successfully. Redirecting to user profile..."
+          );
+          router.push("/UserLanding");
+          loading.value = false;
+          signInMessage.value = "Sent";
+        }
+      } catch (error) {
+        console.error("Error signing in with Google:", error);
+        loading.value = false;
+        alert(error);
+      }
+    };
 
-  } catch (error) {
-    console.error("Error signing in with Google:", error);
-    loading.value = false
-    alert(error)
-  }
-};
+    // Example function to check if user exists
+    const checkUserExists = async (email) => {
+      try {
+        const response = await axios.post(
+          "https://your-backend-url/api/check-user",
+          { email }
+        );
+        return { exists: response.data.exists, userId: response.data.userId };
+      } catch (error) {
+        console.error("Error checking user existence:", error);
+        return { exists: false };
+      }
+    };
 
-// Example function to check if user exists
-const checkUserExists = async (email) => {
-  try {
-    const response = await axios.post('https://your-backend-url/api/check-user', { email });
-    return { exists: response.data.exists, userId: response.data.userId };
-  } catch (error) {
-    console.error("Error checking user existence:", error);
-    return { exists: false };
-  }
-};
+    const auth = getAuth();
+    const facebookProvider = new FacebookAuthProvider();
 
-const auth = getAuth();
-const facebookProvider = new FacebookAuthProvider();
+    const signInWithFacebook = async () => {
+      try {
+        loading.value = true;
+        const result = await signInWithPopup(auth, facebookProvider);
+        const user = result.user;
+        console.log("User signed in:", user);
 
+        // Get the Firebase token
+        const token = await user.getIdToken();
+        localStorage.setItem("token", token);
 
-const signInWithFacebook = async () => {
-  try {
-    loading.value = true
-    const result = await signInWithPopup(auth, facebookProvider);
-    const user = result.user;
-    console.log("User signed in:", user);
+        if (!token) {
+          console.error("Failed to retrieve token.");
+          return;
+        }
 
-    // Get the Firebase token
-    const token = await user.getIdToken();
-    localStorage.setItem('token', token);
+        // Check if the user already exists in your backend
+        const response = await checkUserExists(user.email);
 
-    if (!token) {
-      console.error("Failed to retrieve token.");
-      return;
-    }
+        if (response.exists) {
+          // User already exists, store user ID and redirect
+          localStorage.setItem("user_id", response.userId);
+          console.log("User already exists. Redirecting to user profile...");
+          router.push("/UserLanding");
+          loading.value = false;
+          signInMessage.value = "Sent";
+        } else {
+          // User does not exist, register the user
+          await registerUser(user, token);
+          console.log(
+            "User registered successfully. Redirecting to user profile..."
+          );
+          router.push("/UserLanding");
+          signInMessage.value = "Sent";
+        }
+      } catch (error) {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          loading.value = false;
+          // Handle the case where the user is linked to another provider
+          const email = error.email; // Get the email from the error
+          const methods = await fetchSignInMethodsForEmail(auth, email); // Check linked providers
 
-    // Check if the user already exists in your backend
-    const response = await checkUserExists(user.email);
+          console.log(
+            "User exists with different credential providers:",
+            methods
+          );
+          signInMessage.value =
+            "This email is linked to another account. Please sign in with that provider.";
+        } else {
+          console.error("Error signing in with Facebook:", error);
+          loading.value = false;
+          signInMessage.value = ""; // Clear loading message on error
+        }
+      }
+    };
 
-    if (response.exists) {
-      // User already exists, store user ID and redirect
-      localStorage.setItem('user_id', response.userId);
-      console.log("User already exists. Redirecting to user profile...");
-      router.push("/UserLanding");
-      loading.value = false
-      signInMessage.value = "Sent";
-    } else {
-      // User does not exist, register the user
-      await registerUser(user, token);
-      console.log("User registered successfully. Redirecting to user profile...");
-      router.push("/UserLanding");
-      signInMessage.value = "Sent";
-    }
+    // Example function to check if user exists
+    // const checkUserExists = async (email) => {
+    //   try {
+    //     const response = await axios.post('https://your-backend-url/api/check-user', { email });
+    //     return { exists: response.data.exists, userId: response.data.userId };
+    //   } catch (error) {
+    //     console.error("Error checking user existence:", error);
+    //     return { exists: false };
+    //   }
+    // };
 
-  } catch (error) {
-    if (error.code === 'auth/account-exists-with-different-credential') {
-      loading.value = false
-      // Handle the case where the user is linked to another provider
-      const email = error.email; // Get the email from the error
-      const methods = await fetchSignInMethodsForEmail(auth, email); // Check linked providers
-
-      console.log("User exists with different credential providers:", methods);
-      signInMessage.value = "This email is linked to another account. Please sign in with that provider.";
-    } else {
-      console.error("Error signing in with Facebook:", error);
-      loading.value = false
-      signInMessage.value = ""; // Clear loading message on error
-    }
-  }
-};
-
-// Example function to check if user exists
-// const checkUserExists = async (email) => {
-//   try {
-//     const response = await axios.post('https://your-backend-url/api/check-user', { email });
-//     return { exists: response.data.exists, userId: response.data.userId };
-//   } catch (error) {
-//     console.error("Error checking user existence:", error);
-//     return { exists: false };
-//   }
-// };
-
-const registerUser = async (user, token) => {
-  try {
-    const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
-      name: user.displayName,
-      email: user.email,
-      token: token, 
-      // phone_number:'0988283088',
-      is_banned:1,
-     // : "admin",
-      verification_status: "unverified",
-    });
-    console.log('User registered in backend:', response.data.user);
-    localStorage.setItem('user_id',response.data.user.id)
-  } catch (error) {
-    console.error('Error registering user:', error.response ? error.response.data : error.message);
-  }
-};
+    const registerUser = async (user, token) => {
+      try {
+        const response = await axios.post(
+          `https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`,
+          {
+            name: user.displayName,
+            email: user.email,
+            token: token,
+            // phone_number:'0988283088',
+            is_banned: 1,
+            // : "admin",
+            verification_status: "unverified",
+          }
+        );
+        console.log("User registered in backend:", response.data.user);
+        localStorage.setItem("user_id", response.data.user.id);
+      } catch (error) {
+        console.error(
+          "Error registering user:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    };
     const validateEmail = () => {
       emailError.value = "";
       if (!email.value) {
@@ -719,78 +753,76 @@ const registerUser = async (user, token) => {
       }
     });
 
-   
-const handleLogin = async () => {
-  emailError.value = "";
-  passwordError.value = "";
-  signInMessage.value = "Loading...";
+    const handleLogin = async () => {
+      emailError.value = "";
+      passwordError.value = "";
+      signInMessage.value = "Loading...";
 
-  // Basic email validation
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(email.value)) {
-    emailError.value = "Invalid email format.";
-    return;
-  }
-
-  try {
-   
-    const { userCredential,  } = await login(email.value, password.value);
-    const user = userCredential.user;
-
-   
-    if (user) {
-      const token = await user.getIdToken();
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      //alert("Logged in successfully!");
-      signInMessage.value = "Continue";
-      console.log('token', token);
-      console.log("Redirecting to user profile with :");
-      
-      loading2.value = true
-      const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`, {
-        email: email.value,
-        password: password.value,
-        token: token 
-      });
-
-      const backendToken = response.data.token;
-      const userData = response.data.user;
-
-      console.log("Token from backend:", backendToken);
-      console.log("User from backend:", userData);
-//local storage
-    //localStorage.setItem("token", backendToken);
-      localStorage.setItem("user_id", userData.id); 
-      // localStorage.setItem("user_", userData.role);
-      localStorage.setItem("user_name", userData.name);
-
-
-      axios.defaults.headers.common["Authorization"] = `Bearer ${backendToken}`;
-
-      if (token) {
-        
-        console.log("Redirecting to user profile...");
-        router.push("/UserLanding");
-        loading2.value = false
-        signInMessage.value = "Sent";
+      // Basic email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value)) {
+        emailError.value = "Invalid email format.";
+        return;
       }
-    } else {
-      alert("User is not authenticated.");
-      loading2.value = false
-      signInMessage.value = "Submit";
-      email.value = '',
-      password.value = ''
-    }
-  } catch (error) {
-    signInMessage.value = "Submit";
-    console.error("Login error:", error.message);
-    loading2.value = false
-     email.value = '',
-      password.value = ''
-    alert(error.message);
-  }
-};
+
+      try {
+        const { userCredential } = await login(email.value, password.value);
+        const user = userCredential.user;
+
+        if (user) {
+          const token = await user.getIdToken();
+          localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          //alert("Logged in successfully!");
+          signInMessage.value = "Continue";
+          console.log("token", token);
+          console.log("Redirecting to user profile with :");
+
+          loading2.value = true;
+          const response = await axios.post(
+            `https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`,
+            {
+              email: email.value,
+              password: password.value,
+              token: token,
+            }
+          );
+
+          const backendToken = response.data.token;
+          const userData = response.data.user;
+
+          console.log("Token from backend:", backendToken);
+          console.log("User from backend:", userData);
+          //local storage
+          //localStorage.setItem("token", backendToken);
+          localStorage.setItem("user_id", userData.id);
+          localStorage.setItem("userInfo", JSON.stringify(userData));
+          localStorage.setItem("user_name", userData.name);
+
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${backendToken}`;
+
+          if (token) {
+            console.log("Redirecting to user profile...");
+            router.push("/UserLanding");
+            loading2.value = false;
+            signInMessage.value = "Sent";
+          }
+        } else {
+          alert("User is not authenticated.");
+          loading2.value = false;
+          signInMessage.value = "Submit";
+          (email.value = ""), (password.value = "");
+        }
+      } catch (error) {
+        signInMessage.value = "Submit";
+        console.error("Login error:", error.message);
+        loading2.value = false;
+        (email.value = ""), (password.value = "");
+        alert(error.message);
+      }
+    };
     // const handleLogin = async () => {
     //   if (handleLogin2) {
     //     emailError.value = "";
@@ -809,7 +841,7 @@ const handleLogin = async () => {
     //       console.log("User:", user);
     //       console.log("response:", response);
     //       localStorage.setItem("token", token);
-         
+
     //       localStorage.setItem("user_id", user.id);
     //       localStorage.setItem("user_", user.);
     //       localStorage.setItem("user_name", user.name);
@@ -853,7 +885,7 @@ const handleLogin = async () => {
       togglePasswordVisibility,
       isPasswordVisible,
       loading,
-      loading2
+      loading2,
     };
   },
 };

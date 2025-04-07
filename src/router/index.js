@@ -168,8 +168,16 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
-  const user_role = localStorage.getItem("user_role");
-  const userId = localStorage.getItem("user_id");
+  const userInfoString = localStorage.getItem("userInfo");
+
+  const userInfo = JSON.parse(userInfoString);
+
+  const user_role = userInfo?.role;
+  const userId = userInfo?.id;
+
+
+
+
 
 
 
