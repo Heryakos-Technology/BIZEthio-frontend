@@ -182,9 +182,9 @@ onMounted(async () => {
         </div>
     </div>
 </div>
-            <div class="recommended-section ">
-                <p class="ml-10 lg:ml-46 font-bold lg:text-2xl">recommended for you</p>
-                <div class=" lg:flex w-11/12 px-6 mx-auto mt-4 lg:ml-40">
+            <div class="recommended-section w-5/6  mx-auto">
+                <p class="ml-10 lg:ml-19 font-bold lg:text-2xl">recommended for you</p>
+                <div class=" lg:flex w-11/12 px-6 mx-auto mt-4 lg:ml-">
                     <div class="bg-[#1B7590] rounded-lg h-96 lg:mt-4 lg:h-8/9 lg:mr-10 lg:pb-2">
                         <img src="/sishu.png" alt="" class="" style="border-bottom-right-radius: 180px;">
                         <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
@@ -215,11 +215,11 @@ onMounted(async () => {
                     </div>
 
                 </div>
-                <p class="underline text-[#003962] mt-2 lg:ml-46 md:ml-12 hover:cursor-pointer ml-10">More Results</p>
+                <p class="underline text-[#003962] mt-2 lg:ml-20 md:ml-12 hover:cursor-pointer ml-10">More Results</p>
 
-                <div class="Toppicks-section mt-18 pb-20">
-                    <p class="font-bold ml-10 lg:text-2xl lg:ml-44">Top picks</p>
-                    <div class="w-11/12 px-6 mx-auto mt-4 lg:ml-40">
+                <div class="Toppicks-section mt-18 w-5/6 -ml-0 mx-auto pb-20">
+                    <p class="font-bold ml-10 lg:text-2xl lg:ml-17">Top picks</p>
+                    <div class="w-11/12 px-6 mx-auto mt-4 lg:ml-">
                         <div class="lg:flex">
                             <div class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2">
                                 <img src="/edna-mol.png" alt="" class="" style="border-bottom-right-radius: 180px;">
