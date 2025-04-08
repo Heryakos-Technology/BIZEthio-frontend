@@ -95,9 +95,12 @@
               </div>
             </div>
           </div>
-          <div v-if="showMap">
-            <MapComponent :currentLocation="selectedLatLng" @close="handleClose"
-              @location-selected="handleLocationSelected" />
+          <div v-if="showMap" class="modal">
+            <div class="modal-content"> 
+
+              <MapComponent :currentLocation="selectedLatLng" @close="handleClose"
+                @location-selected="handleLocationSelected" />
+            </div>
           </div>
         </div>
 
@@ -261,6 +264,14 @@ export default {
         lng: latlng.lng
       };
       console.log('Selected Location:', selectedLatLng.value);
+      if(userInformations.value.location.lat!== null&&userInformations.value.location.lng!== null){
+
+showMap.value = false;
+locationInfo.value = 'Location added Sucessfully '
+localStorage.setItem('locationInfo',locationInfo.value)
+locationMessage.value = 'Change Location'
+localStorage.setItem('locationMessage',locationMessage.value)
+}
     };
 
     onMounted(() => {
@@ -287,3 +298,27 @@ export default {
   },
 };
 </script>
+<style>
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  margin-top:80px;
+  padding: 10px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+</style>
