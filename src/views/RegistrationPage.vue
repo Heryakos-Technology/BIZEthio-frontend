@@ -901,7 +901,7 @@ updateCurrentEmail() {
   try {
     const response = await axios.get("https://api.countrylayer.com/v2/all", {
       params: {
-        access_key: "40e89f1514cb8cc8aac3f4d45c0451ff" 
+        access_key: "a8e3e4dae4186911b562e106bb4ca0d9" 
       }
     });
     
