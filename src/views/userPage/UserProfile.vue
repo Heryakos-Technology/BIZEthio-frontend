@@ -1,5 +1,5 @@
 <script setup>
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useAuthStore } from "@/stores/auth";
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -91,8 +91,8 @@ const fetchratedCompany = async () => {
 
 <template>
   <!-- <Navbar class="" /> -->
-  <UserLayout>
-    <div class="lg:px-20 lg:w-9/10 lg:mx-auto lg:pt-24">
+  <UserLayoutUser>
+    <div class="lg:px-20 lg:w-9/10 lg:ml-28 lg:mx-auto lg:-pt-20">
       <div
         class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl"
       >
@@ -235,5 +235,5 @@ const fetchratedCompany = async () => {
       </div>
     </div>
     <!-- <FooterPart class="" /> -->
-  </UserLayout>
+  </UserLayoutUser>
 </template>
