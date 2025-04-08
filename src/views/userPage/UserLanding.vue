@@ -88,10 +88,10 @@ onMounted(async () => {
         <div class="">
             <div class="categories  lg:w-full mx-auto lg:mb-20">
                 <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
-                    <p class="text-center lg:font-semibold lg:text-lg lg:-ml-14">Quick search</p>
-                    <div class="flex w-72 lg:w-80 mt-4 mx-auto">
+                    <p class="lg:w-1/13 lg:ml-162 lg:font-semibold lg:text-lg ">Quick search</p>
+                    <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
                         <input v-model="search" @input="handleInput" type="text"
-                            class="w-56 lg:w-72 lg:-ml-10 lg:h-10  pl-12 h-9 bg-white outline-none rounded-tl-full rounded-br-full " />
+                            class="w-56 lg:w-72   lg:h-10  pl-12 h-9 bg-white outline-none rounded-tl-full rounded-br-full " />
                         <div v-if="showSuggestions && filteredCompanies.length > 0"
                             class="absolute w-1/5 lg:mt-12 lg:-ml-10 mx-auto bg-white border border-gray-300  rounded-md mt-1 z-10">
                             <ul>
@@ -308,11 +308,11 @@ onMounted(async () => {
                         <p class="text-xs lg:text-lg text-gray-300 font-serif  ml-8">{{ review.company.name }}</p>
                         <div class="flex mt- w-64 ml-8">
                             <i class="fa-solid fa-user mr-4 text-gray-800 lg:mt-2"></i>
-                            <p class="text-xs lg:text-lg text-gray-300">{{ review.user.name }}</p>
+                            <p class="text-xs lg:text-md lg:mt-2.5 text-gray-300">{{ review.user.name }}</p>
                         </div>
                         <div class="w-80 mx-auto ml-8">
                             <p
-                                class="font-bold text-sm lg:text-lg text-gray-200 text-center lg:mt-10  lg:mb-6">
+                                class="font-bold text-sm lg:text-md text-gray-200 text-center lg:mt-10  lg:mb-6">
                                 {{ review.name }}
                             </p>
                             <div class="flex ml-0 -mt-6 w-10 h-6 mx-auto">
@@ -322,7 +322,7 @@ onMounted(async () => {
                                     <i class="fa-solid fa-star"></i>
                                 </div>
                             </div>
-                            <p class="w- h-32  text-xs lg:text-lg lg:h-16 text-gray-300 mt-2 mb-4">{{ review.comment }}
+                            <p class="w- h-32  text-xs lg:text-md lg:h-16 text-gray-300 mt-2 mb-4">{{ review.comment }}
                             </p>
 
                         </div>

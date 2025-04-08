@@ -121,10 +121,10 @@
             </div>
             <div v-if="loading2" class="w-1/2 mx-auto py-20">
               <div
-                class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
+                class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"
               ></div>
             </div>
-            <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
+            <div  class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm w-12/10 mx-auto -ml-4 lg:text-sm">
                 Don't have an account ?
                 <span
@@ -142,7 +142,7 @@
               </p>
             </div>
             <div class="w-4/5 mx-auto text-white bg-cyan mt-5" v-if="!loading">
-              <div class="w-3/4">
+              <div class="w-3/4" v-if="!loading2">
                 <button
                   @click="signInWithGoogle"
                   style="
@@ -159,7 +159,7 @@
                   Google
                 </button>
               </div>
-              <div class="mt-3 w-3/4">
+              <div class="mt-3 w-3/4" v-if="!loading2">
                 <button
                   @click="signInWithFacebook"
                   style="
