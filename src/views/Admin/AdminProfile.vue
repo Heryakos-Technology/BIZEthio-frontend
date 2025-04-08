@@ -5,14 +5,137 @@ import admin_profile_setting from "/images/AdminPage/admin_profile_setting.png";
 import AdminCalendar from "@/components/Admin/AdminCalendar.vue";
 import AdminNotification from "@/components/Admin/AdminNotification.vue";
 import { onMounted, ref } from "vue";
+import axios from "axios";
+import CryptoJS from "crypto-js";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
-const userInfo = ref([]);
+const userInfo = ref(null);
+const isModalOpen = ref(false);
+const imageFile = ref(null);
+const loading = ref(false);
+const tempUserInfo = ref(null);
+
+// Cloudinary configuration
+const uploadPreset = "my_unsigned_preset"; 
+const cloudName = "dwh8v2zhg";  
+const file = ref(null);
+const uploaded = ref("");
+const previewImage = ref(null);
+
+const $toast = useToast();
 
 onMounted(async () => {
+  await fetchUserInfo();
+});
+
+const fetchUserInfo = async () => {
   const userInfoString = localStorage.getItem("userInfo");
   userInfo.value = JSON.parse(userInfoString);
-  console.log(userInfo);
-});
+  tempUserInfo.value = { ...userInfo.value };  
+  console.log(userInfo.value);
+};
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  tempUserInfo.value = { ...userInfo.value }; 
+  clearImageUpload();
+};
+
+const updateUser = (updatedUser) => {
+  userInfo.value = updatedUser;
+  localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+};
+
+const saveChanges = async () => {
+  try {
+    loading.value = true;
+    const userId = localStorage.getItem("user_id");
+
+    let imageUrl = tempUserInfo.value.profile_picture_url;
+    if (imageFile.value) {
+      const cloudinaryResponse = await uploadImageToCloudinary(imageFile.value);
+      imageUrl = cloudinaryResponse.secure_url;
+    }
+
+    const userData = {
+      ...tempUserInfo.value,
+      profile_picture_url: imageUrl,
+    };
+
+    const response = await axios.put(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, userData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    console.log("User Information updated:", response.data);
+    updateUser(response.data); // Update the user info
+    closeModal();
+    $toast.success("Profile updated successfully!", {
+        position: 'top'
+      });
+  } catch (error) {
+    console.error("Error updating user information:", error.response || error.message);
+    $toast.error("Failed to update profile.", {
+        position: 'top'
+      });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', uploadPreset);
+
+  const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData);
+  return response.data;
+};
+
+const onFileSelected = (event) => {
+  file.value = event.target.files[0];
+  if (file.value) {
+    previewImage.value = URL.createObjectURL(file.value);
+    uploadFile();
+  } else {
+    previewImage.value = null;
+  }
+};
+
+const uploadFile = async () => {
+  uploaded.value = "Uploading Wait a Sec...";
+  if (!file.value) return;
+
+  const formData = new FormData();
+  formData.append("file", file.value);
+  formData.append("upload_preset", uploadPreset);
+
+  try {
+    const response = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      formData
+    );
+    uploaded.value = "Photo Uploaded Successfully";
+    tempUserInfo.value.profile_picture_url = response.data.secure_url;
+    imageFile.value = file.value;
+  } catch (error) {
+    uploaded.value = "Failed to upload photo";
+    console.error("Error uploading file:", error.response.data);
+  }
+};
+
+const clearImageUpload = () => {
+  file.value = null;
+  uploaded.value = "";
+  previewImage.value = null;
+  imageFile.value = null;
+};
 </script>
 
 <template>
@@ -85,7 +208,8 @@ onMounted(async () => {
           </div>
         </div>
         <button
-          class="bg-[#241ee5] mx-auto my-6 text-white rounded-md px-8 py-2"
+          class="bg-primaryColor hover:bg-primaryColor/90 mx-auto cursor-pointer my-6 text-white rounded-md px-8 py-2"
+          @click="openModal"
         >
           Edit Profile
         </button>
@@ -93,6 +217,92 @@ onMounted(async () => {
       <AdminCalendar />
       <div class=""></div>
       <AdminNotification />
+    </div>
+
+    <!-- Modal -->
+    <div
+      v-if="isModalOpen"
+      class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      @click.self="closeModal"
+    >
+      <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
+
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+          <input
+            type="text"
+            id="name"
+            v-model="tempUserInfo.name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone Number:</label>
+          <input
+            type="text"
+            id="phone"
+            v-model="tempUserInfo.phone_number"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="city" class="block text-gray-700 text-sm font-bold mb-2">City:</label>
+          <input
+            type="text"
+            id="city"
+            v-model="tempUserInfo.city"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="subcity" class="block text-gray-700 text-sm font-bold mb-2">Subcity:</label>
+          <input
+            type="text"
+            id="subcity"
+            v-model="tempUserInfo.sub_city"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-2">
+          <label for="image" class="block text-gray-700 text-sm font-bold mb-1">
+            Profile Picture:
+          </label>
+          <img :src="tempUserInfo.profile_picture_url" alt="Profile Picture" class="w-20 h-20 rounded-full mb-2">
+          <div class="relative w-52 h-36 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-100">
+            <input type="file" id="image" class="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer" @change="onFileSelected" accept="image/*" />
+            <img v-if="previewImage" :src="previewImage" alt="Preview" class="max-w-full max-h-full object-cover" />
+            <div v-else class="text-gray-700 text-sm text-center p-2">
+              Click or drag image here to upload
+            </div>
+          </div>
+          <p v-if="uploaded" class="mt-2 text-green-500">{{ uploaded }}</p>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+            type="button"
+            @click="closeModal"
+          >
+            Cancel
+          </button>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            @click="saveChanges"
+            :disabled="loading"
+          >
+            <span v-if="loading">Saving...</span>
+            <span v-else>Save</span>
+          </button>
+        </div>
+      </div>
     </div>
   </AdminLayout>
 </template>
