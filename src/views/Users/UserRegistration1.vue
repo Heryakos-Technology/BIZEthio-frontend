@@ -569,9 +569,14 @@ export default {
   // });
   localStorage.setItem('name',model.value.user.name)
   localStorage.setItem('email',model.value.user.email)
-  localStorage.setItem('phone_number',model.value.user.name)
+  localStorage.setItem('phone_number',model.value.user.phone_number)
   localStorage.setItem('city',model.value.user.city)
   localStorage.setItem('sub_city',model.value.user.sub_city)
+  model.value.user.location = JSON.stringify({
+          lat: selectedLatLng.value.lat,
+          lng: selectedLatLng.value.lng,
+        });
+  localStorage.setItem('location',model.value.user.location)
       router.push("/next");
     }
     const registerUser = async () => {
@@ -584,7 +589,7 @@ export default {
   // });
   localStorage.setItem('name',model.value.user.name)
   localStorage.setItem('email',model.value.user.email)
-  localStorage.setItem('phone_number',model.value.user.name)
+  localStorage.setItem('phone_number',model.value.user.phone_number)
   localStorage.setItem('city',model.value.user.city)
   localStorage.setItem('sub_city',model.value.user.sub_city)
   localStorage.setItem('location',model.value.user.location)
