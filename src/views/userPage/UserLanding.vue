@@ -17,6 +17,7 @@ const companies = ref([]);
 const reviews = ref([]);
 const loading = ref(true);
 const showSuggestions = ref(false);
+const selectedCategories = ref([]);
 const router = useRouter();
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
@@ -33,19 +34,23 @@ const closeMapModal = () => {
 const handleInput = () => {
     showSuggestions.value = true;
 };
-// const handleFocus = () => {
-//     if(search.value){
-//         showSuggestions.value = true;
-//     }
-// };
-// const handleBlur = () => {
-//     showSuggestions.value = false;
-// };
+
 const filteredCompanies = computed(() => {
+    if (selectedCategories.value.length === 0) {
+        return companies.value;
+    }
     return companies.value.filter(company =>
-        company.name.toLowerCase().includes(search.value.toLowerCase())
+        company.category && selectedCategories.value.includes(company.category.name)
     );
 });
+const toggleCategory = (categoryName) => {
+    const index = selectedCategories.value.indexOf(categoryName);
+    if (index > -1) {
+        selectedCategories.value.splice(index, 1);
+    } else {
+        selectedCategories.value.push(categoryName);
+    }
+};
 
 const selectCompany = (companyId) => {
     router.push(`/company/${companyId}`);
@@ -85,10 +90,9 @@ onMounted(async () => {
 </script>
 <template>
     <UserLayoutUser>
-        <div class="">
-            <div class="categories  lg:w-full mx-auto lg:mb-20">
+
+        <div class="categories  lg:w-full mx-auto lg:mb-20">
                 <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
-                    <p class="lg:w-1/13 lg:ml-162 lg:font-semibold lg:text-lg ">Quick search</p>
                     <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
                         <input v-model="search" @input="handleInput" type="text"
                             class="w-56 lg:w-72   lg:h-10  pl-12 h-9 bg-white outline-none rounded-tl-full rounded-br-full " />
@@ -109,79 +113,99 @@ onMounted(async () => {
                         <div class="fa-solid fa-magnifying-glass  text-gray-600 -ml-68 mt-3 lg:-ml-82"></div>
                     </div>
                 </div>
-                <div class="lg:-mt-48 md:-mt-56 lg:ml-4">
-                    <div class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14">
-                        <router-link :to="{ name: 'CategoryPage', params: { name: category.name } }"
-                            v-for="(category, index) in categories.slice(0, 3)" :key="category.id"
-                            class="w-48 inset-0  h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 bg-[#F0EEFF] mt-2 rounded-full flex"
-                            :class="index === 0 ? 'ml-4 lg:ml-16' : index === 1 ? 'ml-40 md:ml-20 lg:ml-32 md:mr-20' : 'ml-4 lg:ml-10'">
-                            <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
-                            <p
-                                class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
-                                {{ category.name }}
-                            </p>
-                        </router-link>
-                    </div>
-                    <div class="lg:flex lg:mt-10 md:flex md:mt-10 lg:px-40">
-                        <router-link :to="{ name: 'CategoryPage', params: { name: category.name } }"
-                            v-for="(category, index) in categories.slice(3, 5)" :key="category.id"
-                            class="w-48 h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 bg-[#F0EEFF] mt-2 rounded-full flex"
-                            :class="index === 0 ? 'ml-48 lg:ml-28 md:mr-96 md:ml-24' : 'ml-12 lg:ml-40 md:ml-16'">
-                            <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
-                            <p
-                                class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
-                                {{ category.name }}
-                            </p>
-                        </router-link>
-                    </div>
-                    <div class="lg:flex lg:mt-10 md:flex md:mt-10 px-36">
-                        <router-link :to="{ name: 'CategoryPage', params: { name: category.name } }"
-                            v-for="(category, index) in categories.slice(5, 9)" :key="category.id"
-                            class="w-48 h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 bg-[#F0EEFF] mt-2 rounded-full flex"
-                            :class="index === 0 ? 'ml-32 md:ml-20' : index === 1 ? 'ml-4 md:ml-20' : 'ml-20 '">
-                            <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
-                            <p
-                                class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
-                                {{ category.name }}
-                            </p>
-                        </router-link>
+            <div class="lg:-mt-48 md:-mt-56 lg:ml-4 w-11/12 mx-auto">
+                <div class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14">
+                    <div v-for="(category, index) in categories.slice(0, 3)" :key="category.id"
+                        @click="toggleCategory(category.name)"
+                        class="w-48 h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 mt-2 rounded-full flex"
+                        :class="[
+                            index === 0 ? 'ml-4 lg:ml-16'
+                                : index === 1 ? 'ml-40 md:ml-20 lg:ml-32 md:mr-20'
+                                    : 'ml-4 lg:ml-10',
+                            { 'bg-[#b6d3ff]': selectedCategories.includes(category.name) },
+                            { 'bg-[#F0EEFF]': !selectedCategories.includes(category.name) }
+                        ]">
+                        <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
+                        <p class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
+                            {{ category.name }}
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6">
-    <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
-        <div v-if="loading" class="flex justify-center items-center py-20 w-full mx-auto">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
-        <div v-else-if="!companies || companies == null || companies == ''"
-            class="justify-center items-center py-20 -mt-8 w-full mx-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
-            </svg>
-            <p class="text-gray-400 ml-32 lg:ml-76">no user information yet!</p>
-        </div>
 
-        <div v-else v-for="company in companies" :key="company" class="rounded-t-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <div class="bg-[#DCF2F8] h-76 lg:h-96 rounded-t-2xl w-11/12 mx-auto">
-                <img :src="getImageUrl(company.images)" alt=""
-                    class="rounded-br-4xl rounded-t-lg w-full h-1/2">
-                <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">{{ company.name }}</p>
-                <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">{{ company.description }}</p>
-                <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
-                    <i @click="openMapModal"
-                        class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"></i>
-                    <RouterLink :to="{ name: 'CompanyDetail', params: { id: company.id } }"
-                        class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg">
-                        <p class="text-white text-xs hover:cursor-pointer text-center mt-2.5">explore more</p>
-                    </RouterLink>
+                <div class="lg:flex lg:mt-10 md:flex md:mt-10 lg:px-40">
+                    <div v-for="(category, index) in categories.slice(3, 5)" :key="category.id"
+                        @click="toggleCategory(category.name)"
+                        class="w-48 h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 bg-[#F0EEFF] mt-2 rounded-full flex"
+                        :class="[
+                            index === 0 ? 'ml-48 lg:ml-28 md:mr-96 md:ml-24'
+                                : index === 1 ? 'ml-12 lg:ml-40 md:ml-16'
+                                    : 'ml-4 lg:ml-10',
+                            { 'bg-[#b6d3ff]': selectedCategories.includes(category.name) },
+                            { 'bg-[#F0EEFF]': !selectedCategories.includes(category.name) }
+                        ]">
+                        <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
+                        <p class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
+                            {{ category.name }}
+                        </p>
+                    </div>
                 </div>
-                <MapModal :visible="isMapVisible" :mapSrc="mapSrc" @close="closeMapModal" />
+
+                <div class="lg:flex lg:mt-10 md:flex md:mt-10 px-36">
+                    <div v-for="(category, index) in categories.slice(5, 9)" :key="category.id"
+                        @click="toggleCategory(category.name)"
+                        class="w-48 h-20 shadow-md cursor-pointer hover:scale-105 transition-all duration-200 mt-2 rounded-full flex"
+                        :class="[
+                            index === 0 ? 'ml-4 lg:ml-16'
+                                : index === 1 ? 'ml-40 md:ml-20 lg:ml-32 md:mr-20'
+                                    : 'ml-4 lg:ml-10',
+                            { 'bg-[#b6d3ff]': selectedCategories.includes(category.name) },
+                            { 'bg-[#F0EEFF]': !selectedCategories.includes(category.name) }
+                        ]">
+                        <img :src="category.image_link" alt="" class="w-12 h-10 lg:ml-4 lg:mt-5 mt-3 ml-2" />
+                        <p class="w-40 ml-2 mt-3 text-xs lg:text-md lg:mt-7 lg:ml-1 md:font-semibold lg:font-semibold">
+                            {{ category.name }}
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+
+            <div class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6">
+                <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
+                    <div v-if="loading" class="flex justify-center items-center py-20 w-full mx-auto mt-16">
+                        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8">
+                        </div>
+                    </div>
+                    <div v-else-if="!filteredCompanies.length || filteredCompanies == '' || filteredCompanies == null"
+                        class="justify-center items-center py-20 -mt-8 w-full mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 " fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
+                        </svg>
+                        <p class="text-gray-400 ml-32 lg:ml-76">No companies yet!</p>
+                    </div>
+
+                    <div v-else v-for="company in filteredCompanies" :key="company.id"
+                        class="rounded-t-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 ">
+                        <div class="bg-[#DCF2F8] h-76 lg:h-96 rounded-t-2xl w-11/12 mx-auto">
+                            <img :src="getImageUrl(company.images)" alt=""
+                                class="rounded-br-4xl rounded-t-lg w-full h-1/2" />
+                            <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">{{ company.name }}</p>
+                            <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">{{ company.description }}</p>
+                            <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
+                                <i @click="openMapModal"
+                                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"></i>
+                                <RouterLink :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+                                    class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg">
+                                    <p class="text-white text-xs hover:cursor-pointer text-center mt-2.5">Explore more
+                                    </p>
+                                </RouterLink>
+                            </div>
+                            <MapModal :visible="isMapVisible" :mapSrc="mapSrc" @close="closeMapModal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="recommended-section w-5/6  mx-auto">
                 <p class="ml-10 lg:ml-19 font-bold lg:text-2xl">recommended for you</p>
                 <div class=" lg:flex w-11/12 px-6 mx-auto mt-4 lg:ml-">
@@ -311,8 +335,7 @@ onMounted(async () => {
                             <p class="text-xs lg:text-md lg:mt-2.5 text-gray-300">{{ review.user.name }}</p>
                         </div>
                         <div class="w-80 mx-auto ml-8">
-                            <p
-                                class="font-bold text-sm lg:text-md text-gray-200 text-center lg:mt-10  lg:mb-6">
+                            <p class="font-bold text-sm lg:text-md text-gray-200 text-center lg:mt-10  lg:mb-6">
                                 {{ review.name }}
                             </p>
                             <div class="flex ml-0 -mt-6 w-10 h-6 mx-auto">
