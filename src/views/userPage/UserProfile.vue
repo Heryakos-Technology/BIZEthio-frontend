@@ -61,6 +61,7 @@ const fetchUserInfo = async () => {
     });
 
     userInformations.value = response.data;
+    localStorage.setItem('user information', userInformations.value);
     console.log("User Informations:", userInformations.value);
   } catch (error) {
     console.error("Error fetching user information:", error);

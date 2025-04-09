@@ -63,7 +63,8 @@
             </div>
             <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-11/12 h-10 -ml-5 px-2 rounded-lg">
               <button @click="changePassword" class="text-[14px] text-center px-13 font-normal cursor-pointer hover:scale-105 text-white">
-                Reset Password
+                <span v-if="loading === 'loading...'" class="ml-5">{{ loading }}</span>
+                <span v-else>change password</span>
               </button>
             </div>
           </div>
@@ -90,6 +91,8 @@ const showNewPassword = ref(false);
 const showConfirmedPassword = ref(false);
 const isInputFocused = ref(false);
 const errorMessage = ref("");
+const loading = ref('change password');
+// const   isLoading =ref(false);
 const passwordStrength = ref("");
 const router = useRouter();
 
@@ -129,11 +132,15 @@ const validatePasswordStrength = () => {
 };
 
 const changePassword = async () => {
+  // isLoading.value =true;
+  loading.value = "loading...";
   const auth = getAuth();
   const user = auth.currentUser;
 
   if (newPassword.value !== confirmPassword.value) {
     errorMessage.value = "New password and confirmation do not match.";
+    // isLoading.value =false;
+    loading.value = "loading..."
     return;
   }
 
@@ -142,6 +149,9 @@ const changePassword = async () => {
     await reauthenticateWithCredential(user, credential);
     await updatePassword(user, newPassword.value);
     alert("Password changed successfully!");
+    loading.value = "change password";
+    
+    
     router.push('/UserProfile');
   } catch (error) {
     errorMessage.value = "Invalid credentials. Please try again."; 
