@@ -266,7 +266,7 @@ const formatDate = (dateString) => {
             <!-- Company Review Component -->
             <div class="">
               <h2 class="text-2xl font-bold text-darkBlue">
-                Current Reviews And Ratings ({{ company?.rating_avg }}/5)
+                Recent Reviews And Ratings ({{ company?.rating_avg }}/5)
               </h2>
 
               <div
