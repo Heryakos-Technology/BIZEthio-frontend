@@ -47,6 +47,24 @@ export const useCompanyStore = defineStore("companyStore", {
       }
     },
 
+    async updateCompany(payload, company) {
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${company}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.errors) {
+        this.errors = data.errors;
+        return { success: false, error: data.errors };
+      } else {
+        this.errors = {};
+        return { success: true, data: data };
+      }
+    },
 
 
   },

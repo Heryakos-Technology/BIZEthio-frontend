@@ -28,6 +28,7 @@ import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
 import MoreCategories from '@/views/Company/MoreCategories.vue';
 import CategoryPage from '@/views/Company/CategoryPage.vue';
+import CompanyPage from '@/views/Company/CompanyPage.vue';
 
 
 
@@ -160,6 +161,11 @@ const router = createRouter({
       name: 'CategoryPage',
       component: CategoryPage,
     },
+    {
+      path: '/profile/company/:id',
+      name: 'CompanyPage',
+      component: CompanyPage,
+    },
 
 
   ],
@@ -191,14 +197,15 @@ router.beforeEach(async (to, from) => {
     return { name: "AdminProfile" };
   }
 
-  if (!userId && to.meta.auth) {
-    return { name: "SignIn" };
-  }
   if (user_role === "user" && to.meta.welcome) {
     return { name: "UserLanding" };
   }
   if (user_role === "user" && to.meta.guest) {
     return { name: "UserLanding" };
+  }
+
+  if (!userId && to.meta.auth) {
+    return { name: "SignIn" };
   }
 });
 
