@@ -168,6 +168,23 @@
               <select name="country" v-model="companies.country" @change="validateFields"
                 class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
                 <option value="">Select country</option>
+                <option 
+                  class="border-[#84d2ffb7] rounded-lg mt-2">
+                  Ethiopia
+                </option>
+              </select>
+              <p v-if="errors.country" class="text-red-500 text-sm">
+                {{ errors.country }}
+              </p>
+            </div>
+            <!-- <div class="lg:px-4 md:px-4 mt-4 w-11/12 mx-auto">
+              <div class="flex">
+                <label class="text-md">Country</label><br />
+                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+              </div>
+              <select name="country" v-model="companies.country" @change="validateFields"
+                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
+                <option value="">Select country</option>
                 <option v-for="country in countries" :key="country.id" :value="country.name"
                   class="border-[#84d2ffb7] rounded-lg mt-2">
                   {{ country.name }}
@@ -176,7 +193,7 @@
               <p v-if="errors.country" class="text-red-500 text-sm">
                 {{ errors.country }}
               </p>
-            </div>
+            </div> -->
 
             <div class="lg:px-4 md:px-4 mt-4 w-11/12 mx-auto">
               <div class="flex">
@@ -238,7 +255,7 @@
               </p>
             </div>
           </div>
-          <div class="lg:px-4 md:px-4 mt-4 lg:w-full md:w-1/2">
+          <div class="lg:flex lg:px-4 md:px-4 mt-4 lg:w-full md:w-1/2">
             <div class="lg:px-4 -ml-4 md:px-4 mt-full md:w-1/2">
               <div class="flex">
                 <p class="mb-2">Upload Image</p>
@@ -272,6 +289,24 @@
                 Uploading...
               </p>
             </div>
+            <div class="text-[12px]  font-normal cursor-pointer text-gray-100 mt-8 ml-8 md:text-[16px]">
+             <div class="-mt-8">
+              <p class="text-black mb-2">Location</p>
+                <button @click="showMap = !showMap"
+                  class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
+                  Select Location
+                </button>
+                <div v-if="showMap" class="modal">
+                <div class="modal-content">
+
+                  <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
+                  @location-selected="handleLocationSelected">
+                  </MapComponent2>
+                </div>
+          </div>
+             </div>
+                <!-- {{ userInformations.location }} -->
+              </div>
           </div>
           <!-- end of image -->
 
@@ -397,6 +432,8 @@ import axios from "axios";
 // import CompRegformview from '@/components/CompRegistration/CompRegformview.vue'
 import { login, register, updateUserPassword } from "../auth";
 import UserLayout from "@/layout/UserLayout.vue";
+import MapComponent from "@/components/MapComponent.vue";
+import MapComponent2 from "@/components/MapComponent2.vue";
 
 import {
   getAuth,
@@ -411,6 +448,8 @@ export default {
   components: {
     UserLayout,
     // CompRegPasswordView,
+    MapComponent,
+    MapComponent2
     // CompRegformview
   },
   computed: {
@@ -427,6 +466,8 @@ export default {
     this.fetchCategories();
     this.fetchCountries();
     this.checkButtonState();
+    this.getCurrentLocation();
+    //  locationInfo.value  = localStorage.getItem('locationInfo')
   },
   data() {
     return {
@@ -487,8 +528,14 @@ export default {
       emailInUse: false,
       registeredUser: false,
       currentEmail: '',
-      storedEmail: ''
-      
+      storedEmail: '',
+      // locationMessage: localStorage.getItem('locationMessage') || 'Select Location',
+      selectedLatLng: {
+        lat: null,
+        lng: null,
+      },
+      location:'',
+      showMap:false
 
     };
   },
@@ -505,6 +552,50 @@ registeredUser2() {
   this.showPassword = true;
 },
 
+     getCurrentLocation()  {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.selectedLatLng = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            console.log('Current Location:', this.selectedLatLng);
+          },
+          (error) => {
+            console.error('Geolocation error:', error);
+            alert('Unable to retrieve location.');
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    },
+    handleLocationSelected(latlng) {
+      this.selectedLatLng = latlng;
+      this.location = {
+        lat: latlng.lat,
+        lng: latlng.lng
+      };
+      console.log('Selected Location:', this.selectedLatLng);
+      console.log('user location',  this.location)
+      if(this.location.lat!== null&&this.location.lng!== null){
+
+        this.showMap = false;
+        this.locationInfo = 'Location added Sucessfully '
+        localStorage.setItem('locationInfo',this.locationInfo)
+        // this.locationMessage = 'Change Location'
+        // localStorage.setItem('locationMessage',this.locationMessage)
+      }
+    },
+     handleClose() {
+      this.showMap = false;
+    },
 updateCurrentEmail() {
   this.storedEmail = localStorage.getItem('email');
   console.log('Stored email:', this.storedEmail);

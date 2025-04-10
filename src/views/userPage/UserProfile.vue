@@ -14,6 +14,9 @@ onMounted(() => {
   localStorage.getItem("user_id");
   fetchUserInfo();
   fetchratedCompany();
+  // localStorage.getItem('user information' ) || '[]';
+  localStorage.getItem('userInformations') && (userInformations.value = JSON.parse(localStorage.getItem('userInformations')));
+  localStorage.getItem('companies') || '[]';
   console.log('tokennn',localStorage.getItem('token'))
 });
 const handleLogout = async () => {
@@ -80,6 +83,7 @@ const fetchratedCompany = async () => {
       },
     });
     companies.value = response.data;
+    localStorage.setItem('companies', companies.value);
     console.log("companies", companies.value);
   } catch (error) {
     console.error("error fetching company data");
