@@ -145,6 +145,7 @@ export default {
         });
 
         userInformations.value = response.data;
+        localStorage.setItem("userInformations", JSON.stringify(userInformations.value));
         console.log("User Informations:", userInformations.value);
       } catch (error) {
         console.error("Error fetching user information:", error);
@@ -299,6 +300,7 @@ localStorage.setItem('locationMessage',locationMessage.value)
     onMounted(() => {
       fetchUserInfo();
       getCurrentLocation();
+      localStorage.getItem('userInformations') && (userInformations.value = JSON.parse(localStorage.getItem('userInformations')));
     });
 
     return {
