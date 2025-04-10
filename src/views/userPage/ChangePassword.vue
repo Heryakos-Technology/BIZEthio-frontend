@@ -1,6 +1,6 @@
 <template>
-  <UserLayout>
-    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto lg:pt-24 lg:pb-40">
+  <UserLayoutUser>
+    <div class="lg:px-40 mb-40 lg:w-9/10 lg:mx-auto  lg:pb-40">
       <div class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl">
         <p class="font-semibold lg:font-bold lg:ml-4 mb-2">Change Password</p>
         <div class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[370px] lg:w-8/9 mx-auto mb-4 rounded-2xl p-8">
@@ -63,7 +63,8 @@
             </div>
             <div class="flex bg-[#075E86] hover:bg-[#6291a7] w-11/12 h-10 -ml-5 px-2 rounded-lg">
               <button @click="changePassword" class="text-[14px] text-center px-13 font-normal cursor-pointer hover:scale-105 text-white">
-                Reset Password
+                <span v-if="loading === 'loading...'" class="ml-5">{{ loading }}</span>
+                <span v-else>change password</span>
               </button>
             </div>
           </div>
@@ -73,13 +74,13 @@
         </div>
       </div>
     </div>
-  </UserLayout>
+  </UserLayoutUser>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useRouter } from 'vue-router';
 
 const currentPassword = ref("");
@@ -90,6 +91,8 @@ const showNewPassword = ref(false);
 const showConfirmedPassword = ref(false);
 const isInputFocused = ref(false);
 const errorMessage = ref("");
+const loading = ref('change password');
+// const   isLoading =ref(false);
 const passwordStrength = ref("");
 const router = useRouter();
 
@@ -129,11 +132,15 @@ const validatePasswordStrength = () => {
 };
 
 const changePassword = async () => {
+  // isLoading.value =true;
+  loading.value = "loading...";
   const auth = getAuth();
   const user = auth.currentUser;
 
   if (newPassword.value !== confirmPassword.value) {
     errorMessage.value = "New password and confirmation do not match.";
+    // isLoading.value =false;
+    loading.value = "loading..."
     return;
   }
 
@@ -142,6 +149,9 @@ const changePassword = async () => {
     await reauthenticateWithCredential(user, credential);
     await updatePassword(user, newPassword.value);
     alert("Password changed successfully!");
+    loading.value = "change password";
+    
+    
     router.push('/UserProfile');
   } catch (error) {
     errorMessage.value = "Invalid credentials. Please try again."; 
