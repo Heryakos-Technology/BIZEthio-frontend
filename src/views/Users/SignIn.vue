@@ -797,7 +797,7 @@ export default {
           //localStorage.setItem("token", backendToken);
           localStorage.setItem("user_id", userData.id);
           localStorage.setItem("userInfo", JSON.stringify(userData));
-          localStorage.setItem("user_name", userData.name);
+          localStorage.setItem("user_name", userData.name);2
 
           axios.defaults.headers.common[
             "Authorization"

@@ -49,6 +49,7 @@ const closeModal = () => {
 const updateUser = (updatedUser) => {
   userInfo.value = updatedUser;
   localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+  console.log( "userInfo local" ,localStorage.getItem("userInfo"));
 };
 
 const saveChanges = async () => {
@@ -74,7 +75,7 @@ const saveChanges = async () => {
     });
 
     console.log("User Information updated:", response.data);
-    updateUser(response.data); // Update the user info
+    updateUser(response.data.user); // Update the user info
     closeModal();
     $toast.success("Profile updated successfully!", {
         position: 'top'
@@ -140,7 +141,7 @@ const clearImageUpload = () => {
 
 <template>
   <AdminLayout>
-    <div class="grid lg:grid-cols-2 pb-16 pt-16">
+    <div class="grid lg:grid-cols-2 pb-16 pt-8">
       <div
         class="bg-white relative grid max-w-[400px] w-full pt-16 mt-32 mx-auto"
       >
