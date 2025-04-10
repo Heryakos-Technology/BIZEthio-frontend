@@ -466,8 +466,27 @@ export default {
     this.fetchCategories();
     this.fetchCountries();
     this.checkButtonState();
+
     this.getCurrentLocation();
     //  locationInfo.value  = localStorage.getItem('locationInfo')
+
+
+      this.companies.name = localStorage.getItem("name") || "";
+      this.companies.owner_name = localStorage.getItem("owner_name") || "";
+      this.companies.description =localStorage.getItem("description") || "";
+      this.companies.contact_phone = localStorage.getItem("contact_phone") || "";
+      this.companies.contact_email = localStorage.getItem("contact_email") || "";
+      this.companies.categories = localStorage.getItem("categories") || "";
+      this.companies.operating_hours = localStorage.getItem("operating_hours") || "";
+      this.companies.country = localStorage.getItem("country") || "";
+      this.companies.region = localStorage.getItem("region") || "";
+      this.companies.address = localStorage.getItem("address") || "";
+      this.companies.city = localStorage.getItem("city") || "";
+      this.companies.license_url = localStorage.getItem("license_url") || "";
+      this.companies.website = localStorage.getItem("website") || "";
+     
+
+
   },
   data() {
     return {
@@ -541,8 +560,8 @@ export default {
   },
   methods: {
     handleEmail() {
-  if (this.validateFields()) {
-    this.updateCurrentEmail();
+  if (this.companies.validateFields()) {
+    this.companies.updateCurrentEmail();
   } else {
     console.log('Validation failed');
   }
@@ -734,6 +753,19 @@ updateCurrentEmail() {
       if (this.checkButtonState()) {
         console.log("Form is invalid, please correct the errors.");
       } else {
+        localStorage.setItem('name',this.companies.name)
+        localStorage.setItem('owner_name',this.companies.owner_name)
+        localStorage.setItem('description',this.companies.description)
+        localStorage.setItem('contact_phone',this.companies.contact_phone)
+        localStorage.setItem('contact_email',this.companies.contact_email)
+        localStorage.setItem('categories',this.companies.categories)
+        localStorage.setItem('operating_hours',this.companies.operating_hours)
+        localStorage.setItem('country',this.companies.country)
+        localStorage.setItem('region',this.companies.region)
+        localStorage.setItem('address',this.companies.address)
+        localStorage.setItem('city',this.companies.city)
+        localStorage.setItem('license_url',this.companies.license_url)
+        localStorage.setItem('website',this.companies.website)
         this.nextStep = "next";
         this.showPassword = true;
         this.validateFields();
@@ -862,6 +894,7 @@ updateCurrentEmail() {
         } else {
           await currentUser.reload();
           const password = this.companies.password
+          console.log('password',password)
           if (currentUser.emailVerified) {
             const tempPassword = localStorage.getItem("temporaryPassword");
             const success = await updateUserPassword(
@@ -881,6 +914,19 @@ updateCurrentEmail() {
               this.companies.password = "";
               this.companies.password_confirmation = "";
               this.changeRegister = "Register Company";
+              localStorage.removeItem('name')
+        localStorage.removeItem('owner_name')
+        localStorage.removeItem('description')
+        localStorage.removeItem('contact_phone')
+        localStorage.removeItem('contact_email')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('operating_hours')
+        localStorage.removeItem('country')
+        localStorage.removeItem('region')
+        localStorage.removeItem('address')
+        localStorage.removeItem('city')
+        localStorage.removeItem('license_url')
+        localStorage.removeItem('website')
               this.$router.push("/signin");
             }
           } else {
@@ -1002,6 +1048,8 @@ updateCurrentEmail() {
     console.error("Error fetching countries:", error);
   }
 }
+
   },
+  
 };
 </script>
