@@ -1,16 +1,44 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useCategoryStore } from "@/stores/category";
 
-// Chart data and options
-const series = ref([48, 32, 20]); // Percentages: frequently used, occasionally used, rarely used
+const { getLeastPopularCategories, getMostPopularCategories } =
+  useCategoryStore();
 
+const popular_categories = ref([]);
+const least_categories = ref([]);
+
+onMounted(async () => {
+  try {
+    popular_categories.value = await getMostPopularCategories();
+    least_categories.value = await getLeastPopularCategories();
+
+    console.log("least_categories", least_categories.value);
+    console.log("popular_categories", popular_categories.value);
+    updateChartData();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  }
+});
+
+const series = ref([0, 0, 0]); // Initialize with 0 values
 const chartOptions = ref({
   chart: {
     type: "donut",
     height: 250,
   },
-  labels: ["frequently used", "occasionally used", "rarely used"],
-  colors: ["#22C55E", "#FACC15", "#EF4444"], // Green, Yellow, Red (matching the image)
+  labels: [
+    popular_categories.value.length > 0
+      ? popular_categories.value[0].name
+      : "Most Popular",
+    least_categories.value.length > 0
+      ? least_categories.value[0].name
+      : "Least Popular",
+    popular_categories.value.length > 0
+      ? popular_categories.value[popular_categories.value.length - 1].name
+      : "Last Popular",
+  ],
+  colors: ["#22C55E", "#EF4444", "#3b82f6"], // Green, Red, Blue
   legend: {
     position: "bottom",
     fontSize: "14px",
@@ -55,6 +83,22 @@ const chartOptions = ref({
     },
   ],
 });
+
+const updateChartData = () => {
+  if (popular_categories.value && least_categories.value) {
+    const totalCategories =
+      popular_categories.value.length + least_categories.value.length;
+
+    const popularPercentage =
+      popular_categories.value.length > 0 ? (1 / totalCategories) * 100 : 0;
+    const leastPercentage =
+      least_categories.value.length > 0 ? (1 / totalCategories) * 100 : 0;
+    const lastPopularPercentage =
+      popular_categories.value.length > 0 ? (1 / totalCategories) * 100 : 0;
+
+    series.value = [popularPercentage, leastPercentage, lastPopularPercentage];
+  }
+};
 </script>
 
 <template>

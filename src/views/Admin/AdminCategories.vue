@@ -5,7 +5,26 @@ import Catering_Services from "/images/AdminPage/Catering_Services.png";
 import AdminDonutChart from "@/components/Admin/AdminDonutChart.vue";
 import AdminTable from "@/components/Admin/AdminTable.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useCategoryStore } from "@/stores/category";
+import { onMounted, ref } from "vue";
 
+const { getLeastPopularCategories, getMostPopularCategories } =
+  useCategoryStore();
+
+const popular_categories = ref([]);
+const least_categories = ref([]);
+
+onMounted(async () => {
+  try {
+    popular_categories.value = await getMostPopularCategories();
+    least_categories.value = await getLeastPopularCategories();
+
+    console.log("least_categories", least_categories.value);
+    console.log("popular_categories", popular_categories.value);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  }
+});
 </script>
 
 <template>
@@ -27,7 +46,9 @@ import { useAuthStore } from "@/stores/auth";
                 class="flex w-full items-center uppercase justify-between px-4"
               >
                 <img :src="technology_icon" alt="technology_icon" />
-                <p class="font-black md:text-sm lg:text-lg">Technology</p>
+                <p class="font-black md:text-sm lg:text-lg">
+                  {{ least_categories[0]?.name }}
+                </p>
               </div>
             </div>
             <div
@@ -41,14 +62,15 @@ import { useAuthStore } from "@/stores/auth";
               >
                 <img :src="Catering_Services" alt="technology_icon" />
                 <p class="font-black md:text-sm lg:text-lg">
-                  Catering Services
+                  {{ popular_categories[0]?.name }}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <AdminDonutChart />
+        <!-- <AdminDonutChart /> -->
+        <div class=""></div>
         <AdminTable />
       </div>
     </div>

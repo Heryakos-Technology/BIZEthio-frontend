@@ -28,6 +28,46 @@ export const useCategoryStore = defineStore("categoryStore", {
         return data;
       }
     },
+    async getMostPopularCategories() {
+      if (localStorage.getItem("popular_categories")) {
+        return JSON.parse(localStorage.getItem("popular_categories"));
+      }
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories/popular", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      if (data.errors) {
+        this.errors = data.errors;
+      } else {
+        this.errors = {};
+        localStorage.setItem("popular_categories", JSON.stringify(data));
+        return data;
+      }
+    },
+
+
+    async getLeastPopularCategories() {
+      if (localStorage.getItem("least_categories")) {
+        return JSON.parse(localStorage.getItem("least_categories"));
+      }
+      const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories/least-popular", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      if (data.errors) {
+        this.errors = data.errors;
+      } else {
+        this.errors = {};
+        localStorage.setItem("least_categories", JSON.stringify(data));
+        return data;
+      }
+    },
 
     async createCategory(formData) {
       const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
