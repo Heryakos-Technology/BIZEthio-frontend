@@ -48,6 +48,8 @@ export const useAuthStore = defineStore("authStore", {
         localStorage.removeItem("rememberMe");
         localStorage.removeItem("rememberMe");
         localStorage.removeItem("userInfo");
+        localStorage.removeItem("userWithToken");
+        localStorage.removeItem("user information");
 
         // Clear user state
         this.user = null;
