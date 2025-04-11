@@ -639,6 +639,7 @@ export default {
         uploaded.value = "Failed to upload photo Try again";
         console.error("Error uploading file:", error.response.data);
         userPhoto.value = ''
+        model.value.user.profile_picture_url  = ''
       }
     };
     const handleFileDrop = (event) => {

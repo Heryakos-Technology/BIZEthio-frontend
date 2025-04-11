@@ -9,7 +9,7 @@ import { useCompanyStore } from '@/stores/company';
 import { useRouter } from 'vue-router';
 
 const isMapVisible = ref(false);
-const mapSrc = 'YOUR_GOOGLE_MAP_EMBED_URL';
+// const mapSrc = 'YOUR_GOOGLE_MAP_EMBED_URL';
 const search = ref('');
 const categories = ref([]);
 const error = ref('');
@@ -19,14 +19,16 @@ const loading = ref(true);
 const showSuggestions = ref(false);
 const selectedCategories = ref([]);
 const router = useRouter();
+const mapSrc  = ref('');
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
 const { getAllCompanies } = useCompanyStore();
 
-const openMapModal = () => {
-    isMapVisible.value = true;
-};
 
+const openMapModal = (latitude, longitude) => {
+      mapSrc.value = `https://maps.google.com/?q=${latitude},${longitude}`;
+      isMapVisible.value = true;
+    };
 const closeMapModal = () => {
     isMapVisible.value = false;
 };
@@ -36,6 +38,7 @@ const handleInput = () => {
 };
 
 const filteredCompanies = computed(() => {
+    
     if (selectedCategories.value.length === 0) {
         return companies.value;
     }
@@ -73,16 +76,19 @@ const getImageUrl = (images) => {
 
 onMounted(async () => {
     companies.value = await getAllCompanies()
+    localStorage.setItem('companies', companies.value);
     console.log('company', companies[0]?.id);
     loading.value = false
 
 })
 onMounted(async () => {
     categories.value = await getAllCategories()
+    localStorage.getItem('categories', categories.value);
     console.log('cat', categories.value);
 }),
     onMounted(async () => {
         reviews.value = await getAllReviews()
+        localStorage.setItem('reviews', reviews.value);
         console.log('reviews', reviews.value);
     })
 
@@ -113,7 +119,7 @@ onMounted(async () => {
                         <div class="fa-solid fa-magnifying-glass  text-gray-600 -ml-68 mt-3 lg:-ml-82"></div>
                     </div>
                 </div>
-            <div class="lg:-mt-48 md:-mt-56 lg:ml-4 w-11/12 mx-auto">
+            <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto">
                 <div class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14">
                     <div v-for="(category, index) in categories.slice(0, 3)" :key="category.id"
                         @click="toggleCategory(category.name)"
@@ -193,7 +199,7 @@ onMounted(async () => {
                             <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">{{ company.name }}</p>
                             <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">{{ company.description }}</p>
                             <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
-                                <i @click="openMapModal"
+                                <i @click="openMapModal({ latitude: company.latitude, longitude: company.longitude })"
                                     class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"></i>
                                 <RouterLink :to="{ name: 'CompanyDetail', params: { id: company.id } }"
                                     class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg">

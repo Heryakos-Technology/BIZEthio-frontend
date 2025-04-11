@@ -145,6 +145,7 @@ export default {
         });
 
         userInformations.value = response.data;
+        localStorage.setItem("userInformations", JSON.stringify(userInformations.value));
         console.log("User Informations:", userInformations.value);
       } catch (error) {
         console.error("Error fetching user information:", error);
@@ -217,19 +218,41 @@ export default {
       }
     };
 
+    // const uploadImageToCloudinary = async (file) => {
+    //   const formData = new FormData();
+    //   formData.append('file', file);
+    //   formData.append('upload_preset', 'my_unsigned_preset');
+
+    //   const response = await axios.post('https://api.cloudinary.com/v1_1/dwh8v2zhg/image/upload', formData);
+    //   return response.data;
+    // };
+
+    // const triggerImageUpload = () => {
+    //   const fileInput = document.querySelector('input[type="file"]');
+    //   fileInput.click();
+    // };
     const uploadImageToCloudinary = async (file) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'my_unsigned_preset');
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'my_unsigned_preset');
 
-      const response = await axios.post('https://api.cloudinary.com/v1_1/dwh8v2zhg/image/upload', formData);
-      return response.data;
-    };
+    try {
+        const response = await axios.post('https://api.cloudinary.com/v1_1/dwh8v2zhg/image/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Specify the content type
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw error; // Rethrow the error for further handling if needed
+    }
+};
 
-    const triggerImageUpload = () => {
-      const fileInput = document.querySelector('input[type="file"]');
-      fileInput.click();
-    };
+const triggerImageUpload = () => {
+    const fileInput = document.querySelector('input[type="file"]');
+    fileInput.click();
+};
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
@@ -277,6 +300,7 @@ localStorage.setItem('locationMessage',locationMessage.value)
     onMounted(() => {
       fetchUserInfo();
       getCurrentLocation();
+      localStorage.getItem('userInformations') && (userInformations.value = JSON.parse(localStorage.getItem('userInformations')));
     });
 
     return {
