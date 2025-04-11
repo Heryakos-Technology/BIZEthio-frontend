@@ -34,6 +34,8 @@ const formdata = ref({
 const editFormData = ref({
   name: "",
   description: "",
+  image: null, // Add image field
+  image_link: null,
 });
 
 // Cloudinary configuration
@@ -42,6 +44,7 @@ const cloudName = "dzofoegwf";
 const file = ref(null);
 const uploaded = ref("");
 const previewImage = ref(null);
+const previewEditImage = ref(null);
 
 onMounted(async () => {
   await fetchCategories();
@@ -104,11 +107,13 @@ const handleAddCategory = async () => {
 
 const handleEdit = (category) => {
   selectedCategory.value = category;
-  selectedCategoryId.value= category.id,
-  editFormData.value = {
-    name: category.name,
-    description: category.description,
-  };
+  (selectedCategoryId.value = category.id),
+    (editFormData.value = {
+      name: category.name,
+      description: category.description,
+      image_link: category.image_link, // Initialize with existing image link
+    });
+  previewEditImage.value = category.image_link; // Show existing image as preview
   isEditOpen.value = true;
 };
 
@@ -116,14 +121,9 @@ const handleUpdateCategory = async () => {
   loading.value.update = true;
   errorMessage.value = ""; // Clear previous errors
   try {
-
-    const updatedFormData = new FormData();
-    updatedFormData.append("name", editFormData.value.name);
-    updatedFormData.append("description", editFormData.value.description);
- 
-    
+    // Directly pass the editFormData.value object
     const response = await updateCategory(
-      updatedFormData,
+      editFormData.value,
       selectedCategoryId.value
     );
 
@@ -168,6 +168,16 @@ const onFileSelected = (event) => {
   }
 };
 
+const onEditFileSelected = (event) => {
+  file.value = event.target.files[0];
+  if (file.value) {
+    previewEditImage.value = URL.createObjectURL(file.value);
+    uploadFileEdit();
+  } else {
+    previewEditImage.value = null;
+  }
+};
+
 const uploadFile = async () => {
   uploaded.value = "Uploading Wait a Sec...";
   if (!file.value) return;
@@ -194,6 +204,38 @@ const uploadFile = async () => {
     );
     uploaded.value = "Photo Uploaded Successfully";
     formdata.value.image_link = response.data.secure_url;
+  } catch (error) {
+    uploaded.value = "Failed to upload photo";
+    console.error("Error uploading file:", error.response.data);
+  }
+};
+
+const uploadFileEdit = async () => {
+  uploaded.value = "Uploading Wait a Sec...";
+  if (!file.value) return;
+
+  const timestamp = Math.floor(Date.now() / 1000);
+  const params = {
+    timestamp,
+    upload_preset: uploadPreset,
+  };
+
+  const { signature } = generateSignature(params);
+
+  const formData = new FormData();
+  formData.append("file", file.value);
+  formData.append("upload_preset", uploadPreset);
+  formData.append("timestamp", timestamp);
+  formData.append("signature", signature);
+  formData.append("api_key", "734174595538154");
+
+  try {
+    const response = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      formData
+    );
+    uploaded.value = "Photo Uploaded Successfully";
+    editFormData.value.image_link = response.data.secure_url;
   } catch (error) {
     uploaded.value = "Failed to upload photo";
     console.error("Error uploading file:", error.response.data);
@@ -402,6 +444,37 @@ const generateSignature = (params) => {
             :disabled="loading.update"
           ></textarea>
         </div>
+
+        <!-- Image Upload for Edit -->
+        <div class="mb-2">
+          <label
+            for="edit-image"
+            class="block text-gray-700 text-sm font-bold mb-1"
+            >Image:</label
+          >
+          <div
+            class="relative w-52 h-36 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-100"
+          >
+            <input
+              type="file"
+              id="edit-image"
+              class="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer"
+              @change="onEditFileSelected"
+              accept="image/*"
+            />
+            <img
+              v-if="previewEditImage"
+              :src="previewEditImage"
+              alt="Preview"
+              class="max-w-full max-h-full object-cover"
+            />
+            <div v-else class="text-gray-700 text-sm text-center p-2">
+              Click or drag image here to upload
+            </div>
+          </div>
+          <p v-if="uploaded" class="mt-2 text-green-500">{{ uploaded }}</p>
+        </div>
+
         <div class="flex justify-end space-x-2">
           <button
             @click="closeEditForm"
@@ -523,7 +596,9 @@ const generateSignature = (params) => {
 
   <div class="overflow-x-auto xl:col-span-2 mt-8 px-4">
     <div v-if="loading.fetch" class="flex justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"
+      ></div>
     </div>
 
     <div v-else class="">
@@ -532,7 +607,9 @@ const generateSignature = (params) => {
         <div
           class="grid grid-cols-[50px_140px_100px_1fr_100px] bg-white uppercase font-bold"
         >
-          <div class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10">
+          <div
+            class="p-3 lg:py-5 text-sm text-black sticky left-0 bg-white z-10"
+          >
             No
           </div>
           <div
@@ -563,12 +640,12 @@ const generateSignature = (params) => {
           </div>
 
           <div class="size-8 ml-8 text-sm lg:text-base text-black font-bold">
-          <img
-            :src="category.image_link"
-            class="w-full"
-            :alt="category.name"
-          />
-        </div>
+            <img
+              :src="category.image_link"
+              class="w-full"
+              :alt="category.name"
+            />
+          </div>
           <div class="p-3 text-sm lg:text-base text-black font-bold">
             {{ category.description }}
           </div>
