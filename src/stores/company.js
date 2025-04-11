@@ -13,6 +13,9 @@ export const useCompanyStore = defineStore("companyStore", {
 
 
     async getAllCompanies() {
+      if (localStorage.getItem("all_companies")) {
+        return JSON.parse(localStorage.getItem("all_companies"));
+      }
       const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/companies", {
         method: "Get",
         headers: {
@@ -26,6 +29,7 @@ export const useCompanyStore = defineStore("companyStore", {
         this.errors = data.errors;
       } else {
         this.errors = {};
+        localStorage.setItem("all_companies", JSON.stringify(data));
         return data
       }
     },

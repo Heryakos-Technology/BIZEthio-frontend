@@ -10,6 +10,9 @@ export const useCategoryStore = defineStore("categoryStore", {
 
   actions: {
     async getAllCategories() {
+      if (localStorage.getItem("all_categories")) {
+        return JSON.parse(localStorage.getItem("all_categories"));
+      }
       const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
         method: "GET",
         headers: {
@@ -21,6 +24,7 @@ export const useCategoryStore = defineStore("categoryStore", {
         this.errors = data.errors;
       } else {
         this.errors = {};
+        localStorage.setItem("all_categories", JSON.stringify(data));
         return data;
       }
     },
