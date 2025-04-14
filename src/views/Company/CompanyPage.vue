@@ -107,7 +107,7 @@ const saveChanges = async () => {
   };
 
   try {
-    const response = await updateCompany(payload,payload.id);
+    const response = await updateCompany(payload, payload.id);
     if (response.success) {
       company.value = { ...editableCompany.value };
       isPopoverVisible.value = false; // Close the popover
@@ -347,10 +347,10 @@ const formatDate = (dateString) => {
     <!-- Popover -->
     <div
       v-if="isPopoverVisible"
-      class="fixed top-12 left-0 w-full h-full pb-8 bg-black/50 flex justify-center items-center overflow-auto"
+      class="fixed  top-12 left-0 w-full h-full pb-8 bg-black flex justify-center items-center overflow-auto"
     >
       <div
-        class="bg-white p-8 rounded-md shadow-lg w-[90%] max-w-3xl max-h-[700px] overflow-y-auto"
+        class="bg-white pt-32 p-8 rounded-md shadow-lg w-[90%] max-w-3xl max-h-[700px] overflow-y-auto"
       >
         <h2 class="text-2xl font-bold mb-4">Edit Company Profile</h2>
 
@@ -367,7 +367,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="name"
                 v-model="editableCompany.name"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -381,7 +381,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="owner_name"
                 v-model="editableCompany.owner_name"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -395,7 +395,7 @@ const formatDate = (dateString) => {
                 type="number"
                 id="operating_hours"
                 v-model.number="editableCompany.operating_hours"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -408,7 +408,7 @@ const formatDate = (dateString) => {
               <select
                 id="category_id"
                 v-model="editableCompany.category_id"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               >
                 <option
                   v-for="category in categories"
@@ -430,7 +430,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="contact_phone"
                 v-model="editableCompany.contact_phone"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -444,7 +444,7 @@ const formatDate = (dateString) => {
                 type="email"
                 id="contact_email"
                 v-model="editableCompany.contact_email"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
           </div>
@@ -461,7 +461,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="address"
                 v-model="editableCompany.address"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -475,7 +475,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="city"
                 v-model="editableCompany.city"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -489,7 +489,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="region"
                 v-model="editableCompany.region"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -503,7 +503,7 @@ const formatDate = (dateString) => {
                 type="text"
                 id="country"
                 v-model="editableCompany.country"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
 
@@ -530,7 +530,7 @@ const formatDate = (dateString) => {
               <select
                 id="status"
                 v-model="editableCompany.status"
-                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               >
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
@@ -550,7 +550,7 @@ const formatDate = (dateString) => {
           <textarea
             id="description"
             v-model="editableCompany.description"
-            class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
           ></textarea>
         </div>
 
@@ -563,13 +563,13 @@ const formatDate = (dateString) => {
               type="url"
               v-model="socialMediaLinks[0]"
               placeholder="Facebook"
-              class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             />
             <input
               type="url"
               v-model="socialMediaLinks[1]"
               placeholder="Instagram"
-              class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              class="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             />
             <input
               type="url"

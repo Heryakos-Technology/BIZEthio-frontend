@@ -165,7 +165,7 @@ const props = defineProps({
 
           <RouterLink
             v-if="!userId"
-            :to="{ name: 'SignIn' }"
+            :to="{ name: 'CompanyPage', params: { id: 1 } }"
             class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
           >
             Get Started

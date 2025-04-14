@@ -188,11 +188,6 @@ const router = createRouter({
 //   const userId = userInfo?.id;
 
 
-
-
-
-
-
 //   if (user_role === "admin" && to.meta.guest) {
 //     return { name: "AdminProfile" };
 //   }
@@ -203,25 +198,15 @@ const router = createRouter({
 //     return { name: "AdminProfile" };
 //   }
 
-if (user_role === "user" && to.meta.welcome) {
-  return { name: "UserLanding" };
-}
-if (user_role === "user" && to.meta.guest) {
-  return { name: "UserLanding" };
-}
-
-if (!userId && to.meta.auth) {
-  return { name: "SignIn" };
-}
-});
-//   if (!userId && to.meta.auth) {
-//     return { name: "SignIn" };
-//   }
 //   if (user_role === "user" && to.meta.welcome) {
 //     return { name: "UserLanding" };
 //   }
 //   if (user_role === "user" && to.meta.guest) {
 //     return { name: "UserLanding" };
+//   }
+
+//   if (!userId && to.meta.auth) {
+//     return { name: "SignIn" };
 //   }
 // });
 
