@@ -59,7 +59,7 @@ import ECommerce_Illustrations from "/images/AboutUsPage/ECommerce_Illustrations
             community-driven insights.
           </p>
         </div>
-        <RouterLink to="/categories">
+        <RouterLink :to="{ name: 'Home' }">
           <button
             className="mx-auto mt-8 flex items-center justify-center gap-x-4 border-none bg-black px-4 py-[15px] text-[15px] text-white outline-none transition-all duration-300 ease-in-out hover:scale-105  min-[930px]:text-[18px]"
           >
