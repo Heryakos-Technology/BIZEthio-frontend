@@ -1,6 +1,6 @@
 <script setup>
 import router from "@/router";
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch, defineProps } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import Logo from "@/components/icons/Logo.vue";
 
@@ -17,19 +17,18 @@ const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
 
-const navLinks = [
-  {
-    name: "Home",
-    label: "Home",
+const props = defineProps({
+  navLinks: {
+    type: Array,
+    default: () => [
+      {
+        name: "Home",
+        label: "Home",
+      },
+      { name: "AboutUs", label: "About Us" },
+    ],
   },
-
-  // {
-  //   name: "Home",
-  //   label: "Categories",
-  // },
-  // { name: "Home", label: "Services" },
-  { name: "AboutUs", label: "About Us" },
-];
+});
 </script>
 
 <template>
@@ -97,7 +96,7 @@ const navLinks = [
         <ul
           class="mt-16 space-y-3 divide-primaryColor divide-y mx-auto text-3xl text-white"
         >
-          <li v-for="(item, index) in navLinks" :key="index" class="py-1">
+          <li v-for="(item, index) in props.navLinks" :key="index" class="py-1">
             <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
               {{ item.label }}
             </RouterLink>
@@ -122,7 +121,7 @@ const navLinks = [
       >
         <Logo class="w-[120px]" />
         <RouterLink
-          v-for="(item, index) in navLinks"
+          v-for="(item, index) in props.navLinks"
           :key="index"
           :to="{ name: item.name }"
           class="relative py-1 text-lg hover:font-bold hover:underline transition-all duration-300 ease-linear"

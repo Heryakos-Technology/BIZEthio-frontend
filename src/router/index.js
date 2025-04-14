@@ -172,41 +172,41 @@ const router = createRouter({
 })
 
 
-router.beforeEach(async (to, from) => {
-  const authStore = useAuthStore();
-  const userInfoString = localStorage.getItem("userInfo");
+// router.beforeEach(async (to, from) => {
+//   const authStore = useAuthStore();
+//   const userInfoString = localStorage.getItem("userInfo");
 
-  const userInfo = JSON.parse(userInfoString);
+//   const userInfo = JSON.parse(userInfoString);
 
-  const user_role = userInfo?.role;
-  const userId = userInfo?.id;
-
-
+//   const user_role = userInfo?.role;
+//   const userId = userInfo?.id;
 
 
 
 
 
-  if (user_role === "admin" && to.meta.guest) {
-    return { name: "AdminProfile" };
-  }
-  if (user_role === "admin" && to.meta.auth) {
-    return { name: "AdminProfile" };
-  }
-  if (user_role === "admin" && to.meta.welcome) {
-    return { name: "AdminProfile" };
-  }
 
-  if (!userId && to.meta.auth) {
-    return { name: "SignIn" };
-  }
-  if (user_role === "user" && to.meta.welcome) {
-    return { name: "UserLanding" };
-  }
-  if (user_role === "user" && to.meta.guest) {
-    return { name: "UserLanding" };
-  }
-});
+
+//   if (user_role === "admin" && to.meta.guest) {
+//     return { name: "AdminProfile" };
+//   }
+//   if (user_role === "admin" && to.meta.auth) {
+//     return { name: "AdminProfile" };
+//   }
+//   if (user_role === "admin" && to.meta.welcome) {
+//     return { name: "AdminProfile" };
+//   }
+
+//   if (!userId && to.meta.auth) {
+//     return { name: "SignIn" };
+//   }
+//   if (user_role === "user" && to.meta.welcome) {
+//     return { name: "UserLanding" };
+//   }
+//   if (user_role === "user" && to.meta.guest) {
+//     return { name: "UserLanding" };
+//   }
+// });
 
 
 export default router
