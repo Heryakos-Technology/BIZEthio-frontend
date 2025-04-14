@@ -6,7 +6,7 @@ import ECommerce_Illustrations from "/images/AboutUsPage/ECommerce_Illustrations
 
 <template>
   <UserLayout>
-    <div className="  py-14 pb-24 text-center">
+    <div className="  pt-8 text-center">
       <h1
         className="text-[34px] text-primaryColor font-bold md:text-[44px] lg:text-[49px] min-[1200px]:text-[55px]"
       >
