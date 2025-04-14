@@ -28,7 +28,7 @@ const navLinks = [
   //   label: "Categories",
   // },
   // { name: "Home", label: "Services" },
-  { name: "Home", label: "About Us" },
+  { name: "AboutUs", label: "About Us" },
 ];
 </script>
 

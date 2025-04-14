@@ -28,6 +28,7 @@ import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
 import MoreCategories from '@/views/Company/MoreCategories.vue';
 import CategoryPage from '@/views/Company/CategoryPage.vue';
+import AboutUsPage from '@/views/Users/AboutUsPage.vue';
 
 
 
@@ -110,6 +111,11 @@ const router = createRouter({
       path: '/FileUpload',
       name: 'FileUpload',
       component: FileUpload,
+    },
+    {
+      path: '/about-us',
+      name: 'AboutUs',
+      component: AboutUsPage,
     },
 
     // Admin Related Routes
