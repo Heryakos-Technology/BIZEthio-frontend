@@ -3,10 +3,8 @@ import router from "@/router";
 import { ref, onMounted, onUnmounted, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import Logo from "@/components/icons/Logo.vue";
- 
 
 const userId = localStorage.getItem("user_id");
-
 
 const route = useRoute();
 
@@ -17,7 +15,6 @@ let lastScrollPosition = 0;
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
- 
 };
 
 const navLinks = [
@@ -26,15 +23,13 @@ const navLinks = [
     label: "Home",
   },
 
-  {
-    name: "Home",
-    label: "Categories",
-  },
-  { name: "Home", label: "Services" },
+  // {
+  //   name: "Home",
+  //   label: "Categories",
+  // },
+  // { name: "Home", label: "Services" },
   { name: "Home", label: "About Us" },
 ];
-
-
 </script>
 
 <template>
