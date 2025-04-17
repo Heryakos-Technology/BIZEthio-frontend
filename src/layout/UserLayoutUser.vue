@@ -1,16 +1,11 @@
 <script setup>
-import Header from "@/components/HomeView/Header.vue";
+import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-
-const navLinks = [
-  { name: "Home", label: "Home" },
-  { name: "UserProfile", label: "Profile" },
-];
 </script>
 
 <template>
-  <Header :navLinks="navLinks" />
-  <div class="pt-[50px] md:pt-[90px]">
+  <Navbar />
+  <div class="pt-[50px]  md:pt-[90px]">
     <slot />
   </div>
   <Footer />
