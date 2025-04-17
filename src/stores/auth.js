@@ -6,7 +6,7 @@ export const useAuthStore = defineStore("authStore", {
   state: () => {
     return {
       user: null,
-      errors: {}, // Store errors if any
+      errors: {},
     };
   },
 
