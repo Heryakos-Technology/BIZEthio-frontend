@@ -3,7 +3,6 @@
 import { ref, onMounted, computed } from "vue";
 import MapModal from "@/components/MapModal.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
-import axios from "axios";
 import { useCategoryStore } from "@/stores/category";
 import { useReviewStore } from "@/stores/review";
 import { useCompanyStore } from "@/stores/company";
@@ -12,7 +11,6 @@ import { useRouter } from "vue-router";
 const isMapVisible = ref(false);
 const search = ref("");
 const categories = ref([]);
-const error = ref("");
 const companies = ref([]);
 const reviews = ref([]);
 const loading = ref(true);
@@ -20,14 +18,76 @@ const showSuggestions = ref(false);
 const selectedCategories = ref([]);
 const router = useRouter();
 const mapSrc = ref("");
-const userLocation = ref(null);
-const nearbyCompanies = ref([]);
-const nearbyLoading = ref(false); // Add loading state for nearby companies
-const nearbyError = ref(""); // Add error state for nearby companies
+const userLocation = ref(); // Hardcoded for now
+const closestCompanies = ref([]); // For companies from your database
+ 
+
+
+const userInfoString = localStorage.getItem("userInfo");
+const userInfo = JSON.parse(userInfoString);
+
+
+onMounted(()=>{
+ userLocation.value = JSON.parse(userInfo.location)
+})
+
 
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
 const { getAllCompanies } = useCompanyStore();
+
+// Function to calculate distance using the Haversine formula
+const calculateDistance = (lat1, lng1, lat2, lng2) => {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLng = (lng2 - lng1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  console.log(distance);
+  return distance;
+};
+
+// Function to find and sort companies by distance
+const findClosestCompanies = () => {
+  if (!userLocation.value) return;
+
+  const companiesWithDistance = companies.value.map(company => {
+    let companyLocation;
+    try {
+      companyLocation = typeof company.location === 'string' 
+        ? JSON.parse(company.location) 
+        : company.location;
+    } catch (e) {
+      console.error(`Error parsing location for company ${company.name}:`, e);
+      return { ...company, distance: Infinity }; // Exclude companies with invalid location data
+    }finally{
+      loading.value=false
+    }
+
+    if (!companyLocation || !companyLocation.lat || !companyLocation.lng) {
+      return { ...company, distance: Infinity }; // Exclude companies with missing lat/lng
+    }
+
+    const distance = calculateDistance(
+      userLocation.value.lat,
+      userLocation.value.lng,
+      companyLocation.lat,
+      companyLocation.lng
+    );
+
+    return { ...company, distance };
+  });
+
+  // Sort by distance and take the top 10 closest companies
+  closestCompanies.value = companiesWithDistance
+    .filter(company => company.distance !== Infinity)
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 15);
+};
 
 const openMapModal = (latitude, longitude) => {
   mapSrc.value = `https://maps.google.com/?q=${latitude},${longitude}`;
@@ -90,11 +150,12 @@ const getUserLocation = () => {
           lng: position.coords.longitude,
         };
         console.log("User Location:", userLocation.value);
-        fetchNearbyCompanies(); // Fetch nearby companies once location is obtained
+        findClosestCompanies(); // Calculate distances after getting location
       },
       (error) => {
         console.error("Geolocation error:", error);
-        nearbyError.value = "Unable to retrieve your location. Please enable location services.";
+        alert("Unable to retrieve your location. Using default location.");
+        findClosestCompanies(); // Use hardcoded location as fallback
       },
       {
         enableHighAccuracy: true,
@@ -103,59 +164,9 @@ const getUserLocation = () => {
       }
     );
   } else {
-    nearbyError.value = "Geolocation is not supported by your browser.";
+    alert("Geolocation is not supported by your browser. Using default location.");
+    findClosestCompanies(); // Use hardcoded location as fallback
   }
-};
-
-const fetchNearbyCompanies = async () => {
-  if (!userLocation.value) {
-    nearbyError.value = "User location not available.";
-    return;
-  }
-
-  nearbyLoading.value = true;
-  nearbyError.value = "";
-
-  // Use environment variable for the API key
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
-  if (!apiKey) {
-    nearbyError.value = "Google Maps API key is missing. Please contact support.";
-    nearbyLoading.value = false;
-    return;
-  }
-
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${userLocation.value.lat},${userLocation.value.lng}&radius=50000&type=business&keyword=company OR business OR shop OR restaurant OR hotel OR pharmacy&key=${apiKey}`;
-
-  try {
-    const response = await axios.get(url);
-    if (response.data.status === "OK") {
-      nearbyCompanies.value = response.data.results.map(company => ({
-        place_id: company.place_id,
-        name: company.name,
-        address: company.vicinity || "Address not available",
-        type: company.types ? company.types[0] : "Unknown type",
-        rating: company.rating || "No rating",
-        latitude: company.geometry?.location?.lat || null,
-        longitude: company.geometry?.location?.lng || null,
-        photos: company.photos ? company.photos[0]?.photo_reference : null, // Optional: For fetching images
-      }));
-    } else {
-      nearbyError.value = `Failed to fetch nearby companies: ${response.data.status}`;
-    }
-  } catch (error) {
-    nearbyError.value = "Error fetching nearby companies. Please try again later.";
-    console.error("Error fetching nearby companies:", error);
-  } finally {
-    nearbyLoading.value = false;
-  }
-};
-
-// Fetch image URL from Google Maps if a photo reference is available
-const getNearbyCompanyImage = (photoReference) => {
-  if (!photoReference) return "/defalt-company-image.jpg";
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
 };
 
 onMounted(async () => {
@@ -163,6 +174,7 @@ onMounted(async () => {
   localStorage.setItem("companies", JSON.stringify(companies.value));
   console.log("company", companies.value[0]?.id);
   loading.value = false;
+  findClosestCompanies(); // Calculate distances after companies are fetched
 });
 
 onMounted(async () => {
@@ -185,7 +197,7 @@ onMounted(() => {
 <template>
   <UserLayoutUser>
     <div class="categories lg:w-full mx-auto lg:mb-20 mt-16">
-      <!-- Search Bar and Categories (unchanged) -->
+      <!-- Search Bar and Categories -->
       <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
         <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
           <input
@@ -230,7 +242,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Categories (unchanged) -->
+      <!-- Categories -->
       <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto space-y-6">
         <div
           class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14"
@@ -322,8 +334,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Existing Companies (unchanged) -->
-      <div
+      <!-- Existing Companies -->
+      <!-- <div
         class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6"
       >
         <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
@@ -409,33 +421,19 @@ onMounted(() => {
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Nearby Companies Section -->
+      <!-- Closest Companies from Database -->
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
-        <h2 class="text-center py-8 font-bold text-3xl text-blue-700">Nearby Companies</h2>
+        <h2 class="p-8 font-bold text-3xl text-primaryColor ">Nearby Companies</h2>
 
-        <!-- Loading State -->
-        <div
-          v-if="nearbyLoading"
-          class="flex justify-center items-center py-20 w-full mx-auto"
-        >
-          <div
-            class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white"
-          ></div>
-        </div>
-
-        <!-- Error State -->
-        <div
-          v-else-if="nearbyError"
-          class="text-center py-4 text-red-600"
-        >
-          <p>{{ nearbyError }}</p>
-        </div>
+        <div v-if="loading" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
+    </div>
 
         <!-- No Companies Found -->
         <div
-          v-else-if="!nearbyCompanies.length"
+          v-if="!closestCompanies.length"
           class="justify-center items-center py-20 w-full mx-auto"
         >
           <svg
@@ -452,44 +450,52 @@ onMounted(() => {
               d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
             />
           </svg>
-          <p class="text-gray-400 text-center">No nearby companies found.</p>
+          <p class="text-gray-400 text-center">No companies found near your location.</p>
         </div>
 
-        <!-- Display Nearby Companies -->
-        <div v-else class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
+        <!-- Display Closest Companies -->
+        <div v-else class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  ">
           <div
-            v-for="company in nearbyCompanies"
-            :key="company.place_id"
-            class="rounded-t-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+            v-for="company in closestCompanies"
+            :key="company.id"
+            class="w-[300px] xs:w-[350px] pb-4  bg-white rounded-t-lg lg:w-[300px]  2xl:w-[350px]  "
           >
             <div
-              class="bg-[#DCF2F8] h-76 lg:h-96 rounded-t-2xl w-11/12 mx-auto"
+              class=" rounded-t-2xl  "
             >
               <img
-                :src="getNearbyCompanyImage(company.photos)"
+                :src="getImageUrl(company.images)"
                 alt=""
-                class="rounded-br-4xl rounded-t-lg w-full h-1/2 object-cover"
+                class="rounded-br-4xl rounded-t-lg w-full h-[250px] "
               />
-              <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
+
+              <div class=" px-2 mt-3 ">
+              <p class="font-bold  ">
                 {{ company.name }}
               </p>
-              <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">
-                {{ company.address }}
+              <p class=" ">
+                {{ company.description }}
               </p>
-              <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
+              <p class=" ">
+                Distance: {{ company.distance.toFixed(2) }} km
+              </p>
+              <div class="flex ">
                 <i
                   v-if="company.latitude && company.longitude"
                   @click="openMapModal(company.latitude, company.longitude)"
                   class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
                 ></i>
-                <button
-                  class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
-                  disabled
+                <RouterLink
+                  :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+                  class=" flex justify-center items-center px-4 py-2 mt-3 bg-[#1B7590] rounded-md"
                 >
-                  <p class="text-white text-xs text-center mt-2.5">
+                  <p
+                    class="text-white text-xs hover:cursor-pointer text-center"
+                  >
                     Explore more
                   </p>
-                </button>
+                </RouterLink>
+              </div>
               </div>
             </div>
           </div>
