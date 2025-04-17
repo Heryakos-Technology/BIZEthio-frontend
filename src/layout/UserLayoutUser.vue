@@ -3,8 +3,8 @@ import Header from "@/components/HomeView/Header.vue";
 import Footer from "@/components/Footer.vue";
 
 const navLinks = [
-  { name: "UserProfile", label: "Profile" },
   { name: "Home", label: "Home" },
+  { name: "UserProfile", label: "Profile" },
 ];
 </script>
 

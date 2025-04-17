@@ -33,8 +33,16 @@ export const useCompanyStore = defineStore("companyStore", {
         return data
       }
     },
-    async getCompany(company) {
-      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${company}`, {
+    async getCompany(companyId) {
+      if (localStorage.getItem("all_companies")) {
+        const allCompanies = JSON.parse(localStorage.getItem("all_companies"));
+        const company = allCompanies.find((c) => c.id === parseInt(companyId));
+        if (company) {
+          return company;
+        }
+      }
+
+      const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${companyId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -101,12 +101,13 @@ watch(
   }
 );
 
+
 </script>
 
 <template>
 
   <!-- Rate The Company Block -->
-  <div class="mt-6 p-6 bg-white rounded-lg shadow-sm max-w-[420px]">
+  <div v-if="userId" class="mt-6 p-6 bg-white rounded-lg shadow-sm max-w-[420px]">
     <h3 class="text-lg font-bold text-darkBlue mb-2">Rate The Company!</h3>
     <p class="text-sm text-gray-600 mb-4">
       Help us improve our service to best suit your needs by rating us here!
