@@ -1,4 +1,5 @@
 <script setup>
+// filepath: src/views/userPage/UserLanding.vue
 import { ref, onMounted, computed } from "vue";
 import MapModal from "@/components/MapModal.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
@@ -9,7 +10,6 @@ import { useCompanyStore } from "@/stores/company";
 import { useRouter } from "vue-router";
 
 const isMapVisible = ref(false);
-// const mapSrc = 'YOUR_GOOGLE_MAP_EMBED_URL';
 const search = ref("");
 const categories = ref([]);
 const error = ref("");
@@ -20,6 +20,11 @@ const showSuggestions = ref(false);
 const selectedCategories = ref([]);
 const router = useRouter();
 const mapSrc = ref("");
+const userLocation = ref(null);
+const nearbyCompanies = ref([]);
+const nearbyLoading = ref(false); // Add loading state for nearby companies
+const nearbyError = ref(""); // Add error state for nearby companies
+
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
 const { getAllCompanies } = useCompanyStore();
@@ -28,6 +33,7 @@ const openMapModal = (latitude, longitude) => {
   mapSrc.value = `https://maps.google.com/?q=${latitude},${longitude}`;
   isMapVisible.value = true;
 };
+
 const closeMapModal = () => {
   isMapVisible.value = false;
 };
@@ -46,6 +52,7 @@ const filteredCompanies = computed(() => {
       selectedCategories.value.includes(company.category.name)
   );
 });
+
 const toggleCategory = (categoryName) => {
   const index = selectedCategories.value.indexOf(categoryName);
   if (index > -1) {
@@ -74,26 +81,111 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
+const getUserLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        userLocation.value = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        console.log("User Location:", userLocation.value);
+        fetchNearbyCompanies(); // Fetch nearby companies once location is obtained
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        nearbyError.value = "Unable to retrieve your location. Please enable location services.";
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  } else {
+    nearbyError.value = "Geolocation is not supported by your browser.";
+  }
+};
+
+const fetchNearbyCompanies = async () => {
+  if (!userLocation.value) {
+    nearbyError.value = "User location not available.";
+    return;
+  }
+
+  nearbyLoading.value = true;
+  nearbyError.value = "";
+
+  // Use environment variable for the API key
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  if (!apiKey) {
+    nearbyError.value = "Google Maps API key is missing. Please contact support.";
+    nearbyLoading.value = false;
+    return;
+  }
+
+  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${userLocation.value.lat},${userLocation.value.lng}&radius=50000&type=business&keyword=company OR business OR shop OR restaurant OR hotel OR pharmacy&key=${apiKey}`;
+
+  try {
+    const response = await axios.get(url);
+    if (response.data.status === "OK") {
+      nearbyCompanies.value = response.data.results.map(company => ({
+        place_id: company.place_id,
+        name: company.name,
+        address: company.vicinity || "Address not available",
+        type: company.types ? company.types[0] : "Unknown type",
+        rating: company.rating || "No rating",
+        latitude: company.geometry?.location?.lat || null,
+        longitude: company.geometry?.location?.lng || null,
+        photos: company.photos ? company.photos[0]?.photo_reference : null, // Optional: For fetching images
+      }));
+    } else {
+      nearbyError.value = `Failed to fetch nearby companies: ${response.data.status}`;
+    }
+  } catch (error) {
+    nearbyError.value = "Error fetching nearby companies. Please try again later.";
+    console.error("Error fetching nearby companies:", error);
+  } finally {
+    nearbyLoading.value = false;
+  }
+};
+
+// Fetch image URL from Google Maps if a photo reference is available
+const getNearbyCompanyImage = (photoReference) => {
+  if (!photoReference) return "/defalt-company-image.jpg";
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
+};
+
 onMounted(async () => {
   companies.value = await getAllCompanies();
-  localStorage.setItem("companies", companies.value);
-  console.log("company", companies[0]?.id);
+  localStorage.setItem("companies", JSON.stringify(companies.value));
+  console.log("company", companies.value[0]?.id);
   loading.value = false;
 });
+
 onMounted(async () => {
   categories.value = await getAllCategories();
-  localStorage.getItem("categories", categories.value);
+  localStorage.setItem("categories", JSON.stringify(categories.value));
   console.log("cat", categories.value);
-}),
-  onMounted(async () => {
-    reviews.value = await getAllReviews();
-    localStorage.setItem("reviews", reviews.value);
-    console.log("reviews", reviews.value);
-  });
+});
+
+onMounted(async () => {
+  reviews.value = await getAllReviews();
+  localStorage.setItem("reviews", JSON.stringify(reviews.value));
+  console.log("reviews", reviews.value);
+});
+
+onMounted(() => {
+  getUserLocation();
+});
 </script>
+
 <template>
   <UserLayoutUser>
     <div class="categories lg:w-full mx-auto lg:mb-20 mt-16">
+      <!-- Search Bar and Categories (unchanged) -->
       <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
         <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
           <input
@@ -137,7 +229,9 @@ onMounted(async () => {
           ></div>
         </div>
       </div>
-      <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto">
+
+      <!-- Categories (unchanged) -->
+      <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto space-y-6">
         <div
           class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14"
         >
@@ -228,6 +322,7 @@ onMounted(async () => {
         </div>
       </div>
 
+      <!-- Existing Companies (unchanged) -->
       <div
         class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6"
       >
@@ -315,312 +410,87 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div class="recommended-section w-5/6 mx-auto">
-        <p class="ml-10 lg:ml-19 font-bold lg:text-2xl">recommended for you</p>
-        <div class="lg:flex w-11/12 px-6 mx-auto mt-4 lg:ml-">
-          <div
-            class="bg-[#1B7590] rounded-lg h-96 lg:mt-4 lg:h-8/9 lg:mr-10 lg:pb-2"
-          >
-            <img
-              src="/sishu.png"
-              alt=""
-              class=""
-              style="border-bottom-right-radius: 180px"
-            />
-            <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-              <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40">
-                Sishu Restaurant
-              </p>
-              <div
-                class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md border-white"
-              >
-                <p
-                  class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                >
-                  see detail
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:mr-10 lg:h-8/9 lg:pb-2"
-          >
-            <img
-              src="/golden-plate.png"
-              alt=""
-              class=""
-              style="border-bottom-right-radius: 180px"
-            />
-            <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-              <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40">
-                Golden Plate Restaurant
-              </p>
-              <div
-                class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md border-white"
-              >
-                <p
-                  class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                >
-                  see detail
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="bg-[#1B7590] rounded-lg h-96 mt-4 lg:h-8/9 lg:pb-2">
-            <img
-              src="/bole-medhanialem.png"
-              alt=""
-              class=""
-              style="border-bottom-right-radius: 180px"
-            />
-            <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-              <p class="mr-6 mt- text-sm font-semibold w-32 -mt-2 lg:w-40">
-                Bole Medanialem Shopping Center
-              </p>
-              <div
-                class="w-32 h-10 bg-[#1B7590] border-1 lg:ml-12 lg:-mt-2 rounded-md border-white"
-              >
-                <p
-                  class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                >
-                  see detail
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p
-          class="underline text-[#003962] mt-2 lg:ml-20 md:ml-12 hover:cursor-pointer ml-10"
-        >
-          More Results
-        </p>
 
-        <div class="Toppicks-section mt-18 w-5/6 -ml-0 mx-auto pb-20">
-          <p class="font-bold ml-10 lg:text-2xl lg:ml-17">Top picks</p>
-          <div class="w-11/12 px-6 mx-auto mt-4 lg:ml-">
-            <div class="lg:flex">
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/edna-mol.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Edna Mall
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/hayle-grand.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Haile Grand Addis Ababa
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/zefmesh.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Zefmesh Grand Mall
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="lg:flex lg:mt-6">
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/fit-addis.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Fit Addis
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/saron-beauty.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Saron Beauty
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:pb-2"
-              >
-                <img
-                  src="/skylight.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Ethiopian Skylight Hotel
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p
-              class="underline lg:mt-2 -ml-0.5 text-[#1B7590] hover:cursor-pointer"
-            >
-              Discover more
-            </p>
-          </div>
-        </div>
-        <div class="Reviews-section lg:px-80 lg:-ml-12 pb-20">
-          <p class="lg:ml-1.5 ml-2 font-bold lg:text-2xl">Reviews</p>
+      <!-- Nearby Companies Section -->
+      <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
+        <h2 class="text-center py-8 font-bold text-3xl text-blue-700">Nearby Companies</h2>
+
+        <!-- Loading State -->
+        <div
+          v-if="nearbyLoading"
+          class="flex justify-center items-center py-20 w-full mx-auto"
+        >
           <div
-            v-if="loading"
-            class="flex justify-center items-center py-20 w-full mx-auto"
+            class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white"
+          ></div>
+        </div>
+
+        <!-- Error State -->
+        <div
+          v-else-if="nearbyError"
+          class="text-center py-4 text-red-600"
+        >
+          <p>{{ nearbyError }}</p>
+        </div>
+
+        <!-- No Companies Found -->
+        <div
+          v-else-if="!nearbyCompanies.length"
+          class="justify-center items-center py-20 w-full mx-auto"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
+            />
+          </svg>
+          <p class="text-gray-400 text-center">No nearby companies found.</p>
+        </div>
+
+        <!-- Display Nearby Companies -->
+        <div v-else class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
+          <div
+            v-for="company in nearbyCompanies"
+            :key="company.place_id"
+            class="rounded-t-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
           >
             <div
-              class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
-            ></div>
-          </div>
-          <div
-            v-else-if="!companies || companies == null || companies == ''"
-            class="justify-center items-center py-20 -mt-8 w-full mx-auto"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+              class="bg-[#DCF2F8] h-76 lg:h-96 rounded-t-2xl w-11/12 mx-auto"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
+              <img
+                :src="getNearbyCompanyImage(company.photos)"
+                alt=""
+                class="rounded-br-4xl rounded-t-lg w-full h-1/2 object-cover"
               />
-            </svg>
-            <p class="text-gray-400 ml-32 lg:ml-76">no user information yet!</p>
-          </div>
-          <div
-            v-else
-            v-for="review in reviews"
-            :key="review"
-            class="ml-2 mr-2 rounded-md mt-4 h-40 transition-all duration-300 shadow-lg bg-[#1B7590] p-2 pb-4"
-          >
-            <!-- <img :src=getImageUrl(review.images) alt="" class="rounded-lg w-1/4 h-1/3 lg:w-64 lg:h-64">  -->
-            <p class="text-xs lg:text-lg text-gray-300 font-serif ml-8">
-              {{ review.company.name }}
-            </p>
-            <div class="flex mt- w-64 ml-8">
-              <i class="fa-solid fa-user mr-4 text-gray-800 lg:mt-2"></i>
-              <p class="text-xs lg:text-md lg:mt-2.5 text-gray-300">
-                {{ review.user.name }}
+              <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
+                {{ company.name }}
               </p>
-            </div>
-            <div class="w-80 mx-auto ml-8">
-              <p
-                class="font-bold text-sm lg:text-md text-gray-200 text-center lg:mt-10 lg:mb-6"
-              >
-                {{ review.name }}
+              <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">
+                {{ company.address }}
               </p>
-              <div class="flex ml-0 -mt-6 w-10 h-6 mx-auto">
-                <div
-                  v-for="star in Array(
-                    Math.max(0, Math.floor(review.rating || 0))
-                  )"
-                  :key="star"
-                  class="text-[11px] text-yellow-500 mx-auto"
+              <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
+                <i
+                  v-if="company.latitude && company.longitude"
+                  @click="openMapModal(company.latitude, company.longitude)"
+                  class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
+                ></i>
+                <button
+                  class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
+                  disabled
                 >
-                  <i class="fa-solid fa-star"></i>
-                </div>
+                  <p class="text-white text-xs text-center mt-2.5">
+                    Explore more
+                  </p>
+                </button>
               </div>
-              <p
-                class="w- h-32 text-xs lg:text-md lg:h-16 text-gray-300 mt-2 mb-4"
-              >
-                {{ review.comment }}
-              </p>
             </div>
           </div>
         </div>
