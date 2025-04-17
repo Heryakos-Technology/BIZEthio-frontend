@@ -8,6 +8,8 @@ import CompanyReview from "@/components/CompanyDetail/CompanyReview.vue"; // Imp
 
 const { getCompany } = useCompanyStore();
 
+
+
 const route = useRoute();
 const company = ref(null);
 const loading = ref(true);

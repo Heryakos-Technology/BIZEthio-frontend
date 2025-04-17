@@ -15,22 +15,24 @@ const props = defineProps({
 const { getReview } = useReviewStore();
 
 const reviews = ref([]);
-const loadingReviews = ref(true); // Add a loading state
+const loadingReviews = ref(true); 
+const userId = localStorage.getItem("user_id");
+
 
 onMounted(async () => {
   try {
     const response = await getReview(props.company?.id);
     if (response && response.message === "No reviews found for this company") {
-      reviews.value = []; // Ensure reviews is an empty array
+      reviews.value = [];  
     } else {
       reviews.value = response;
     }
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    // Optionally, set reviews.value to [] here as well
+    
     reviews.value = [];
   } finally {
-    loadingReviews.value = false; // Set loading to false after data is fetched or if an error occurs
+    loadingReviews.value = false; 
   }
 
   console.log("id", props.company?.id);
@@ -66,14 +68,14 @@ const formatDate = (dateString) => {
   </div>
 
   <div
-    v-else-if="reviews.length === 0"
+    v-else-if="reviews.length === 0 &&  userId"
     class="font-bold text-primaryColor text-xl"
   >
     No ratings found. Be the first to comment!
   </div>
 
   <!-- Rating Distribution -->
-  <div v-else class="space-y-2">
+  <div v-else-if="userId" class="space-y-2">
     <div
       v-for="rating in ratingDistribution"
       :key="rating.stars"
