@@ -427,9 +427,7 @@ onMounted(() => {
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
         <h2 class="p-8 font-bold text-3xl text-primaryColor ">Nearby Companies</h2>
 
-        <div v-if="loading" class="flex justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryColor"></div>
-    </div>
+       
 
         <!-- No Companies Found -->
         <div
