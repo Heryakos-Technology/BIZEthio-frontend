@@ -1,11 +1,11 @@
 <script setup>
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import About_Illustration from "/images/AboutUsPage/About_Illustration.png";
 import ECommerce_Illustrations from "/images/AboutUsPage/ECommerce_Illustrations.png";
 </script>
 
 <template>
-  <UserLayout>
+  <UserLayoutUser>
     <div className="  pt-8 text-center">
       <h1
         className="text-[34px] text-primaryColor font-bold md:text-[44px] lg:text-[49px] min-[1200px]:text-[55px]"
@@ -325,5 +325,5 @@ import ECommerce_Illustrations from "/images/AboutUsPage/ECommerce_Illustrations
         </div>
       </div>
     </div>
-  </UserLayout>
+  </UserLayoutUser>
 </template>
