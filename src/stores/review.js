@@ -27,6 +27,11 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async getReview(companyId) {
+      const localStorageKey = `reviews_company_${companyId}`;
+      if (localStorage.getItem(localStorageKey)) {
+        return JSON.parse(localStorage.getItem(localStorageKey));
+      }
+
       const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/reviews/company/${companyId}`, {
         method: "Get",
         headers: {
@@ -39,6 +44,7 @@ export const useReviewStore = defineStore("reviewStore", {
         this.errors = data.errors;
       } else {
         this.errors = {};
+        localStorage.setItem(localStorageKey, JSON.stringify(data));
         return data;
       }
     },
