@@ -52,6 +52,14 @@ export const useAuthStore = defineStore("authStore", {
         localStorage.removeItem("user information");
         localStorage.removeItem("all_companies");
         localStorage.removeItem("all_categories");
+        localStorage.removeItem("reviews");
+
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key.startsWith("reviews_company_")) {
+            localStorage.removeItem(key);
+          }
+        }
 
         // Clear user state
         this.user = null;
