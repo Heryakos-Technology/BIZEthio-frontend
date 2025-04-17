@@ -164,13 +164,6 @@ const props = defineProps({
           </RouterLink>
 
 
-          <RouterLink
-            v-if="!userId"
-            :to="{ name: 'CompanyPage', params: { id: 1 } }"
-            class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
-          >
-            Test Company page
-          </RouterLink>
 
           <RouterLink
             v-if="!userId"
