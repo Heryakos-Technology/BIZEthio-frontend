@@ -41,25 +41,7 @@ export const useAuthStore = defineStore("authStore", {
     async logout() {
       try {
 
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user_name");
-        localStorage.removeItem("user_role");
-        localStorage.removeItem("rememberMe");
-        localStorage.removeItem("rememberMe");
-        localStorage.removeItem("userInfo");
-        localStorage.removeItem("userWithToken");
-        localStorage.removeItem("user information");
-        localStorage.removeItem("all_companies");
-        localStorage.removeItem("all_categories");
-        localStorage.removeItem("reviews");
-
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key.startsWith("reviews_company_")) {
-            localStorage.removeItem(key);
-          }
-        }
+        localStorage.clear();
 
         // Clear user state
         this.user = null;
