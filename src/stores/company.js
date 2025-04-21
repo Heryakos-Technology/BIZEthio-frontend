@@ -60,6 +60,8 @@ export const useCompanyStore = defineStore("companyStore", {
     },
 
     async updateCompany(payload, company) {
+
+      localStorage.removeItem("all_companies");
       const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${company}`, {
         method: "PUT",
         headers: {
