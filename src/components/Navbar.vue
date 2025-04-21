@@ -1,3 +1,6 @@
+<script setup>
+const userId = localStorage.getItem("user_id");
+</script>
 <template>
   <div class="pt-5">
     <div class="block md:hidden">
@@ -24,10 +27,10 @@
           <div
             class="flex lg:w-3/4 md:w-40 lg:ml-40 font-semibold md:ml-5 lg:mx-auto mx-auto mt-3 md:text-[12px] lg:text-[16px]"
           >
-            <router-link to="/UserLanding" class="lg:mr-32 md:mr-4"
-              >Home</router-link
+            <router-link to="/" class="lg:mr-32 md:mr-4">Home</router-link>
+            <router-link to="/about-us" class="lg:mr-32 md:mr-4"
+              >about us</router-link
             >
-            <router-link to="#" class="lg:mr-32 md:mr-4">about us</router-link>
             <router-link to="#">contacts</router-link>
           </div>
 
@@ -50,9 +53,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {};
-</script>
-
-<style></style>
