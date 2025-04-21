@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayoutUser>
     <div class="hidden lg:block pt-10">
       <div class="pt-10 pb-10">
         <div
@@ -124,7 +124,7 @@
                 class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"
               ></div>
             </div>
-            <div  class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
+            <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
               <p class="md:text-lg text-sm w-12/10 mx-auto -ml-4 lg:text-sm">
                 Don't have an account ?
                 <span
@@ -502,17 +502,15 @@
               </div>
             </div>
           </div>
-    
         </div>
       </div>
     </div>
-  
-  </UserLayout>
+  </UserLayoutUser>
 </template>
 
 <script>
 import { ref, onMounted, computed, watch } from "vue";
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { login } from "../../auth";
@@ -527,7 +525,7 @@ import {
 
 export default {
   components: {
-    UserLayout,
+    UserLayoutUser,
   },
   setup() {
     const authError = ref(null);
@@ -553,48 +551,48 @@ export default {
 
     //google
     const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-   loading.value = true
-    const user = result.user;
-    console.log("User signed in:", user);
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        loading.value = true;
+        const user = result.user;
+        console.log("User signed in:", user);
 
-    // Get the Firebase token
-    const token = await user.getIdToken();
-    console.log("Firebase Token:", token); 
-    localStorage.setItem('token', token);
+        // Get the Firebase token
+        const token = await user.getIdToken();
+        console.log("Firebase Token:", token);
+        localStorage.setItem("token", token);
 
-    if (!token) {
-      console.error("Failed to retrieve token.");
-      return;
-    }
+        if (!token) {
+          console.error("Failed to retrieve token.");
+          return;
+        }
 
-    // Check if the user already exists in your backend
-    const response = await checkUserExists(user.email); // Implement this function
+        // Check if the user already exists in your backend
+        const response = await checkUserExists(user.email); // Implement this function
 
-    if (response.exists) {
-      // User already exists, store user ID and redirect
-      localStorage.setItem('user_id', response.userId);
-      console.log("User already exists. Redirecting to user profile...");
-      router.push("/UserLanding");
-      loading.value = false
-      signInMessage.value = "Sent";
-    } else {
-      // User does not exist, register the user
-      await registerUser(user, token);
-      console.log("User registered successfully. Redirecting to user profile...");
-      router.push("/UserLanding");
-      loading.value = false
-      signInMessage.value = "Sent";
-    }
-
-  } catch (error) {
-    console.error("Error signing in with Google:", error);
-    loading.value = false
-    alert(error)
-  }
-};
-
+        if (response.exists) {
+          // User already exists, store user ID and redirect
+          localStorage.setItem("user_id", response.userId);
+          console.log("User already exists. Redirecting to user profile...");
+          router.push("/UserLanding");
+          loading.value = false;
+          signInMessage.value = "Sent";
+        } else {
+          // User does not exist, register the user
+          await registerUser(user, token);
+          console.log(
+            "User registered successfully. Redirecting to user profile..."
+          );
+          router.push("/UserLanding");
+          loading.value = false;
+          signInMessage.value = "Sent";
+        }
+      } catch (error) {
+        console.error("Error signing in with Google:", error);
+        loading.value = false;
+        alert(error);
+      }
+    };
 
     // Example function to check if user exists
     const checkUserExists = async (email) => {
@@ -651,8 +649,8 @@ export default {
       } catch (error) {
         if (error.code === "auth/account-exists-with-different-credential") {
           loading.value = false;
-          
-          const email = error.email; 
+
+          const email = error.email;
           const methods = await fetchSignInMethodsForEmail(auth, email); // Check linked providers
 
           console.log(
@@ -664,11 +662,10 @@ export default {
         } else {
           console.error("Error signing in with Facebook:", error);
           loading.value = false;
-          signInMessage.value = ""; 
+          signInMessage.value = "";
         }
       }
     };
-
 
     const registerUser = async (user, token) => {
       try {
@@ -678,28 +675,28 @@ export default {
             //name: user.displayName,
             email: user.email,
             token: token,
-            profile_picture_url:user.photoURL,
+            profile_picture_url: user.photoURL,
             // phone_number:'0988283088',
-          //  is_banned: 1,
+            //  is_banned: 1,
             // : "admin",
             //verification_status: "unverified",
           }
         );
-        
+
         const backendToken = response.data.token;
         const userData = response.data.user;
         localStorage.setItem("userInfo", JSON.stringify(userData));
         console.log("User registered in backend:", response.data.user);
         localStorage.setItem("user_id", response.data.user.id);
         axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${backendToken}`;
-          if (token) {
-            console.log("Redirecting to user profile...");
-            router.push("/UserLanding");
-            loading2.value = false;
-            signInMessage.value = "Sent";
-          }
+          "Authorization"
+        ] = `Bearer ${backendToken}`;
+        if (token) {
+          console.log("Redirecting to user profile...");
+          router.push("/UserLanding");
+          loading2.value = false;
+          signInMessage.value = "Sent";
+        }
       } catch (error) {
         console.error(
           "Error registering user:",
@@ -789,9 +786,8 @@ export default {
           //localStorage.setItem("token", backendToken);
           localStorage.setItem("user_id", userData.id);
           localStorage.setItem("userInfo", JSON.stringify(userData));
- 
+
           localStorage.setItem("user_name", userData.name);
- 
 
           axios.defaults.headers.common[
             "Authorization"
@@ -817,7 +813,6 @@ export default {
         alert(error.message);
       }
     };
-
 
     return {
       base_url,
