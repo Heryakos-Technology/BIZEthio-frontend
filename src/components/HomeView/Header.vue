@@ -163,8 +163,6 @@ const props = defineProps({
             </svg>
           </RouterLink>
 
-
-
           <RouterLink
             v-if="!userId"
             :to="{ name: 'SignIn' }"
