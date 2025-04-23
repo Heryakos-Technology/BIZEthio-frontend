@@ -30,6 +30,7 @@ import MoreCategories from '@/views/Company/MoreCategories.vue';
 import CategoryPage from '@/views/Company/CategoryPage.vue';
 import CompanyPage from '@/views/Company/CompanyPage.vue';
 import AboutUsPage from '@/views/Users/AboutUsPage.vue';
+import ContactUsPage from '@/views/Users/ContactUsPage.vue';
 
 
 
@@ -117,6 +118,11 @@ const router = createRouter({
       path: '/about-us',
       name: 'AboutUs',
       component: AboutUsPage,
+    },
+    {
+      path: '/contact-us',
+      name: 'ContactUs',
+      component: ContactUsPage,
     },
 
     // Admin Related Routes

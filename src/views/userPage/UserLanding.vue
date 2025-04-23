@@ -1,18 +1,16 @@
 <script setup>
+// filepath: src/views/userPage/UserLanding.vue
 import { ref, onMounted, computed } from "vue";
 import MapModal from "@/components/MapModal.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
-import axios from "axios";
 import { useCategoryStore } from "@/stores/category";
 import { useReviewStore } from "@/stores/review";
 import { useCompanyStore } from "@/stores/company";
 import { useRouter } from "vue-router";
 
 const isMapVisible = ref(false);
-// const mapSrc = 'YOUR_GOOGLE_MAP_EMBED_URL';
 const search = ref("");
 const categories = ref([]);
-const error = ref("");
 const companies = ref([]);
 const reviews = ref([]);
 const loading = ref(true);
@@ -20,14 +18,81 @@ const showSuggestions = ref(false);
 const selectedCategories = ref([]);
 const router = useRouter();
 const mapSrc = ref("");
+const userLocation = ref(); // Hardcoded for now
+const closestCompanies = ref([]); // For companies from your database
+
+const userInfoString = localStorage.getItem("userInfo");
+const userInfo = JSON.parse(userInfoString);
+
+onMounted(() => {
+  userLocation.value = JSON.parse(userInfo.location);
+});
+
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
 const { getAllCompanies } = useCompanyStore();
+
+// Function to calculate distance using the Haversine formula
+const calculateDistance = (lat1, lng1, lat2, lng2) => {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLng = (lng2 - lng1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  console.log(distance);
+  return distance;
+};
+
+// Function to find and sort companies by distance
+const findClosestCompanies = () => {
+  if (!userLocation.value) return;
+
+  const companiesWithDistance = companies.value.map((company) => {
+    let companyLocation;
+    try {
+      companyLocation =
+        typeof company.location === "string"
+          ? JSON.parse(company.location)
+          : company.location;
+    } catch (e) {
+      console.error(`Error parsing location for company ${company.name}:`, e);
+      return { ...company, distance: Infinity }; // Exclude companies with invalid location data
+    } finally {
+      loading.value = false;
+    }
+
+    if (!companyLocation || !companyLocation.lat || !companyLocation.lng) {
+      return { ...company, distance: Infinity }; // Exclude companies with missing lat/lng
+    }
+
+    const distance = calculateDistance(
+      userLocation.value.lat,
+      userLocation.value.lng,
+      companyLocation.lat,
+      companyLocation.lng
+    );
+
+    return { ...company, distance };
+  });
+
+  // Sort by distance and take the top 10 closest companies
+  closestCompanies.value = companiesWithDistance
+    .filter((company) => company.distance !== Infinity)
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 15);
+};
 
 const openMapModal = (latitude, longitude) => {
   mapSrc.value = `https://maps.google.com/?q=${latitude},${longitude}`;
   isMapVisible.value = true;
 };
+
 const closeMapModal = () => {
   isMapVisible.value = false;
 };
@@ -46,6 +111,7 @@ const filteredCompanies = computed(() => {
       selectedCategories.value.includes(company.category.name)
   );
 });
+
 const toggleCategory = (categoryName) => {
   const index = selectedCategories.value.indexOf(categoryName);
   if (index > -1) {
@@ -74,26 +140,65 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
+const getUserLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        userLocation.value = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        console.log("User Location:", userLocation.value);
+        findClosestCompanies(); // Calculate distances after getting location
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to retrieve your location. Using default location.");
+        findClosestCompanies(); // Use hardcoded location as fallback
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  } else {
+    alert(
+      "Geolocation is not supported by your browser. Using default location."
+    );
+    findClosestCompanies(); // Use hardcoded location as fallback
+  }
+};
+
 onMounted(async () => {
   companies.value = await getAllCompanies();
-  localStorage.setItem("companies", companies.value);
-  console.log("company", companies[0]?.id);
+  localStorage.setItem("companies", JSON.stringify(companies.value));
+  console.log("company", companies.value[0]?.id);
   loading.value = false;
+  findClosestCompanies(); // Calculate distances after companies are fetched
 });
+
 onMounted(async () => {
   categories.value = await getAllCategories();
-  localStorage.getItem("categories", categories.value);
+  localStorage.setItem("categories", JSON.stringify(categories.value));
   console.log("cat", categories.value);
-}),
-  onMounted(async () => {
-    reviews.value = await getAllReviews();
-    localStorage.setItem("reviews", reviews.value);
-    console.log("reviews", reviews.value);
-  });
+});
+
+onMounted(async () => {
+  reviews.value = await getAllReviews();
+  localStorage.setItem("reviews", JSON.stringify(reviews.value));
+  console.log("reviews", reviews.value);
+});
+
+onMounted(() => {
+  getUserLocation();
+});
 </script>
+
 <template>
   <UserLayoutUser>
     <div class="categories lg:w-full mx-auto lg:mb-20 mt-16">
+      <!-- Search Bar and Categories -->
       <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
         <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
           <input
@@ -137,7 +242,9 @@ onMounted(async () => {
           ></div>
         </div>
       </div>
-      <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto">
+
+      <!-- Categories -->
+      <div class="lg:-mt-40 md:-mt-56 lg:ml-4 w-11/12 mx-auto space-y-6">
         <div
           class="lg:flex lg:-mt-40 lg:w lg:ml-64 md:flex md:-mt-40 md:w md:ml-14"
         >
@@ -228,7 +335,8 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div
+      <!-- Existing Companies -->
+      <!-- <div
         class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6"
       >
         <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
@@ -314,236 +422,81 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-      </div>
-      <div class="recommended-section w-5/6 mx-auto">
+      </div> -->
 
+      <!-- Closest Companies from Database -->
+      <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
+        <h2 class="p-8 font-bold text-3xl text-primaryColor">
+          Nearby Companies
+        </h2>
 
-        <div class="Toppicks-section mt-18 w-5/6 -ml-0 mx-auto pb-20">
-          <p class="font-bold ml-10 lg:text-2xl lg:ml-17">Top picks</p>
-          <div class="w-11/12 px-6 mx-auto mt-4 lg:ml-">
-            <div class="lg:flex">
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/edna-mol.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Edna Mall
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/hayle-grand.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Haile Grand Addis Ababa
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/zefmesh.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Zefmesh Grand Mall
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="lg:flex lg:mt-6">
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/fit-addis.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Fit Addis
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:mr-10 lg:pb-2"
-              >
-                <img
-                  src="/saron-beauty.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Saron Beauty
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="bg-[#1B7590] rounded-lg rounded-t-2xl lg:h-8/9 h-96 mt-4 lg:pb-2"
-              >
-                <img
-                  src="/skylight.png"
-                  alt=""
-                  class=""
-                  style="border-bottom-right-radius: 180px"
-                />
-                <div class="flex mt-6 w-11/12 mx-auto lg:pb-2">
-                  <p class="mr-6 text-sm font-semibold w-32 lg:w-40">
-                    Ethiopian Skylight Hotel
-                  </p>
-                  <div
-                    class="w-32 h-10 bg-[#1B7590] lg:ml-10 border-1 rounded-md border-white"
-                  >
-                    <p
-                      class="text-center text-white text-xs hover:cursor-pointer mt-2.5"
-                    >
-                      view detail
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p
-              class="underline lg:mt-2 -ml-0.5 text-[#1B7590] hover:cursor-pointer"
-            >
-              Discover more
-            </p>
-          </div>
+        <!-- No Companies Found -->
+        <div
+          v-if="!closestCompanies.length"
+          class="justify-center items-center py-20 w-full mx-auto"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
+            />
+          </svg>
+          <p class="text-gray-400 text-center">
+            No companies found near your location.
+          </p>
         </div>
-        <div class="Reviews-section lg:px-80 lg:-ml-12 pb-20">
-          <p class="lg:ml-1.5 ml-2 font-bold lg:text-2xl">Reviews</p>
+
+        <!-- Display Closest Companies -->
+        <div
+          v-else
+          class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
           <div
-            v-if="loading"
-            class="flex justify-center items-center py-20 w-full mx-auto"
+            v-for="company in closestCompanies"
+            :key="company.id"
+            class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
           >
-            <div
-              class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
-            ></div>
-          </div>
-          <div
-            v-else-if="!companies || companies == null || companies == ''"
-            class="justify-center items-center py-20 -mt-8 w-full mx-auto"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
+            <div class="rounded-t-2xl">
+              <img
+                :src="getImageUrl(company.images)"
+                alt=""
+                class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
               />
-            </svg>
-            <p class="text-gray-400 ml-32 lg:ml-76">no user information yet!</p>
-          </div>
-          <div
-            v-else
-            v-for="review in reviews"
-            :key="review"
-            class="ml-2 mr-2 rounded-md mt-4 h-40 transition-all duration-300 shadow-lg bg-[#1B7590] p-2 pb-4"
-          >
-            <!-- <img :src=getImageUrl(review.images) alt="" class="rounded-lg w-1/4 h-1/3 lg:w-64 lg:h-64">  -->
-            <p class="text-xs lg:text-lg text-gray-300 font-serif ml-8">
-              {{ review.company.name }}
-            </p>
-            <div class="flex mt- w-64 ml-8">
-              <i class="fa-solid fa-user mr-4 text-gray-800 lg:mt-2"></i>
-              <p class="text-xs lg:text-md lg:mt-2.5 text-gray-300">
-                {{ review.user.name }}
-              </p>
-            </div>
-            <div class="w-80 mx-auto ml-8">
-              <p
-                class="font-bold text-sm lg:text-md text-gray-200 text-center lg:mt-10 lg:mb-6"
-              >
-                {{ review.name }}
-              </p>
-              <div class="flex ml-0 -mt-6 w-10 h-6 mx-auto">
-                <div
-                  v-for="star in Array(
-                    Math.max(0, Math.floor(review.rating || 0))
-                  )"
-                  :key="star"
-                  class="text-[11px] text-yellow-500 mx-auto"
-                >
-                  <i class="fa-solid fa-star"></i>
+
+              <div class="px-2 mt-3">
+                <p class="font-bold">
+                  {{ company.name }}
+                </p>
+                <p class=" ">
+                  {{ company.description }}
+                </p>
+                <p class=" ">Distance: {{ company.distance.toFixed(2) }} km</p>
+                <div class="flex">
+                  <i
+                    v-if="company.latitude && company.longitude"
+                    @click="openMapModal(company.latitude, company.longitude)"
+                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
+                  ></i>
+                  <RouterLink
+                    :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+                    class="flex justify-center items-center px-4 py-2 mt-3 bg-[#1B7590] rounded-md"
+                  >
+                    <p
+                      class="text-white text-xs hover:cursor-pointer text-center"
+                    >
+                      Explore more
+                    </p>
+                  </RouterLink>
                 </div>
               </div>
-              <p
-                class="w- h-32 text-xs lg:text-md lg:h-16 text-gray-300 mt-2 mb-4"
-              >
-                {{ review.comment }}
-              </p>
             </div>
           </div>
         </div>

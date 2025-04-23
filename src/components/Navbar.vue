@@ -1,38 +1,132 @@
-<template>
-    <div class="pt-5">
-    <div class=" block md:hidden">
-        <div class="flex w-screen">
-            <img src="\logo.png" alt="" class="w-32 p-2 ">
-           <div class=" ml-48"> <i class="fa-solid fa-bars  mt-6"></i></div>
-        </div>
-    </div>
-    <div class="hidden  md:block">
-        <div class=" w-1/2 md:w-2/3 mx-auto p-1 rounded-full  h-14 bg-[#C8EDF8]">
-            <div class="flex">
-            <div class="flex">
-            <img src="\logo.png" alt="" class="lg:w-14 lg:h-10 lg:mt-1 ml-4 md:w-16 md:h-8 md:mt-2">
-            <p class="lg:mt-2 ml-2 lg:text-lg md:text-[13px] md:font-semibold md:-ml-0.5 lg:mr-8">BIZEthio</p>
-            </div>
-            <div class="flex lg:w-3/4 md:w-40 lg:ml-40 font-semibold md:ml-5 lg:mx-auto mx-auto mt-3 md:text-[12px] lg:text-[16px]">
-                <router-link to="/UserLanding" class="lg:mr-32 md:mr-4">Home</router-link >
-                <router-link to="#" class="lg:mr-32  md:mr-4">about us</router-link>
-                <router-link to="#">contacts</router-link>
-            </div>
-            <div class="mt-3 lg:-ml-16 md:-ml-4">
-                <router-link to="/UserProfile" class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"></router-link>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
-</template>
+<script setup>
+import Logo from "./icons/Logo.vue";
+import { ref, onMounted, onUnmounted, watch, defineProps } from "vue";
+const userId = localStorage.getItem("user_id");
 
-<script>
-export default {
+const isSidebarOpen = ref(false);
 
-}
+const isNavbarVisible = ref(true);
+
+const handleSidebarOpen = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const props = defineProps({
+  navLinks: {
+    type: Array,
+    default: () => [
+      {
+        name: "Home",
+        label: "Home",
+      },
+      { name: "AboutUs", label: "About Us" },
+      { name: "ContactUs", label: "Contact Us" },
+    ],
+  },
+});
 </script>
+<template>
+  <div class="">
+    <div
+      class="fixed top-0 left-0 z-50 flex w-full items-center justify-between md:py-3 bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff] px-4 py-2.5 lg:hidden"
+    >
+      <Logo class="w-[100px]" />
+      <div @click="handleSidebarOpen" class="size-5 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path
+            d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
+          />
+        </svg>
+      </div>
 
-<style>
+      <!-- Mobile Sidebar -->
+      <div
+        class="fixed top-0 right-0 flex h-screen w-0 max-w-sm origin-right flex-col bg-black transition-all duration-700 ease-linear"
+        :class="{ 'w-screen': isSidebarOpen }"
+      >
+        <div class="flex my-8 items-center justify-between px-4">
+          <div
+            class="bg-white w-fit h-fit px-2 py-1 flex justify-center items-center"
+          >
+            <Logo class="w-[100px]" />
+          </div>
+          <svg
+            @click="handleSidebarOpen"
+            class="size-7 fill-[#91e5ff]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+            />
+          </svg>
+        </div>
+        <ul
+          class="mt-16 space-y-3 divide-primaryColor divide-y mx-auto text-3xl text-white"
+        >
+          <li v-for="(item, index) in props.navLinks" :key="index" class="py-1">
+            <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
+              {{ item.label }}
+            </RouterLink>
+          </li>
+        </ul>
 
-</style>
+        <RouterLink
+          :to="{ name: 'SignIn' }"
+          class="w-fit mx-auto mt-16"
+          :class="{
+            'hidden  w-fit': !isSidebarOpen,
+          }"
+        >
+          <button
+            class="cursor-pointer rounded-md bg-[#1B7590] px-12 py-3 font-medium text-white"
+          >
+            Get Started
+          </button>
+        </RouterLink>
+      </div>
+    </div>
+
+    <div class="hidden lg:block pt-4">
+      <div
+        class="flex items-center w-[90%] max-w-[1000px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between"
+      >
+        <div class="ml-8">
+          <Logo class="w-[100px]" />
+        </div>
+        <div class="flex gap-x-8 text-[16px] uppercase font-semibold">
+          <router-link
+            to="/"
+            class="hover:font-bold transition-all duration-200 ease-linear"
+            >Home</router-link
+          >
+          <router-link
+            to="/about-us"
+            class="hover:font-bold transition-all duration-200 ease-linear"
+            >about us</router-link
+          >
+          <router-link
+            to="/contact-us"
+            class="hover:font-bold transition-all duration-200 ease-linear"
+            >contact us</router-link
+          >
+        </div>
+
+        <RouterLink
+          v-if="!userId"
+          :to="{ name: 'SignIn' }"
+          class="cursor-pointer w-[160px] m-2 flex items-center justify-center rounded-full bg-[#1B7590]/80 px-6 py-2 font-medium text-white lg:px-6 hover:bg-primaryColor"
+        >
+          Get Started
+        </RouterLink>
+
+        <div v-else class="mt-3 lg:-ml-16 md:-ml-4">
+          <router-link
+            to="/UserProfile"
+            class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"
+          ></router-link>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

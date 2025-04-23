@@ -70,6 +70,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async createCategory(formData) {
+      localStorage.removeItem("all_categories");
       const res = await fetch("https://bizethio-backend-production-944c.up.railway.app/api/categories", {
         method: "POST",
         headers: {
@@ -88,6 +89,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async deleteCategory(categoryId) {
+      localStorage.removeItem("all_categories");
       const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/categories/${categoryId}`, {
         method: "DELETE",
         headers: {
@@ -96,6 +98,7 @@ export const useCategoryStore = defineStore("categoryStore", {
       });
       const data = res.status !== 204 ? await res.json() : {};
       if (data.errors) {
+        w
         this.errors = data.errors;
       } else {
         return data;
@@ -103,6 +106,7 @@ export const useCategoryStore = defineStore("categoryStore", {
     },
 
     async updateCategory(formData, categoryId) {
+      localStorage.removeItem("all_categories");
       const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/categories/${categoryId}`, {
         method: "PUT",
         headers: {
