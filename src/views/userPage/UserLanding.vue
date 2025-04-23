@@ -20,17 +20,13 @@ const router = useRouter();
 const mapSrc = ref("");
 const userLocation = ref(); // Hardcoded for now
 const closestCompanies = ref([]); // For companies from your database
- 
-
 
 const userInfoString = localStorage.getItem("userInfo");
 const userInfo = JSON.parse(userInfoString);
 
-
-onMounted(()=>{
- userLocation.value = JSON.parse(userInfo.location)
-})
-
+onMounted(() => {
+  userLocation.value = JSON.parse(userInfo.location);
+});
 
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
@@ -43,8 +39,10 @@ const calculateDistance = (lat1, lng1, lat2, lng2) => {
   const dLng = (lng2 - lng1) * (Math.PI / 180);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in kilometers
   console.log(distance);
@@ -55,17 +53,18 @@ const calculateDistance = (lat1, lng1, lat2, lng2) => {
 const findClosestCompanies = () => {
   if (!userLocation.value) return;
 
-  const companiesWithDistance = companies.value.map(company => {
+  const companiesWithDistance = companies.value.map((company) => {
     let companyLocation;
     try {
-      companyLocation = typeof company.location === 'string' 
-        ? JSON.parse(company.location) 
-        : company.location;
+      companyLocation =
+        typeof company.location === "string"
+          ? JSON.parse(company.location)
+          : company.location;
     } catch (e) {
       console.error(`Error parsing location for company ${company.name}:`, e);
       return { ...company, distance: Infinity }; // Exclude companies with invalid location data
-    }finally{
-      loading.value=false
+    } finally {
+      loading.value = false;
     }
 
     if (!companyLocation || !companyLocation.lat || !companyLocation.lng) {
@@ -84,7 +83,7 @@ const findClosestCompanies = () => {
 
   // Sort by distance and take the top 10 closest companies
   closestCompanies.value = companiesWithDistance
-    .filter(company => company.distance !== Infinity)
+    .filter((company) => company.distance !== Infinity)
     .sort((a, b) => a.distance - b.distance)
     .slice(0, 15);
 };
@@ -164,7 +163,9 @@ const getUserLocation = () => {
       }
     );
   } else {
-    alert("Geolocation is not supported by your browser. Using default location.");
+    alert(
+      "Geolocation is not supported by your browser. Using default location."
+    );
     findClosestCompanies(); // Use hardcoded location as fallback
   }
 };
@@ -425,9 +426,9 @@ onMounted(() => {
 
       <!-- Closest Companies from Database -->
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
-        <h2 class="p-8 font-bold text-3xl text-primaryColor ">Nearby Companies</h2>
-
-       
+        <h2 class="p-8 font-bold text-3xl text-primaryColor">
+          Nearby Companies
+        </h2>
 
         <!-- No Companies Found -->
         <div
@@ -448,52 +449,53 @@ onMounted(() => {
               d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
             />
           </svg>
-          <p class="text-gray-400 text-center">No companies found near your location.</p>
+          <p class="text-gray-400 text-center">
+            No companies found near your location.
+          </p>
         </div>
 
         <!-- Display Closest Companies -->
-        <div v-else class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  ">
+        <div
+          v-else
+          class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
           <div
             v-for="company in closestCompanies"
             :key="company.id"
-            class="w-[300px] xs:w-[350px] pb-4  bg-white rounded-t-lg lg:w-[300px]  2xl:w-[350px]  "
+            class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
           >
-            <div
-              class=" rounded-t-2xl  "
-            >
+            <div class="rounded-t-2xl">
               <img
                 :src="getImageUrl(company.images)"
                 alt=""
-                class="rounded-br-4xl rounded-t-lg w-full h-[250px] "
+                class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
               />
 
-              <div class=" px-2 mt-3 ">
-              <p class="font-bold  ">
-                {{ company.name }}
-              </p>
-              <p class=" ">
-                {{ company.description }}
-              </p>
-              <p class=" ">
-                Distance: {{ company.distance.toFixed(2) }} km
-              </p>
-              <div class="flex ">
-                <i
-                  v-if="company.latitude && company.longitude"
-                  @click="openMapModal(company.latitude, company.longitude)"
-                  class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
-                ></i>
-                <RouterLink
-                  :to="{ name: 'CompanyDetail', params: { id: company.id } }"
-                  class=" flex justify-center items-center px-4 py-2 mt-3 bg-[#1B7590] rounded-md"
-                >
-                  <p
-                    class="text-white text-xs hover:cursor-pointer text-center"
+              <div class="px-2 mt-3">
+                <p class="font-bold">
+                  {{ company.name }}
+                </p>
+                <p class=" ">
+                  {{ company.description }}
+                </p>
+                <p class=" ">Distance: {{ company.distance.toFixed(2) }} km</p>
+                <div class="flex">
+                  <i
+                    v-if="company.latitude && company.longitude"
+                    @click="openMapModal(company.latitude, company.longitude)"
+                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
+                  ></i>
+                  <RouterLink
+                    :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+                    class="flex justify-center items-center px-4 py-2 mt-3 bg-[#1B7590] rounded-md"
                   >
-                    Explore more
-                  </p>
-                </RouterLink>
-              </div>
+                    <p
+                      class="text-white text-xs hover:cursor-pointer text-center"
+                    >
+                      Explore more
+                    </p>
+                  </RouterLink>
+                </div>
               </div>
             </div>
           </div>

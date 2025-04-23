@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import horizon_hotel from "/images/ForYouSection/horizon_hotel.jpeg";
 import { useRoute } from "vue-router";
 import { useCompanyStore } from "@/stores/company";
@@ -106,7 +106,7 @@ const closeSharePopup = () => {
 </script>
 
 <template>
-  <UserLayout>
+  <UserLayoutUser>
     <div class="min-h-screen px-4 sm:pt-5 lg:pt-10 md:pb-16">
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center py-20">
@@ -301,6 +301,6 @@ const closeSharePopup = () => {
         </div>
       </div>
     </div>
-  </UserLayout>
+  </UserLayoutUser>
 </template>
 
