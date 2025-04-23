@@ -1,6 +1,5 @@
 <script setup>
-// filepath: src/views/userPage/UserLanding.vue
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import MapModal from "@/components/MapModal.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useCategoryStore } from "@/stores/category";
@@ -20,12 +19,148 @@ const router = useRouter();
 const mapSrc = ref("");
 const userLocation = ref(); // Hardcoded for now
 const closestCompanies = ref([]); // For companies from your database
+const nearbyPlaces = ref([]); // For Google Places API results
+const nearbyPlacesLoading = ref(true);
+const googleMapsApiKey = "AIzaSyDBGwRQtiXnydphnsYf5GJvj0bPH6x2r0w"; // Replace with your actual API key
+
+// Generate category types mapping
+const categoryToGoogleType = {
+  Restaurant: "restaurant",
+  Cafe: "cafe",
+  Hotel: "lodging",
+  Shopping: "shopping_mall",
+  Hospital: "hospital",
+  School: "school",
+  Bank: "bank",
+  "Gas Station": "gas_station",
+  Pharmacy: "pharmacy",
+  // Add more mappings as needed
+};
 
 const userInfoString = localStorage.getItem("userInfo");
 const userInfo = JSON.parse(userInfoString);
 
 onMounted(() => {
   userLocation.value = JSON.parse(userInfo.location);
+  loadGoogleMapsAPI();
+});
+
+const loadGoogleMapsAPI = () => {
+  // Check if the API is already loaded
+  if (window.google && window.google.maps) {
+    initGooglePlaces();
+    return;
+  }
+
+  // Load Google Maps API with Places library
+  const script = document.createElement("script");
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places&callback=initGooglePlaces`;
+  script.async = true;
+  script.defer = true;
+
+  // Define the callback function globally
+  window.initGooglePlaces = () => {
+    fetchNearbyPlaces();
+  };
+
+  document.head.appendChild(script);
+};
+
+const fetchNearbyPlaces = () => {
+  if (!userLocation.value || !window.google) return;
+
+  nearbyPlacesLoading.value = true;
+
+  const location = new google.maps.LatLng(
+    userLocation.value.lat,
+    userLocation.value.lng
+  );
+  const service = new google.maps.places.PlacesService(
+    document.createElement("div")
+  );
+
+  // Get all selected Google place types
+  let placeTypes = selectedCategories.value
+    .map((cat) => categoryToGoogleType[cat])
+    .filter(Boolean);
+
+  // If no categories selected, use some default types
+  if (!placeTypes.length) {
+    placeTypes = ["restaurant", "store", "lodging", "shopping_mall"];
+  }
+
+  // Make a separate request for each type to get more diverse results
+  const promises = placeTypes.map((type) => {
+    return new Promise((resolve) => {
+      service.nearbySearch(
+        {
+          location: location,
+          radius: 5000, // 5km radius
+          type: type,
+        },
+        (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            resolve(results);
+          } else {
+            console.error(`Error fetching nearby ${type}:`, status);
+            resolve([]);
+          }
+        }
+      );
+    });
+  });
+
+  Promise.all(promises)
+    .then((resultsArray) => {
+      // Combine all results and remove duplicates
+      const allPlaces = [];
+      const placeIds = new Set();
+
+      resultsArray.forEach((places) => {
+        places.forEach((place) => {
+          if (!placeIds.has(place.place_id)) {
+            placeIds.add(place.place_id);
+            allPlaces.push(place);
+          }
+        });
+      });
+
+      // Transform the results for display
+      nearbyPlaces.value = allPlaces.map((place) => ({
+        id: place.place_id,
+        name: place.name,
+        location: {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        },
+        address: place.vicinity,
+        rating: place.rating,
+        types: place.types,
+        photos: place.photos
+          ? [place.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 })]
+          : ["/defalt-company-image.jpg"],
+        // For display purposes
+        distance: calculateDistance(
+          userLocation.value.lat,
+          userLocation.value.lng,
+          place.geometry.location.lat(),
+          place.geometry.location.lng()
+        ),
+      }));
+
+      nearbyPlacesLoading.value = false;
+    })
+    .catch((error) => {
+      console.error("Error fetching nearby places:", error);
+      nearbyPlacesLoading.value = false;
+    });
+};
+
+// Watch for category selection changes to update Google Places
+watch(selectedCategories, () => {
+  if (window.google) {
+    fetchNearbyPlaces();
+  }
 });
 
 const { getAllReviews } = useReviewStore();
@@ -45,47 +180,7 @@ const calculateDistance = (lat1, lng1, lat2, lng2) => {
       Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in kilometers
-  console.log(distance);
   return distance;
-};
-
-// Function to find and sort companies by distance
-const findClosestCompanies = () => {
-  if (!userLocation.value) return;
-
-  const companiesWithDistance = companies.value.map((company) => {
-    let companyLocation;
-    try {
-      companyLocation =
-        typeof company.location === "string"
-          ? JSON.parse(company.location)
-          : company.location;
-    } catch (e) {
-      console.error(`Error parsing location for company ${company.name}:`, e);
-      return { ...company, distance: Infinity }; // Exclude companies with invalid location data
-    } finally {
-      loading.value = false;
-    }
-
-    if (!companyLocation || !companyLocation.lat || !companyLocation.lng) {
-      return { ...company, distance: Infinity }; // Exclude companies with missing lat/lng
-    }
-
-    const distance = calculateDistance(
-      userLocation.value.lat,
-      userLocation.value.lng,
-      companyLocation.lat,
-      companyLocation.lng
-    );
-
-    return { ...company, distance };
-  });
-
-  // Sort by distance and take the top 10 closest companies
-  closestCompanies.value = companiesWithDistance
-    .filter((company) => company.distance !== Infinity)
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 15);
 };
 
 const openMapModal = (latitude, longitude) => {
@@ -128,7 +223,8 @@ const selectCompany = (companyId) => {
 const getImageUrl = (images) => {
   if (images) {
     try {
-      const parsedImages = JSON.parse(images);
+      const parsedImages =
+        typeof images === "string" ? JSON.parse(images) : images;
       return parsedImages.length > 0
         ? parsedImages[0]
         : "/defalt-company-image.jpg";
@@ -140,58 +236,21 @@ const getImageUrl = (images) => {
   return "/defalt-company-image.jpg";
 };
 
-const getUserLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLocation.value = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        console.log("User Location:", userLocation.value);
-        findClosestCompanies(); // Calculate distances after getting location
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
-        alert("Unable to retrieve your location. Using default location.");
-        findClosestCompanies(); // Use hardcoded location as fallback
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
-    );
-  } else {
-    alert(
-      "Geolocation is not supported by your browser. Using default location."
-    );
-    findClosestCompanies(); // Use hardcoded location as fallback
-  }
-};
-
 onMounted(async () => {
   companies.value = await getAllCompanies();
   localStorage.setItem("companies", JSON.stringify(companies.value));
   console.log("company", companies.value[0]?.id);
   loading.value = false;
-  findClosestCompanies(); // Calculate distances after companies are fetched
 });
 
 onMounted(async () => {
   categories.value = await getAllCategories();
-  localStorage.setItem("categories", JSON.stringify(categories.value));
   console.log("cat", categories.value);
 });
 
 onMounted(async () => {
   reviews.value = await getAllReviews();
-  localStorage.setItem("reviews", JSON.stringify(reviews.value));
   console.log("reviews", reviews.value);
-});
-
-onMounted(() => {
-  getUserLocation();
 });
 </script>
 
@@ -377,7 +436,7 @@ onMounted(() => {
             class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           >
             <div
-              v-for="company in filteredCompanies"
+              v-for="company in filteredCompanies.slice(0, 8)"
               :key="company.id"
               class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
             >
@@ -427,15 +486,25 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Closest Companies from Database -->
+      <!-- Google Places Nearby Companies -->
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
         <h2 class="p-8 font-bold text-3xl text-primaryColor">
-          Nearby Companies
+          Discover Nearby Places
         </h2>
 
-        <!-- No Companies Found -->
+        <!-- Loading Indicator -->
         <div
-          v-if="!closestCompanies.length"
+          v-if="nearbyPlacesLoading"
+          class="flex justify-center items-center py-20 w-full mx-auto mt-16"
+        >
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
+          ></div>
+        </div>
+
+        <!-- No Places Found -->
+        <div
+          v-else-if="!nearbyPlaces.length"
           class="justify-center items-center py-20 w-full mx-auto"
         >
           <svg
@@ -453,52 +522,47 @@ onMounted(() => {
             />
           </svg>
           <p class="text-gray-400 text-center">
-            No companies found near your location.
+            No places found near your location.
           </p>
         </div>
 
-        <!-- Display Closest Companies -->
+        <!-- Display Nearby Places -->
         <div
           v-else
           class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           <div
-            v-for="company in closestCompanies"
-            :key="company.id"
+            v-for="place in nearbyPlaces"
+            :key="place.id"
             class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
           >
             <div class="rounded-t-2xl">
               <img
-                :src="getImageUrl(company.images)"
+                :src="getImageUrl(place.photos)"
                 alt=""
                 class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
               />
-
-              <div class="px-2 mt-3">
-                <p class="font-bold">
-                  {{ company.name }}
+              <div class="px-4 py-2">
+                <p class="font-bold text-lg">{{ place.name }}</p>
+                <p class="text-sm text-gray-600">{{ place.address }}</p>
+                <p class="text-sm text-gray-600">Rating: {{ place.rating }}</p>
+                <p class="text-sm text-gray-600">
+                  Distance: {{ place.distance.toFixed(2) }} km
                 </p>
-                <p class=" ">
-                  {{ company.description }}
-                </p>
-                <p class=" ">Distance: {{ company.distance.toFixed(2) }} km</p>
-                <div class="flex">
-                  <i
-                    v-if="company.latitude && company.longitude"
-                    @click="openMapModal(company.latitude, company.longitude)"
-                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
-                  ></i>
-                  <RouterLink
-                    :to="{ name: 'CompanyDetail', params: { id: company.id } }"
-                    class="flex justify-center items-center px-4 py-2 mt-3 bg-[#1B7590] rounded-md"
-                  >
-                    <p
-                      class="text-white text-xs hover:cursor-pointer text-center"
-                    >
-                      Explore more
-                    </p>
-                  </RouterLink>
-                </div>
+              </div>
+              <div class="flex justify-between items-center px-4 py-2">
+                <button
+                  @click="openMapModal(place.location.lat, place.location.lng)"
+                  class="text-primaryColor hover:underline"
+                >
+                  View on Map
+                </button>
+                <RouterLink
+                  :to="{ name: 'PlaceDetail', params: { id: place.id } }"
+                  class="text-primaryColor hover:underline"
+                >
+                  Explore more
+                </RouterLink>
               </div>
             </div>
           </div>

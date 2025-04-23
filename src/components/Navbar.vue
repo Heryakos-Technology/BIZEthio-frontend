@@ -89,7 +89,7 @@ const props = defineProps({
 
     <div class="hidden lg:block pt-4">
       <div
-        class="flex items-center w-[90%] max-w-[1000px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between"
+        class="flex items-center w-[90%] max-w-[1000px] h-[64px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between"
       >
         <div class="ml-8">
           <Logo class="w-[100px]" />
