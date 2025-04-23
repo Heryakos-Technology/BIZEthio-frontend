@@ -336,7 +336,7 @@ onMounted(() => {
       </div>
 
       <!-- Existing Companies -->
-      <!-- <div
+      <div
         class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6"
       >
         <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
@@ -372,57 +372,60 @@ onMounted(() => {
             </svg>
             <p class="text-gray-400 ml-32 lg:ml-76">No companies yet!</p>
           </div>
-
           <div
             v-else
-            v-for="company in filteredCompanies"
-            :key="company.id"
-            class="rounded-t-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+            class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           >
             <div
-              class="bg-[#DCF2F8] h-76 lg:h-96 rounded-t-2xl w-11/12 mx-auto"
+              v-for="company in filteredCompanies"
+              :key="company.id"
+              class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
             >
-              <img
-                :src="getImageUrl(company.images)"
-                alt=""
-                class="rounded-br-4xl rounded-t-lg w-full h-1/2"
-              />
-              <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
-                {{ company.name }}
-              </p>
-              <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1">
-                {{ company.description }}
-              </p>
-              <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
-                <i
-                  @click="
-                    openMapModal({
-                      latitude: company.latitude,
-                      longitude: company.longitude,
-                    })
-                  "
-                  class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
-                ></i>
-                <RouterLink
-                  :to="{ name: 'CompanyDetail', params: { id: company.id } }"
-                  class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
+              <div class="rounded-t-2xl">
+                <img
+                  :src="getImageUrl(company.images)"
+                  alt=""
+                  class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
+                />
+                <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
+                  {{ company.name }}
+                </p>
+                <p
+                  class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1 truncate"
                 >
-                  <p
-                    class="text-white text-xs hover:cursor-pointer text-center mt-2.5"
+                  {{ company.description }}
+                </p>
+                <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
+                  <i
+                    @click="
+                      openMapModal({
+                        latitude: company.latitude,
+                        longitude: company.longitude,
+                      })
+                    "
+                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
+                  ></i>
+                  <RouterLink
+                    :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+                    class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
                   >
-                    Explore more
-                  </p>
-                </RouterLink>
+                    <p
+                      class="text-white text-xs hover:cursor-pointer text-center mt-2.5"
+                    >
+                      Explore more
+                    </p>
+                  </RouterLink>
+                </div>
+                <MapModal
+                  :visible="isMapVisible"
+                  :mapSrc="mapSrc"
+                  @close="closeMapModal"
+                />
               </div>
-              <MapModal
-                :visible="isMapVisible"
-                :mapSrc="mapSrc"
-                @close="closeMapModal"
-              />
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- Closest Companies from Database -->
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
