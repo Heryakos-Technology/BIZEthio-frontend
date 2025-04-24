@@ -33,7 +33,7 @@ export const useUserStore = defineStore("userStore", {
     },
 
     /********************* Delete User  ********************** */
-    async deleteUser(userId) {
+    async deleteUsers(userId) {
       const res = await fetch(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
@@ -43,7 +43,8 @@ export const useUserStore = defineStore("userStore", {
       });
 
       const data = res.status !== 204 ? await res.json() : {};
-      console.log(data);
+      const userData = res.data
+      console.log('dataaaa',userData);
 
       if (data.errors) {
         this.errors = data.errors;

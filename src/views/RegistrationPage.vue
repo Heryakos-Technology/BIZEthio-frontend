@@ -269,13 +269,44 @@
               <input type="file" @change="handleFileChange" ref="fileInput" class="hidden" multiple />
 
               <!-- Button to trigger file input -->
-              <button @click="triggerFileInput"
+              <!-- <button @click="triggerFileInput"
                 class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
                 Browse
-              </button>
+              </button> -->
 
-              <div v-if="imageUrl && imageUrl.length" class="mt-4">
-                <h3 class="text-green-600">Image Uploaded successfully!</h3>
+             
+            </div>
+            <!---->
+            <div class="-ml-124 mt-10">
+                  <div
+                    class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+                    @dragover.prevent="handleDragOver"
+                    @drop.prevent="handleFileDrop"
+                    @click="triggerFileInput"
+                  >
+                    <img src="/dragfile.png" alt="" class="w-1/2" />
+                  </div>
+                  <input
+                    type="file"
+                    class="hidden"
+                    @change="handleFileChange"
+                    accept="image/*"
+                    id="fileInput"
+                  />
+                  <label
+                    for="fileInput"
+                    class="bg-cyan-500 ml-28 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
+                    style="display: inline-block"
+                  >
+                    Browse
+                  </label>
+                  <p
+                    class="text-gray-500 mt-2 text-center font-semibold text-lg"
+                  >
+                    or drag a file here
+                  </p>
+                  <div v-if="imageUrl && imageUrl.length" class="mt-4 ml-20">
+                <h3 class="text-green-600 ml-20">Image Uploaded successfully!</h3>
                 <div v-for="(url, index) in imageUrl" :key="index">
                   <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
                 </div>
@@ -285,12 +316,12 @@
                 {{ errors.images }}
               </p>
 
-              <p v-if="isUploading" class="mt-2 ml-4 text-green-600">
+              <p v-if="isUploading" class="mt-2 ml-20 text-green-600">
                 Uploading...
               </p>
-            </div>
+                </div>
             <div class="text-[12px]  font-normal cursor-pointer text-gray-100 mt-8 ml-8 md:text-[16px]">
-             <div class="-mt-8">
+             <div class="-mt-8 ml-18">
               <p class="text-black mb-2">Location</p>
                 <button @click="showMap = !showMap"
                   class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
@@ -298,7 +329,6 @@
                 </button>
                 <div v-if="showMap" class="modal">
                 <div class="modal-content">
-
                   <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
                   @location-selected="handleLocationSelected">
                   </MapComponent2>
@@ -431,6 +461,7 @@ import axios from "axios";
 // import CompRegPasswordView from '@/components/CompRegistration/CompRegPasswordView.vue'
 // import CompRegformview from '@/components/CompRegistration/CompRegformview.vue'
 import { login, register, updateUserPassword } from "../auth";
+import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
 import UserLayout from "@/layout/UserLayout.vue";
 import MapComponent from "@/components/MapComponent.vue";
 import MapComponent2 from "@/components/MapComponent2.vue";
@@ -466,7 +497,7 @@ export default {
     this.fetchCategories();
     this.fetchCountries();
     this.checkButtonState();
-
+    
     this.getCurrentLocation();
     //  locationInfo.value  = localStorage.getItem('locationInfo')
 
@@ -484,12 +515,12 @@ export default {
       this.companies.city = localStorage.getItem("city") || "";
       this.companies.license_url = localStorage.getItem("license_url") || "";
       this.companies.website = localStorage.getItem("website") || "";
-     
-
+      this.token = localStorage.getItem('token');
 
   },
   data() {
     return {
+      file:null,
       selectedCountry: null,
       countries: [],
       error: null,
@@ -566,7 +597,19 @@ export default {
     console.log('Validation failed');
   }
 },
-
+handleDragOver(event){
+      event.preventDefault();
+    },
+handleFileDrop(event){
+      const files = event.dataTransfer.files;
+      if (files.length) {
+        this.file = files[0];
+        uploadFile();
+      }
+    },
+    triggerFileInput(){
+      document.getElementById("fileInput").click();
+    },
 registeredUser2() {
   this.showPassword = true;
 },
@@ -801,6 +844,8 @@ updateCurrentEmail() {
       tempPassword
     );
 
+    const db = getFirestore();
+    await setDoc(doc(db, "users", userCredential.user.uid), companyData);
     await sendEmailVerification(userCredential.user);
   alert("A verification email has been sent. Please check your inbox.");
 
@@ -813,7 +858,11 @@ updateCurrentEmail() {
   localStorage.setItem("email", companyData.contact_email);
   
   localStorage.setItem("token", token);
-
+  const userWithToken = {
+      ...companyData,
+      token
+    };
+    localStorage.setItem("userWithToken", JSON.stringify(userWithToken)); 
     alert("Please verify your email to complete your registration.");
     this.changeNaxt = "Next"; 
     this.nextShow()
@@ -904,7 +953,9 @@ updateCurrentEmail() {
             );
 
             if (success) {
-              const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/company/register`, companyData, {
+              const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/company/register`,
+               companyData,
+                {
                 headers: {
                   "Content-Type": "application/json",
                 },

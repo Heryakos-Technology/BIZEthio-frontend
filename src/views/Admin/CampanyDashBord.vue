@@ -155,12 +155,7 @@ Reject
       >
         <div class="loader2"></div>
       </div>
-          <!-- <div  @click="singleampany?.status !== 'approved' && singleampany?.status !== 'rejected' ? rejectCampany(singleampany.id) : null" 
-          :class="{ 'opacity-50 cursor-not-allowed': singleampany?.status === 'approved' || singleampany?.status === 'rejected','hover:scale-130' : singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'  }">
-            <button  class="bg-[#FFCCCB] px-5 py-1 rounded-md text-black" 
-    :disabled="singleampany?.status === 'approved' || singleampany?.status === 'rejected'" 
-    @click.stop>Reject</button>
-          </div> -->
+ 
         </div>
       </div>
       <div></div>

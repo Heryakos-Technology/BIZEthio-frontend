@@ -617,8 +617,6 @@ export default {
     localStorage.setItem("temporaryPassword", tempPassword);
 
     const auth = getAuth();
-    
-    
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       userData.email,
