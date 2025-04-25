@@ -1,19 +1,137 @@
 <script setup>
-import { ref } from "vue";
+// filepath: c:\Users\RAK\Documents\GitHub\BIZEthio-frontend\src\components\UserProfile\PersonalInfoCard.vue
+import { ref, onMounted } from "vue";
 import Modal from "./Modal.vue";
+import axios from "axios";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
+const $toast = useToast();
 
 const isProfileInfoModal = ref(false);
-
 const userInfoString = localStorage.getItem("userInfo");
+const user = ref(JSON.parse(userInfoString));
+const imageFile = ref(null);
+const loading = ref(false);
 
-const user = JSON.parse(userInfoString);
+onMounted(() => {
+  // Initialize local state with user data
+  nameInput.value = user.value.name;
+  phoneInput.value = user.value.phone_number;
+  cityInput.value = user.value.city;
+  subCityInput.value = user.value.sub_city;
+  profilePictureUrl.value = user.value.profile_picture_url;
+});
 
-const saveProfile = () => {
-  // Implement save profile logic here
-  console.log("Profile saved");
-  isProfileInfoModal.value = false;
+const nameInput = ref("");
+const phoneInput = ref("");
+const cityInput = ref("");
+const subCityInput = ref("");
+const profilePictureUrl = ref("");
+
+const saveProfile = async () => {
+  try {
+    loading.value = true;
+    const userId = localStorage.getItem("user_id");
+
+    let imageUrl = profilePictureUrl.value;
+    if (imageFile.value) {
+      const cloudinaryResponse = await uploadImageToCloudinary(imageFile.value);
+      imageUrl = cloudinaryResponse.secure_url;
+    }
+
+    const userData = {
+      ...user.value,
+      name: nameInput.value,
+      phone_number: phoneInput.value,
+      city: cityInput.value,
+      sub_city: subCityInput.value,
+      profile_picture_url: imageUrl,
+    };
+
+    const response = await axios.put(
+      `https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    console.log("User Information updated:", response.data);
+    $toast.success("Profile updated successfully!", {
+      position: "top",
+    });
+
+    // Update local storage
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+    user.value = userData; // Update the user ref
+  } catch (error) {
+    console.error(
+      "Error updating user information:",
+      error.response || error.message
+    );
+    $toast.error("Failed to update profile.", {
+      position: "top",
+    });
+  } finally {
+    loading.value = false;
+    isProfileInfoModal.value = false;
+  }
+};
+
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "my_unsigned_preset");
+
+  try {
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dwh8v2zhg/image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Specify the content type
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    $toast.error("Failed to upload image.", {
+      position: "top",
+    });
+    throw error; // Rethrow the error for further handling if needed
+  }
+};
+
+const triggerImageUpload = () => {
+  const fileInput = document.querySelector('input[type="file"]');
+  fileInput.click();
+};
+
+const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!validImageTypes.includes(file.type)) {
+      $toast.error("Please upload a valid image (JPEG, PNG, GIF)", {
+        position: "top",
+      });
+      return;
+    }
+
+    imageFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      profilePictureUrl.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
 };
 </script>
+
 <template>
   <div>
     <div
@@ -137,21 +255,8 @@ const saveProfile = () => {
                     </label>
                     <input
                       type="text"
-                      value="Musharof"
+                      v-model="nameInput"
                       class="ark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
-                    />
-                  </div>
-
-                  <div class="col-span-2 lg:col-span-1">
-                    <label
-                      class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      type="text"
-                      value="emirhanboruch55@gmail.com"
-                      class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
                     />
                   </div>
 
@@ -163,7 +268,7 @@ const saveProfile = () => {
                     </label>
                     <input
                       type="text"
-                      value="+09 363 398 46"
+                      v-model="phoneInput"
                       class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
                     />
                   </div>
@@ -186,7 +291,7 @@ const saveProfile = () => {
                         </label>
                         <input
                           type="text"
-                          value="United States"
+                          v-model="cityInput"
                           class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                         />
                       </div>
@@ -195,40 +300,42 @@ const saveProfile = () => {
                         <label
                           class="mb-1.5 block text-sm font-medium text-gray-700"
                         >
-                          City/State
+                          Sub City
                         </label>
                         <input
                           type="text"
-                          value="Poenix, Arizona, United States"
+                          v-model="subCityInput"
                           class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                         />
                       </div>
-
-                      <div>
-                        <label
-                          class="mb-1.5 block text-sm font-medium text-gray-700"
-                        >
-                          Postal Code
-                        </label>
-                        <input
-                          type="text"
-                          value="ERT 2489"
-                          class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          class="mb-1.5 block text-sm font-medium text-gray-700"
-                        >
-                          TAX ID
-                        </label>
-                        <input
-                          type="text"
-                          value="AS4568384"
-                          class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
-                        />
-                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-7">
+                  <h5
+                    class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                  >
+                    Profile Picture
+                  </h5>
+                  <div class="flex items-center">
+                    <img
+                      :src="profilePictureUrl"
+                      alt="Profile Picture"
+                      class="w-20 h-20 rounded-full mr-4"
+                    />
+                    <div>
+                      <button
+                        @click="triggerImageUpload"
+                        class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
+                      >
+                        Change Picture
+                      </button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        class="hidden"
+                        @change="handleImageUpload"
+                      />
                     </div>
                   </div>
                 </div>
@@ -238,16 +345,18 @@ const saveProfile = () => {
               <button
                 @click="isProfileInfoModal = false"
                 type="button"
-                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 ark:border-gray-700 ark:bg-gray-800 ark:text-gray-400 ark:hover:bg-white/[0.03] sm:w-auto"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
               >
                 Close
               </button>
               <button
                 @click="saveProfile"
                 type="button"
-                class="flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
+                :disabled="loading"
               >
-                Save Changes
+                <span v-if="loading">Saving...</span>
+                <span v-else>Save Changes</span>
               </button>
             </div>
           </form>
