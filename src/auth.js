@@ -6,9 +6,13 @@ import { getAuth,
          sendEmailVerification, 
          fetchSignInMethodsForEmail, 
          updatePassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore"; 
+import { getFirestore, doc, setDoc,getDoc,collection, query, where, getDocs  } from "firebase/firestore"; 
+// import { deleteUser} from 'firebase/auth';
+import { deleteDoc } from "firebase/firestore";
 
 const db = getFirestore();
+
+
 
 
 export const register = async (email, newPassword) => {
@@ -43,7 +47,7 @@ export const register = async (email, newPassword) => {
 
 export const login = async (email, password) => {
   try {
-    // Attempt to sign in with email and password
+    // Attempt to si  gn in with email and password
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     
     // Retrieve user document from Firestore
@@ -51,7 +55,7 @@ export const login = async (email, password) => {
     
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      console.log("User role:", userData.role);
+      console.log("User role:", userData);
       // return { userCredential, role: userData.role }; 
        return { userCredential }; 
     } else {
@@ -132,6 +136,56 @@ export const updateUserPassword = async (email, tempPassword, newPassword) => {
   } catch (error) {
     console.error('Error during password update:', error.message);
     throw error; 
+  }
+};
+export const getUserByEmail = async (email) => {
+  try {
+    // Create a query to find the user by email
+    const userQuery = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(userQuery);
+
+    if (!querySnapshot.empty) {
+      // Assuming email is unique and there's only one user with that email
+      const userData = querySnapshot.docs[0].data();
+      console.log('Fetched user data by email:', userData); // Log the fetched data
+      return userData;
+    } else {
+      throw new Error("User not found.");
+    }
+  } catch (error) {
+    console.error('Error fetching user data by email:', error.message);
+    throw error;
+  }
+};
+
+
+export const deleteUserByEmail = async (email) => {
+  admin.auth().deleteUser(uid)
+  .then(() => {
+    console.log('Successfully deleted user');
+  })
+  .catch((error) => {
+    console.log('Error deleting user:', error);
+  });
+
+  try {
+    // Create a query to find the user document by email
+    const userQuery = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(userQuery);
+
+    if (!querySnapshot.empty) {
+      // Assuming email is unique and there's only one user with that email
+      const userDocRef = doc(db, "users", querySnapshot.docs[0].id); // Get the document reference using the first match
+      await deleteDoc(userDocRef); // Delete the document
+      console.log('User document deleted successfully by email');
+      return true;
+    } else {
+      console.error('No user found with email:', email);
+      throw new Error('User not found.');
+    }
+  } catch (error) {
+    console.error('Error deleting user document by email:', error.message);
+    throw error; // Rethrow the error for handling in the calling function
   }
 };
 

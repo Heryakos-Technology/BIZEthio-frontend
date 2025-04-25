@@ -126,7 +126,7 @@
         </div>
         <div class="flex mt-3 px-3 justify-between w-4/5 mx-auto">
           <button v-if="!loadingCampanies3[singleampany.id]" 
-  @click="singleampany?.status !== 'approved' && singleampany?.status !== 'rejected' ? approveCampany(singleampany.id) : null"
+  @click="singleampany?.status !== 'approved' && singleampany?.status !== 'rejected' ? confirmApprove(singleampany.id) : null"
   class="bg-[#E0F7FF] px-5 py-1 rounded-md text-black 
          "
   :class="{ 'opacity-50 cursor-not-allowed': singleampany?.status === 'approved' || singleampany?.status === 'rejected','hover:scale-130 transition-transform duration-300' : singleampany?.status !== 'approved' && singleampany?.status !== 'rejected','cursor-pointer' : singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'}"
@@ -134,6 +134,62 @@
 >
   Approve
 </button>
+
+<!--confirmation-->
+<div
+      v-if="showApproveConfirm"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+        <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+        <p class="mb-6">
+          Are you sure you want to Approve the Campany
+          <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
+          action cannot be undone.
+        </p>
+        <div class="flex justify-end gap-3">
+          <button
+             @click="cancelApprove"
+            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
+          
+          >
+            Cancel
+          </button>
+          <button
+          @click="approveCampany(singleampany.id)"
+       
+            class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
+           
+          >
+            <svg
+             
+              class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            {{ loading.approve ? "approving..." : "Approve" }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
 <div
         class="flex justify-center items-center mb-3"
        v-if="loadingCampanies3[singleampany.id]"
@@ -155,12 +211,7 @@ Reject
       >
         <div class="loader2"></div>
       </div>
-          <!-- <div  @click="singleampany?.status !== 'approved' && singleampany?.status !== 'rejected' ? rejectCampany(singleampany.id) : null" 
-          :class="{ 'opacity-50 cursor-not-allowed': singleampany?.status === 'approved' || singleampany?.status === 'rejected','hover:scale-130' : singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'  }">
-            <button  class="bg-[#FFCCCB] px-5 py-1 rounded-md text-black" 
-    :disabled="singleampany?.status === 'approved' || singleampany?.status === 'rejected'" 
-    @click.stop>Reject</button>
-          </div> -->
+ 
         </div>
       </div>
       <div></div>
@@ -241,7 +292,7 @@ Reject
        
           <div 
   class="shadow-md h-8   cursor-pointer" 
-  @click="campany.status !== 'approved' && campany.status !== 'rejected' ? approveCampany(campany.id) : null " 
+  @click="campany.status !== 'approved' && campany.status !== 'rejected' ? confirmApprove(campany.id) : null " 
   :class="{ 'opacity-50 cursor-not-allowed': campany.status === 'approved' || campany.status === 'rejected', 'hover:scale-130' : campany.status !== 'approved' && campany.status !== 'rejected'   } "
 >
 <div
@@ -299,7 +350,12 @@ export default {
     const loadingCampanies3 = ref({});
     const loadingCampanies4 = ref({})
     const errors = ref("");
+    const showApproveConfirm = ref(false);
     // Define chartData as a reactive reference
+    const loading = ref({
+  approve: false,
+  reject: false,
+});
     const chartData = ref({
       labels: ["M", "T", "W", "T", "F", "S", "S"],
       datasets: [
@@ -315,9 +371,15 @@ export default {
         },
       ],
     });
+    const cancelApprove = () => {
+ 
+      showApproveConfirm.value = false;
+};
+
     const approveCampany = async (id) => {
-      //alert(`You clicked me`)
-      console.log('You Clicked Me')
+      // alert(`You clicked me`)
+      // console.log('You Clicked Me')
+      loading.value.approve = true
       loadingCampanies3.value[id] = true;
   try {
     const response = await axios.put(`https://bizethio-backend-production-944c.up.railway.app/api/companies/${id}`, {
@@ -339,9 +401,14 @@ export default {
     console.error('Error updating the campany status:', error);
   } finally {
     loadingCampanies3.value[id] = false; 
+    loading.value.approve = false
+    showApproveConfirm.value = false
   }
+  
 };
-
+const confirmApprove = async(id)=>{
+  showApproveConfirm.value = !showApproveConfirm.value
+}
 const rejectCampany = async (id) => {
   loadingCampanies4.value[id] = true;
   try {
@@ -457,7 +524,11 @@ const rejectCampany = async (id) => {
       approveCampany,
       rejectCampany,
       loadingCampanies3,
-      loadingCampanies4
+      loadingCampanies4,
+      showApproveConfirm,
+      cancelApprove,
+      confirmApprove,
+      loading
     };
   },
 };

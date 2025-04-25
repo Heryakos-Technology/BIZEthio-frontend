@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 import { useCompanyStore } from "@/stores/company";
 import { useReviewStore } from "@/stores/review";
 import { useCategoryStore } from "@/stores/category";
+import { useAuthStore } from "@/stores/auth";
 
 const { getCompany, updateCompany } = useCompanyStore();
 const { getReview } = useReviewStore();
@@ -16,12 +17,24 @@ const loading = ref(true);
 const reviews = ref([]);
 const loadingReviews = ref(true);
 const isPopoverVisible = ref(false);
-
+const authStore = useAuthStore();
 const editableCompany = ref({});
 const socialMediaLinks = ref(["", "", ""]);
 const categories = ref([]);
 const isSaving = ref(false); // Add a loading state for the save button
+const handleLogout = async () => {
+  const confirmLogout = confirm("Are you sure you want to log out?");
+  if (!confirmLogout) {
+    return; 
+  }
 
+  try {
+    await authStore.logoutCampany();
+
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
 onMounted(async () => {
   try {
     const response = await getReview(props.company?.id);
@@ -147,11 +160,22 @@ const formatDate = (dateString) => {
       <!-- Content when not loading -->
       <div v-else>
         <!-- Hero Image -->
-        <div
-          class="mx-auto w-[90%] aspect-video rounded-md shadow-sm bg-center bg-cover lg:max-w-[780px] xl:max-w-[1025px] lg:max-h-[430px] xl:max-h-[500px]"
-          :style="{ backgroundImage: `url(${getImageUrl(company?.images)})` }"
-        ></div>
+         <div class="flex">
 
+           <div
+             class="mx-auto w-[90%] aspect-video rounded-md shadow-sm bg-center bg-cover lg:max-w-[780px] xl:max-w-[1025px] lg:max-h-[430px] xl:max-h-[500px]"
+             :style="{ backgroundImage: `url(${getImageUrl(company?.images)})` }"
+           ></div>
+           <div  @click="handleLogout"
+                 class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer -mt-0.5 md:w-32 lg:w-28 w-28 pl-3 pt-3 h-10 rounded-lg ml-10 "
+   
+               >
+                 <i
+                   class="fa-solid fa-right-from-bracket lg:text-md text-xs md:text-sm  lg:ml-3 ml-3 mt-  mr-2 font-light text-white"
+                 ></i>
+                 <p class="lg:-mt-1 lg:text-[13px] text-[10px] -ml-1 mt-0.5 font-light text-white">Log out</p>
+               </div>
+         </div>
         <!-- Business Details -->
         <div class="w-[90%] mx-auto lg:max-w-[780px] xl:max-w-[1025px]">
           <div
@@ -284,6 +308,15 @@ const formatDate = (dateString) => {
               >
                 No ratings found.
               </div>
+              <div  @click="handleLogout"
+                 class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer mt-5 md:w-32 lg:w-28 w-28 pl-3 pt-3 h-10 rounded-lg"
+   
+               >
+                 <i
+                   class="fa-solid fa-right-from-bracket lg:text-md text-xs md:text-sm  lg:ml-3 ml-3 mt-  mr-2 font-light text-white"
+                 ></i>
+                 <p class="lg:-mt-1 lg:text-[13px] text-[10px] -ml-1 mt-0.5 font-light text-white">Log out</p>
+               </div>
 
               <div class="space-y-6 grid lg:grid-cols-2 gap-x-10 mt-8">
                 <div

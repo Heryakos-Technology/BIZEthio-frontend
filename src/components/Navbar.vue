@@ -1,16 +1,19 @@
 <script setup>
+import router from "@/router";
 import Logo from "./icons/Logo.vue";
 import { ref, onMounted, onUnmounted, watch, defineProps } from "vue";
 const userId = localStorage.getItem("user_id");
 
 const isSidebarOpen = ref(false);
-
+const showOptions = ref(false)
 const isNavbarVisible = ref(true);
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
-
+const signInOptions = ()=>{
+  showOptions.value = !showOptions.value
+}
 const props = defineProps({
   navLinks: {
     type: Array,
@@ -112,13 +115,13 @@ const props = defineProps({
           >
         </div>
 
-        <RouterLink
+        <button
           v-if="!userId"
-          :to="{ name: 'SignIn' }"
+          @click="signInOptions"
           class="cursor-pointer w-[160px] m-2 flex items-center justify-center rounded-full bg-[#1B7590]/80 px-6 py-2 font-medium text-white lg:px-6 hover:bg-primaryColor"
         >
           Get Started
-        </RouterLink>
+        </button>
 
         <div v-else class="mt-3 lg:-ml-16 md:-ml-4">
           <router-link
@@ -126,7 +129,13 @@ const props = defineProps({
             class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"
           ></router-link>
         </div>
+       
       </div>
+      <div v-if="showOptions" class="ml-260 mt-5">
+          <button @click="router.push('/signin')" class="text-blue-500 underline cursor-pointer hover:scale-110">Sign In as a User</button> <br>
+          <button @click="router.push('/CampanyLogin')" class="text-blue-500 underline mt-2 cursor-pointer hover:scale-110">Sign In as a Campany</button>
+          </div>
     </div>
   </div>
 </template>
+//:to="{ name: 'SignIn' }"

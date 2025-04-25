@@ -1,7 +1,7 @@
 <template>
   <UserLayoutUser>
-    <div class="hidden lg:block pt-10">
-      <div class="pt-10 pb-10">
+    <div class="hidden lg:block -mt-12">
+      <div class=" pb-10">
         <div
           class="relative w-1/2 h-165 rounded-2xl overflow-hidden ml-100 pt-30 mx-auto"
         >
@@ -118,6 +118,8 @@
               >
                 {{ signInMessage }}
               </button>
+
+              
             </div>
             <div v-if="loading2" class="w-1/2 mx-auto py-20">
               <div
@@ -742,7 +744,28 @@ export default {
         });
       }
     });
+const handleLogin2 = async()=>{
+  try{
+    const { userCredential } = await login(email.value, password.value);
+    const user = userCredential.user;
+    const token = await user.getIdToken();
+    console.log('tokrnn',token)
+    axios.post('https://bizethio-backend-production-944c.up.railway.app/api/company/login', {
+              contact_email: email.value,
+              password: password.value,
+              token: token,
+          })
+          .then(response => {
+              console.log('campany', response.data);
+              router.push("/UserLanding");
+              // Handle successful login here, e.g., redirect to another page or store token
+          })
+  }catch(error){
+    console.error("Error signing in with Facebook:", error);
 
+  }
+
+}
     const handleLogin = async () => {
       emailError.value = "";
       passwordError.value = "";
@@ -776,7 +799,7 @@ export default {
               token: token,
             }
           );
-
+//campany sign in
           const backendToken = response.data.token;
           const userData = response.data.user;
 
@@ -836,6 +859,7 @@ export default {
       isPasswordVisible,
       loading,
       loading2,
+      handleLogin2
     };
   },
 };

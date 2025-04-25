@@ -3,8 +3,12 @@ import AdminLayout from '@/layout/AdminLayout.vue';
 import { useUserStore } from '@/stores/user';
 import { computed, onMounted, ref, reactive, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
+import { getUserByEmail ,deleteUserByEmail} from '../../auth'; 
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, deleteDoc } from 'firebase/firestore'; 
+// import { deleteUserByUid } from "../../auth";
 
-const { getAllUsers, deleteUser, updateUser } = useUserStore();
+const { getAllUsers, deleteUsers, updateUser } = useUserStore();
 const { errors } = storeToRefs(useUserStore());
 const users = ref([]);
 const searchQuery = ref("");
@@ -23,7 +27,8 @@ const formData = reactive({
   verification_status: "unverified",
   is_banned: false,
 });
-
+const userData = ref(null);
+const userToBeDeleted  = ref([])
 // Loading states
 const loading = ref({
   update: false,
@@ -47,23 +52,135 @@ const confirmDelete = async () => {
     try {
       await deleteUser(userToDelete.value.id);
       users.value = await getAllUsers();
+      console.log('users',users.value)
     } finally {
       loading.value.delete = false;
       userToDelete.value = null;
       showDeleteConfirm.value = false;
     }
   }
-};
 
+};
+// const deleteUserAccount = async () => {
+//       const auth = getAuth();
+//       const user = userToDelete.value.email; // Get the currently logged-in user
+
+//       if (user) {
+//         try {
+//           await deleteUser(user); // Delete the user account
+//           console.log('User deleted from Firebase Authentication successfully');
+//         } catch (error) {
+//           console.error('Error deleting user from Authentication:', error.message);
+//           throw error; // Rethrow to handle in confirmDelete
+//         }
+//       } else {
+//         console.error('No user is currently logged in.');
+//         throw new Error('No user is currently logged in.');
+//       }
+//     };
+// const confirmDelete = async () => {
+//   if (userToDelete.value) {
+//     loading.value.delete = true;
+//     try {
+      
+//       await Promise.all([
+//       deleteUsers(userToDelete.value.id), 
+//         deleteUserByEmail(userToDelete.value.email), 
+//         deleteUserAccount()
+//       ]);
+
+//       //Refresh the user list
+
+//       users.value = await getAllUsers();
+//       console.log('users', users.value);
+//     } catch (error) {
+//       console.error('Error deleting user:', error.message);
+//     } finally {
+//       loading.value.delete = false;
+//       userToDelete.value = null;
+//       showDeleteConfirm.value = false; 
+//     }
+//   }
+// };
+// const deleteUserAccount = async (email) => {
+//       const auth = getAuth();
+//       const uid = await getUserUidByEmail(email); // Replace this with your method to get UID
+
+//       if (uid) {
+//         try {
+//           // Delete the user from Firebase Authentication
+//           await deleteUser(auth.currentUser); // You need to be logged in as the user or an admin
+//           console.log('User deleted from Firebase Authentication successfully');
+//         } catch (error) {
+//           console.error('Error deleting user from Authentication:', error.message);
+//           throw error; // Rethrow to handle in confirmDelete
+//         }
+//       } else {
+//         console.error('User not found.');
+//         throw new Error('User not found.');
+//       }
+//     };
+
+    // const deleteUserFromFirestore = async (email) => {
+    //   const db = getFirestore();
+    //   const userDocRef = doc(db, 'users', email); // Assuming 'users' is your collection name
+    //   await deleteDoc(userDocRef);
+    //   console.log('User document deleted from Firestore successfully');
+    // };
+
+    // const confirmDelete = async () => {
+    //   if (userToDelete.value) {
+    //     loading.value.delete = true;
+    //     try {
+    //       deleteUserByEmail(userToDelete.value.id), 
+    //       //deleteUserByEmail(userToDelete.value.email), 
+    //       // deleteUserByEmail(userToDelete.value.email)
+    //       //await deleteUser(userToDelete.value.email); // Delete from Firestore
+          
+    //       // Refresh the user list
+    //       users.value = await getAllUsers();
+    //       console.log('users', users.value);
+    //     } catch (error) {
+    //       console.error('Error deleting user:', error.message);
+    //     } finally {
+    //       loading.value.delete = false;
+    //       userToDelete.value = null;
+    //       // Optionally close confirmation dialog here
+    //     }
+    //   }
+    // };
 const cancelDelete = () => {
   userToDelete.value = null;
   showDeleteConfirm.value = false;
 };
 
 const handleDelete = (user) => {
+  console.log('user to delete',user)
+  userToBeDeleted.value = user
+  console.log('user to be deleted',userToBeDeleted.value.password)
   userToDelete.value = user;
   showDeleteConfirm.value = true;
 };
+
+const fetchUser = async (email) => {
+      console.log('Fetching user with email:', email);
+      try {
+        userData.value = await getUserByEmail(email);
+        console.log('User data from firebase:', userData.value);
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    };
+    const deleteUser =  async (email) => {
+      console.log('Fetching delete with email:', email);
+      try {
+        await deleteUserByEmail(email);
+        userData.value = null; 
+        console.log('User deleted successfully');
+      } catch (error) {
+        console.error('Error deleting user:', error.message);
+      }
+    };
 
 const handleUpdate = (user) => {
   userToUpdate.value = user;
@@ -591,7 +708,7 @@ const filteredUsers = computed(() => {
                       Edit
                     </button>
                     <button
-                      @click.prevent="handleDelete(user)"
+                      @click.prevent="handleDelete(user),fetchUser(user.email)"
                       class="bg-red-500 text-white hover:bg-red-600 px-3 rounded-md py-1 transition duration-200 transform hover:scale-105"
                       :disabled="loading.update || loading.delete"
                     >

@@ -28,7 +28,10 @@ import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
 import MoreCategories from '@/views/Company/MoreCategories.vue';
 import CategoryPage from '@/views/Company/CategoryPage.vue';
+import CampanySignIn from '@/views/Company/CampanySignIn.vue';
 import CompanyPage from '@/views/Company/CompanyPage.vue';
+
+import CampanyLogin from '@/views/Company/CampanyLogin.vue';
 import AboutUsPage from '@/views/Users/AboutUsPage.vue';
 import ContactUsPage from '@/views/Users/ContactUsPage.vue';
 
@@ -174,12 +177,32 @@ const router = createRouter({
       component: CategoryPage,
     },
     {
+      path: '/company/CampanySignIn',
+      name: 'CampanySignIn',
+      component: CampanySignIn,
+    },
+    
+    // {
+    //   path: '/profile/company/:id',
+    //   name: 'CompanyPage',
+    //   component: CompanyPage,
+    // },
+    {
       path: '/profile/company/:id',
       name: 'CompanyPage',
       component: CompanyPage,
     },
-
-
+    {
+      path: '/CampanyLogin',
+      name: 'CampanyLogin',
+      component: CampanyLogin,
+    },
+    // {
+    //   path: '/CompanyPage',
+    //   name: 'CompanyPage',
+    //   component: CompanyPage,
+    // },
+    
   ],
 })
 

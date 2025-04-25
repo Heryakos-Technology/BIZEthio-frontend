@@ -56,5 +56,23 @@ export const useAuthStore = defineStore("authStore", {
         return false;
       }
     },
+    async logoutCampany() {
+      try {
+
+        localStorage.clear();
+
+        // Clear user state
+        this.user = null;
+
+        // Navigate to sign in page
+        router.push("/CampanyLogin");
+
+        return true;
+      } catch (error) {
+        console.error("Logout failed:", error);
+        this.errors = error.response?.data || { message: "Failed to logout" };
+        return false;
+      }
+    },
   },
 });
