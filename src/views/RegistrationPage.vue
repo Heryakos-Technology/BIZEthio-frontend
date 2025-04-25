@@ -168,8 +168,7 @@
               <select name="country" v-model="companies.country" @change="validateFields"
                 class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
                 <option value="">Select country</option>
-                <option 
-                  class="border-[#84d2ffb7] rounded-lg mt-2">
+                <option class="border-[#84d2ffb7] rounded-lg mt-2">
                   Ethiopia
                 </option>
               </select>
@@ -274,38 +273,23 @@
                 Browse
               </button> -->
 
-             
+
             </div>
             <!---->
             <div class="-ml-124 mt-10">
-                  <div
-                    class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
-                    @dragover.prevent="handleDragOver"
-                    @drop.prevent="handleFileDrop"
-                    @click="triggerFileInput"
-                  >
-                    <img src="/dragfile.png" alt="" class="w-1/2" />
-                  </div>
-                  <input
-                    type="file"
-                    class="hidden"
-                    @change="handleFileChange"
-                    accept="image/*"
-                    id="fileInput"
-                  />
-                  <label
-                    for="fileInput"
-                    class="bg-cyan-500 ml-28 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
-                    style="display: inline-block"
-                  >
-                    Browse
-                  </label>
-                  <p
-                    class="text-gray-500 mt-2 text-center font-semibold text-lg"
-                  >
-                    or drag a file here
-                  </p>
-                  <div v-if="imageUrl && imageUrl.length" class="mt-4 ml-20">
+              <div class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+                @dragover.prevent="handleDragOver" @drop.prevent="handleFileDrop" @click="triggerFileInput">
+                <img src="/dragfile.png" alt="" class="w-1/2" />
+              </div>
+              <input type="file" class="hidden" @change="handleFileChange" accept="image/*" id="fileInput" />
+              <label for="fileInput" class="bg-cyan-500 ml-28 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
+                style="display: inline-block">
+                Browse
+              </label>
+              <p class="text-gray-500 mt-2 text-center font-semibold text-lg">
+                or drag a file here
+              </p>
+              <div v-if="imageUrl && imageUrl.length" class="mt-4 ml-20">
                 <h3 class="text-green-600 ml-20">Image Uploaded successfully!</h3>
                 <div v-for="(url, index) in imageUrl" :key="index">
                   <img :src="url" alt="Uploaded Image" class="mt-2 w-full h-auto rounded-md" />
@@ -319,24 +303,24 @@
               <p v-if="isUploading" class="mt-2 ml-20 text-green-600">
                 Uploading...
               </p>
-                </div>
+            </div>
             <div class="text-[12px]  font-normal cursor-pointer text-gray-100 mt-8 ml-8 md:text-[16px]">
-             <div class="-mt-8 ml-18">
-              <p class="text-black mb-2">Location</p>
+              <div class="-mt-8 ml-18">
+                <p class="text-black mb-2">Location</p>
                 <button @click="showMap = !showMap"
                   class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
                   Select Location
                 </button>
                 <div v-if="showMap" class="modal">
-                <div class="modal-content">
-                  <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
-                  @location-selected="handleLocationSelected">
-                  </MapComponent2>
+                  <div class="modal-content">
+                    <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
+                      @location-selected="handleLocationSelected">
+                    </MapComponent2>
+                  </div>
                 </div>
-          </div>
-             </div>
-                <!-- {{ userInformations.location }} -->
               </div>
+              <!-- {{ userInformations.location }} -->
+            </div>
           </div>
           <!-- end of image -->
 
@@ -356,104 +340,114 @@
               </div>
             </div>
           </div>
-          <div  v-if="!registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-  <button @click="registerCompany"
- 
-    class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
-    {{ changeNaxt }}
-  </button>
-  <p v-if="emailError" class="text-red-500 mt-2">{{ emailError }}</p>
-</div>
-<div v-if="registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-<button @click="registeredUser2"
+          <div v-if="!registeredUser"
 
-    class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
-    {{ changeNaxt }}
-  </button>
-  <p v-if="emailError" class="text-red-500 mt-2">{{ emailError }}</p>
-</div>
-</div>
-        
-        <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
-          <!-- <CompRegPasswordView /> -->
-          <p class="text-center text-3xl font-bold mt-16">
-            Welcome to <span class="text-[#2178AC]">BIZEthio</span>
-          </p>
-          <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
-            <div class="w-full">
-              <div class="px-4 mt-4 mx-auto">
-                <div class="flex">
-                  <p>Password</p>
-                  <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+          class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
+            <button @click="registerCompany"
+            :disabled="isButtonDisabled"
+              :class="{
+                'bg-gray-200  cursor-not-allowed': isButtonDisabled,
+                'bg-cyan-700 hover:bg-cyan-500 cursor-pointer':
+                  !isButtonDisabled,
+              }"
+              class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+              {{ changeNaxt }}
+            </button>
+
+          </div>
+
+          <div v-if="registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
+
+            <button @click="registeredUser2"
+              class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
+              {{ changeNaxt }}
+            </button>
+
+            <p v-if="emailError" class="text-red-500 mt-2">{{ emailError }}</p>
+            </div>
+          </div>
+
+          <div ref="cardSection" v-if="showPassword" class="w-1/3 mx-auto">
+            <!-- <CompRegPasswordView /> -->
+            <p class="text-center text-3xl font-bold mt-16">
+              Welcome to <span class="text-[#2178AC]">BIZEthio</span>
+            </p>
+            <div class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4">
+              <div class="w-full">
+                <div class="px-4 mt-4 mx-auto">
+                  <div class="flex">
+                    <p>Password</p>
+                    <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+                  </div>
+                  <div class="relative">
+                    <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
+                      @input="handlePasswordInput"
+                      class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+                    <span @click="togglePasswordVisibility"
+                      class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                      <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
+                        " class="text-gray-800"></i>
+                    </span>
+                  </div>
+                  <p v-if="errors.password" class="text-red-500 text-sm">
+                    {{ errors.password }}
+                  </p>
+                  <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
+                    {{ passwordStrengthLabel }}
+                  </div>
                 </div>
-                <div class="relative">
-                  <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
-                    @input="handlePasswordInput"
-                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
-                  <span @click="togglePasswordVisibility"
-                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                    <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
-                      " class="text-gray-800"></i>
-                  </span>
-                </div>
-                <p v-if="errors.password" class="text-red-500 text-sm">
-                  {{ errors.password }}
-                </p>
-                <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
-                  {{ passwordStrengthLabel }}
+
+                <div class="px-4 mt-4 mx-auto">
+                  <div class="flex">
+                    <p>Confirm Password</p>
+                    <p class="text-red-600 text-2xl font-medium ml-2">*</p>
+                  </div>
+                  <div class="relative">
+                    <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
+                      :type="showConfirmPasswordField ? 'text' : 'password'"
+                      class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
+                      :class="[
+                        'outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
+                        isConfirmPasswordFocused &&
+                          companies.password &&
+                          companies.password !== companies.password_confirmation
+                          ? 'border-red-500'
+                          : 'border-[#60b5e6]',
+                      ]" @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
+                    <span @click="toggleConfirmPasswordVisibility"
+                      class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                      <i :class="showConfirmPasswordField
+                        ? 'fas fa-eye-slash'
+                        : 'fas fa-eye'
+                        " class="text-gray-800"></i>
+                    </span>
+                  </div>
+                  <p v-if="errors.password_confirmation" class="text-red-500 text-sm">
+                    {{ errors.password_confirmation }}
+                  </p>
                 </div>
               </div>
 
-              <div class="px-4 mt-4 mx-auto">
-                <div class="flex">
-                  <p>Confirm Password</p>
-                  <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-                </div>
-                <div class="relative">
-                  <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
-                    :type="showConfirmPasswordField ? 'text' : 'password'"
-                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                    :class="[
-                      'outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
-                      isConfirmPasswordFocused &&
-                        companies.password &&
-                        companies.password !== companies.password_confirmation
-                        ? 'border-red-500'
-                        : 'border-[#60b5e6]',
-                    ]" @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
-                  <span @click="toggleConfirmPasswordVisibility"
-                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                    <i :class="showConfirmPasswordField
-                      ? 'fas fa-eye-slash'
-                      : 'fas fa-eye'
-                      " class="text-gray-800"></i>
-                  </span>
-                </div>
-                <p v-if="errors.password_confirmation" class="text-red-500 text-sm">
-                  {{ errors.password_confirmation }}
-                </p>
+              <div>
+                <button @click="hidepassword"
+                  class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
+                  Back
+                </button>
               </div>
-            </div>
-
-            <div>
-              <button @click="hidepassword"
-                class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
-                Back
-              </button>
-            </div>
-            <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!</p>
-            <div class="-mt-2">
-              <button @click="submitForm"
-                class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
-                {{ this.changeRegister }}
-              </button>
+              <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!
+              </p>
+              <div class="-mt-2">
+                <button @click="submitForm"
+                  class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
+                  {{ this.changeRegister }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
 
-    
+
   </UserLayout>
 </template>
 <script>
@@ -461,7 +455,7 @@ import axios from "axios";
 // import CompRegPasswordView from '@/components/CompRegistration/CompRegPasswordView.vue'
 // import CompRegformview from '@/components/CompRegistration/CompRegformview.vue'
 import { login, register, updateUserPassword } from "../auth";
-import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import UserLayout from "@/layout/UserLayout.vue";
 import MapComponent from "@/components/MapComponent.vue";
 import MapComponent2 from "@/components/MapComponent2.vue";
@@ -495,32 +489,32 @@ export default {
   },
   mounted() {
     this.fetchCategories();
-    this.fetchCountries();
+
     this.checkButtonState();
-    
+
     this.getCurrentLocation();
     //  locationInfo.value  = localStorage.getItem('locationInfo')
 
 
-      this.companies.name = localStorage.getItem("name") || "";
-      this.companies.owner_name = localStorage.getItem("owner_name") || "";
-      this.companies.description =localStorage.getItem("description") || "";
-      this.companies.contact_phone = localStorage.getItem("contact_phone") || "";
-      this.companies.contact_email = localStorage.getItem("contact_email") || "";
-      this.companies.categories = localStorage.getItem("categories") || "";
-      this.companies.operating_hours = localStorage.getItem("operating_hours") || "";
-      this.companies.country = localStorage.getItem("country") || "";
-      this.companies.region = localStorage.getItem("region") || "";
-      this.companies.address = localStorage.getItem("address") || "";
-      this.companies.city = localStorage.getItem("city") || "";
-      this.companies.license_url = localStorage.getItem("license_url") || "";
-      this.companies.website = localStorage.getItem("website") || "";
-      this.token = localStorage.getItem('token');
+    this.companies.name = localStorage.getItem("name") || "";
+    this.companies.owner_name = localStorage.getItem("owner_name") || "";
+    this.companies.description = localStorage.getItem("description") || "";
+    this.companies.contact_phone = localStorage.getItem("contact_phone") || "";
+    this.companies.contact_email = localStorage.getItem("contact_email") || "";
+    this.companies.categories = localStorage.getItem("categories") || "";
+    this.companies.operating_hours = localStorage.getItem("operating_hours") || "";
+    this.companies.country = localStorage.getItem("country") || "";
+    this.companies.region = localStorage.getItem("region") || "";
+    this.companies.address = localStorage.getItem("address") || "";
+    this.companies.city = localStorage.getItem("city") || "";
+    this.companies.license_url = localStorage.getItem("license_url") || "";
+    this.companies.website = localStorage.getItem("website") || "";
+    this.token = localStorage.getItem('token');
 
   },
   data() {
     return {
-      file:null,
+      file: null,
       selectedCountry: null,
       countries: [],
       error: null,
@@ -566,14 +560,14 @@ export default {
       ImageButton: true,
       errors: {
         contact_phone: "",
-        password:''
+        password: ''
       },
       passwordStrengthMessages: [],
       contact_phone: "",
       showPasswordField: false,
       showConfirmPasswordField: false,
       changeNaxt: "next",
-      changeRegister: "Register Company",
+      changeRegister: "Register",
       showRegistrationError: false,
       emailInUse: false,
       registeredUser: false,
@@ -584,37 +578,66 @@ export default {
         lat: null,
         lng: null,
       },
-      location:'',
-      showMap:false
+      location: '',
+      showMap: false
 
     };
   },
+  coumputed: {
+    isButtonDisabled() {
+      return (
+        !this.companies.name ||
+        !this.companies.owner_name ||
+        !this.companies.description ||
+        !this.companies.contact_phone ||
+        !this.companies.contact_email ||
+        !this.companies.categories ||
+        !this.companies.operating_hours ||
+        !this.companies.country ||
+        !this.companies.region ||
+        !this.companies.address ||
+        !this.companies.city ||
+        !this.companies.license_url ||
+        !this.companies.website 
+        
+      );
+    },
+  },
+  watch: {
+    isButtonDisabled(newValue) {
+      if (newValue) {
+        console.log("Button is disabled");
+      } else {
+        console.log("Button is enabled");
+      }
+    },
+  },
   methods: {
     handleEmail() {
-  if (this.companies.validateFields()) {
-    this.companies.updateCurrentEmail();
-  } else {
-    console.log('Validation failed');
-  }
-},
-handleDragOver(event){
+      if (this.validateFields()) {
+        this.companies.updateCurrentEmail();
+      } else {
+        console.log('Validation failed');
+      }
+    },
+    handleDragOver(event) {
       event.preventDefault();
     },
-handleFileDrop(event){
+    handleFileDrop(event) {
       const files = event.dataTransfer.files;
       if (files.length) {
         this.file = files[0];
         uploadFile();
       }
     },
-    triggerFileInput(){
+    triggerFileInput() {
       document.getElementById("fileInput").click();
     },
-registeredUser2() {
-  this.showPassword = true;
-},
+    registeredUser2() {
+      this.showPassword = true;
+    },
 
-     getCurrentLocation()  {
+    getCurrentLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -645,33 +668,34 @@ registeredUser2() {
         lng: latlng.lng
       };
       console.log('Selected Location:', this.selectedLatLng);
-      console.log('user location',  this.location)
-      if(this.location.lat!== null&&this.location.lng!== null){
+      console.log('user location', this.location)
+      if (this.location.lat !== null && this.location.lng !== null) {
 
         this.showMap = false;
         this.locationInfo = 'Location added Sucessfully '
-        localStorage.setItem('locationInfo',this.locationInfo)
+        localStorage.setItem('locationInfo', this.locationInfo)
         // this.locationMessage = 'Change Location'
         // localStorage.setItem('locationMessage',this.locationMessage)
       }
     },
-     handleClose() {
+    handleClose() {
       this.showMap = false;
     },
-updateCurrentEmail() {
-  this.storedEmail = localStorage.getItem('email');
-  console.log('Stored email:', this.storedEmail);
+    updateCurrentEmail() {
+      this.storedEmail = localStorage.getItem('email');
+      console.log('Stored email:', this.storedEmail);
 
-  // Assuming companies.contact_email is correctly defined and accessible
-  if (this.companies && this.companies.contact_email) {
-    this.currentEmail = this.companies.contact_email;
-    console.log('Current email:', this.currentEmail);
-  } else {
-    console.error('Contact email is not available');
-  }
+      // Assuming companies.contact_email is correctly defined and accessible
+      if (this.companies && this.companies.contact_email) {
+        this.currentEmail = this.companies.contact_email;
+        console.log('Current email:', this.currentEmail);
+      } else {
+        console.error('Contact email is not available');
+        alert('Contact email is not available');
+      }
 
-  this.registeredUser = false;
-},
+      this.registeredUser = false;
+    },
 
     togglePasswordVisibility() {
       this.showPasswordField = !this.showPasswordField;
@@ -795,20 +819,22 @@ updateCurrentEmail() {
       this.validateFields();
       if (this.checkButtonState()) {
         console.log("Form is invalid, please correct the errors.");
+        alert("Please fill in all required fields.");
+        this.showPassword = false;
       } else {
-        localStorage.setItem('name',this.companies.name)
-        localStorage.setItem('owner_name',this.companies.owner_name)
-        localStorage.setItem('description',this.companies.description)
-        localStorage.setItem('contact_phone',this.companies.contact_phone)
-        localStorage.setItem('contact_email',this.companies.contact_email)
-        localStorage.setItem('categories',this.companies.categories)
-        localStorage.setItem('operating_hours',this.companies.operating_hours)
-        localStorage.setItem('country',this.companies.country)
-        localStorage.setItem('region',this.companies.region)
-        localStorage.setItem('address',this.companies.address)
-        localStorage.setItem('city',this.companies.city)
-        localStorage.setItem('license_url',this.companies.license_url)
-        localStorage.setItem('website',this.companies.website)
+        localStorage.setItem('name', this.companies.name)
+        localStorage.setItem('owner_name', this.companies.owner_name)
+        localStorage.setItem('description', this.companies.description)
+        localStorage.setItem('contact_phone', this.companies.contact_phone)
+        localStorage.setItem('contact_email', this.companies.contact_email)
+        localStorage.setItem('categories', this.companies.categories)
+        localStorage.setItem('operating_hours', this.companies.operating_hours)
+        localStorage.setItem('country', this.companies.country)
+        localStorage.setItem('region', this.companies.region)
+        localStorage.setItem('address', this.companies.address)
+        localStorage.setItem('city', this.companies.city)
+        localStorage.setItem('license_url', this.companies.license_url)
+        localStorage.setItem('website', this.companies.website)
         this.nextStep = "next";
         this.showPassword = true;
         this.validateFields();
@@ -816,62 +842,75 @@ updateCurrentEmail() {
       }
     },
     async registerCompany() {
-  const companyData = {
-    contact_email: this.companies.contact_email,
-    password: this.companies.password,
-  };
+      const companyData = {
+        contact_email: this.companies.contact_email,
+        password: this.companies.password,
+      };
 
-  try {
-    this.changeNaxt = "loading...";
-    this.emailError = ""; 
+      try {
+        this.changeNaxt = "loading...";
+        this.emailError = "";
 
-    const auth = getAuth();
+        const auth = getAuth();
+        const signInMethods = await fetchSignInMethodsForEmail(auth, companyData.contact_email);
 
-   
-    const signInMethods = await fetchSignInMethodsForEmail(auth, companyData.contact_email);
-    if (signInMethods.length > 0) {
- 
-      this.emailInUse = true; 
-      this.emailError = "Email is already in use. Please use a different email.";
-      this.changeNaxt = "Next Page"; 
-      return; 
-    }
+        if (signInMethods.length > 0) {
+          this.emailInUse = true;
+          this.emailError = "Email is already in use. Please use a different email.";
+          this.changeNaxt = "Next Page";
+          return;
+        }
 
-    const tempPassword = Math.random().toString(36).slice(-8);
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      companyData.contact_email,
-      tempPassword
-    );
+        const tempPassword = Math.random().toString(36).slice(-8);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          companyData.contact_email,
+          tempPassword
+        );
 
-    const db = getFirestore();
-    await setDoc(doc(db, "users", userCredential.user.uid), companyData);
-    await sendEmailVerification(userCredential.user);
-  alert("A verification email has been sent. Please check your inbox.");
+        await sendEmailVerification(userCredential.user);
+        alert("A verification email has been sent. Please check your inbox.");
+        const db = getFirestore();
+        await setDoc(doc(db, "users", userCredential.user.uid), companyData);
+        
 
-  localStorage.setItem("temporaryPassword", tempPassword);
+        localStorage.setItem("temporaryPassword", tempPassword);
+        const token = await userCredential.user.getIdToken();
+        localStorage.setItem("firebaseToken", token);
+        console.log("User Token:", token);
 
-  const token = await userCredential.user.getIdToken();
-  localStorage.setItem("firebaseToken", token);
-  console.log("User Token:", token);
+        localStorage.setItem("email", companyData.contact_email);
+        localStorage.setItem("token", token);
 
-  localStorage.setItem("email", companyData.contact_email);
-  
-  localStorage.setItem("token", token);
-  const userWithToken = {
-      ...companyData,
-      token
-    };
-    localStorage.setItem("userWithToken", JSON.stringify(userWithToken)); 
-    alert("Please verify your email to complete your registration.");
-    this.changeNaxt = "Next"; 
-    this.nextShow()
-  } catch (error) {
-    console.error("Error during registration:", error.message);
-    this.emailError = error.message || "An error occurred. Please try again.";
-  }
-},
+        alert("Please verify your email to complete your registration.");
+        this.changeNaxt = "Next";
+        this.nextShow();
+
+      } catch (error) {
+        console.error("Error during registration:", error.message);
+        this.changeNaxt = "Next";
+        this.emailError = error.message || "An error occurred. Please try again.";
+      }
+    },
+
+    //   localStorage.setItem("email", companyData.contact_email);
+
+    //   localStorage.setItem("token", token);
+    //   const userWithToken = {
+    //       ...companyData,
+    //       token
+    //     };
+    //     localStorage.setItem("userWithToken", JSON.stringify(userWithToken)); 
+    //     alert("Please verify your email to complete your registration.");
+    //     this.changeNaxt = "Next"; 
+    //     this.nextShow()
+    //   } catch (error) {
+    //     console.error("Error during registration:", error.message);
+    //     this.emailError = error.message || "An error occurred. Please try again.";
+    //   }
+    // },
     async handleRegister() {
+      this.changeRegister = "registering..."
       const name = this.companies.name;
       const owner_name = this.companies.owner_name;
       const description = this.companies.description;
@@ -943,7 +982,7 @@ updateCurrentEmail() {
         } else {
           await currentUser.reload();
           const password = this.companies.password
-          console.log('password',password)
+          console.log('password', password)
           if (currentUser.emailVerified) {
             const tempPassword = localStorage.getItem("temporaryPassword");
             const success = await updateUserPassword(
@@ -954,30 +993,30 @@ updateCurrentEmail() {
 
             if (success) {
               const response = await axios.post(`https://bizethio-backend-production-944c.up.railway.app/api/company/register`,
-               companyData,
+                companyData,
                 {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
 
               console.log("Company registered successfully", response.data);
               this.companies.password = "";
               this.companies.password_confirmation = "";
-              this.changeRegister = "Register Company";
+              this.changeRegister = "Register";
               localStorage.removeItem('name')
-        localStorage.removeItem('owner_name')
-        localStorage.removeItem('description')
-        localStorage.removeItem('contact_phone')
-        localStorage.removeItem('contact_email')
-        localStorage.removeItem('categories')
-        localStorage.removeItem('operating_hours')
-        localStorage.removeItem('country')
-        localStorage.removeItem('region')
-        localStorage.removeItem('address')
-        localStorage.removeItem('city')
-        localStorage.removeItem('license_url')
-        localStorage.removeItem('website')
+              localStorage.removeItem('owner_name')
+              localStorage.removeItem('description')
+              localStorage.removeItem('contact_phone')
+              localStorage.removeItem('contact_email')
+              localStorage.removeItem('categories')
+              localStorage.removeItem('operating_hours')
+              localStorage.removeItem('country')
+              localStorage.removeItem('region')
+              localStorage.removeItem('address')
+              localStorage.removeItem('city')
+              localStorage.removeItem('license_url')
+              localStorage.removeItem('website')
               this.$router.push("/signin");
             }
           } else {
@@ -989,9 +1028,10 @@ updateCurrentEmail() {
           }
         }
       } catch (error) {
-        let errorMessage = 'An error occured. please try again'
+        // let errorMessage = 'An error occured. please try again'
         if (error.response) {
           errorMessage = error.response.data.message || errorMessage
+          this.changeRegister = "register"
         }
         this.showError(errorMessage);
         this.companies.password = "";
@@ -1000,13 +1040,13 @@ updateCurrentEmail() {
     },
     showError(message) {
       this.errors = message;
-      this.changeRegister = "Register Company";
+      this.changeRegister = "Register";
       this.showRegistrationError = true
     },
     submitForm() {
+      this.changeRegister = "registering...";
       this.validateFields();
       if (!this.checkButtonState()) {
-        this.changeRegister = "loading...";
         this.handleRegister();
         this.showError()
       }
@@ -1015,7 +1055,7 @@ updateCurrentEmail() {
     hidepassword() {
       this.showPassword = false;
       this.changeNaxt = "next";
-      this.registeredUser =true
+      this.registeredUser = true
     },
 
     triggerFileInput() {
@@ -1031,7 +1071,7 @@ updateCurrentEmail() {
       if (!this.file || this.file.length === 0) return;
 
       this.isUploading = true;
-      this.errors.images = null; // Clear previous errors
+      this.errors.images = null;
 
       const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
       const promises = [];
@@ -1085,22 +1125,9 @@ updateCurrentEmail() {
       }
     },
 
-    async fetchCountries() {
-  try {
-    const response = await axios.get("https://api.countrylayer.com/v2/all", {
-      params: {
-        access_key: "a8e3e4dae4186911b562e106bb4ca0d9" 
-      }
-    });
-    
-    this.countries = response.data;
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error fetching countries:", error);
-  }
-}
+
 
   },
-  
+
 };
 </script>
