@@ -1,237 +1,519 @@
 <script setup>
-import UserLayoutUser from "@/layout/UserLayoutUser.vue";
-import { useAuthStore } from "@/stores/auth";
 import { ref, onMounted } from "vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
+import Modal from "@/components/UserProfile/Modal.vue";
+import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+import MapComponent from "@/components/MapComponent.vue"; // Import MapComponent
 
 const authStore = useAuthStore();
-const userInformations = ref([null]);
-const companies = ref([]);
-const loading = ref(true); 
 
+const $toast = useToast();
+
+const isProfileInfoModal = ref(false);
+const userInfoString = localStorage.getItem("userInfo");
+const user = ref(JSON.parse(userInfoString));
+const imageFile = ref(null);
+const loading = ref(false);
+const showMap = ref(false); // Add ref for map visibility
+const selectedLatLng = ref({ lat: null, lng: null }); // Add ref for selected location
+const locationInfo = ref(
+  localStorage.getItem("locationInfo") || "No location added"
+);
+const locationMessage = ref(
+  localStorage.getItem("locationMessage") || "Select Location"
+);
 
 onMounted(() => {
-  localStorage.getItem("user_id");
-  fetchUserInfo();
-  fetchratedCompany();
-  // localStorage.getItem('user information' ) || '[]';
-  localStorage.getItem('userInformations') && (userInformations.value = JSON.parse(localStorage.getItem('userInformations')));
-  localStorage.getItem('companies') || '[]';
-  console.log('tokennn',localStorage.getItem('token'))
+  // Initialize local state with user data
+  nameInput.value = user.value.name;
+  phoneInput.value = user.value.phone_number;
+  cityInput.value = user.value.city;
+  subCityInput.value = user.value.sub_city;
+  profilePictureUrl.value = user.value.profile_picture_url;
+  // Initialize selectedLatLng from user data if available
+  if (user.value.location) {
+    try {
+      const location = JSON.parse(user.value.location);
+      selectedLatLng.value = { lat: location.lat, lng: location.lng };
+    } catch (error) {
+      console.error("Error parsing location:", error);
+    }
+  }
 });
-const handleLogout = async () => {
-  const confirmLogout = confirm("Are you sure you want to log out?");
-  if (!confirmLogout) {
-    return; 
-  }
 
+const nameInput = ref("");
+const phoneInput = ref("");
+const cityInput = ref("");
+const subCityInput = ref("");
+const profilePictureUrl = ref("");
+
+const saveProfile = async () => {
   try {
-    await authStore.logout();
-
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
-
-const getImageUrl = (images) => {
-  if (images) {
-        try {
-          const parsedImages = JSON.parse(images);
-          return parsedImages.length > 0
-            ? parsedImages[0]
-            : "/defalt-company-image.jpg";
-        } catch (error) {
-          console.error("Error parsing image URL:", error);
-          return "/defalt-company-image.jpg";
-        }
-      }
-      return "/defalt-company-image.jpg";
-};
-
-const fetchUserInfo = async () => {
-  loading.value = true;
-  try {
+    loading.value = true;
     const userId = localStorage.getItem("user_id");
-    if (!userId) {
-      console.error("User ID not found in localStorage");
+
+    let imageUrl = profilePictureUrl.value;
+    if (imageFile.value) {
+      const cloudinaryResponse = await uploadImageToCloudinary(imageFile.value);
+      imageUrl = cloudinaryResponse.secure_url;
+    }
+
+    // Stringify the location data
+    const locationString = JSON.stringify({
+      lat: selectedLatLng.value.lat,
+      lng: selectedLatLng.value.lng,
+    });
+
+    const userData = {
+      ...user.value,
+      name: nameInput.value,
+      phone_number: phoneInput.value,
+      city: cityInput.value,
+      sub_city: subCityInput.value,
+      profile_picture_url: imageUrl,
+      location: locationString, // Save the stringified location
+    };
+
+    const response = await axios.put(
+      `https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    console.log("User Information updated:", response.data);
+    $toast.success("Profile updated successfully!", {
+      position: "top",
+    });
+
+    // Update local storage
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+    user.value = userData; // Update the user ref
+  } catch (error) {
+    console.error(
+      "Error updating user information:",
+      error.response || error.message
+    );
+    $toast.error("Failed to update profile.", {
+      position: "top",
+    });
+  } finally {
+    loading.value = false;
+    isProfileInfoModal.value = false;
+  }
+};
+
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "my_unsigned_preset");
+
+  try {
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dwh8v2zhg/image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Specify the content type
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    $toast.error("Failed to upload image.", {
+      position: "top",
+    });
+    throw error; // Rethrow the error for further handling if needed
+  }
+};
+
+const triggerImageUpload = () => {
+  const fileInput = document.querySelector('input[type="file"]');
+  fileInput.click();
+};
+
+const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!validImageTypes.includes(file.type)) {
+      $toast.error("Please upload a valid image (JPEG, PNG, GIF)", {
+        position: "top",
+      });
       return;
     }
 
-    const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    userInformations.value = response.data;
-    localStorage.setItem('user information', userInformations.value);
-    console.log("User Informations:", userInformations.value);
-  } catch (error) {
-    console.error("Error fetching user information:", error);
-  }
-  finally {
-    loading.value = false; 
+    imageFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      profilePictureUrl.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 };
 
-const fetchratedCompany = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(`https://bizethio-backend-production-944c.up.railway.app/api/companies`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    companies.value = response.data;
-    localStorage.setItem('companies', companies.value);
-    console.log("companies", companies.value);
-  } catch (error) {
-    console.error("error fetching company data");
-  }
-  finally {
-    loading.value = false; 
-  }
+const handleClose = () => {
+  showMap.value = false;
+};
+
+const handleLocationSelected = (latlng) => {
+  selectedLatLng.value = latlng;
+  locationInfo.value = "Location added Successfully";
+  localStorage.setItem("locationInfo", locationInfo.value);
+  locationMessage.value = "Change Location";
+  localStorage.setItem("locationMessage", locationMessage.value);
+  showMap.value = false;
 };
 </script>
 
 <template>
-  <!-- <Navbar class="" /> -->
   <UserLayoutUser>
-    <div class="lg:px-20 lg:w-9/10 lg:ml-28 lg:mx-auto lg:-pt-20">
-      <div
-        class="bg-white h-4/5 lg:h-6/7 w-11/12 lg:w-8/9 mb-10 p-2 mt-4 ml-7 rounded-2xl"
-      >
-        <p class="font-semibold lg:font-bold lg:ml-4">My profile</p>
+    <div
+      class="rounded-2xl border border-gray-200 p-5 lg:p-6 max-w-[1200px] mx-auto xl:space-y-16"
+    >
+      <h3 class="mb-5 text-lg font-semibold text-gray-800 lg:mb-7">Profile</h3>
+      <div>
         <div
-          class="bg-gradient-to-l from-[#1B7590] to-[#1B7B90] relative h-[350px] w-11/12 lg:w-8/9 mx-auto mb-4 rounded-2xl p-20"
+          class="p-5 mb-6 border border-black/40 shadow-theme-lg rounded-2xl lg:p-6"
         >
-          <div class="ml-28">
-            <div
-              class="w-20 h-8 rounded-bl-4xl bg-white absolute top-0 right-0 rounded-tr-xl border-2 border-[#176678] text-[#1B7B90] text-xs font-semibold text-center pt-1"
-            >
-              <p>{{ userInformations.verification_status }}</p>
-            </div>
-          </div>
-
-          <div v-if="loading" class="flex justify-center items-center py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
-        <div v-else-if="!userInformations || userInformations == null || userInformations == ''" class=" justify-center items-center py-20 -mt-8">
-          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
-          </svg>
-          <p class="text-gray-400 ml-32 lg:ml-76 ">no user information yet!</p>
-        </div>
-          <div v-else class="flex lg:-ml-20 lg:-mt-10">
-            <img
-              :src="userInformations.profile_picture_url"
-              alt=""
-              class="-ml-18 -mt-6 w-24 h-24 rounded-md md:w-24 md:h-24 md:ml-10 lg:w-64 lg:h-64"
-            />
-            <!-- <i
-              class="fa-solid fa-camera-retro text-gray-200 mt-6 -ml-3 md:text-lg md:-ml-2 md:mt-10 lg:text-2xl lg:mt-40 lg:-ml-8"
-            ></i> -->
-            <div class="text-white -mt-6 lg:ml-10 ml-32 md:ml-32 w-11/12 lg:mt-6">
-              <p
-                class="ml-8 lg:ml-10 text-[17px] font-semibold text-gray-100 md:text-[20px] md:ml-20"
-              >
-                {{ userInformations.name }}
-              </p>
-              <p
-                class="ml-8 lg:ml-10 text-[16px] font-semibold text-gray-100 md:text-[18px] md:ml-20"
-              >
-                {{ userInformations.city }}, {{ userInformations.sub_city }}
-              </p>
-              <div class="flex ml-6 w-56 mt-4 md:ml-20">
-                <div
-                  class="text-[14px] font-normal text-gray-100 -ml-10 md:text-[16px]"
-                >
-                  <p class="">
-                    <span class="mr-5">Email</span> {{ userInformations.email }}
-                  </p>
-                  <p class="">
-                    <span class="mr-4.5">Phone</span>
-                    {{ userInformations.phone_number }}
-                  </p>
-                  <p class="">
-                    <span class="mr-9">City</span> {{ userInformations.city }}
-                  </p>
-                  <p class="">
-                    <span class="mr-3">Subcity</span>
-                    {{ userInformations.sub_city }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
           <div
-            class="flex ml-10 md:-ml- mt-10 lg:mt-4  md:mt-4"
+            class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between"
           >
-            <div class="flex bg-[#075E86] hover:bg-[#6291a7] lg:w-28  md:w-32 w-32 pl-2 pt-2 h-10 rounded-lg">
-              <i class="fa-solid fa-pen mr-2 text-[12px] lg:text-[13px] lg:mt-1 mt-2  lg:ml-1 -ml-1"></i>
-              <router-link
-                to="/EditProfile"
-                class="lg:text-[13px] text-[10px] mt- font-normal text-white"
-                >Edit Profile</router-link
+            <div class="flex flex-col items-center w-full gap-6 xl:flex-row">
+              <div
+                class="w-20 h-20 overflow-hidden border border-gray-200 rounded-full"
               >
+                <img :src="user.profile_picture_url" alt="user" />
+              </div>
+              <div class="order-3 xl:order-2">
+                <h4
+                  class="mb-2 text-lg font-semibold text-center uppercase text-gray-800 ark:text-white/90 xl:text-left"
+                >
+                  {{ user.name }}
+                </h4>
+              </div>
             </div>
-
-            <div  @click="handleLogout"
-              class="flex bg-[#b63030] hover:bg-[#be6e6e] cursor-pointer -mt-0.5 md:w-32 lg:w-28 w-28 pl-3 pt-3 h-10 rounded-lg ml-10 lg:ml-72"
-
+            <button
+              :onclick="authStore.logout"
+              class="flex justify-center items-center min-w-fit max-w-fit bg-red-500 text-white hover:bg-red-800 cursor-pointer p-2 rounded-lg"
             >
-              <i
-                class="fa-solid fa-right-from-bracket lg:text-md text-xs md:text-sm  lg:ml-3 ml-3 mt-  mr-2 font-light text-white"
-              ></i>
-              <p class="lg:-mt-1 lg:text-[13px] text-[10px] -ml-1 mt-0.5 font-light text-white">Log out</p>
-            </div>
+              Log Out
+            </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="mb-20 w-11/12 lg:w-6/7 lg:mx-auto mx-auto lg:pb-10">
-      <p class="text-center mb-4 text-bold text-lg lg:text-xl lg:text-center">
-        Rated companies
-      </p>
-      <div v-if="loading" class="flex justify-center items-center py-20">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
-        </div>
-        <div v-else-if="!companies || companies == null || companies == '' " class=" justify-center items-center py-20">
-          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" />
-          </svg>
-          <p class="text-gray-500 text-center">No Companies Yet!</p>
-        </div>
-      <div v-else class="flex flex-wrap">
+      <div>
         <div
-          v-for="(company, index) in companies"
-          :key="index"
-          class="w-full sm:w-1/2 lg:w-1/3 p-2 lg:mb-6"
+          class="p-5 mb-6 border border-black/40 shadow-theme-lg rounded-2xl ark:border-gray-800 lg:p-6"
         >
-          <div class="relative">
-            <img
-              :src="getImageUrl(company.images)"
-              alt=""
-              class="rounded-[10px] w-80 h-60"
-            />
-            <div
-              class="bg-white h-20 w-4/5 lg:w-2/3 md:w-2/3 p-1 -mt-4 relative rounded-tr-4xl"
-            >
-              <p
-                class="text-[13px] font-semibold h-10 w-50 mx-auto mt-2 lg:text-[15px] lg:font-semibold"
+          <div
+            class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between"
+          >
+            <div>
+              <h4
+                class="text-lg font-semibold text-gray-800 capitalize lg:mb-6"
               >
-                {{ company.name }}
-              </p>
-              <div class="flex w-10 h-6 mx-auto">
-                <div
-                  v-for="star in Array(
-                    Math.max(0, Math.floor(company.rating_avg || 0))
-                  )"
-                  :key="star"
-                  class="text-[11px] text-yellow-500 mx-auto"
+                Personal Information
+              </h4>
+
+              <div
+                class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32"
+              >
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 ark:text-gray-400"
+                  >
+                    Name
+                  </p>
+                  <p class="text-sm font-medium text-gray-800 uppercase">
+                    {{ user.name }}
+                  </p>
+                </div>
+
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 ark:text-gray-400"
+                  >
+                    Email address
+                  </p>
+                  <p class="text-sm font-medium text-gray-800">
+                    {{ user.email }}
+                  </p>
+                </div>
+
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 ark:text-gray-400"
+                  >
+                    Phone
+                  </p>
+                  <p class="text-sm font-medium text-gray-800 capitalize">
+                    {{ user.phone_number }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button class="edit-button" @click="isProfileInfoModal = true">
+              <svg
+                class="fill-current"
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                  fill=""
+                />
+              </svg>
+              Edit
+            </button>
+          </div>
+        </div>
+        <Modal v-if="isProfileInfoModal" @close="isProfileInfoModal = false">
+          <template #body>
+            <div
+              class="no-scrollbar relative min-w-full translate-x-12 w-full xs:min-w-0 mx-auto max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 ark:bg-gray-900 lg:p-11 2xl:translate-x-16"
+            >
+              <!-- close btn -->
+              <button
+                @click="isProfileInfoModal = false"
+                class="transition-color absolute right-5 top-5 z-999 flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 ark:bg-gray-700 ark:bg-white/[0.05] ark:text-gray-400 ark:hover:bg-white/[0.07] ark:hover:text-gray-300"
+              >
+                <svg
+                  class="fill-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <i class="fa-solid fa-star"></i>
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M6.04289 16.5418C5.65237 16.9323 5.65237 17.5655 6.04289 17.956C6.43342 18.3465 7.06658 18.3465 7.45711 17.956L11.9987 13.4144L16.5408 17.9565C16.9313 18.347 17.5645 18.347 17.955 17.9565C18.3455 17.566 18.3455 16.9328 17.955 16.5423L13.4129 12.0002L17.955 7.45808C18.3455 7.06756 18.3455 6.43439 17.955 6.04387C17.5645 5.65335 16.9313 5.65335 16.5408 6.04387L11.9987 10.586L7.45711 6.04439C7.06658 5.65386 6.43342 5.65386 6.04289 6.04439C5.65237 6.43491 5.65237 7.06808 6.04289 7.4586L10.5845 12.0002L6.04289 16.5418Z"
+                    fill=""
+                  />
+                </svg>
+              </button>
+              <div class="px-2 pr-14">
+                <h4
+                  class="mb-2 text-2xl font-semibold text-gray-800 capitalize"
+                >
+                  Edit Personal Information
+                </h4>
+                <p class="mb-6 text-sm text-gray-500 ark:text-gray-400 lg:mb-7">
+                  Update your details to keep your profile up-to-date.
+                </p>
+              </div>
+              <form class="flex flex-col">
+                <div class="custom-scrollbar h-[458px] overflow-y-auto p-2">
+                  <div class="mt-7">
+                    <h5
+                      class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                    >
+                      Personal Information
+                    </h5>
+
+                    <div
+                      class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2"
+                    >
+                      <div class="col-span-2 lg:col-span-1">
+                        <label
+                          class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                        >
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          v-model="nameInput"
+                          class="ark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                        />
+                      </div>
+
+                      <div class="col-span-2 lg:col-span-1">
+                        <label
+                          class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                        >
+                          Phone
+                        </label>
+                        <input
+                          type="text"
+                          v-model="phoneInput"
+                          class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                        />
+                      </div>
+                    </div>
+                    <div class="px-2 pr-14 mt-8">
+                      <h4 class="mb-2 text-2xl font-semibold text-gray-800">
+                        Edit Address
+                      </h4>
+                    </div>
+                    <div class="flex flex-col">
+                      <div class="px-2 overflow-y-auto custom-scrollbar">
+                        <div
+                          class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2"
+                        >
+                          <div>
+                            <label
+                              class="mb-1.5 block text-sm font-medium text-gray-700"
+                            >
+                              City
+                            </label>
+                            <input
+                              type="text"
+                              v-model="cityInput"
+                              class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              class="mb-1.5 block text-sm font-medium text-gray-700"
+                            >
+                              Sub City
+                            </label>
+                            <input
+                              type="text"
+                              v-model="subCityInput"
+                              class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-7 lg:flex justify-around items-center">
+                      <div class="">
+                        <h5
+                          class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                        >
+                          Profile Picture
+                        </h5>
+                        <div class="flex items-center">
+                          <img
+                            :src="profilePictureUrl"
+                            alt="Profile Picture"
+                            class="w-20 h-20 rounded-full mr-4"
+                          />
+                          <div>
+                            <button
+                              @click="triggerImageUpload"
+                              class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                            >
+                              Change Picture
+                            </button>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              class="hidden"
+                              @change="handleImageUpload"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="">
+                        <h5
+                          class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                        >
+                          Location
+                        </h5>
+                        <p v-if="selectedLatLng.lat && selectedLatLng.lng">
+                          Selected Location: Lat: {{ selectedLatLng.lat }}, Lng:
+                          {{ selectedLatLng.lng }}
+                        </p>
+                        <button
+                          @click="showMap = true"
+                          class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                        >
+                          {{ locationMessage }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+                  <button
+                    @click="isProfileInfoModal = false"
+                    type="button"
+                    class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                  >
+                    Close
+                  </button>
+                  <button
+                    @click="saveProfile"
+                    type="button"
+                    class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                    :disabled="loading"
+                  >
+                    <span v-if="loading">Saving...</span>
+                    <span v-else>Save Changes</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </template>
+        </Modal>
+        <div v-if="showMap" class="modal">
+          <div class="modal-content">
+            <MapComponent
+              :currentLocation="selectedLatLng"
+              @close="handleClose"
+              @location-selected="handleLocationSelected"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="p-5 border border-black/40 shadow-theme-lg rounded-2xl ark:border-gray-800 lg:p-6"
+        >
+          <div
+            class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between"
+          >
+            <div>
+              <h4 class="text-lg font-semibold text-gray-800 lg:mb-6">
+                Address
+              </h4>
+
+              <div
+                class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32"
+              >
+                <div>
+                  <p class="mb-2 text-xs leading-normal text-gray-500">
+                    Country
+                  </p>
+                  <p class="text-sm font-medium text-gray-800 capitalize">
+                    Ethiopia
+                  </p>
+                </div>
+
+                <div>
+                  <p class="mb-2 text-xs leading-normal text-gray-500">
+                    Sub City
+                  </p>
+                  <p class="text-sm font-medium text-gray-800 capitalize">
+                    {{ user.sub_city }}
+                  </p>
+                </div>
+
+                <div>
+                  <p class="mb-2 text-xs leading-normal text-gray-500">City</p>
+                  <p class="text-sm font-medium text-gray-800 capitalize">
+                    {{ user.city }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -239,6 +521,7 @@ const fetchratedCompany = async () => {
         </div>
       </div>
     </div>
-    <!-- <FooterPart class="" /> -->
   </UserLayoutUser>
 </template>
+
+<style scoped></style>
