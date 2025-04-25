@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import MapComponent from "@/components/MapComponent.vue"; // Import MapComponent
 
 const authStore = useAuthStore();
 
@@ -19,6 +20,14 @@ const userInfoString = localStorage.getItem("userInfo");
 const user = ref(JSON.parse(userInfoString));
 const imageFile = ref(null);
 const loading = ref(false);
+const showMap = ref(false); // Add ref for map visibility
+const selectedLatLng = ref({ lat: null, lng: null }); // Add ref for selected location
+const locationInfo = ref(
+  localStorage.getItem("locationInfo") || "No location added"
+);
+const locationMessage = ref(
+  localStorage.getItem("locationMessage") || "Select Location"
+);
 
 onMounted(() => {
   // Initialize local state with user data
@@ -27,6 +36,15 @@ onMounted(() => {
   cityInput.value = user.value.city;
   subCityInput.value = user.value.sub_city;
   profilePictureUrl.value = user.value.profile_picture_url;
+  // Initialize selectedLatLng from user data if available
+  if (user.value.location) {
+    try {
+      const location = JSON.parse(user.value.location);
+      selectedLatLng.value = { lat: location.lat, lng: location.lng };
+    } catch (error) {
+      console.error("Error parsing location:", error);
+    }
+  }
 });
 
 const nameInput = ref("");
@@ -46,6 +64,12 @@ const saveProfile = async () => {
       imageUrl = cloudinaryResponse.secure_url;
     }
 
+    // Stringify the location data
+    const locationString = JSON.stringify({
+      lat: selectedLatLng.value.lat,
+      lng: selectedLatLng.value.lng,
+    });
+
     const userData = {
       ...user.value,
       name: nameInput.value,
@@ -53,6 +77,7 @@ const saveProfile = async () => {
       city: cityInput.value,
       sub_city: subCityInput.value,
       profile_picture_url: imageUrl,
+      location: locationString, // Save the stringified location
     };
 
     const response = await axios.put(
@@ -135,6 +160,19 @@ const handleImageUpload = (event) => {
     };
     reader.readAsDataURL(file);
   }
+};
+
+const handleClose = () => {
+  showMap.value = false;
+};
+
+const handleLocationSelected = (latlng) => {
+  selectedLatLng.value = latlng;
+  locationInfo.value = "Location added Successfully";
+  localStorage.setItem("locationInfo", locationInfo.value);
+  locationMessage.value = "Change Location";
+  localStorage.setItem("locationMessage", locationMessage.value);
+  showMap.value = false;
 };
 </script>
 
@@ -250,7 +288,7 @@ const handleImageUpload = (event) => {
         <Modal v-if="isProfileInfoModal" @close="isProfileInfoModal = false">
           <template #body>
             <div
-              class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 ark:bg-gray-900 lg:p-11"
+              class="no-scrollbar relative min-w-full translate-x-12 w-full xs:min-w-0 mx-auto max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 ark:bg-gray-900 lg:p-11 2xl:translate-x-16"
             >
               <!-- close btn -->
               <button
@@ -359,32 +397,51 @@ const handleImageUpload = (event) => {
                         </div>
                       </div>
                     </div>
-                    <div class="mt-7">
-                      <h5
-                        class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
-                      >
-                        Profile Picture
-                      </h5>
-                      <div class="flex items-center">
-                        <img
-                          :src="profilePictureUrl"
-                          alt="Profile Picture"
-                          class="w-20 h-20 rounded-full mr-4"
-                        />
-                        <div>
-                          <button
-                            @click="triggerImageUpload"
-                            class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
-                          >
-                            Change Picture
-                          </button>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            class="hidden"
-                            @change="handleImageUpload"
+                    <div class="mt-7 lg:flex justify-around items-center">
+                      <div class="">
+                        <h5
+                          class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                        >
+                          Profile Picture
+                        </h5>
+                        <div class="flex items-center">
+                          <img
+                            :src="profilePictureUrl"
+                            alt="Profile Picture"
+                            class="w-20 h-20 rounded-full mr-4"
                           />
+                          <div>
+                            <button
+                              @click="triggerImageUpload"
+                              class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                            >
+                              Change Picture
+                            </button>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              class="hidden"
+                              @change="handleImageUpload"
+                            />
+                          </div>
                         </div>
+                      </div>
+                      <div class="">
+                        <h5
+                          class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                        >
+                          Location
+                        </h5>
+                        <p v-if="selectedLatLng.lat && selectedLatLng.lng">
+                          Selected Location: Lat: {{ selectedLatLng.lat }}, Lng:
+                          {{ selectedLatLng.lng }}
+                        </p>
+                        <button
+                          @click="showMap = true"
+                          class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                        >
+                          {{ locationMessage }}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -409,55 +466,17 @@ const handleImageUpload = (event) => {
                 </div>
               </form>
             </div>
-
-            <div>
-              <div
-                class="p-5 border border-black/40 shadow-theme-lg rounded-2xl ark:border-gray-800 lg:p-6"
-              >
-                <div
-                  class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between"
-                >
-                  <div>
-                    <h4 class="text-lg font-semibold text-gray-800 lg:mb-6">
-                      Address
-                    </h4>
-
-                    <div
-                      class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32"
-                    >
-                      <div>
-                        <p class="mb-2 text-xs leading-normal text-gray-500">
-                          Country
-                        </p>
-                        <p class="text-sm font-medium text-gray-800 capitalize">
-                          Ethiopia
-                        </p>
-                      </div>
-
-                      <div>
-                        <p class="mb-2 text-xs leading-normal text-gray-500">
-                          Sub City
-                        </p>
-                        <p class="text-sm font-medium text-gray-800 capitalize">
-                          {{ user.sub_city }}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p class="mb-2 text-xs leading-normal text-gray-500">
-                          City
-                        </p>
-                        <p class="text-sm font-medium text-gray-800 capitalize">
-                          {{ user.city }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </template>
         </Modal>
+        <div v-if="showMap" class="modal">
+          <div class="modal-content">
+            <MapComponent
+              :currentLocation="selectedLatLng"
+              @close="handleClose"
+              @location-selected="handleLocationSelected"
+            />
+          </div>
+        </div>
       </div>
 
       <div>
@@ -507,3 +526,5 @@ const handleImageUpload = (event) => {
     </div>
   </UserLayoutUser>
 </template>
+
+<style scoped></style>
