@@ -1,8 +1,5 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import ProfileCard from "@/components/UserProfile/ProfileCard.vue";
-import PersonalInfoCard from "@/components/UserProfile/PersonalInfoCard.vue";
-import AddressCard from "@/components/UserProfile/AddressCard.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import Modal from "@/components/UserProfile/Modal.vue";
 import { useAuthStore } from "@/stores/auth";
