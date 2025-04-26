@@ -340,21 +340,16 @@
               </div>
             </div>
           </div>
-          <div v-if="!registeredUser"
-
-          class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-            <button @click="registerCompany"
-            :disabled="isButtonDisabled"
-              :class="{
-                'bg-gray-200  cursor-not-allowed': isButtonDisabled,
-                'bg-cyan-700 hover:bg-cyan-500 cursor-pointer':
-                  !isButtonDisabled,
-              }"
-              class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
-              {{ changeNaxt }}
-            </button>
-
-          </div>
+          <div class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
+  <button
+  v-if="!registeredUser"
+    @click="registerCompany"
+    :disabled="makeButtonDisable"
+    :class="buttonClass"
+  >
+    {{ changeNaxt }}
+  </button>
+</div>
 
           <div v-if="registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
 
@@ -434,8 +429,8 @@
                   Back
                 </button>
               </div>
-              <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!
-              </p>
+              <!-- <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!
+              </p> -->
               <div class="-mt-2">
                 <button @click="submitForm"
                   class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
@@ -477,22 +472,18 @@ export default {
     MapComponent2
     // CompRegformview
   },
-  computed: {
-    buttonClass() {
-      return {
-        "bg-gray-400 cursor-not-allowed": this.checkButtonDisabled,
-        "bg-[#2178AC] hover:bg-[#6b8ea1] cursor-pointer":
-          !this.checkButtonDisabled,
-        "mb-32 ml-40 py-3 transition-all duration-300 px-40 rounded-md text-white text-md": true,
-      };
-    },
-  },
+
+  
   mounted() {
     this.fetchCategories();
 
     this.checkButtonState();
 
     this.getCurrentLocation();
+    // this.registeredUser =  localStorage.getItem('registereduser')
+    // console.log('registerd user',localStorage.getItem('registereduser'))
+    this.contact_email = localStorage.getItem('contact_email')
+    console.log('registerd user',localStorage.getItem('contact_email'))
     //  locationInfo.value  = localStorage.getItem('locationInfo')
 
 
@@ -553,7 +544,7 @@ export default {
       imageUrl: null,
       cloudName: "dwh8v2zhg",
       apiKey: "934859592498419",
-      isButtonDisabled: false,
+      // isButtonDisabled: false,
       timeOutDuration: 2000,
       showPassword: false,
       isUploading: false,
@@ -583,28 +574,35 @@ export default {
 
     };
   },
-  coumputed: {
-    isButtonDisabled() {
-      return (
-        !this.companies.name ||
-        !this.companies.owner_name ||
-        !this.companies.description ||
-        !this.companies.contact_phone ||
-        !this.companies.contact_email ||
-        !this.companies.categories ||
-        !this.companies.operating_hours ||
-        !this.companies.country ||
-        !this.companies.region ||
-        !this.companies.address ||
-        !this.companies.city ||
-        !this.companies.license_url ||
-        !this.companies.website 
-        
-      );
+  computed: {
+    buttonClass() {
+      return {
+        "bg-gray-400 cursor-not-allowed": this.makeButtonDisable,
+        "bg-[#2178AC] hover:bg-[#6b8ea1] cursor-pointer": !this.makeButtonDisable,
+        "mb-32 ml-40 py-3 transition-all duration-300 px-40 rounded-md text-white text-md": true,
+      };
     },
+    makeButtonDisable() {
+      console.log('campanies',this.companies);
+  return (
+    !this.companies.name ||
+    !this.companies.owner_name ||
+    !this.companies.description ||
+    !this.companies.contact_phone ||
+    !this.companies.contact_email ||
+    !this.companies.category_id ||
+    !this.companies.operating_hours ||
+    !this.companies.country ||
+    !this.companies.region ||
+    !this.companies.address ||
+    !this.companies.city ||
+    !this.companies.license_url 
+    
+  );
+}
   },
   watch: {
-    isButtonDisabled(newValue) {
+    makeButtonDisable(newValue) {
       if (newValue) {
         console.log("Button is disabled");
       } else {
@@ -613,9 +611,11 @@ export default {
     },
   },
   methods: {
+
     handleEmail() {
       if (this.validateFields()) {
-        this.companies.updateCurrentEmail();
+        this.updateCurrentEmail();
+        // this.companies.updateCurrentEmail();
       } else {
         console.log('Validation failed');
       }
@@ -634,6 +634,19 @@ export default {
       document.getElementById("fileInput").click();
     },
     registeredUser2() {
+      localStorage.setItem('name', this.companies.name)
+        localStorage.setItem('owner_name', this.companies.owner_name)
+        localStorage.setItem('description', this.companies.description)
+        localStorage.setItem('contact_phone', this.companies.contact_phone)
+        localStorage.setItem('contact_email', this.companies.contact_email)
+        localStorage.setItem('categories', this.companies.categories)
+        localStorage.setItem('operating_hours', this.companies.operating_hours)
+        localStorage.setItem('country', this.companies.country)
+        localStorage.setItem('region', this.companies.region)
+        localStorage.setItem('address', this.companies.address)
+        localStorage.setItem('city', this.companies.city)
+        localStorage.setItem('license_url', this.companies.license_url)
+        localStorage.setItem('website', this.companies.website)
       this.showPassword = true;
     },
 
@@ -682,19 +695,20 @@ export default {
       this.showMap = false;
     },
     updateCurrentEmail() {
-      this.storedEmail = localStorage.getItem('email');
+      this.storedEmail = localStorage.getItem('contact_email');
       console.log('Stored email:', this.storedEmail);
 
       // Assuming companies.contact_email is correctly defined and accessible
-      if (this.companies && this.companies.contact_email) {
+      
         this.currentEmail = this.companies.contact_email;
         console.log('Current email:', this.currentEmail);
-      } else {
-        console.error('Contact email is not available');
-        alert('Contact email is not available');
-      }
-
-      this.registeredUser = false;
+      
+if(this.currentEmail !== this.storedEmail){
+ this.registeredUser = false
+}
+else{
+  this.registeredUser = true
+}
     },
 
     togglePasswordVisibility() {
@@ -836,6 +850,7 @@ export default {
         localStorage.setItem('license_url', this.companies.license_url)
         localStorage.setItem('website', this.companies.website)
         this.nextStep = "next";
+  
         this.showPassword = true;
         this.validateFields();
         // this.$refs.cardSection.scrollIntoView({ behavoir: 'smooth', block: 'start' })
@@ -857,6 +872,7 @@ export default {
         if (signInMethods.length > 0) {
           this.emailInUse = true;
           this.emailError = "Email is already in use. Please use a different email.";
+          alert("Email is already in use. Please use a different email.");
           this.changeNaxt = "Next Page";
           return;
         }
@@ -888,6 +904,7 @@ export default {
 
       } catch (error) {
         console.error("Error during registration:", error.message);
+        alert("email is already in use!")
         this.changeNaxt = "Next";
         this.emailError = error.message || "An error occurred. Please try again.";
       }
@@ -978,6 +995,7 @@ export default {
           await sendEmailVerification(userCredential.user);
           alert("A verification email has been sent. Please check your inbox.");
           localStorage.setItem("temporaryPassword", tempPassword);
+
           return;
         } else {
           await currentUser.reload();
@@ -1017,7 +1035,7 @@ export default {
               localStorage.removeItem('city')
               localStorage.removeItem('license_url')
               localStorage.removeItem('website')
-              this.$router.push("/signin");
+              this.$router.push("/CampanyLogin");
             }
           } else {
             alert(
@@ -1029,6 +1047,7 @@ export default {
         }
       } catch (error) {
         // let errorMessage = 'An error occured. please try again'
+        this.changeRegister = "register"
         if (error.response) {
           errorMessage = error.response.data.message || errorMessage
           this.changeRegister = "register"
@@ -1041,7 +1060,7 @@ export default {
     showError(message) {
       this.errors = message;
       this.changeRegister = "Register";
-      this.showRegistrationError = true
+      // this.showRegistrationError = true
     },
     submitForm() {
       this.changeRegister = "registering...";
@@ -1055,7 +1074,7 @@ export default {
     hidepassword() {
       this.showPassword = false;
       this.changeNaxt = "next";
-      this.registeredUser = true
+      this.registeredUser =  true
     },
 
     triggerFileInput() {
@@ -1105,12 +1124,12 @@ export default {
     toggleImageButton() {
       this.ImageButton = false;
     },
-    disableButtons() {
-      this.isButtonDisabled = true;
-      setTimeout(() => {
-        this.isButtonDisabled = false;
-      }, this.timeOutDuration);
-    },
+    // disableButtons() {
+    //   this.isButtonDisabled = true;
+    //   setTimeout(() => {
+    //     this.isButtonDisabled = false;
+    //   }, this.timeOutDuration);
+    // },
     checkButtonDisabled() {
       return !this.validateFields();
     },
