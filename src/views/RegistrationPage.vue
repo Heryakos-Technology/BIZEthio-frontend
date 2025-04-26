@@ -434,7 +434,7 @@
               <div class="-mt-2">
                 <button @click="submitForm"
                   class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
-                  {{ this.changeRegister }}
+                  {{changeRegister }}
                 </button>
               </div>
             </div>
@@ -613,12 +613,13 @@ export default {
   methods: {
 
     handleEmail() {
-      if (this.validateFields()) {
+      this.validateFields()
+      // if (this.validateFields()) {
         this.updateCurrentEmail();
         // this.companies.updateCurrentEmail();
-      } else {
-        console.log('Validation failed');
-      }
+      // } else {
+      //   console.log('Validation failed');
+      // }
     },
     handleDragOver(event) {
       event.preventDefault();
@@ -927,7 +928,10 @@ else{
     //   }
     // },
     async handleRegister() {
-      this.changeRegister = "registering..."
+    this.changeRegister = "registering...";
+    setTimeout(() => {
+      this.changeRegister = "Register";
+    }, 1000);
       const name = this.companies.name;
       const owner_name = this.companies.owner_name;
       const description = this.companies.description;
@@ -1040,7 +1044,9 @@ else{
           } else {
             alert(
               "Your email is not verified. Please verify your email before registering again."
+             
             );
+             this.changeRegister = 'Register'
             this.companies.password = "";
             this.companies.password_confirmation = "";
           }
@@ -1063,11 +1069,15 @@ else{
       // this.showRegistrationError = true
     },
     submitForm() {
-      this.changeRegister = "registering...";
+    this.changeRegister = "registering...";
+    setTimeout(() => {
+      this.changeRegister = "Register";
+    }, 1000);
       this.validateFields();
       if (!this.checkButtonState()) {
         this.handleRegister();
         this.showError()
+        
       }
     },
 
