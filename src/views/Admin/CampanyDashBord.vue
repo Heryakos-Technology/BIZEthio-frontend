@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="flex mt-3 px-3">
-          <div>
+    <div>
             <img src="/textIcon.png" alt="" class="mt-2" />
           </div>
           <div class="ml-2">
@@ -300,7 +300,7 @@ Reject
        v-if="loadingCampanies3[campany.id]"
       >
         <div class="loader2"></div>
-      </div>
+      </div> 
   <img src="/approve.png" alt=""  v-if="!loadingCampanies3[campany.id]"/>
 </div>
 
