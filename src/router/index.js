@@ -79,7 +79,7 @@ const router = createRouter({
       path: '/forgot',
       name: 'ForgotPassword',
       component: ForgotPassword,
-      meta: { auth: true },
+      //meta: { auth: true },
     },
     {
       path: '/ChangePassword',

@@ -20,6 +20,7 @@ const tempUserInfo = ref(null);
 const uploadPreset = "my_unsigned_preset"; 
 const cloudName = "dwh8v2zhg";  
 const file = ref(null);
+
 const uploaded = ref("");
 const previewImage = ref(null);
 

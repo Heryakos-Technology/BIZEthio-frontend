@@ -102,7 +102,7 @@ export default {
     if (!exists) {
       buttonMessage.value = 'Failed'
       error.value = 'Email not found. Please check and try again.';
-
+buttonMessage.value = 'Send Reset Link'
       email.value = ''
       return;
     }

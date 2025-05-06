@@ -31,22 +31,7 @@
                   <p>Password</p>
                 </div>
               </div>
-              <!-- <div class="mt-2 relative">
-                <input
-                  :type="isPasswordVisible ? 'text' : 'password'"
-                  class="focus:outline-none pl-3 border-2 rounded-xl border-blue-300 w-1/2 md:h-12"
-                  v-model="password"
-                  @input="validatePassword"
-                />
-                <span
-                @click="togglePasswordVisibility"
-                class="absolute top-6 right-70 transform -translate-y-1/2 cursor-pointer text-gray-500"
-              >
-                <i
-                  :class="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                ></i>
-              </span>
-            </div> -->
+            
               <div class="mt-2 relative">
                 <input
                   :type="isPasswordVisible ? 'text' : 'password'"
@@ -197,24 +182,21 @@
               />
               <h1 class="mt-36 text-xl w-12/12 -ml-3 mx-auto">Welcome Back</h1>
               <p class="text-sm font-normal w-13/13 -ml-10 mt-2 mx-auto">
-                Sign in to continue access pages
+                Sign in to Login access pages
               </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-
+<div>
+  <p>{{ popupError }}</p>
+</div>
     <div class="px-2 py-5 lg:hidden">
       <div class="bg-white rounded-sm pb-10 lg:hidden">
         <img src="/public/logo.png" alt="" class="mx-auto pt-5" />
         <h1 class="text-center mt-8 font-bold text-xl">SIgn In</h1>
-        <!-- <div class="flex justify-between w-1/3 mx-auto text-gray-400 mt-4 md:w-1/5 md:mx-auto">
-      <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>
-      <div><i class="fa-brands fa-twitter text-2xl"></i></div>
-      <div><i class="fa-brands fa-linkedin-in text-2xl"></i></div>
-  </div> -->
-        <!-- <p class="text-gray-400 text-center mt-4">fill the form for registration</p> -->
+  
         <div class="w-2/3 mx-auto mt-10">
           <div>
             <div class="flex">
@@ -370,12 +352,7 @@
         <div class="flex">
           <div class="rounded-sm pb-10 w-1/2">
             <h1 class="text-center mt-8 font-bold text-xl">SIgn In</h1>
-            <!-- <div class="flex justify-between w-1/3 mx-auto text-gray-400 mt-4 md:w-1/5 md:mx-auto">
-      <div><i class="fa-brands fa-facebook-f text-2xl"></i></div>
-      <div><i class="fa-brands fa-twitter text-2xl"></i></div>
-      <div><i class="fa-brands fa-linkedin-in text-2xl"></i></div>
-  </div> -->
-            <!-- <p class="text-gray-400 text-center mt-4">fill the form for registration</p> -->
+
             <div class="w-2/3 mx-auto mt-10">
               <div>
                 <div class="flex">
@@ -446,7 +423,7 @@
                   }"
                   class="bg-cyan-700 text-white px-8 py-2 rounded-sm"
                 >
-                  Continue
+                  Login
                 </button>
               </div>
               <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
@@ -517,6 +494,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { login } from "../../auth";
 import { auth, googleProvider, facebookProvider } from "..//../firebase";
+import { useToast } from 'vue-toast-notification';
 import {
   getAuth,
   signInWithPopup,
@@ -530,6 +508,7 @@ export default {
     UserLayoutUser,
   },
   setup() {
+    const $toast = useToast();
     const authError = ref(null);
     const router = useRouter();
     const base_url = "";
@@ -537,12 +516,13 @@ export default {
     const password = ref("");
     const currentUser = ref("");
     const isRemembered = ref(false);
-    const signInMessage = ref("Continue");
+    const signInMessage = ref("Login");
     const emailError = ref("");
     const passwordError = ref("");
     const isPasswordVisible = ref(false);
     const loading = ref(false);
     const loading2 = ref(false);
+    const popupError = ref('')
 
     const isLoginButtonDisabled = computed(() => {
       return email.value.trim() === "" || password.value.trim() === "";
@@ -592,7 +572,10 @@ export default {
       } catch (error) {
         console.error("Error signing in with Google:", error);
         loading.value = false;
-        alert(error);
+        $toast.error("Error signing in with Google", {
+        position: 'top'
+      });
+        //alert(error);
       }
     };
 
@@ -786,7 +769,7 @@ const handleLogin2 = async()=>{
           const token = await user.getIdToken();
           localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          signInMessage.value = "Continue";
+          signInMessage.value = "Login";
           console.log("token", token);
           console.log("Redirecting to user profile with :");
 
@@ -823,17 +806,24 @@ const handleLogin2 = async()=>{
             signInMessage.value = "Sent";
           }
         } else {
-          alert("User is not authenticated.");
+          $toast.error("User is not authenticated.", {
+        position: 'top'
+      });
+         // alert("User is not authenticated.");
           loading2.value = false;
-          signInMessage.value = "Submit";
-          (email.value = ""), (password.value = "");
+          signInMessage.value = "Login";
+          // (email.value = ""), (password.value = "");
         }
       } catch (error) {
-        signInMessage.value = "Submit";
+        signInMessage.value = "Login";
         console.error("Login error:", error.message);
         loading2.value = false;
-        (email.value = ""), (password.value = "");
-        alert(error.message);
+        // (email.value = ""), (password.value = "");
+       // popupError.value = error.message
+        $toast.error("Invalid Email or Password", {
+        position: 'top'
+      });
+        //alert();
       }
     };
 
@@ -859,7 +849,8 @@ const handleLogin2 = async()=>{
       isPasswordVisible,
       loading,
       loading2,
-      handleLogin2
+      handleLogin2,
+      popupError
     };
   },
 };
