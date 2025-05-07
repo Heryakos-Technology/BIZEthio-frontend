@@ -5,15 +5,15 @@ import { ref, onMounted, onUnmounted, watch, defineProps } from "vue";
 const userId = localStorage.getItem("user_id");
 
 const isSidebarOpen = ref(false);
-const showOptions = ref(false)
+const showOptions = ref(false);
 const isNavbarVisible = ref(true);
 
 const handleSidebarOpen = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
 };
-const signInOptions = ()=>{
-  showOptions.value = !showOptions.value
-}
+const signInOptions = () => {
+  showOptions.value = !showOptions.value;
+};
 const props = defineProps({
   navLinks: {
     type: Array,
@@ -67,7 +67,11 @@ const props = defineProps({
         <ul
           class="mt-16 space-y-3 divide-primaryColor divide-y mx-auto text-3xl text-white"
         >
-          <li v-for="(item, index) in props.navLinks" :key="index" class="py-1">
+          <li
+            v-for="(item, index) in props.navLinks"
+            :key="index"
+            class="py-1 relative"
+          >
             <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
               {{ item.label }}
             </RouterLink>
@@ -97,23 +101,21 @@ const props = defineProps({
         <div class="ml-8">
           <Logo class="w-[100px]" />
         </div>
-        <div class="flex gap-x-8 text-[16px] uppercase font-semibold">
-          <router-link
-            to="/"
-            class="hover:font-bold transition-all duration-200 ease-linear"
-            >Home</router-link
+        <ul class="flex gap-x-8 text-[16px] uppercase font-semibold">
+          <li
+            v-for="(item, index) in props.navLinks"
+            :key="index"
+            class="hover:font-bold transition-all duration-200 ease-linear group relative"
           >
-          <router-link
-            to="/about-us"
-            class="hover:font-bold transition-all duration-200 ease-linear"
-            >about us</router-link
-          >
-          <router-link
-            to="/contact-us"
-            class="hover:font-bold transition-all duration-200 ease-linear"
-            >contact us</router-link
-          >
-        </div>
+            <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
+              {{ item.label }}
+            </RouterLink>
+
+            <div
+              class="w-0 group-hover:w-full bottom-0-0 left-0 h-0.5 transition-all ease-linear duration-300 bg-black"
+            ></div>
+          </li>
+        </ul>
 
         <button
           v-if="!userId"
@@ -129,12 +131,22 @@ const props = defineProps({
             class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"
           ></router-link>
         </div>
-       
       </div>
       <div v-if="showOptions" class="ml-260 mt-5">
-          <button @click="router.push('/signin')" class="text-blue-500 underline cursor-pointer hover:scale-110">Sign In as a User</button> <br>
-          <button @click="router.push('/CampanyLogin')" class="text-blue-500 underline mt-2 cursor-pointer hover:scale-110">Sign In as a Campany</button>
-          </div>
+        <button
+          @click="router.push('/signin')"
+          class="text-blue-500 underline cursor-pointer hover:scale-110"
+        >
+          Sign In as a User
+        </button>
+        <br />
+        <button
+          @click="router.push('/CampanyLogin')"
+          class="text-blue-500 underline mt-2 cursor-pointer hover:scale-110"
+        >
+          Sign In as a Campany
+        </button>
+      </div>
     </div>
   </div>
 </template>

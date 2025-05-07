@@ -96,10 +96,16 @@ const props = defineProps({
         <ul
           class="mt-16 space-y-3 divide-primaryColor divide-y mx-auto text-3xl text-white"
         >
-          <li v-for="(item, index) in props.navLinks" :key="index" class="py-1">
+          <li
+            v-for="(item, index) in props.navLinks"
+            :key="index"
+            class="py-1 relative"
+          >
             <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
               {{ item.label }}
             </RouterLink>
+
+            <div class="absolute top-0 left-0 h-3 w-8 bg-black"></div>
           </li>
         </ul>
 
