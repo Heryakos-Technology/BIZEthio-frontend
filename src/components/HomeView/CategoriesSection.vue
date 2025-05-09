@@ -69,6 +69,29 @@ const getImageUrl = (images) => {
       ></div>
     </div>
 
+    <div v-else-if="categories.length === 0" class="py-20 text-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
+        />
+      </svg>
+      <h3 class="mt-2 text-lg font-medium text-gray-900">
+        No Categories found
+      </h3>
+      <p class="mt-1 text-gray-500">
+        We couldn't find any Categories to display at the moment.
+      </p>
+    </div>
+
     <div
       v-else
       class="grid gap-y-4 mt-8 md:mt-16 place-items-center sm:grid-cols-2 lg:grid-cols-3"
