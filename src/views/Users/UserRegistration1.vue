@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayoutUser>
     <div class="px-2 py-5 pt-10 pb-10">
       <div class="bg-white rounded-sm pb-10 lg:hidden">
         <img src="/public/logo.png" alt="" class="mx-auto pt-5" />
@@ -48,7 +48,7 @@
               type="email"
               class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12"
               v-model="model.user.email"
-              @input="handleInput "
+              @input="handleInput"
             />
             <div v-if="errors.email" class="text-red-400 mt-1">
               {{ errors.email }}
@@ -114,12 +114,10 @@
               {{ errors.sub_city }}
             </div>
           </div>
-          <div class="text-white lg:ml-28  lg:-mt-4 -ml-2 w-11/12">
-            <div class="flex ml-4 w-56 mt-6 md:ml-20 lg:ml-56">
-            
-            </div>
+          <div class="text-white lg:ml-28 lg:-mt-4 -ml-2 w-11/12">
+            <div class="flex ml-4 w-56 mt-6 md:ml-20 lg:ml-56"></div>
           </div>
-         
+
           <!-- <div class="mt-9">
             <div class="flex">
               <div>
@@ -139,24 +137,30 @@
               {{ errors.location }}
             </div>
           </div> -->
-          <div class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4  md:text-[16px]">
-                <button @click="showMap = !showMap"
-                  class="text-md bg-[#038ba6] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-10 cursor-pointer text-white mt-10">
-                  Select Location
-                </button>
-                <!--{{ userInformations.location }}-->
-              </div>
-              <div v-if="showMap" class="modal">
-                <div class="modal-content">
-
-                  <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
-                  @location-selected="handleLocationSelected">
-                  </MapComponent2>
-                </div>
+          <div
+            class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4 md:text-[16px]"
+          >
+            <button
+              @click="showMap = !showMap"
+              class="text-md bg-[#038ba6] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-10 cursor-pointer text-white mt-10"
+            >
+              Select Location
+            </button>
+            <!--{{ userInformations.location }}-->
+          </div>
+          <div v-if="showMap" class="modal">
+            <div class="modal-content">
+              <MapComponent2
+                :currentLocation="selectedLatLng"
+                @close="handleClose"
+                @location-selected="handleLocationSelected"
+              >
+              </MapComponent2>
+            </div>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
             <button
-            v-if="!registeredUser"
+              v-if="!registeredUser"
               :disabled="isButtonDisabled"
               :class="{
                 'bg-gray-200  cursor-not-allowed': isButtonDisabled,
@@ -170,15 +174,14 @@
             </button>
           </div>
           <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
- 
- <button
-   v-if="registeredUser"
-   class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
-   @click="registeredUser2"
- >
-   Next
- </button>
-</div>
+            <button
+              v-if="registeredUser"
+              class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+              @click="registeredUser2"
+            >
+              Next
+            </button>
+          </div>
           <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
             <p class="md:text-lg text-sm text-center">
               Do you have an account?
@@ -280,7 +283,7 @@
                   <div>
                     <p>Email</p>
                   </div>
-                 
+
                   <div>
                     <p class="text-red-400 mt-1 ml-1">*</p>
                   </div>
@@ -361,22 +364,28 @@
                 </div>
               </div>
               <p class="text-cyan-400 mt-4">{{ locationInfo }}</p>
-            
-              <div class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4  md:text-[16px]">
-                <button @click="showMap = !showMap"
-                  class="text-md bg-[#23bbd9] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-10 cursor-pointer text-black mt-10">
-                 {{locationMessage}}
+
+              <div
+                class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4 md:text-[16px]"
+              >
+                <button
+                  @click="showMap = !showMap"
+                  class="text-md bg-[#23bbd9] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-10 cursor-pointer text-black mt-10"
+                >
+                  {{ locationMessage }}
                 </button>
                 <!--{{ userInformations.location }}-->
               </div>
               <div v-if="showMap" class="modal">
                 <div class="modal-content">
-
-                  <MapComponent :currentLocation="selectedLatLng" @close="handleClose"
-                  @location-selected="handleLocationSelected">
+                  <MapComponent
+                    :currentLocation="selectedLatLng"
+                    @close="handleClose"
+                    @location-selected="handleLocationSelected"
+                  >
                   </MapComponent>
                 </div>
-          </div>
+              </div>
               <!-- <div class="text-white lg:ml-28  lg:-mt-4 -ml-2 w-11/12">
             <div class="flex ml-4 w-56 mt-6 md:ml-20 lg:ml-56">
               <div class="text-[12px] font-normal text-gray-100 md:text-[16px]">
@@ -385,32 +394,31 @@
              
             </div>
           </div> -->
-        
-              <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
 
-    <button
-      v-if="!registeredUser"
-      :disabled="isButtonDisabled"
-      :class="{
-        'bg-gray-200 cursor-not-allowed': isButtonDisabled,
-        'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled,
-      }"
-      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer mt-10"
-      @click="registerUser"
-    >
-      {{ continueButton }}
-    </button>
-  </div>
-  <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
- 
-    <button
-      v-if="registeredUser"
-      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
-      @click="registeredUser2"
-    >
-      Next
-    </button>
-  </div>
+              <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+                <button
+                  v-if="!registeredUser"
+                  :disabled="isButtonDisabled"
+                  :class="{
+                    'bg-gray-200 cursor-not-allowed': isButtonDisabled,
+                    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer':
+                      !isButtonDisabled,
+                  }"
+                  class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer mt-10"
+                  @click="registerUser"
+                >
+                  {{ continueButton }}
+                </button>
+              </div>
+              <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+                <button
+                  v-if="registeredUser"
+                  class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+                  @click="registeredUser2"
+                >
+                  Next
+                </button>
+              </div>
               <!-- <p v-if="isButtonDisabled">The button is currently disabled.</p>
 <p v-else>The button is enabled.</p> -->
               <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
@@ -424,24 +432,20 @@
                       }
                     "
                     >Login</span
-                  
                   >
                 </p>
-               
               </div>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
-    
-  </UserLayout>
+  </UserLayoutUser>
 </template>
 
 <script>
 import { ref, computed, onMounted, watch } from "vue";
-import UserLayout from "@/layout/UserLayout.vue";
+import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useRouter } from "vue-router";
 import Logo from "@/components/icons/Logo.vue";
 import MapComponent from "@/components/MapComponent.vue";
@@ -452,14 +456,14 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 export default {
   components: {
-    UserLayout,
+    UserLayoutUser,
     Logo,
     MapComponent,
-    MapComponent2
+    MapComponent2,
   },
   setup() {
     const base_url = "#";
@@ -471,20 +475,21 @@ export default {
         city: "",
         sub_city: "",
         location: "",
-        
       },
     });
-    const userLocation = ref("")
+    const userLocation = ref("");
     const errorss = ref("");
     const router = useRouter();
     const errors = ref({});
-    const registeredUser = ref(false)
-    const continueButton = ref("Continue")
-    const currentEmail = ref('');
+    const registeredUser = ref(false);
+    const continueButton = ref("Continue");
+    const currentEmail = ref("");
     const showMap = ref(false);
-    const locationInfo = ref('');
-    const storedEmail = ref('');
-    const locationMessage = ref(localStorage.getItem('locationMessage') || 'Select Location')
+    const locationInfo = ref("");
+    const storedEmail = ref("");
+    const locationMessage = ref(
+      localStorage.getItem("locationMessage") || "Select Location"
+    );
     const selectedLatLng = ref({ lat: null, lng: null });
     const getCurrentLocation = () => {
       if (navigator.geolocation) {
@@ -492,23 +497,23 @@ export default {
           (position) => {
             selectedLatLng.value = {
               lat: position.coords.latitude,
-              lng: position.coords.longitude
+              lng: position.coords.longitude,
             };
-          //  userInformations.value.location = selectedLatLng.value;
-            console.log('Current Location:', selectedLatLng.value);
+            //  userInformations.value.location = selectedLatLng.value;
+            console.log("Current Location:", selectedLatLng.value);
           },
           (error) => {
-            console.error('Geolocation error:', error);
-            alert('Unable to retrieve location.');
+            console.error("Geolocation error:", error);
+            alert("Unable to retrieve location.");
           },
           {
             enableHighAccuracy: true,
             timeout: 10000,
-            maximumAge: 0
+            maximumAge: 0,
           }
         );
       } else {
-        alert('Geolocation is not supported by your browser.');
+        alert("Geolocation is not supported by your browser.");
       }
     };
     const handleClose = () => {
@@ -518,22 +523,20 @@ export default {
       validate();
       updateCurrentEmail();
     };
-   
 
     const updateCurrentEmail = () => {
-      storedEmail.value = localStorage.getItem('email'); 
-     console.log('stored email',storedEmail.value)
-     // Adjust this key as needed
-     currentEmail.value = model.value.user.email
-     console.log('email',currentEmail.value)
+      storedEmail.value = localStorage.getItem("email");
+      console.log("stored email", storedEmail.value);
+      // Adjust this key as needed
       currentEmail.value = model.value.user.email;
-      registeredUser.value = false
+      console.log("email", currentEmail.value);
+      currentEmail.value = model.value.user.email;
+      registeredUser.value = false;
     };
-  // Check if the email has changed
-  if (currentEmail !== storedEmail) {
-    registeredUser.value = false; // Set registeredUser to false if the email has changed
-  }
-
+    // Check if the email has changed
+    if (currentEmail !== storedEmail) {
+      registeredUser.value = false; // Set registeredUser to false if the email has changed
+    }
 
     const validate = () => {
       errors.value = {};
@@ -554,128 +557,123 @@ export default {
         !model.value.user.email ||
         !model.value.user.phone_number ||
         !model.value.user.city ||
-        !model.value.user.sub_city 
-       // !model.value.user.location
+        !model.value.user.sub_city
+        // !model.value.user.location
       );
     });
 
-    const registeredUser2 = ()=>{
-    
-  if (Object.keys(errors.value).length > 0) return;
+    const registeredUser2 = () => {
+      if (Object.keys(errors.value).length > 0) return;
 
-  // Store user data in local storage
-  // Object.keys(model.value.user).forEach((key) => {
-  //   localStorage.setItem(key, model.value.user[key]);
-  // });
-  localStorage.setItem('name',model.value.user.name)
-  localStorage.setItem('email',model.value.user.email)
-  localStorage.setItem('phone_number',model.value.user.phone_number)
-  localStorage.setItem('city',model.value.user.city)
-  localStorage.setItem('sub_city',model.value.user.sub_city)
-  model.value.user.location = JSON.stringify({
-          lat: selectedLatLng.value.lat,
-          lng: selectedLatLng.value.lng,
-        });
-  localStorage.setItem('location',model.value.user.location)
+      // Store user data in local storage
+      // Object.keys(model.value.user).forEach((key) => {
+      //   localStorage.setItem(key, model.value.user[key]);
+      // });
+      localStorage.setItem("name", model.value.user.name);
+      localStorage.setItem("email", model.value.user.email);
+      localStorage.setItem("phone_number", model.value.user.phone_number);
+      localStorage.setItem("city", model.value.user.city);
+      localStorage.setItem("sub_city", model.value.user.sub_city);
+      model.value.user.location = JSON.stringify({
+        lat: selectedLatLng.value.lat,
+        lng: selectedLatLng.value.lng,
+      });
+      localStorage.setItem("location", model.value.user.location);
       router.push("/next");
-    }
-    const registerUser = async () => {
-  validate();
-  if (Object.keys(errors.value).length > 0) return;
-
-  // Store user data in local storage
-  // Object.keys(model.value.user).forEach((key) => {
-  //   localStorage.setItem(key, model.value.user[key]);
-  // });
-  localStorage.setItem('name',model.value.user.name)
-  localStorage.setItem('email',model.value.user.email)
-  localStorage.setItem('phone_number',model.value.user.phone_number)
-  localStorage.setItem('city',model.value.user.city)
-  localStorage.setItem('sub_city',model.value.user.sub_city)
-  localStorage.setItem('location',model.value.user.location)
- 
-
-  model.value.user.location = JSON.stringify({
-          lat: selectedLatLng.value.lat,
-          lng: selectedLatLng.value.lng,
-        });
-  continueButton.value = "Loading...";
-  const userData = {
-    email: model.value.user.email,
-   // role: "admin",
-    name: model.value.user.name,
-    phone_number: model.value.user.phone_number,
-    city: model.value.user.city,
-    sub_city: model.value.user.sub_city,
-    location: model.value.user.location,
-    //location: locationString
-  };
-
-  try {
-  
-    const tempPassword = Math.random().toString(36).slice(-8);
-    localStorage.setItem("temporaryPassword", tempPassword);
-
-    const auth = getAuth();
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      userData.email,
-      tempPassword 
-    );
-
-    const db = getFirestore();
-   
-    await setDoc(doc(db, "users", userCredential.user.uid), userData);
-    const token = await userCredential.user.getIdToken();
-    console.log("User Token:", token); 
-    localStorage.setItem('token',token)
-
-    const userWithToken = {
-      ...userData,
-      token
     };
-    console.log("User Data with Token:", userWithToken);
-    localStorage.setItem("userWithToken", JSON.stringify(userWithToken)); 
-    model.value.user.location = userData.location
-    localStorage.setItem('location',model.value.user.location)  
-    await sendEmailVerification(userCredential.user);
-    alert("A verification email has been sent. Please check your inbox.");
-    registeredUser.value = true
-    localStorage.setItem('registereduser',registeredUser.value )
-    
-    router.push("/next");
-    continueButton.value = "Sent";
-  } catch (error) {
-    console.error( 
-      
-      "Error during registration:",
-      error.message || "An error occurred. Please try again."
-    );
-    errors.value = error.response
-    ? error.response.data.message
-    : "An error occurred. Please try again.";
-    alert(error.message)
-    continueButton.value = "Submit";
+    const registerUser = async () => {
+      validate();
+      if (Object.keys(errors.value).length > 0) return;
 
+      // Store user data in local storage
+      // Object.keys(model.value.user).forEach((key) => {
+      //   localStorage.setItem(key, model.value.user[key]);
+      // });
+      localStorage.setItem("name", model.value.user.name);
+      localStorage.setItem("email", model.value.user.email);
+      localStorage.setItem("phone_number", model.value.user.phone_number);
+      localStorage.setItem("city", model.value.user.city);
+      localStorage.setItem("sub_city", model.value.user.sub_city);
+      localStorage.setItem("location", model.value.user.location);
 
+      model.value.user.location = JSON.stringify({
+        lat: selectedLatLng.value.lat,
+        lng: selectedLatLng.value.lng,
+      });
+      continueButton.value = "Loading...";
+      const userData = {
+        email: model.value.user.email,
+        // role: "admin",
+        name: model.value.user.name,
+        phone_number: model.value.user.phone_number,
+        city: model.value.user.city,
+        sub_city: model.value.user.sub_city,
+        location: model.value.user.location,
+        //location: locationString
+      };
 
-  }
-};
-const handleLocationSelected = (latlng) => {
+      try {
+        const tempPassword = Math.random().toString(36).slice(-8);
+        localStorage.setItem("temporaryPassword", tempPassword);
+
+        const auth = getAuth();
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          userData.email,
+          tempPassword
+        );
+
+        const db = getFirestore();
+
+        await setDoc(doc(db, "users", userCredential.user.uid), userData);
+        const token = await userCredential.user.getIdToken();
+        console.log("User Token:", token);
+        localStorage.setItem("token", token);
+
+        const userWithToken = {
+          ...userData,
+          token,
+        };
+        console.log("User Data with Token:", userWithToken);
+        localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
+        model.value.user.location = userData.location;
+        localStorage.setItem("location", model.value.user.location);
+        await sendEmailVerification(userCredential.user);
+        alert("A verification email has been sent. Please check your inbox.");
+        registeredUser.value = true;
+        localStorage.setItem("registereduser", registeredUser.value);
+
+        router.push("/next");
+        continueButton.value = "Sent";
+      } catch (error) {
+        console.error(
+          "Error during registration:",
+          error.message || "An error occurred. Please try again."
+        );
+        errors.value = error.response
+          ? error.response.data.message
+          : "An error occurred. Please try again.";
+        alert(error.message);
+        continueButton.value = "Submit";
+      }
+    };
+    const handleLocationSelected = (latlng) => {
       selectedLatLng.value = latlng;
       model.value.user.location = {
         lat: latlng.lat,
-        lng: latlng.lng
+        lng: latlng.lng,
       };
-      console.log('Selected Location:', selectedLatLng.value);
-      console.log('user location',  model.value.user.location)
-      if(model.value.user.location.lat!== null&&model.value.user.location.lng!== null){
-
+      console.log("Selected Location:", selectedLatLng.value);
+      console.log("user location", model.value.user.location);
+      if (
+        model.value.user.location.lat !== null &&
+        model.value.user.location.lng !== null
+      ) {
         showMap.value = false;
-        locationInfo.value = 'Location added Sucessfully '
-        localStorage.setItem('locationInfo',locationInfo.value)
-        locationMessage.value = 'Change Location'
-        localStorage.setItem('locationMessage',locationMessage.value)
+        locationInfo.value = "Location added Sucessfully ";
+        localStorage.setItem("locationInfo", locationInfo.value);
+        locationMessage.value = "Change Location";
+        localStorage.setItem("locationMessage", locationMessage.value);
       }
     };
 
@@ -690,13 +688,12 @@ const handleLocationSelected = (latlng) => {
       Object.keys(model.value.user).forEach((key) => {
         model.value.user[key] = localStorage.getItem(key) || "";
       });
-      registeredUser.value =  localStorage.getItem('registereduser')
-     console.log('registerd user',localStorage.getItem('registereduser'))
-     getCurrentLocation();
-     locationInfo.value  = localStorage.getItem('locationInfo')
-    // locationMessage.value = localStorage.getItem('locationMessage')
-     
-    }); 
+      registeredUser.value = localStorage.getItem("registereduser");
+      console.log("registerd user", localStorage.getItem("registereduser"));
+      getCurrentLocation();
+      locationInfo.value = localStorage.getItem("locationInfo");
+      // locationMessage.value = localStorage.getItem('locationMessage')
+    });
     return {
       base_url,
       model,
@@ -715,8 +712,7 @@ const handleLocationSelected = (latlng) => {
       selectedLatLng,
       handleClose,
       locationInfo,
-      locationMessage
-
+      locationMessage,
     };
   },
 };
@@ -737,12 +733,11 @@ const handleLocationSelected = (latlng) => {
 .modal-content {
   background-color: #fff;
   margin: auto;
-  margin-top:80px;
+  margin-top: 80px;
   padding: 10px;
   border: 1px solid #888;
   width: 80%;
   max-width: 600px;
   position: relative;
 }
-
 </style>
