@@ -1168,7 +1168,7 @@ export default {
 
             if (success) {
               const response = await axios.post(
-                `https://bizethio-backend-production-944c.up.railway.app/api/company/register`,
+                `https://bizethio-backend-production-d484.up.railway.app/api/company/register`,
                 companyData,
                 {
                   headers: {
@@ -1299,7 +1299,7 @@ export default {
     async fetchCategories() {
       try {
         const response = await axios.get(
-          "https://bizethio-backend-production-944c.up.railway.app/api/categories"
+          "https://bizethio-backend-production-d484.up.railway.app/api/categories"
         );
         this.categories = response.data;
         console.log("categoriessss", this.categories);

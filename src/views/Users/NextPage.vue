@@ -23,7 +23,7 @@
             <div class="mt-2 relative">
               <input
                 :type="isPasswordVisible ? 'text' : 'password'"
-                class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12 "
+                class="focus:outline-none pl-3 border-2 rounded-md border-blue-300 w-13/13 md:h-12"
                 v-model="model.user.password"
                 @input="checkPasswordStrength(), validate()"
               />
@@ -39,15 +39,15 @@
             <div v-if="errors.password" class="text-red-400 mt-2">
               {{ errors.password }}
             </div>
-            <p :class="passwordStrengthClass" class="mt-2">{{ passwordStrengthMessage }}</p>
+            <p :class="passwordStrengthClass" class="mt-2">
+              {{ passwordStrengthMessage }}
+            </p>
             <ul>
               <li
                 :class="{
                   'text-green-500': criterion.met,
                   'text-red-500': !criterion.met,
-                  
                 }"
-               
                 v-for="(criterion, index) in passwordCriteria"
                 :key="index"
               >
@@ -438,7 +438,7 @@
                     !isButtonDisabled,
                 }"
                 @click="handleRegister"
-                class="bg-cyan-700 text-white  py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer"
+                class="bg-cyan-700 text-white py-2 lg:w-11/10 lg:mx-auto rounded-sm text-lg cursor-pointer"
               >
                 {{ submitText }}
               </button>
@@ -521,20 +521,16 @@ export default {
     const isCheckboxChecked = ref(false);
     const submitText = ref("Submit");
 
- 
     const validate = () => {
       errors.value = "";
       if (!model.value.user.password)
         errors.value.password = "password is required.";
       if (!model.value.user.password_confirmation)
         errors.value.password_confirmation = "password is required.";
-
     };
     const isButtonDisabled = computed(() => {
       return (
-        !model.value.user.password ||
-        !model.value.user.password_confirmation 
-   
+        !model.value.user.password || !model.value.user.password_confirmation
       );
     });
     watch(isCheckboxChecked, (newValue) => {
@@ -634,12 +630,12 @@ export default {
         userPhoto.value = response.data.secure_url;
         console.log("Upload response:", userPhoto.value);
         model.value.user.profile_picture_url = response.data.secure_url;
-        console.log('profile picture',model.value.user.profile_picture_url )
+        console.log("profile picture", model.value.user.profile_picture_url);
       } catch (error) {
         uploaded.value = "Failed to upload photo Try again";
         console.error("Error uploading file:", error.response.data);
-        userPhoto.value = ''
-        model.value.user.profile_picture_url  = ''
+        userPhoto.value = "";
+        model.value.user.profile_picture_url = "";
       }
     };
     const handleFileDrop = (event) => {
@@ -673,7 +669,7 @@ export default {
       submitText.value = "Loading...";
       const email = model.value.user.email.trim().toLowerCase();
       const password = model.value.user.password;
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const name = model.value.user.name;
       const phone_number = model.value.user.phone_number;
       const city = model.value.user.city;
@@ -684,7 +680,7 @@ export default {
       // const role = model.value.user.role;
       const profile_picture_url = model.value.user.profile_picture_url;
       const password_confirmation = model.value.user.password_confirmation;
-      
+
       const checkbox = document.getElementById("myCheckbox");
 
       if (!isCheckboxChecked.value) {
@@ -709,7 +705,7 @@ export default {
         // role,
         profile_picture_url,
         token,
-        location
+        location,
       };
 
       const auth = getAuth();
@@ -728,7 +724,7 @@ export default {
 
           await sendEmailVerification(userCredential.user);
           alert("A verification email has been sent. Please check your inbox.");
-submitText.value = "Submit";
+          submitText.value = "Submit";
           localStorage.setItem("temporaryPassword", tempPassword);
 
           return;
@@ -737,9 +733,9 @@ submitText.value = "Submit";
 
           if (currentUser.emailVerified) {
             const tempPassword = localStorage.getItem("temporaryPassword");
-            try{
+            try {
               const response = await axios.post(
-                `https://bizethio-backend-production-944c.up.railway.app/api/firebase-auth`,
+                `https://bizethio-backend-production-d484.up.railway.app/api/firebase-auth`,
                 userData,
                 {
                   headers: {
@@ -763,29 +759,27 @@ submitText.value = "Submit";
               localStorage.removeItem("registereduser");
               localStorage.removeItem("locationInfo");
               localStorage.removeItem("locationMessage");
-              
-              
+
               model.value.user.password = "";
               model.value.user.password_confirmation = "";
               model.value.user.profile_picture_url = "";
               userPhoto.value = "";
-              uploaded.value = ''
+              uploaded.value = "";
 
               isLoading.value = "Submit";
-              alert('Registered Successfully')
+              alert("Registered Successfully");
               router.push("/signin");
-
-            }catch(error){
-              errors.value = error.response.data.message
+            } catch (error) {
+              errors.value = error.response.data.message;
             }
-             const success = await updateUserPassword(
+            const success = await updateUserPassword(
               email,
               tempPassword,
               password
             );
 
             if (success) {
-           console.log('success')
+              console.log("success");
             }
           } else {
             alert(
@@ -796,15 +790,15 @@ submitText.value = "Submit";
             model.value.user.password_confirmation = "";
             model.value.user.profile_picture_url = "";
             userPhoto.value = "";
-            uploaded.value = ''
-            
-      passwordCriteria.value[0].met = false;
-      passwordCriteria.value[1].met = false;
-      passwordCriteria.value[2].met = false;
-      passwordCriteria.value[3].met = false;
-      passwordCriteria.value[4].met = false;
-      passwordStrengthMessage.value = "";
-        uploaded.value = ''
+            uploaded.value = "";
+
+            passwordCriteria.value[0].met = false;
+            passwordCriteria.value[1].met = false;
+            passwordCriteria.value[2].met = false;
+            passwordCriteria.value[3].met = false;
+            passwordCriteria.value[4].met = false;
+            passwordStrengthMessage.value = "";
+            uploaded.value = "";
           }
         }
       } catch (error) {
@@ -819,13 +813,13 @@ submitText.value = "Submit";
         model.value.user.profile_picture_url = "";
         userPhoto.value = "";
         passwordCriteria.value[0].met = false;
-      passwordCriteria.value[1].met = false;
-      passwordCriteria.value[2].met = false;
-      passwordCriteria.value[3].met = false;
-      passwordCriteria.value[4].met = false;
-      passwordStrengthMessage.value = "";
-    
-        uploaded.value = ''
+        passwordCriteria.value[1].met = false;
+        passwordCriteria.value[2].met = false;
+        passwordCriteria.value[3].met = false;
+        passwordCriteria.value[4].met = false;
+        passwordStrengthMessage.value = "";
+
+        uploaded.value = "";
       }
     };
     onMounted(() => {
@@ -836,10 +830,8 @@ submitText.value = "Submit";
       model.value.user.city = localStorage.getItem("city") || "";
       model.value.user.sub_city = localStorage.getItem("sub_city") || "";
       model.value.user.location = localStorage.getItem("location") || "";
-      console.log('location',model.value.user.location)
-
+      console.log("location", model.value.user.location);
     });
-
 
     const togglePasswordVisibility = () => {
       isPasswordVisible.value = !isPasswordVisible.value;
@@ -879,7 +871,6 @@ submitText.value = "Submit";
       handleFileDrop,
       triggerFileInput,
       handleDragOver,
-      
 
       // handleRegister,
     };

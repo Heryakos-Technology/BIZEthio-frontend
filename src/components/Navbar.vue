@@ -96,7 +96,7 @@ const props = defineProps({
 
     <div class="hidden lg:block pt-4">
       <div
-        class="flex items-center w-[90%] max-w-[1000px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between"
+        class="flex items-center w-[90%] max-w-[1000px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between h-[64px]"
       >
         <div class="ml-8">
           <Logo class="w-[100px]" />
@@ -125,7 +125,7 @@ const props = defineProps({
           Get Started
         </button>
 
-        <div v-else class="mt-3 lg:-ml-16 md:-ml-4">
+        <div v-else class="lg:-ml-16 md:-ml-4">
           <router-link
             to="/UserProfile"
             class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"
