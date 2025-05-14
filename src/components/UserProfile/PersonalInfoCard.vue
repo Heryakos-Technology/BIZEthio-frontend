@@ -50,7 +50,7 @@ const saveProfile = async () => {
     };
 
     const response = await axios.put(
-      `https://bizethio-backend-production-944c.up.railway.app/api/users/${userId}`,
+      `https://bizethio-backend-production-d484.up.railway.app/api/users/${userId}`,
       userData,
       {
         headers: {
@@ -326,7 +326,7 @@ const handleImageUpload = (event) => {
                     <div>
                       <button
                         @click="triggerImageUpload"
-                        class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
+                        class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
                       >
                         Change Picture
                       </button>
@@ -345,14 +345,14 @@ const handleImageUpload = (event) => {
               <button
                 @click="isProfileInfoModal = false"
                 type="button"
-                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
               >
                 Close
               </button>
               <button
                 @click="saveProfile"
                 type="button"
-                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor  sm:w-auto cursor-pointer"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
                 :disabled="loading"
               >
                 <span v-if="loading">Saving...</span>

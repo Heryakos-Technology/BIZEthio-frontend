@@ -73,7 +73,9 @@
         <div class="bg-white w-9/10 flex pl-10 mb-6">
           <p class="h-16 pt-5 font-bold text-[13px] w-1/5">No</p>
           <p class="h-16 pt-5 font-bold text-[13px] w-1/4">Name</p>
-          <p class="h-16 pt-5 font-bold text-[13px] w-1/2">Average Client Ratting</p>
+          <p class="h-16 pt-5 font-bold text-[13px] w-1/2">
+            Average Client Ratting
+          </p>
           <p class="h-16 pt-5 font-bold text-[13px] w-1/4">Actions</p>
         </div>
         <div
@@ -81,9 +83,9 @@
           :key="index"
           class="bg-white w-9/10 mb-6 flex"
         >
-          <p class="h-16 ml-10 pt-5  font-bold w-1/5">{{ index + 1 }}</p>
-          <p class="h-16 pt-5  w-1/4 ml- ">{{ company.name }}</p>
-          <i class="fa-solid fa-star text-yellow-400 ml-18  mt-6"></i>
+          <p class="h-16 ml-10 pt-5 font-bold w-1/5">{{ index + 1 }}</p>
+          <p class="h-16 pt-5 w-1/4 ml-">{{ company.name }}</p>
+          <i class="fa-solid fa-star text-yellow-400 ml-18 mt-6"></i>
           <p class="h-16 pt-5 w-1/4">{{ company.rating_avg }}</p>
           <i
             @click="showCard(company)"
@@ -143,11 +145,14 @@ export default {
 
     async fetchCompanyRatting() {
       try {
-        const response = await axios.get("https://bizethio-backend-production-944c.up.railway.app//api/companies", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          "https://bizethio-backend-production-d484.up.railway.app//api/companies",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         this.companies = response.data;
         console.log("company data", this.companies);
       } catch (error) {
