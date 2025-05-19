@@ -18,6 +18,7 @@ export default {
     return {
       email: "",
       password: "",
+      status:'',
     };
   },
   methods: {
@@ -31,7 +32,7 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response.data);
+          console.log('status',response.data.status);
           // Handle successful login here, e.g., redirect to another page or store token
         });
     },

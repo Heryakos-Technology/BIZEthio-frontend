@@ -22,6 +22,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
+        
         target: "https://bizethio-backend-production-d484.up.railway.app/",
         changeOrigin: true,
       },

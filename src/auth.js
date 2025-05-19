@@ -7,7 +7,7 @@ import { getAuth,
          fetchSignInMethodsForEmail, 
          updatePassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc,getDoc,collection, query, where, getDocs  } from "firebase/firestore"; 
-// import { deleteUser} from 'firebase/auth';
+//import { deleteUser} from 'firebase/auth';
 import { deleteDoc } from "firebase/firestore";
 
 const db = getFirestore();
@@ -79,10 +79,11 @@ export const logout = async () => {
 export const checkEmailExists = async (email) => {
   try {
     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+    console.log(`Sign-in methods for ${email}:`, signInMethods);
 
     if (signInMethods.length === 0) {
       console.log(`No sign-in methods found for ${email}. Checking if user exists...`);
-      
+
       const user = auth.currentUser;
 
       if (user && user.email === email) {
@@ -90,9 +91,11 @@ export const checkEmailExists = async (email) => {
         return true; 
       }
 
+      console.log(`User not found for email: ${email}`);
       return false;
     }
 
+    console.log(`Email exists with sign-in methods: ${signInMethods}`);
     return true; 
   } catch (error) {
     console.error("Error checking email existence:", error);
