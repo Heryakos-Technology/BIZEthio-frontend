@@ -118,25 +118,7 @@
             <div class="flex ml-4 w-56 mt-6 md:ml-20 lg:ml-56"></div>
           </div>
 
-          <!-- <div class="mt-9">
-            <div class="flex">
-              <div>
-                <p>Location</p>
-              </div>
-              <div>
-                <p class="text-red-400 mt-1 ml-1">*</p>
-              </div>
-            </div>
-            <input
-              type="text"
-              class="border-2 rounded-md focus:outline-none border-blue-300 w-13/13 md:h-12"
-              v-model="model.user.location"
-              @input="validate"
-            />
-            <div v-if="errors.location" class="text-red-400 mt-1">
-              {{ errors.location }}
-            </div>
-          </div> -->
+       
           <div
             class="text-[12px] w-5/6 font-normal cursor-pointer text-gray-100 -mt-4 md:text-[16px]"
           >
@@ -146,7 +128,7 @@
             >
               Select Location
             </button>
-            <!--{{ userInformations.location }}-->
+         
           </div>
           <div v-if="showMap" class="modal">
             <div class="modal-content">
@@ -374,7 +356,7 @@
                 >
                   {{ locationMessage }}
                 </button>
-                <!--{{ userInformations.location }}-->
+               
               </div>
               <div v-if="showMap" class="modal">
                 <div class="modal-content">
@@ -386,41 +368,34 @@
                   </MapComponent>
                 </div>
               </div>
-              <!-- <div class="text-white lg:ml-28  lg:-mt-4 -ml-2 w-11/12">
-            <div class="flex ml-4 w-56 mt-6 md:ml-20 lg:ml-56">
-              <div class="text-[12px] font-normal text-gray-100 md:text-[16px]">
-
-              </div>
-             
-            </div>
-          </div> -->
+          
 
               <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-                <button
-                  v-if="!registeredUser"
-                  :disabled="isButtonDisabled"
-                  :class="{
-                    'bg-gray-200 cursor-not-allowed': isButtonDisabled,
-                    'bg-cyan-700 hover:bg-cyan-500 cursor-pointer':
-                      !isButtonDisabled,
-                  }"
-                  class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer mt-10"
-                  @click="registerUser"
-                >
-                  {{ continueButton }}
-                </button>
-              </div>
-              <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
-                <button
-                  v-if="registeredUser"
-                  class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
-                  @click="registeredUser2"
-                >
-                  Next
-                </button>
-              </div>
-              <!-- <p v-if="isButtonDisabled">The button is currently disabled.</p>
-<p v-else>The button is enabled.</p> -->
+
+    <button
+      v-if="!registeredUser"
+      :disabled="isButtonDisabled"
+      :class="{
+        'bg-gray-200 cursor-not-allowed': isButtonDisabled,
+        'bg-cyan-700 hover:bg-cyan-500 cursor-pointer': !isButtonDisabled,
+      }"
+      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer mt-10"
+      @click="registerUser"
+    >
+      {{ continueButton }}
+    </button>
+  </div>
+  <div class="mx-auto w-1/2 mt-6 md:w-1/3 md:mx-auto">
+ 
+    <button
+      v-if="registeredUser"
+      class="bg-cyan-700 text-white px-14 py-2 rounded-lg text-lg cursor-pointer"
+      @click="registeredUser2"
+    >
+      Next
+    </button>
+  </div>
+
               <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
                 <p class="md:text-lg text-sm text-center lg:text-sm">
                   Do you have an account?
@@ -456,8 +431,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-
+import { getFirestore, doc, setDoc,getDoc } from "firebase/firestore";
+import { useToast } from 'vue-toast-notification';
 export default {
   components: {
     UserLayoutUser,
@@ -477,7 +452,8 @@ export default {
         location: "",
       },
     });
-    const userLocation = ref("");
+    const $toast = useToast();
+    const userLocation = ref("")
     const errorss = ref("");
     const router = useRouter();
     const errors = ref({});
@@ -503,8 +479,11 @@ export default {
             console.log("Current Location:", selectedLatLng.value);
           },
           (error) => {
-            console.error("Geolocation error:", error);
-            alert("Unable to retrieve location.");
+            console.error('Geolocation error:', error);
+            $toast.error("Unable to retrieve location.", {
+        position: 'top'
+      });
+           // alert('Unable to retrieve location.');
           },
           {
             enableHighAccuracy: true,
@@ -513,7 +492,10 @@ export default {
           }
         );
       } else {
-        alert("Geolocation is not supported by your browser.");
+        $toast.error("Geolocation is not supported by your browser.", {
+        position: 'top'
+      });
+       // alert('Geolocation is not supported by your browser.');
       }
     };
     const handleClose = () => {
@@ -630,34 +612,44 @@ export default {
         console.log("User Token:", token);
         localStorage.setItem("token", token);
 
-        const userWithToken = {
-          ...userData,
-          token,
-        };
-        console.log("User Data with Token:", userWithToken);
-        localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
-        model.value.user.location = userData.location;
-        localStorage.setItem("location", model.value.user.location);
-        await sendEmailVerification(userCredential.user);
-        alert("A verification email has been sent. Please check your inbox.");
-        registeredUser.value = true;
-        localStorage.setItem("registereduser", registeredUser.value);
-
-        router.push("/next");
-        continueButton.value = "Sent";
-      } catch (error) {
-        console.error(
-          "Error during registration:",
-          error.message || "An error occurred. Please try again."
-        );
-        errors.value = error.response
-          ? error.response.data.message
-          : "An error occurred. Please try again.";
-        alert(error.message);
-        continueButton.value = "Submit";
-      }
+    const userWithToken = {
+      ...userData,
+      token
     };
-    const handleLocationSelected = (latlng) => {
+    console.log("User Data with Token:", userWithToken);
+    localStorage.setItem("userWithToken", JSON.stringify(userWithToken)); 
+    model.value.user.location = userData.location
+    localStorage.setItem('location',model.value.user.location)  
+    await sendEmailVerification(userCredential.user);
+    $toast.success("A verification email has been sent. Please check your inbox.", {
+        position: 'top'
+      });
+    //alert("A verification email has been sent. Please check your inbox.");
+    registeredUser.value = true
+    localStorage.setItem('registereduser',registeredUser.value )
+    
+    router.push("/next");
+    continueButton.value = "Sent";
+  } catch (error) {
+    console.error( 
+      
+      "Error during registration:",
+      error.message || "An error occurred. Please try again."
+    );
+    errors.value = error.response
+    ? error.response.data.message
+    : "An error occurred. Please try again.";
+    $toast.error(error.message, {
+        position: 'top'
+      });
+    //alert(error.message)
+    continueButton.value = "Submit";
+
+
+
+  }
+};
+const handleLocationSelected = (latlng) => {
       selectedLatLng.value = latlng;
       model.value.user.location = {
         lat: latlng.lat,

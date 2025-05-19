@@ -475,6 +475,7 @@ import {
   updatePassword,
 } from "firebase/auth"; // Import Firebase Auth functions
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toast-notification';
 import CryptoJS from "crypto-js";
 // import { updateUserPassword } from './auth';
 
@@ -501,7 +502,7 @@ export default {
         is_banned: 1,
       },
     });
-
+    const $toast = useToast();
     const router = useRouter();
     const file = ref(null);
     const uploadPreset = "ml_default";
@@ -723,8 +724,11 @@ export default {
           );
 
           await sendEmailVerification(userCredential.user);
-          alert("A verification email has been sent. Please check your inbox.");
-          submitText.value = "Submit";
+          $toast.success("A verification email has been sent. Please check your inbox.", {
+        position: 'top'
+      });
+         // alert("A verification email has been sent. Please check your inbox.");
+submitText.value = "Submit";
           localStorage.setItem("temporaryPassword", tempPassword);
 
           return;
@@ -767,7 +771,10 @@ export default {
               uploaded.value = "";
 
               isLoading.value = "Submit";
-              alert("Registered Successfully");
+              $toast.success("Registered Successfully.", {
+        position: 'top'
+      });
+             // alert('Registered Successfully')
               router.push("/signin");
             } catch (error) {
               errors.value = error.response.data.message;
@@ -782,23 +789,27 @@ export default {
               console.log("success");
             }
           } else {
-            alert(
-              "Your email is not verified. Please verify your email before registering again."
-            );
+            $toast.error("Your email is not verified. Please verify your email before registering again.", {
+        position: 'top'
+      });
+            // alert(
+              
+            //   "Your email is not verified. Please verify your email before registering again."
+            // );
             submitText.value = "Submit";
-            model.value.user.password = "";
-            model.value.user.password_confirmation = "";
-            model.value.user.profile_picture_url = "";
-            userPhoto.value = "";
-            uploaded.value = "";
-
-            passwordCriteria.value[0].met = false;
-            passwordCriteria.value[1].met = false;
-            passwordCriteria.value[2].met = false;
-            passwordCriteria.value[3].met = false;
-            passwordCriteria.value[4].met = false;
-            passwordStrengthMessage.value = "";
-            uploaded.value = "";
+            // model.value.user.password = "";
+            // model.value.user.password_confirmation = "";
+            // model.value.user.profile_picture_url = "";
+            // userPhoto.value = "";
+            // uploaded.value = ''
+            
+      passwordCriteria.value[0].met = true;
+      passwordCriteria.value[1].met = true;
+      passwordCriteria.value[2].met = true;
+      passwordCriteria.value[3].met = true;
+      passwordCriteria.value[4].met = true;
+      passwordStrengthMessage.value = "";
+        uploaded.value = ''
           }
         }
       } catch (error) {
@@ -808,18 +819,18 @@ export default {
         );
         //errors.value = error.message
         submitText.value = "Submit";
-        model.value.user.password = "";
-        model.value.user.password_confirmation = "";
-        model.value.user.profile_picture_url = "";
-        userPhoto.value = "";
-        passwordCriteria.value[0].met = false;
-        passwordCriteria.value[1].met = false;
-        passwordCriteria.value[2].met = false;
-        passwordCriteria.value[3].met = false;
-        passwordCriteria.value[4].met = false;
-        passwordStrengthMessage.value = "";
-
-        uploaded.value = "";
+        // model.value.user.password = "";
+        // model.value.user.password_confirmation = "";
+        // model.value.user.profile_picture_url = "";
+        // userPhoto.value = "";
+        passwordCriteria.value[0].met = true;
+      passwordCriteria.value[1].met = true;
+      passwordCriteria.value[2].met = true;
+      passwordCriteria.value[3].met = true;
+      passwordCriteria.value[4].met = true;
+      passwordStrengthMessage.value = "";
+    
+        uploaded.value = ''
       }
     };
     onMounted(() => {

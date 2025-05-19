@@ -129,20 +129,23 @@
                 class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-10"
               ></div>
             </div>
-            <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto">
+            <div class="mt-5 w-12/10 mx-auto md:w-2/3 md:mx-auto ">
               <p class="md:text-lg text-sm w-12/10 mx-auto -ml-4 lg:text-sm">
                 Don't You Register as a Campany ?
               </p>
               <br />
-              <span
-                class="text-cyan-500 cursor-pointer underline"
-                @click="
-                  () => {
-                    this.$router.push('/registration');
-                  }
-                "
-                >Register as a Campany</span
-              >
+              <div class="">
+                
+                <span
+                  class="text-cyan-500 cursor-pointer underline "
+                  @click="
+                    () => {
+                      this.$router.push('/registration');
+                    }
+                  "
+                  >Register as a Campany</span
+                >
+              </div>
 
               <!-- <p class="text-gray-400 text-sm mt-7 w-11/11 mx-auto">
                   Or connect with social media
@@ -278,7 +281,7 @@
                 </div>
               </div>
               <span
-                class="text-cyan-500 mt-6 w-12/11 cursor-pointer"
+                class="text-cyan-500 mt-6 w-12/11 cursor-pointer hover:scale-200"
                 @click="
                   () => {
                     this.$router.push('/forgot');
@@ -300,11 +303,11 @@
               {{ signInMessage }}
             </button>
           </div>
-          <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto">
+          <div class="mt-5 w-12/13 mx-auto md:w-2/3 md:mx-auto ">
             <p class="md:text-lg text-sm text-center w-10/11">
               Don't You Register as a Campany ?
               <span
-                class="text-cyan-500 cursor-pointer"
+                class="text-cyan-500 cursor-pointer  hover:scale-200"
                 @click="
                   () => {
                     this.$router.push('/registration');
@@ -522,6 +525,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { login } from "../../auth";
 import { auth, googleProvider, facebookProvider } from "..//../firebase";
+import { useToast } from 'vue-toast-notification';
 import {
   getAuth,
   signInWithPopup,
@@ -535,6 +539,7 @@ export default {
     UserLayoutUser,
   },
   setup() {
+    const $toast = useToast();
     const authError = ref(null);
     const router = useRouter();
     const base_url = "";
@@ -749,29 +754,37 @@ export default {
         });
       }
     });
-    const handleLogin2 = async () => {
-      try {
-        const { userCredential } = await login(email.value, password.value);
-        const user = userCredential.user;
-        const token = await user.getIdToken();
-        console.log("tokrnn", token);
-        axios
-          .post(
-            "https://bizethio-backend-production-d484.up.railway.app/api/company/login",
-            {
-              contact_email: email.value,
-              password: password.value,
-              token: token,
-            }
-          )
-          .then((response) => {
-            console.log("campany", response.data);
-            router.push("//profile/company");
-          });
-      } catch (error) {
-        console.error("Error signing in with Facebook:", error);
+   const handleLogin2 = async () => {
+  try {
+    const { userCredential } = await login(email.value, password.value);
+    const user = userCredential.user;
+    const token = await user.getIdToken();
+
+    const response = await axios.post(
+      "https://bizethio-backend-production-d484.up.railway.app/api/company/login",
+      {
+        contact_email: email.value,
+        password: password.value,
+        token: token,
       }
-    };
+    );
+
+    const data = response.data;
+
+    if (data.status === "rejected") {
+      alert("Login failed: " + (data.message || "Invalid credentials"));
+      return;
+    }
+
+    console.log("company", data);
+    router.push("/profile/company");
+
+  } catch (error) {
+    console.error("Error during login:", error);
+    alert("An error occurred during login. Please try again.");
+  }
+};
+
     const handleLogin = async () => {
       emailError.value = "";
       passwordError.value = "";
@@ -814,6 +827,16 @@ export default {
           //local storage
           //localStorage.setItem("token", backendToken);
 
+    if (campanyData.status === "rejected") {
+      // alert("Login failed: " + (campanyData.message || "Invalid credentials"));
+           $toast.error("You are band user you can't login to this sight", {
+        position: 'top'
+      });
+      loading2.value = false;
+      return;
+    }
+
+
           localStorage.setItem("campanyID", campanyData.id);
           localStorage.setItem("userInfo", JSON.stringify(campanyData));
 
@@ -824,7 +847,7 @@ export default {
           ] = `Bearer ${backendToken}`;
 
           if (token) {
-            console.log("Redirecting to user profile...");
+            // console.log("Redirecting to user profile...");
             router.push(`/profile/company/${campanyData.id}`);
             loading2.value = false;
             signInMessage.value = "Sent";
@@ -833,13 +856,13 @@ export default {
           alert("User is not authenticated.");
           loading2.value = false;
           signInMessage.value = "Submit";
-          (email.value = ""), (password.value = "");
+          // (email.value = ""), (password.value = "");
         }
       } catch (error) {
         signInMessage.value = "Submit";
         console.error("Login error:", error.message);
         loading2.value = false;
-        (email.value = ""), (password.value = "");
+        // (email.value = ""), (password.value = "");
         alert(error.message);
       }
     };

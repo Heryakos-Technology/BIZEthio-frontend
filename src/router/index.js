@@ -24,6 +24,7 @@ import CampanyDashBord from '@/views/Admin/CampanyDashBord.vue'
 import AdminCategories from '@/views/Admin/AdminCategories.vue'
 
 import AdminRating from '@/views/Admin/AdminRating.vue'
+import CampanyStatus from '@/views/Admin/CampanyStatus.vue'
 import CompanyDetail from '@/views/Company/CompanyDetail.vue'
 import AdminUsers from '@/views/Admin/AdminUsers.vue';
 import MoreCategories from '@/views/Company/MoreCategories.vue';
@@ -79,7 +80,7 @@ const router = createRouter({
       path: '/forgot',
       name: 'ForgotPassword',
       component: ForgotPassword,
-      meta: { auth: true },
+      //meta: { auth: true },
     },
     {
       path: '/ChangePassword',
@@ -157,9 +158,9 @@ const router = createRouter({
       path: '/admin/campany',
       name: 'CampanyDashBord',
       component: CampanyDashBord,
-      meta: { admin: true },
+      // meta: { admin: true },
     },
-
+   
     // Company Related Routes
     {
       path: '/company/:id',
@@ -197,6 +198,13 @@ const router = createRouter({
       name: 'CampanyLogin',
       component: CampanyLogin,
     },
+      {
+      path: '/admin/CampanyStatus',
+      name: 'CampanyStatus',
+      component: CampanyStatus,
+      // meta: { admin: true },
+    },
+
     // {
     //   path: '/CompanyPage',
     //   name: 'CompanyPage',
