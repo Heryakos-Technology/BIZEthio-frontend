@@ -15,28 +15,31 @@ const props = defineProps({
 const { getReview } = useReviewStore();
 
 const reviews = ref([]);
-const loadingReviews = ref(true); 
+const loadingReviews = ref(true);
 const userId = localStorage.getItem("user_id");
 
-
-onMounted(async () => {
+const fetchCompanyReviews = async () => {
   try {
     const response = await getReview(props.company?.id);
     if (response && response.message === "No reviews found for this company") {
-      reviews.value = [];  
+      reviews.value = [];
     } else {
       reviews.value = response;
     }
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    
+
     reviews.value = [];
   } finally {
-    loadingReviews.value = false; 
+    loadingReviews.value = false;
   }
 
   console.log("id", props.company?.id);
   console.log("reviews", reviews.value);
+};
+
+onMounted(() => {
+  fetchCompanyReviews();
 });
 
 const ratingDistribution = ref([
@@ -68,14 +71,14 @@ const formatDate = (dateString) => {
   </div>
 
   <div
-    v-else-if="reviews.length === 0 &&  userId"
+    v-else-if="reviews.length === 0 && userId"
     class="font-bold text-primaryColor text-xl"
   >
     No ratings found. Be the first to comment!
   </div>
 
   <!-- Rating Distribution -->
-  <div v-else-if="userId" class="space-y-2">
+  <!-- <div v-else-if="userId" class="space-y-2">
     <div
       v-for="rating in ratingDistribution"
       :key="rating.stars"
@@ -98,7 +101,7 @@ const formatDate = (dateString) => {
       </div>
       <span class="text-sm text-gray-600">{{ rating.count }}</span>
     </div>
-  </div>
+  </div> -->
 
   <!-- Review List -->
   <div class="space-y-6 grid lg:grid-cols-2 gap-x-10 mt-8">
@@ -152,5 +155,8 @@ const formatDate = (dateString) => {
       </div>
     </div>
   </div>
-  <CompanyRatingBlock :company="props.company" />
+  <CompanyRatingBlock
+    :company="props.company"
+    @fetchCompanyReviews="fetchCompanyReviews"
+  />
 </template>
