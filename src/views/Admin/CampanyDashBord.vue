@@ -1,7 +1,10 @@
 <template>
   <AdminLayout>
+    <div class="pb-20">
+
+    
      <div class="pb-10 px-5 w-1/2 mx-auto" v-if="hasApprovedOrRejected">
-      <h1 class="mb-3 text-gray-500">Company Statistics</h1>
+      <h1 class="text-center py-8 font-bold text-xl text-blue-700">Company Statistics</h1>
       <!-- <div class="flex justify-center items-center mb-3" v-if="loadingCampanies">
         <div class="loader"></div>
       </div> -->
@@ -40,13 +43,47 @@
     </div>
     <!--large screen-->
     <div class="pb-10 px-5">
-      <h1 class="mb-3 text-gray-500">Featured Campaigns</h1>
+
       <!-- <div
         class="flex justify-center items-center mb-3"
         v-if="loadingCampanies"
       >
         <div class="loader"></div>
       </div> -->
+
+
+<!-- <div v-for="campany in filteredCampanies" :key="campany.id" class="px-3">
+  <div class="flex bg-white py-3 mt-3 text-xs rounded-md px-2">
+    <div class="break-words max-w-[80px] w-1/7">{{ campany.name }}</div>
+ 
+  </div>
+</div> -->
+      <h1 class="-mt-10 py-8 font-bold text-2xl text-blue-700">Featured Campaigns</h1>
+            <div class=" px-5">
+  <!-- <h1 class="text-center py-8 font-bold text-lg text-blue-700">Search Companies</h1> -->
+  <div class="pt-2 relative py-4 max-w-screen-md mx-auto text-gray-600">
+
+    <input
+      type="text"
+      v-model="searchTerm"
+      placeholder="Search by campany name..."
+       class="border-2 w-full border-gray-300 bg-white h-10 py-2 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+    />
+     <button type="submit" class="absolute right-0 top-0 mt-5 mr-4" @click="searchCompanies">
+            <svg
+              class="text-gray-600 h-4 w-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 56.966 56.966"
+              width="512px"
+              height="512px"
+            >
+              <path
+                d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
+              />
+            </svg>
+          </button>
+  </div>
+</div>
            <div v-if="loadingCampanies && !hasApprovedOrRejected" class="flex justify-center py-10">
         <div class="flex items-center">
           <svg
@@ -104,8 +141,7 @@
         </div>
       </div>
       <hr class="text-gray-300 -mx-9" />
- 
-      <div></div>
+
     </div>
     <p v-if="errors" class="text-red-400 text-xl text-center font-semibold">
       {{ errors }}
@@ -303,27 +339,7 @@
                   @click="approveCampany(singleampany.id)"
                   class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
                 >
-                  <!-- <svg
-                    class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg> -->
-                  <!-- {{ loading.approve ? "approving..." : "Approve" }} -->
+     
                {{ approveMessage }}
 
                 </button>
@@ -331,12 +347,6 @@
             </div>
           </div>
 
-          <!-- <div
-            class="flex justify-center items-center mb-3"
-            v-if="loadingCampanies3[singleampany.id]"
-          >
-            <div class="loader2"></div>
-          </div> -->
           <button
             v-if="!loadingCampanies4[singleampany.id]"
             @click="
@@ -386,27 +396,7 @@
                   @click="rejectCampany(singleampany.id)"
                   class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
                 >
-                  <!-- <svg
-                    class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg> -->
-                  <!-- {{ loading.approve ? "approving..." : "Approve" }} -->
+      
                {{ rejectMessage }}
 
                 </button>
@@ -414,12 +404,7 @@
             </div>
           </div>
 
-          <!-- <div
-            class="flex justify-center items-center mb-3"
-            v-if="loadingCampanies4[singleampany.id]"
-          >
-            <div class="loader2"></div>
-          </div> -->
+        
         </div>
        
 
@@ -434,7 +419,7 @@
       </div>
       
       <div v-if="noCampanyData" class="text-2xl text-center text-green-700 font-bold">{{  campanyData}}</div>
-    <div v-for="campany in campanies" :key="campany.id" class="px-3">
+    <div v-for="campany in filteredCampanies" :key="campany.id" class="px-3">
       <div
         class="flex bg-white py-3 mt-3 text-xs rounded-md px-2"
         :style="{
@@ -538,27 +523,7 @@
                   @click="approveCampany(campany.id)"
                   class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
                 >
-                  <!-- <svg
-                    class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg> -->
-                  <!-- {{ loading.approve ? "approving..." : "Approve" }} -->
+    
                    {{approveMessage}}
                 </button>
               </div>
@@ -608,27 +573,7 @@
                   @click="rejectCampany(singleampany.id)"
                   class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
                 >
-                  <!-- <svg
-                    class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg> -->
-                  <!-- {{ loading.approve ? "approving..." : "Approve" }} -->
+       
                {{ rejectMessage }}
 
                 </button>
@@ -639,14 +584,8 @@
       </div>
     </div>
 
-    <!-- <div v-if="campanies.length > 0" class="px-3">
-      <h1 class="mt-25 mb-3 text-gray-400 font-semibold">Campany Status</h1>
-      <div class="bg-white w-1/2 px-4 py-4 shadow-md">
-        <h1 class="text-gray-400 text-sm mb-3">Last Campany Performance</h1>
-        <BarChart v-if="chartData.labels.length" :chartData="chartData" />
-        <p v-else>Loading chart...</p>
-      </div>
-    </div> -->
+ 
+    </div>
   </AdminLayout>
 </template>
 
@@ -698,11 +637,18 @@ const hasApprovedOrRejected = computed(() => {
     const noCampanyData = ref(false);
     const currentCompanyId = ref(null);
     const showRejectConfirm = ref(false)
+    const searchTerm = ref('');
     // Define chartData as a reactive reference
     const loading = ref({
       approve: false,
       reject: false,
     });
+    const filteredCampanies = computed(() => {
+  if (!searchTerm.value) return campanies.value;
+  return campanies.value.filter(campany =>
+    campany.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
     // const chartData = ref({
     //   labels: ["M", "T", "W", "T", "F", "S", "S"],
     //   datasets: [
@@ -760,6 +706,7 @@ const approveCampany = async () => {
     }
 
   } catch (error) {
+    showApproveConfirm.value = false;
     approveMessage.value = "Approve";
       $toast.error("Error approving company try again!.", { position: 'top' });
        singleampany.value  = false
@@ -819,6 +766,7 @@ rejectMessage.value = 'Rejected'
     rejectCampany.value = "Reject"
         $toast.error("Error rejecting company try again!.", { position: 'top' });
        singleampany.value  = false
+       showRejectConfirm.value = false;
     console.error("Error updating the company status:", error);
   } finally {
     loadingCampanies4.value[id] = false;
@@ -999,6 +947,9 @@ if (storedCampanies) {
        fetchCompanyStats,
        updateCompanyStats,
       hasApprovedOrRejected,
+      searchTerm,
+      filteredCampanies,
+
     };
   },
 };
