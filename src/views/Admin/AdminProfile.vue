@@ -226,9 +226,6 @@ const clearImageUpload = () => {
           Edit Profile
         </button>
       </div>
-      <AdminCalendar />
-      <div class=""></div>
-      <AdminNotification />
     </div>
 
     <!-- Modal -->
