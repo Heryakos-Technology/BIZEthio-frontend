@@ -155,7 +155,7 @@
               >
                 <button
                   @click="showMap = !showMap"
-                  class="text-xs bg-[#075E86] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-9 cursor-pointer text-white"
+                  class="text-xs bg-[#075E86] hover:bg-[#6291a7] rounded-lg w-56 outline-none h-9 cursor-pointer text-white "
                 >
                   Select Location
                 </button>

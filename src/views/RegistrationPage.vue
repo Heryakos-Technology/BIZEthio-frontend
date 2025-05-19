@@ -399,7 +399,7 @@
                   <img
                     :src="url"
                     alt="Uploaded Image"
-                    class="mt-2 w-full h-auto rounded-md"
+                    class="mt-2 w-80 h-auto rounded-md"
                   />
                 </div>
               </div>
@@ -612,6 +612,8 @@ import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import MapComponent from "@/components/MapComponent.vue";
 import MapComponent2 from "@/components/MapComponent2.vue";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 import {
   getAuth,
@@ -628,7 +630,9 @@ export default {
     MapComponent2,
     // CompRegformview
   },
-
+  created() {
+    this.toast = useToast(); // Set up toast in created hook
+  },
   mounted() {
     this.fetchCategories();
 
@@ -659,6 +663,7 @@ export default {
   },
   data() {
     return {
+      toast: null,
       file: null,
       selectedCountry: null,
       countries: [],
@@ -815,7 +820,9 @@ export default {
           },
           (error) => {
             console.error("Geolocation error:", error);
-            alert("Unable to retrieve location.");
+            this.toast.error("Unable to retrieve location.", {
+      position: "top",
+    });
           },
           {
             enableHighAccuracy: true,
@@ -824,7 +831,9 @@ export default {
           }
         );
       } else {
-        alert("Geolocation is not supported by your browser.");
+        this.toast.error("Geolocation is not supported by your browser.", {
+      position: "top",
+    });
       }
     },
     handleLocationSelected(latlng) {
@@ -984,7 +993,9 @@ export default {
       this.validateFields();
       if (this.checkButtonState()) {
         console.log("Form is invalid, please correct the errors.");
-        alert("Please fill in all required fields.");
+        this.toast.error("Please fill in all required fields.", {
+      position: "top",
+    });
         this.showPassword = false;
       } else {
         localStorage.setItem("name", this.companies.name);
@@ -1027,7 +1038,9 @@ export default {
           this.emailInUse = true;
           this.emailError =
             "Email is already in use. Please use a different email.";
-          alert("Email is already in use. Please use a different email.");
+          this.toast.error("Email is already in use. Please use a different email.", {
+      position: "top",
+    });
           this.changeNaxt = "Next Page";
           return;
         }
@@ -1040,7 +1053,9 @@ export default {
         );
 
         await sendEmailVerification(userCredential.user);
-        alert("A verification email has been sent. Please check your inbox.");
+        this.toast.success("A verification email has been sent. Please check your inbox.", {
+      position: "top",
+    });
         const db = getFirestore();
         await setDoc(doc(db, "users", userCredential.user.uid), companyData);
 
@@ -1052,12 +1067,16 @@ export default {
         localStorage.setItem("email", companyData.contact_email);
         localStorage.setItem("token", token);
 
-        alert("Please verify your email to complete your registration.");
+        this.toast.success("Please verify your email to complete your registration.", {
+      position: "top",
+    });
         this.changeNaxt = "Next";
         this.nextShow();
       } catch (error) {
         console.error("Error during registration:", error.message);
-        alert("email is already in use!");
+        this.toast.error("email is already in use!", {
+      position: "top",
+    });
         this.changeNaxt = "Next";
         this.emailError =
           error.message || "An error occurred. Please try again.";
@@ -1072,7 +1091,7 @@ export default {
     //       token
     //     };
     //     localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
-    //     alert("Please verify your email to complete your registration.");
+    //     this.toast.error("Please verify your email to complete your registration.");
     //     this.changeNaxt = "Next";
     //     this.nextShow()
     //   } catch (error) {
@@ -1150,7 +1169,9 @@ export default {
             tempPassword
           );
           await sendEmailVerification(userCredential.user);
-          alert("A verification email has been sent. Please check your inbox.");
+          this.toast.success("A verification email has been sent. Please check your inbox.", {
+      position: "top",
+    });
           localStorage.setItem("temporaryPassword", tempPassword);
 
           return;
@@ -1197,8 +1218,10 @@ export default {
               this.$router.push("/CampanyLogin");
             }
           } else {
-            alert(
-              "Your email is not verified. Please verify your email before registering again."
+            this.toast.error(
+              "Your email is not verified. Please verify your email before registering again.", {
+      position: "top",
+    }
             );
             this.changeRegister = "Register";
             this.companies.password = "";
