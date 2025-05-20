@@ -260,7 +260,7 @@
                   Image Uploaded successfully!
                 </h3>
                 <div v-for="(url, index) in imageUrl" :key="index">
-                  <img :src="url" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md" />
+                  <img :src="url" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md absolute" />
                 </div>
               </div>
 
@@ -276,7 +276,7 @@
               <div class="-mt-8 ml-18">
                 <p class="text-black mb-2">Location</p>
                 <button @click="showMap = !showMap"
-                  class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-cyan-500 transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
+                  class="mt-2 ml- bg-[#409cd0]  hover:bg-cyan-500  cursor-pointer text-white rounded-md px-4 py-2">
                   Select Location
                 </button>
                 <div v-if="showMap" class="modal">
