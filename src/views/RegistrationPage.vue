@@ -14,18 +14,12 @@
 
     <div class="px-4">
       <div class="flex">
-        <div
-          class="hidden md:block bg-gradient-to-r from-[#0087e1] to-[#2178AC] relative w-1/3 -ml-4"
-        >
-          <p
-            class="text-2xl font-medium text-white mt-16 w-11/12 px-10 text-center"
-          >
+        <div class="hidden md:block bg-gradient-to-r from-[#0087e1] to-[#2178AC] relative w-1/3 -ml-4">
+          <p class="text-2xl font-medium text-white mt-16 w-11/12 px-10 text-center">
             Connect, Discover, and Grow with AI-Powered Local Business Listings!
           </p>
-          <div
-            style="height: 350px"
-            class="ml-10 mt-6 rounded-3xl w-56 bg-gradient-to-b from-[#e8fffe] to-[#00D2EA] shadow-sm"
-          >
+          <div style="height: 350px"
+            class="ml-10 mt-6 rounded-3xl w-56 bg-gradient-to-b from-[#e8fffe] to-[#00D2EA] shadow-sm">
             <i class="fa-solid fa-robot text-4xl mt-16 text-[#2178AC] ml-4"></i>
             <p class="font-semibold text-lg ml-6 mt-4">AI-Powered Experience</p>
             <p class="font-medium text-sm mt-2 mb-2 text-center">
@@ -38,33 +32,19 @@
           </div>
 
           <div
-            class="h-56 mb-20 lg:mb-96 mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]"
-          >
+            class="h-56 mb-20 lg:mb-96 mt-10 ml-4 shadow-sm rounded-4xl w-11/12 bg-gradient-to-l from-[#FFFFFF] to-[#00D2EA]">
             <div class="flex">
               <div class="lg:ml-6 md:ml-5 mt-20">
-                <div
-                  class="lg:w-16 md:w-10 w-10 h-1 ml-6 bg-[#1b6489] rounded-full mb-3"
-                ></div>
-                <div
-                  class="lg:w-24 md:w-10 w-10 h-1 -ml-4 bg-gray-300 rounded-full mb-3"
-                ></div>
-                <div
-                  class="lg:w-24 md:w-10 w-10 -ml-4 h-1 bg-gray-300 rounded-full mb-3"
-                ></div>
-                <div
-                  class="lg:w-24 md:w-10 w-10 ml-2 h-1 bg-[#1b6489] rounded-full mb-3"
-                ></div>
-                <div
-                  class="lg:w-24 md:w-10 w-10 h-1 bg-gray-300 rounded-full mb-3"
-                ></div>
+                <div class="lg:w-16 md:w-10 w-10 h-1 ml-6 bg-[#1b6489] rounded-full mb-3"></div>
+                <div class="lg:w-24 md:w-10 w-10 h-1 -ml-4 bg-gray-300 rounded-full mb-3"></div>
+                <div class="lg:w-24 md:w-10 w-10 -ml-4 h-1 bg-gray-300 rounded-full mb-3"></div>
+                <div class="lg:w-24 md:w-10 w-10 ml-2 h-1 bg-[#1b6489] rounded-full mb-3"></div>
+                <div class="lg:w-24 md:w-10 w-10 h-1 bg-gray-300 rounded-full mb-3"></div>
               </div>
               <div class="lg:ml-">
-                <i
-                  class="fa-solid fa-key text-4xl ml-20 mt-6 text-[#2178AC]"
-                ></i>
+                <i class="fa-solid fa-key text-4xl ml-20 mt-6 text-[#2178AC]"></i>
                 <p
-                  class="text-xs font-bold text-center mt-4 lg:text-sm lg:font-bold lg:text-center lg:mt-4 md:text-xs md:font-bold md:text-center md:mt-4"
-                >
+                  class="text-xs font-bold text-center mt-4 lg:text-sm lg:font-bold lg:text-center lg:mt-4 md:text-xs md:font-bold md:text-center md:mt-4">
                   Your Security, Our Priority
                 </p>
                 <p class="text-xs lg:ml-6 mt-4">
@@ -75,11 +55,7 @@
             </div>
           </div>
 
-          <img
-            src="/Bottom Desogn Card.png"
-            alt=""
-            class="absolute bottom-0 left-0 mt-44"
-          />
+          <img src="/Bottom Desogn Card.png" alt="" class="absolute bottom-0 left-0 mt-44" />
         </div>
         <div v-if="!showPassword" class="ml-20 w-2/3">
           <p class="text-center text-3xl font-bold mt-4">
@@ -92,12 +68,8 @@
                 <p class="">Owner name</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.owner_name"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.owner_name" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.owner_name" class="text-red-500 text-sm">
                 {{ errors.owner_name }}
               </p>
@@ -108,12 +80,8 @@
                 <p class="">Company name</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.name"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.name" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.name" class="text-red-500 text-sm">
                 {{ errors.name }}
               </p>
@@ -126,15 +94,9 @@
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
               <!-- <input v-model="description" type="textArea" class="w-11/12 outline-none h-32 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"> -->
-              <textarea
-                v-model="companies.description"
-                name="description"
-                id=""
-                cols="30"
-                rows="6"
+              <textarea v-model="companies.description" name="description" id="" cols="30" rows="6"
                 @input="validateFields"
-                class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34 pt-1"
-              ></textarea>
+                class="border-2 border-[#60b5e6] rounded-md w-11/12 px-2 outline-none h-34 pt-1"></textarea>
               <p v-if="errors.description" class="text-red-500 text-sm">
                 {{ errors.description }}
               </p>
@@ -146,12 +108,8 @@
                   <p class="">Contact Phone</p>
                   <p class="text-red-600 text-2xl font-medium ml-2">*</p>
                 </div>
-                <input
-                  v-model="companies.contact_phone"
-                  type="text"
-                  @input="handlePhoneInput"
-                  class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-                />
+                <input v-model="companies.contact_phone" type="text" @input="handlePhoneInput"
+                  class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
                 <p v-if="errors.contact_phone" class="text-red-500 text-sm">
                   {{ errors.contact_phone }}
                 </p>
@@ -163,18 +121,10 @@
                   <p class="text-red-600 text-2xl font-medium ml-1">*</p>
                 </div>
 
-                <select
-                  name="category"
-                  v-model="companies.category_id"
-                  @change="validateFields"
-                  class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center"
-                >
+                <select name="category" v-model="companies.category_id" @change="validateFields"
+                  class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
                   <option value="">Select category</option>
-                  <option
-                    v-for="category in categories"
-                    :key="category.id"
-                    :value="category.id"
-                  >
+                  <option v-for="category in categories" :key="category.id" :value="category.id">
                     {{ category.name }}
                   </option>
                 </select>
@@ -190,12 +140,8 @@
                 <p class="">Email</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.contact_email"
-                type="text"
-                @input="handleEmail"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.contact_email" type="text" @input="handleEmail"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.contact_email" class="text-red-500 text-sm">
                 {{ errors.contact_email }}
               </p>
@@ -206,12 +152,8 @@
                 <p class="">Operating Hours</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.operating_hours"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.operating_hours" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.operating_hours" class="text-red-500 text-sm">
                 {{ errors.operating_hours }}
               </p>
@@ -223,12 +165,8 @@
                 <label class="text-md">Country</label><br />
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <select
-                name="country"
-                v-model="companies.country"
-                @change="validateFields"
-                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center"
-              >
+              <select name="country" v-model="companies.country" @change="validateFields"
+                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
                 <option value="">Select country</option>
                 <option class="border-[#84d2ffb7] rounded-lg mt-2">
                   Ethiopia
@@ -238,35 +176,13 @@
                 {{ errors.country }}
               </p>
             </div>
-            <!-- <div class="lg:px-4 md:px-4 mt-4 w-11/12 mx-auto">
-              <div class="flex">
-                <label class="text-md">Country</label><br />
-                <p class="text-red-600 text-2xl font-medium ml-2">*</p>
-              </div>
-              <select name="country" v-model="companies.country" @change="validateFields"
-                class="cursor-pointer w-11/12 mx-auto h-10 p-1 bg-transparent border-2 border-[#60b5e6] rounded-md transition-all duration-300 focus:outline-none hover:bg-[#eaf8ff] placeholder:text-center">
-                <option value="">Select country</option>
-                <option v-for="country in countries" :key="country.id" :value="country.name"
-                  class="border-[#84d2ffb7] rounded-lg mt-2">
-                  {{ country.name }}
-                </option>
-              </select>
-              <p v-if="errors.country" class="text-red-500 text-sm">
-                {{ errors.country }}
-              </p>
-            </div> -->
-
             <div class="lg:px-4 md:px-4 mt-4 w-11/12 mx-auto">
               <div class="flex">
                 <p class="">Address</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.address"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.address" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.address" class="text-red-500 text-sm">
                 {{ errors.address }}
               </p>
@@ -278,12 +194,8 @@
                 <p class="">Region</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.region"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.region" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.region" class="text-red-500 text-sm">
                 {{ errors.region }}
               </p>
@@ -293,12 +205,8 @@
                 <p class="">City</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.city"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.city" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.city" class="text-red-500 text-sm">
                 {{ errors.city }}
               </p>
@@ -311,12 +219,8 @@
                 <p class="">License URL</p>
                 <p class="text-red-600 text-2xl font-medium ml-2">*</p>
               </div>
-              <input
-                v-model="companies.license_url"
-                type="text"
-                @input="validateFields"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.license_url" type="text" @input="validateFields"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.license_url" class="text-red-500 text-sm">
                 {{ errors.license_url }}
               </p>
@@ -325,11 +229,8 @@
               <div class="flex">
                 <p class="mb-2">Website</p>
               </div>
-              <input
-                v-model="companies.website"
-                type="text"
-                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2"
-              />
+              <input v-model="companies.website" type="text"
+                class="w-11/12 outline-none mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-2" />
               <p v-if="errors.website" class="text-red-500 text-sm">
                 {{ errors.website }}
               </p>
@@ -341,66 +242,25 @@
                 <p class="mb-2">Upload Image</p>
               </div>
 
-              <input
-                v-model="companies.images"
-                type="text"
-                class="w-11/12 hidden h-10 bg-transparent border-2 border-[#60b5e6] rounded-md"
-                placeholder="Upload images"
-                readonly
-              />
+              <input v-model="companies.images" type="text"
+                class="w-11/12 hidden h-10 bg-transparent border-2  border-[#60b5e6] rounded-md"
+                placeholder="Upload images" readonly />
 
-              <!-- Hidden file input for selecting images -->
-              <input
-                type="file"
-                @change="handleFileChange"
-                ref="fileInput"
-                class="hidden"
-                multiple
-              />
-
-              <!-- Button to trigger file input -->
-              <!-- <button @click="triggerFileInput"
-                class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
-                Browse
-              </button> -->
+              <input type="file" @change="handleFileChange" ref="fileInput" class="hidden" multiple />
             </div>
             <!---->
-            <div class="-ml-124 mt-10">
-              <div
-                class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
-                @dragover.prevent="handleDragOver"
-                @drop.prevent="handleFileDrop"
-                @click="triggerFileInput"
-              >
-                <img src="/dragfile.png" alt="" class="w-1/2" />
+            <div class="-ml-124 mr-50 mt-10">
+              <div class="border-gray-300 h-32 mt-4 flex items-center justify-center cursor-pointer"
+                @dragover.prevent="handleDragOver" @drop.prevent="handleFileDrop" @click="triggerFileInput">
+                <img src="/drag and drop2.png" alt="" class="w-40 ml-16 hover:scale-105" />
               </div>
-              <input
-                type="file"
-                class="hidden"
-                @change="handleFileChange"
-                accept="image/*"
-                id="fileInput"
-              />
-              <label
-                for="fileInput"
-                class="bg-cyan-500 ml-28 mt-10 text-white px-6 py-2 rounded-md cursor-pointer"
-                style="display: inline-block"
-              >
-                Browse
-              </label>
-              <p class="text-gray-500 mt-2 text-center font-semibold text-lg">
-                or drag a file here
-              </p>
+              <input type="file" class="hidden" @change="handleFileChange" accept="image/*" id="fileInput" />
               <div v-if="imageUrl && imageUrl.length" class="mt-4 ml-20">
                 <h3 class="text-green-600 ml-20">
                   Image Uploaded successfully!
                 </h3>
                 <div v-for="(url, index) in imageUrl" :key="index">
-                  <img
-                    :src="url"
-                    alt="Uploaded Image"
-                    class="mt-2 w-full h-auto rounded-md"
-                  />
+                  <img :src="url" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md" />
                 </div>
               </div>
 
@@ -412,24 +272,17 @@
                 Uploading...
               </p>
             </div>
-            <div
-              class="text-[12px] font-normal cursor-pointer text-gray-100 mt-8 ml-8 md:text-[16px]"
-            >
+            <div class="text-[12px] font-normal cursor-pointer text-gray-100 mt-8 ml-8 md:text-[16px]">
               <div class="-mt-8 ml-18">
                 <p class="text-black mb-2">Location</p>
-                <button
-                  @click="showMap = !showMap"
-                  class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-[#6b8ea1] transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2"
-                >
+                <button @click="showMap = !showMap"
+                  class="mt-2 ml- bg-[#409cd0] hover:scale-105 hover:bg-cyan-500 transition-all duration-300 cursor-pointer text-white rounded-md px-4 py-2">
                   Select Location
                 </button>
                 <div v-if="showMap" class="modal">
                   <div class="modal-content">
-                    <MapComponent2
-                      :currentLocation="selectedLatLng"
-                      @close="handleClose"
-                      @location-selected="handleLocationSelected"
-                    >
+                    <MapComponent2 :currentLocation="selectedLatLng" @close="handleClose"
+                      @location-selected="handleLocationSelected">
                     </MapComponent2>
                   </div>
                 </div>
@@ -446,43 +299,23 @@
               </div>
               <div></div>
               <div class="lg:flex mt-4 -ml-3">
-                <input
-                  v-model="socialMediaLinks.facebook"
-                  type="text"
-                  placeholder="Facebook "
-                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6"
-                />
-                <input
-                  v-model="socialMediaLinks.Instagram"
-                  type="text"
-                  placeholder="Instagram "
-                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6"
-                />
-                <input
-                  v-model="socialMediaLinks.LinkedIn"
-                  type="text"
-                  placeholder="LinkedIn"
-                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4"
-                />
+                <input v-model="socialMediaLinks.facebook" type="text" placeholder="Facebook "
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                <input v-model="socialMediaLinks.Instagram" type="text" placeholder="Instagram "
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4 mr-6" />
+                <input v-model="socialMediaLinks.LinkedIn" type="text" placeholder="LinkedIn"
+                  class="w-56 h-10 bg-transparent outline-none pl-2 border-2 border-[#60b5e6] rounded-md mb-4" />
               </div>
             </div>
           </div>
           <div class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-            <button
-              v-if="!registeredUser"
-              @click="registerCompany"
-              :disabled="makeButtonDisable"
-              :class="buttonClass"
-            >
+            <button v-if="!registeredUser" @click="registerCompany" :disabled="makeButtonDisable" :class="buttonClass">
               {{ changeNaxt }}
             </button>
           </div>
-
           <div v-if="registeredUser" class="mt-10 lg:ml-20 -ml-40 md:-ml-10">
-            <button
-              @click="registeredUser2"
-              class="bg-[#2178AC] mb-2 hover:bg-[#6291a7] ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md"
-            >
+            <button @click="registeredUser2" :disabled="!registeredUser"
+              class="bg-[#2178AC] mb-2 hover:bg-cyan-500 ml-40 py-3 cursor-pointer transition-all duration-300 px-26 md:px-32 lg:px-40 -mt-80 md:ml-20 rounded-md text-white text-md">
               {{ changeNaxt }}
             </button>
 
@@ -495,9 +328,7 @@
           <p class="text-center text-3xl font-bold mt-16">
             Welcome to <span class="text-[#2178AC]">BIZEthio</span>
           </p>
-          <div
-            class="mt-28 border-2 border-cyan-800 rounded-md h-96 transition-all duration-300 hover:scale-105 p-4"
-          >
+          <div class="mt-16 shadow-lg rounded-md h-96  p-4">
             <div class="w-full">
               <div class="px-4 mt-4 mx-auto">
                 <div class="flex">
@@ -505,31 +336,19 @@
                   <p class="text-red-600 text-2xl font-medium ml-2">*</p>
                 </div>
                 <div class="relative">
-                  <input
-                    v-model="companies.password"
-                    :type="showPasswordField ? 'text' : 'password'"
+                  <input v-model="companies.password" :type="showPasswordField ? 'text' : 'password'"
                     @input="handlePasswordInput"
-                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
-                  />
-                  <span
-                    @click="togglePasswordVisibility"
-                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                  >
-                    <i
-                      :class="
-                        showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
-                      "
-                      class="text-gray-800"
-                    ></i>
+                    class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4" />
+                  <span @click="togglePasswordVisibility"
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i :class="showPasswordField ? 'fas fa-eye-slash' : 'fas fa-eye'
+                      " class="text-gray-800"></i>
                   </span>
                 </div>
                 <p v-if="errors.password" class="text-red-500 text-sm">
                   {{ errors.password }}
                 </p>
-                <div
-                  v-if="passwordStrengthLabel"
-                  :class="['mt-2', passwordStrengthClass]"
-                >
+                <div v-if="passwordStrengthLabel" :class="['mt-2', passwordStrengthClass]">
                   {{ passwordStrengthLabel }}
                 </div>
               </div>
@@ -540,60 +359,42 @@
                   <p class="text-red-600 text-2xl font-medium ml-2">*</p>
                 </div>
                 <div class="relative">
-                  <input
-                    v-model="companies.password_confirmation"
-                    @input="handleConfirmPasswordInput"
+                  <input v-model="companies.password_confirmation" @input="handleConfirmPasswordInput"
                     :type="showConfirmPasswordField ? 'text' : 'password'"
                     class="outline-none w-11/12 mx-auto h-10 bg-transparent border-2 border-[#60b5e6] rounded-md pl-4"
                     :class="[
                       'outline-none w-11/12 mx-auto h-10 bg-transparent border-2 rounded-md pl-4',
                       isConfirmPasswordFocused &&
-                      companies.password &&
-                      companies.password !== companies.password_confirmation
+                        companies.password &&
+                        companies.password !== companies.password_confirmation
                         ? 'border-red-500'
                         : 'border-[#60b5e6]',
-                    ]"
-                    @focus="isConfirmPasswordFocused = true"
-                    @blur="isConfirmPasswordFocused = false"
-                  />
-                  <span
-                    @click="toggleConfirmPasswordVisibility"
-                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                  >
-                    <i
-                      :class="
-                        showConfirmPasswordField
-                          ? 'fas fa-eye-slash'
-                          : 'fas fa-eye'
-                      "
-                      class="text-gray-800"
-                    ></i>
+                    ]" @focus="isConfirmPasswordFocused = true" @blur="isConfirmPasswordFocused = false" />
+                  <span @click="toggleConfirmPasswordVisibility"
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i :class="showConfirmPasswordField
+                        ? 'fas fa-eye-slash'
+                        : 'fas fa-eye'
+                      " class="text-gray-800"></i>
                   </span>
                 </div>
-                <p
-                  v-if="errors.password_confirmation"
-                  class="text-red-500 text-sm"
-                >
+                <p v-if="errors.password_confirmation" class="text-red-500 text-sm">
                   {{ errors.password_confirmation }}
                 </p>
               </div>
             </div>
 
             <div>
-              <button
-                @click="hidepassword"
-                class="bg-[#2178AC] mb-32 lg:mb-0 hover:bg-[#6291a7] ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md"
-              >
+              <button @click="hidepassword"
+                class="bg-[#2178AC] mb-32 lg:mb-0 mx-auto hover:bg-cyan-500 ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
                 Back
               </button>
             </div>
             <!-- <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!
               </p> -->
             <div class="-mt-2">
-              <button
-                @click="submitForm"
-                class="bg-[#2178AC] mb-32 hover:bg-[#6291a7] ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md"
-              >
+              <button @click="submitForm"
+                class="bg-[#2178AC] mb-32 hover:bg-cyan-500 ml-40 lg:ml-24 py-3 cursor-pointer transition-all duration-300 hover:scale-105 px-10 mt-10 lg:mt-6 md:ml-20 rounded-md text-white text-md">
                 {{ changeRegister }}
               </button>
             </div>
@@ -612,6 +413,8 @@ import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import MapComponent from "@/components/MapComponent.vue";
 import MapComponent2 from "@/components/MapComponent2.vue";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 import {
   getAuth,
@@ -628,7 +431,9 @@ export default {
     MapComponent2,
     // CompRegformview
   },
-
+  created() {
+    this.toast = useToast(); // Set up toast in created hook
+  },
   mounted() {
     this.fetchCategories();
 
@@ -659,6 +464,8 @@ export default {
   },
   data() {
     return {
+      toast: null,
+      file: [],
       file: null,
       selectedCountry: null,
       countries: [],
@@ -776,13 +583,11 @@ export default {
     handleDragOver(event) {
       event.preventDefault();
     },
-    handleFileDrop(event) {
-      const files = event.dataTransfer.files;
-      if (files.length) {
-        this.file = files[0];
-        uploadFile();
-      }
-    },
+  handleFileDrop(event) {
+    const files = event.dataTransfer.files;
+    this.file = Array.from(files); // Ensure this.file is an array
+    this.uploadImage(); // Call uploadImage after setting the files
+  },
     triggerFileInput() {
       document.getElementById("fileInput").click();
     },
@@ -815,7 +620,9 @@ export default {
           },
           (error) => {
             console.error("Geolocation error:", error);
-            alert("Unable to retrieve location.");
+            this.toast.error("Unable to retrieve location.", {
+              position: "top",
+            });
           },
           {
             enableHighAccuracy: true,
@@ -824,7 +631,9 @@ export default {
           }
         );
       } else {
-        alert("Geolocation is not supported by your browser.");
+        this.toast.error("Geolocation is not supported by your browser.", {
+          position: "top",
+        });
       }
     },
     handleLocationSelected(latlng) {
@@ -984,7 +793,9 @@ export default {
       this.validateFields();
       if (this.checkButtonState()) {
         console.log("Form is invalid, please correct the errors.");
-        alert("Please fill in all required fields.");
+        this.toast.error("Please fill in all required fields.", {
+          position: "top",
+        });
         this.showPassword = false;
       } else {
         localStorage.setItem("name", this.companies.name);
@@ -1027,7 +838,9 @@ export default {
           this.emailInUse = true;
           this.emailError =
             "Email is already in use. Please use a different email.";
-          alert("Email is already in use. Please use a different email.");
+          this.toast.error("Email is already in use. Please use a different email.", {
+            position: "top",
+          });
           this.changeNaxt = "Next Page";
           return;
         }
@@ -1040,7 +853,9 @@ export default {
         );
 
         await sendEmailVerification(userCredential.user);
-        alert("A verification email has been sent. Please check your inbox.");
+        this.toast.success("A verification email has been sent. Please check your inbox.", {
+          position: "top",
+        });
         const db = getFirestore();
         await setDoc(doc(db, "users", userCredential.user.uid), companyData);
 
@@ -1052,39 +867,26 @@ export default {
         localStorage.setItem("email", companyData.contact_email);
         localStorage.setItem("token", token);
 
-        alert("Please verify your email to complete your registration.");
+        this.toast.success("Please verify your email to complete your registration.", {
+          position: "top",
+        });
         this.changeNaxt = "Next";
         this.nextShow();
       } catch (error) {
         console.error("Error during registration:", error.message);
-        alert("email is already in use!");
+        this.toast.error("email is already in use!", {
+          position: "top",
+        });
         this.changeNaxt = "Next";
         this.emailError =
           error.message || "An error occurred. Please try again.";
       }
     },
-
-    //   localStorage.setItem("email", companyData.contact_email);
-
-    //   localStorage.setItem("token", token);
-    //   const userWithToken = {
-    //       ...companyData,
-    //       token
-    //     };
-    //     localStorage.setItem("userWithToken", JSON.stringify(userWithToken));
-    //     alert("Please verify your email to complete your registration.");
-    //     this.changeNaxt = "Next";
-    //     this.nextShow()
-    //   } catch (error) {
-    //     console.error("Error during registration:", error.message);
-    //     this.emailError = error.message || "An error occurred. Please try again.";
-    //   }
-    // },
     async handleRegister() {
       this.changeRegister = "registering...";
       setTimeout(() => {
         this.changeRegister = "Register";
-      }, 1000);
+      }, 2000);
       const name = this.companies.name;
       const owner_name = this.companies.owner_name;
       const description = this.companies.description;
@@ -1150,7 +952,9 @@ export default {
             tempPassword
           );
           await sendEmailVerification(userCredential.user);
-          alert("A verification email has been sent. Please check your inbox.");
+          this.toast.success("A verification email has been sent. Please check your inbox.", {
+            position: "top",
+          });
           localStorage.setItem("temporaryPassword", tempPassword);
 
           return;
@@ -1197,12 +1001,14 @@ export default {
               this.$router.push("/CampanyLogin");
             }
           } else {
-            alert(
-              "Your email is not verified. Please verify your email before registering again."
+            this.toast.error(
+              "Your email is not verified. Please verify your email before registering again.", {
+              position: "top",
+            }
             );
             this.changeRegister = "Register";
-            this.companies.password = "";
-            this.companies.password_confirmation = "";
+            this.registeredUser = false;
+            return;
           }
         }
       } catch (error) {
@@ -1250,40 +1056,41 @@ export default {
     },
 
     async uploadImage() {
-      if (!this.file || this.file.length === 0) return;
+    if (!this.file || this.file.length === 0) return;
 
-      this.isUploading = true;
-      this.errors.images = null;
+    this.isUploading = true;
+    this.errors.images = null;
 
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
-      const promises = [];
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+    const promises = [];
 
-      for (const singleFile of this.file) {
-        const formData = new FormData();
-        formData.append("file", singleFile);
-        formData.append("upload_preset", "my_unsigned_preset");
+    for (const singleFile of this.file) {
+      const formData = new FormData();
+      formData.append("file", singleFile);
+      formData.append("upload_preset", "my_unsigned_preset");
 
-        promises.push(
-          fetch(cloudinaryUrl, {
-            method: "POST",
-            body: formData,
-          }).then((response) => response.json())
-        );
-      }
+      promises.push(
+        fetch(cloudinaryUrl, {
+          method: "POST",
+          body: formData,
+        }).then((response) => response.json())
+      );
+    }
 
-      try {
-        const responses = await Promise.all(promises);
-        console.log("Upload responses:", responses);
-        this.imageUrl = responses.map((data) => data.secure_url);
-        this.companies.images = JSON.stringify(this.imageUrl);
-        console.log("Uploaded image URLs:", this.imageUrl);
-      } catch (error) {
-        console.error("Error uploading images:", error);
-        this.errors.images = "Failed to upload images. Please try again.";
-      } finally {
-        this.isUploading = false;
-      }
-    },
+    try {
+      const responses = await Promise.all(promises);
+      console.log("Upload responses:", responses);
+      this.imageUrl = responses.map((data) => data.secure_url);
+      this.companies.images = JSON.stringify(this.imageUrl);
+      console.log("Uploaded image URLs:", this.imageUrl);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      this.errors.images = "Failed to upload images. Please try again.";
+    } finally {
+      this.isUploading = false;
+    }
+  },
+
     toggleImageButton() {
       this.ImageButton = false;
     },
