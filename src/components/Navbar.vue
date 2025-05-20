@@ -101,7 +101,12 @@ const props = defineProps({
         <div class="ml-8">
           <Logo class="w-[100px]" />
         </div>
-        <ul class="flex gap-x-8 text-[16px] uppercase font-semibold">
+        <ul
+          class="flex gap-x-8 text-[16px] uppercase font-semibold"
+          :class="{
+            '-translate-x-6 ': userId,
+          }"
+        >
           <li
             v-for="(item, index) in props.navLinks"
             :key="index"

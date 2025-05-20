@@ -170,6 +170,19 @@ const getUserLocation = () => {
   }
 };
 
+const isSearchFocused = ref(false); // Track if the input is focused
+
+const handleFocus = () => {
+  isSearchFocused.value = true;
+};
+
+const handleBlur = () => {
+  // Delay hiding the suggestions to allow click events on the list
+  setTimeout(() => {
+    isSearchFocused.value = false;
+  }, 200);
+};
+
 onMounted(async () => {
   companies.value = await getAllCompanies();
   localStorage.setItem("companies", JSON.stringify(companies.value));
@@ -204,11 +217,15 @@ onMounted(() => {
           <input
             v-model="search"
             @input="handleInput"
+            @focus="handleFocus"
+            @blur="handleBlur"
             type="text"
             class="w-56 lg:w-72 lg:h-10 pl-12 h-9 bg-white outline-none rounded-tl-full rounded-br-full"
           />
           <div
-            v-if="showSuggestions && filteredCompanies.length > 0"
+            v-if="
+              isSearchFocused && showSuggestions && filteredCompanies.length > 0
+            "
             class="absolute w-1/5 lg:mt-12 lg:-ml-10 mx-auto bg-white border border-gray-300 rounded-md mt-1 z-10"
           >
             <ul>

@@ -429,10 +429,10 @@ const handleLocationSelected = (latlng) => {
                         >
                           Location
                         </h5>
-                        <p v-if="selectedLatLng.lat && selectedLatLng.lng">
+                        <!-- <p v-if="selectedLatLng.lat && selectedLatLng.lng">
                           Selected Location: Lat: {{ selectedLatLng.lat }}, Lng:
                           {{ selectedLatLng.lng }}
-                        </p>
+                        </p> -->
                         <button
                           @click="showMap = true"
                           class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
