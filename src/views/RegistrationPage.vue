@@ -886,7 +886,7 @@ export default {
       this.changeRegister = "registering...";
       setTimeout(() => {
         this.changeRegister = "Register";
-      }, 1000);
+      }, 2000);
       const name = this.companies.name;
       const owner_name = this.companies.owner_name;
       const description = this.companies.description;
@@ -1007,6 +1007,7 @@ export default {
             }
             );
             this.changeRegister = "Register";
+            this.registeredUser = false;
             return;
           }
         }
