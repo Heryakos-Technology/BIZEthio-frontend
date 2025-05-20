@@ -131,9 +131,20 @@ const handleUpdateCategory = async () => {
       errorMessage.value = response.message || "Failed to update category";
       console.log(response);
     } else {
+      // Update only the changed category in the local array
+      const idx = categories.value.findIndex(
+        (cat) => cat.id === selectedCategoryId.value
+      );
+      if (idx !== -1) {
+        categories.value[idx] = {
+          ...categories.value[idx],
+          ...editFormData.value,
+          id: selectedCategoryId.value,
+        };
+      }
       isEditOpen.value = false;
       selectedCategory.value = null;
-      await fetchCategories();
+      // No need to call fetchCategories()
     }
   } catch (error) {
     errorMessage.value =
