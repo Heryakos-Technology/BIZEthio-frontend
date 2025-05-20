@@ -435,26 +435,30 @@
 
         <div class="w-1/10 ml-3">{{ campany.owner_name }}</div>
 
-        <div class="py-2 px-4 w-1/7">
-          <span v-if="!campany.showFullDescription">
-            {{ campany.description.slice(0, 10) }}...
-        <br>    <a
-              href="#"
-              @click.prevent="toggleDescription(campany)"
-              class="text-blue-400 underline"
-              >Show more</a
-            >
-          </span>
-          <span v-else>
-            {{ campany.description }}
-          <br>  <a
-              href="#"
-              @click.prevent="toggleDescription(campany)"
-              class="text-blue-400 underline w-1/7"
-              >Show less</a
-            >
-          </span>
-        </div>
+     <div class="py-2 px-4 w-1/7">
+  <span v-if="!campany.showFullDescription">
+    <span v-if="campany.description">
+      {{ campany.description.slice(0, 10) }}...
+    </span>
+    <br>
+    <a
+      href="#"
+      @click.prevent="toggleDescription(campany)"
+      class="text-blue-400 underline"
+    >Show more</a>
+  </span>
+  <span v-else>
+    <span v-if="campany.description">
+      {{ campany.description }}
+    </span>
+    <br>
+    <a
+      href="#"
+      @click.prevent="toggleDescription(campany)"
+      class="text-blue-400 underline"
+    >Show less</a>
+  </span>
+</div>
         <div class="w-1/15">{{ campany.category_id }}</div>
 
         <div class="w-1/7">{{ campany.address }}</div>
@@ -583,7 +587,26 @@
         </div>
       </div>
     </div>
-
+  <div class="flex justify-between w-1/2 mx-auto mt-5">
+    <div>
+      <button class="bg-white px-2 shadow-sm" @click="goToFirst" :class="{ active: activeNumber === 1 }">First</button>
+    </div>
+    <div>
+      <button class="bg-white px-2 shadow-sm" @click="goToPrevious"  :disabled="activeNumber === 1">Previous</button>
+    </div>
+    <!-- <button class="number bg-white px-2 shadow-sm"  :class="{ active: activeNumber === 1 }" @click="handleButtonClick(1)">1</button> -->
+    <button class="number bg-white px-2 shadow-sm" :class="{ active: activeNumber === 2 }"  @click="handleButtonClick(2)">2</button>
+    <button class="number bg-white px-2 shadow-sm"  :class="{ active: activeNumber === 3 }" @click=" handleButtonClick(3)">3</button>
+    <button class="number bg-white px-2 shadow-sm"  :class="{ active: activeNumber === 4 }" @click=" handleButtonClick(4)">4</button>
+    <button class="number bg-white px-2 shadow-sm"  :class="{ active: activeNumber === 5 }" @click=" handleButtonClick(5)">5</button>
+    <button class="number bg-white px-2 shadow-sm"  :class="{ active: activeNumber === 6 }" @click=" handleButtonClick(6)">6</button>
+    <div>
+      <button class="bg-white px-2 shadow-sm"   :disabled="activeNumber === totalPages" @click="goToNext">Next</button>
+    </div>
+    <div>
+      <button class="bg-white px-2 shadow-sm" @click="goToLast"   :disabled="activeNumber === totalPages">Last</button>
+    </div>
+  </div>
  
     </div>
   </AdminLayout>
@@ -638,6 +661,9 @@ const hasApprovedOrRejected = computed(() => {
     const currentCompanyId = ref(null);
     const showRejectConfirm = ref(false)
     const searchTerm = ref('');
+    const paginatedCampanies = ref([])
+     const activeNumber = ref(1);
+     const totalPages = ref(0);
     // Define chartData as a reactive reference
     const loading = ref({
       approve: false,
@@ -664,6 +690,28 @@ const hasApprovedOrRejected = computed(() => {
     //     },
     //   ],
     // });
+    const goToFirst = ()=> {
+      setActive(1);
+      fetchCampanies(1);
+    }
+    const goToPrevious = ()=> {
+      if (activeNumber.value > 1) {
+        setActive(activeNumber.value - 1);
+        fetchCampanies(activeNumber.value - 1);
+      }
+    }
+    const goToNext = ()=> {
+      if (activeNumber.value < totalPages) {
+        setActive(activeNumber.value + 1);
+        fetchCampanies(activeNumber.value + 1);
+      }
+    }
+
+   const goToLast = ()=> {
+      setActive(totalPages);
+      fetchCampanies(totalPages);
+    }
+
     const cancelApprove = () => {
       singleampany.value = false
       showApproveConfirm.value = false;
@@ -775,14 +823,17 @@ rejectMessage.value = 'Rejected'
     const toggleDescription = (campany) => {
       campany.showFullDescription = !campany.showFullDescription;
     };
-    const fetchCampanies = async () => {
+    const fetchCampanies = async (number) => {
       try {
         const response = await axios.get(
-          `https://bizethio-backend-production-d484.up.railway.app/api/companies`
+          `https://bizethio-backend-production-d484.up.railway.app/api/companies/paginated?page=${number}`
         );
-        campanies.value = response.data;
+        campanies.value = response.data.data;
+        noCampanyData.value = false;
         localStorage.setItem("campanies", JSON.stringify(campanies.value));
         console.log("campanies", campanies.value);
+        totalPages.value = response.data.last_page;
+        
         loadingCampanies.value = false;
       } catch (error) {
         console.log("Errors", error);
@@ -793,8 +844,31 @@ rejectMessage.value = 'Rejected'
         noCampanyData.value = true;
         campanyData.value = "No Campany Found";
       }
+      
     };
-    
+    const handleButtonClick = (number)=> {
+      setActive(number);
+      fetchCampanies(number);
+    }
+    // const fetchPaginatedCampanies = async()=>{
+    //      try {
+    //     const response = await axios.get(
+    //       `https://bizethio-backend-production-d484.up.railway.app/api/companies/paginated?page=${page}`
+    //     );
+    //     campanies.value = response.data.data;
+    //     localStorage.setItem("campanies", JSON.stringify(campanies.value));
+    //     console.log("campanies", campanies.value);
+    //     loadingCampanies.value = false;
+    //   } catch (error) {
+    //     console.log("Errors", error);
+    //     loadingCampanies.value = false;
+    //     errors.value = error;
+    //   }
+    //   if (campanies.value.length === 0) {
+    //     noCampanyData.value = true;
+    //     campanyData.value = "No Campany Found";
+    //   }
+    // } 
     const fetchCompanyStats = async () => {
       await fetchCampanies();
       const stats = {
@@ -909,8 +983,20 @@ if (storedCampanies) {
         this.$router.push({ name: "SignIn" });
       }
     });
+ 
+    function setActive(number) {
+      activeNumber.value = number; // Set the active number
+    }
     return {
+      totalPages,
+      goToNext,
+      goToPrevious,
+      goToFirst,
+      goToLast,
+      activeNumber,
+      handleButtonClick,
       chartData,
+      setActive,
       fetchCampanies,
       campanies,
       toggleDescription,
@@ -996,6 +1082,13 @@ if (storedCampanies) {
   width:350px;          
   margin-left: 400px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+.active {
+  color: blue; /* Change to the desired shade of blue */
+  background-color: lightblue; /* Optional: Change background color */
+}
+.number {
+  transition: background-color 0.3s; /* Smooth transition */
 }
 @keyframes spin {
   0% {
