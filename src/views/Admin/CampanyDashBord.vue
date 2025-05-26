@@ -25,7 +25,7 @@
               stroke-width="4"
             ></circle>
             <path
-              class="opacity-75"
+              class="opacity-75" 
               fill="currentColor"
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
@@ -171,6 +171,7 @@
       </div>
     </div>
     <div class="modal w-1/3 "  v-if="singleampany">
+ 
    <div class="flex">
      <div
        
@@ -180,7 +181,13 @@
         </div> -->
      
        
-   
+<p :class="['text-right', 'font-bold', 'mb-2', 'text-xl', 
+    singleampany.status === 'rejected' ? 'text-red-300' : 
+    singleampany.status === 'approved' ? 'text-green-300' : 
+    'text-blue-400']">
+    {{ singleampany.status }}
+</p>
+
         <img
           :src="getImageUrl(singleampany.images)"
           alt="No Image For This Campany"
@@ -287,7 +294,9 @@
           </div>
           <div>{{ singleampany.rating_avg }}</div>
         </div>
+        
         <div class="flex  px-3 justify-between w-4/5 mx-auto">
+          
           <button
             v-if="!loadingCampanies3[singleampany.id]"
             @click="
@@ -316,16 +325,37 @@
             Approve
           </button>
 
-          <!--confirmation-->
-          <div
+                  <div v-if="showApproveConfirm" class="modalConfirm">
+  <div class="modal-content">
+    <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+    <p class="mb-6">
+      Are you sure you want to approve the company? This action cannot be undone.
+    </p>
+    <div class="flex justify-end gap-3">
+      <button
+        @click="cancelApprove"
+        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
+      >
+        Cancel
+      </button>
+      <button
+        @click="approveCampany(singleampany.id)"
+        class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
+      >
+        {{ approveMessage }}
+      </button>
+    </div>
+  </div>
+</div>
+          <!-- <div
             v-if="showApproveConfirm"
-            class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            class="fixed inset-0  bg-opacity-50 z-50 flex items-center justify-center"
           >
             <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
               <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
               <p class="mb-6">
                 Are you sure you want to Approve the Campany
-                <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
+
                 action cannot be undone.
               </p>
               <div class="flex justify-end gap-3">
@@ -345,7 +375,8 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
+
 
           <button
             v-if="!loadingCampanies4[singleampany.id]"
@@ -376,10 +407,10 @@
           </button>
            <div
             v-if="showRejectConfirm"
-            class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            class="modalConfirm"
           >
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-              <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+            <div class="modal-content">
+              <h3 class="text-lg font-bold mb-4">Confirm Rejection</h3>
               <p class="mb-6">
                 Are you sure you want to reject the Campany
                 <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
@@ -420,6 +451,7 @@
       
       <div v-if="noCampanyData" class="text-2xl text-center text-green-700 font-bold">{{  campanyData}}</div>
     <div v-for="campany in filteredCampanies" :key="campany.id" class="px-3">
+ 
       <div
         class="flex bg-white py-3 mt-3 text-xs rounded-md px-2"
         :style="{
@@ -493,6 +525,7 @@
                 campany.status !== 'approved' && campany.status !== 'rejected',
             }"
           >
+
             <div
               class="flex justify-center items-center mb-3"
               v-if="loadingCampanies3[campany.id]"
@@ -505,34 +538,28 @@
               v-if="!loadingCampanies3[campany.id]"
             />
           </div>
-          <div
-            v-if="showApproveConfirm"
-            class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-          >
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-              <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
-              <p class="mb-6">
-                Are you sure you want to Approve the Campany
-                <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
-                action cannot be undone.
-              </p>
-              <div class="flex justify-end gap-3">
-                <button
-                  @click="cancelApprove"
-                  class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  @click="approveCampany(campany.id)"
-                  class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-                >
-    
-                   {{approveMessage}}
-                </button>
-              </div>
-            </div>
-          </div>
+               <div v-if="showApproveConfirm" class="modalConfirm">
+  <div class="modal-content">
+    <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+    <p class="mb-6">
+      Are you sure you want to approve the company? This action cannot be undone.
+    </p>
+    <div class="flex justify-end gap-3">
+      <button
+        @click="cancelApprove"
+        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
+      >
+        Cancel
+      </button>
+      <button
+        @click="approveCampany(currentCompanyId)"
+        class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
+      >
+        {{ approveMessage }}
+      </button>
+    </div>
+  </div>
+</div>
           <div
             class="shadow-md h-8 cursor-pointer"
             @click="
@@ -557,9 +584,9 @@
           </div>
            <div
             v-if="showRejectConfirm"
-            class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            class="modalConfirm"
           >
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="modal-content">
               <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
               <p class="mb-6">
                 Are you sure you want to reject the Campany
@@ -574,7 +601,7 @@
                   Cancel
                 </button>
                 <button
-                  @click="rejectCampany(singleampany.id)"
+                  @click="rejectCampany(currentCompanyId)"
                   class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
                 >
        
@@ -1058,11 +1085,25 @@ if (storedCampanies) {
   height: 20px;
   animation: spin 1s linear infinite;
 }
+.modalConfirm{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 100px;
+  margin-left:210px;
+
+  background-color: rgba(0, 0, 0, 0.423);
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; */
+}
 .modal {
   position: fixed;
   top: 0;
   left: 0;
- 
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
