@@ -811,6 +811,10 @@ export default {
         localStorage.setItem("city", this.companies.city);
         localStorage.setItem("license_url", this.companies.license_url);
         localStorage.setItem("website", this.companies.website);
+        this.location = JSON.stringify({
+          lat:this.selectedLatLng.lat,
+          lng:this.selectedLatLng.lng,
+        });
         this.nextStep = "next";
 
         this.showPassword = true;
@@ -902,6 +906,10 @@ export default {
       const contact_email = this.companies.contact_email.trim().toLowerCase();
       const website = this.companies.website;
       const license_url = this.companies.license_url;
+      const location = JSON.stringify({
+          lat:this.selectedLatLng.lat,
+          lng:this.selectedLatLng.lng,
+        });
       const token = localStorage.getItem("token");
 
       const socialMediaLinks = {
@@ -928,6 +936,7 @@ export default {
         city,
         region,
         country,
+        location,
         contact_phone,
         contact_email,
         website,

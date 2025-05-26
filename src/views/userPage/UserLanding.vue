@@ -5,21 +5,23 @@ import MapModal from "@/components/MapModal.vue";
 import UserLayoutUser from "@/layout/UserLayoutUser.vue";
 import { useCategoryStore } from "@/stores/category";
 import { useReviewStore } from "@/stores/review";
-import { useCompanyStore } from "@/stores/company";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
 const isMapVisible = ref(false);
-const search = ref("");
 const categories = ref([]);
 const companies = ref([]);
 const reviews = ref([]);
 const loading = ref(true);
-const showSuggestions = ref(false);
 const selectedCategories = ref([]);
 const router = useRouter();
 const mapSrc = ref("");
-const userLocation = ref(); // Hardcoded for now
-const closestCompanies = ref([]); // For companies from your database
+const userLocation = ref(); 
+const closestCompanies = ref([]); 
+const search = ref("");
+const isSearchFocused = ref(false);
+const showSuggestions = ref("");
+const $toast = useToast();
 
 const userInfoString = localStorage.getItem("userInfo");
 const userInfo = JSON.parse(userInfoString);
@@ -30,11 +32,10 @@ onMounted(() => {
 
 const { getAllReviews } = useReviewStore();
 const { getAllCategories } = useCategoryStore();
-const { getAllCompanies } = useCompanyStore();
 
 // Function to calculate distance using the Haversine formula
 const calculateDistance = (lat1, lng1, lat2, lng2) => {
-  const R = 6371; // Earth's radius in kilometers
+  const R = 6371; 
   const dLat = (lat2 - lat1) * (Math.PI / 180);
   const dLng = (lng2 - lng1) * (Math.PI / 180);
   const a =
@@ -44,9 +45,7 @@ const calculateDistance = (lat1, lng1, lat2, lng2) => {
       Math.sin(dLng / 2) *
       Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c; // Distance in kilometers
-  console.log(distance);
-  return distance;
+  return R * c; 
 };
 
 // Function to find and sort companies by distance
@@ -62,13 +61,11 @@ const findClosestCompanies = () => {
           : company.location;
     } catch (e) {
       console.error(`Error parsing location for company ${company.name}:`, e);
-      return { ...company, distance: Infinity }; // Exclude companies with invalid location data
-    } finally {
-      loading.value = false;
+      return { ...company, distance: Infinity };
     }
 
     if (!companyLocation || !companyLocation.lat || !companyLocation.lng) {
-      return { ...company, distance: Infinity }; // Exclude companies with missing lat/lng
+      return { ...company, distance: Infinity }; 
     }
 
     const distance = calculateDistance(
@@ -81,7 +78,6 @@ const findClosestCompanies = () => {
     return { ...company, distance };
   });
 
-  // Sort by distance and take the top 10 closest companies
   closestCompanies.value = companiesWithDistance
     .filter((company) => company.distance !== Infinity)
     .sort((a, b) => a.distance - b.distance)
@@ -98,18 +94,27 @@ const closeMapModal = () => {
 };
 
 const handleInput = () => {
-  showSuggestions.value = true;
+  showSuggestions.value = search.value.trim() !== "";
 };
 
 const filteredCompanies = computed(() => {
-  if (selectedCategories.value.length === 0) {
-    return companies.value;
+  let filtered = companies.value;
+
+  if (selectedCategories.value.length > 0) {
+    filtered = filtered.filter(
+      (company) =>
+        company.category &&
+        selectedCategories.value.includes(company.category.name)
+    );
   }
-  return companies.value.filter(
-    (company) =>
-      company.category &&
-      selectedCategories.value.includes(company.category.name)
-  );
+
+  if (search.value.trim() !== "") {
+    filtered = filtered.filter((company) =>
+      company.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+
+  return filtered;
 });
 
 const toggleCategory = (categoryName) => {
@@ -123,6 +128,7 @@ const toggleCategory = (categoryName) => {
 
 const selectCompany = (companyId) => {
   router.push(`/company/${companyId}`);
+  showSuggestions.value = false;
 };
 
 const getImageUrl = (images) => {
@@ -131,13 +137,13 @@ const getImageUrl = (images) => {
       const parsedImages = JSON.parse(images);
       return parsedImages.length > 0
         ? parsedImages[0]
-        : "/defalt-company-image.jpg";
+        : "/default-company-image.jpg";
     } catch (error) {
       console.error("Error parsing image URL:", error);
-      return "/defalt-company-image.jpg";
+      return "/default-company-image.jpg";
     }
   }
-  return "/defalt-company-image.jpg";
+  return "/default-company-image.jpg";
 };
 
 const getUserLocation = () => {
@@ -148,13 +154,14 @@ const getUserLocation = () => {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        console.log("User Location:", userLocation.value);
-        findClosestCompanies(); // Calculate distances after getting location
+        findClosestCompanies();
       },
       (error) => {
         console.error("Geolocation error:", error);
-        alert("Unable to retrieve your location. Using default location.");
-        findClosestCompanies(); // Use hardcoded location as fallback
+        $toast.error("Unable to retrieve your location. Using default location.", {
+      position: "top",
+    });
+        findClosestCompanies(); 
       },
       {
         enableHighAccuracy: true,
@@ -163,54 +170,104 @@ const getUserLocation = () => {
       }
     );
   } else {
-    alert(
-      "Geolocation is not supported by your browser. Using default location."
-    );
-    findClosestCompanies(); // Use hardcoded location as fallback
+    $toast.error("Geolocation is not supported by your browser. Using default location.", {
+      position: "top",
+    });
+    findClosestCompanies(); 
   }
 };
 
-const isSearchFocused = ref(false); // Track if the input is focused
+const handleMapClick = (locationInput) => {
+  try {
+    const location = typeof locationInput === "string"
+      ? JSON.parse(locationInput)
+      : locationInput;
+
+    if (location.lat && location.lng) {
+      mapSrc.value = `https://www.google.com/maps?q=${location.lat},${location.lng}&hl=es;z=14&output=embed`;
+      isMapVisible.value = true;
+    } else {
+      $toast.error("Location data is incomplete.", {
+      position: "top",
+    });
+    }
+  } catch (e) {
+    $toast.error("Invalid location data format.", {
+      position: "top",
+    });
+    console.error("Map click error:", e);
+  }
+};
 
 const handleFocus = () => {
   isSearchFocused.value = true;
+  showSuggestions.value = search.value.trim() !== "";
 };
 
 const handleBlur = () => {
-  // Delay hiding the suggestions to allow click events on the list
   setTimeout(() => {
     isSearchFocused.value = false;
+    showSuggestions.value = false;
   }, 200);
 };
 
+const getAllCompanies = async () => {
+  const cachedCompanies = localStorage.getItem("all_companies");
+  if (cachedCompanies) {
+    try {
+      const parsed = JSON.parse(cachedCompanies);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) {
+      console.warn("Invalid cached companies data");
+    }
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("No token found.");
+    return [];
+  }
+
+  const res = await fetch("https://bizethio-backend-production-d484.up.railway.app/api/companies", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  console.log("Fetched data:", data);
+
+  if (data.errors) {
+    console.error("API returned errors:", data.errors);
+    return [];
+  }
+
+  const companies = data.companies ?? data; // adapt based on actual API response
+  localStorage.setItem("all_companies", JSON.stringify(companies));
+  return companies;
+};
+
+
 onMounted(async () => {
-  companies.value = await getAllCompanies();
-  localStorage.setItem("companies", JSON.stringify(companies.value));
-  console.log("company", companies.value[0]?.id);
+  userLocation.value = JSON.parse(userInfo.location);
+
+  [companies.value, categories.value, reviews.value] = await Promise.all([
+    getAllCompanies(),
+    getAllCategories(),
+    getAllReviews()
+  ]);
+
   loading.value = false;
-  findClosestCompanies(); // Calculate distances after companies are fetched
+
+  getUserLocation(); 
+  findClosestCompanies(); 
 });
 
-onMounted(async () => {
-  categories.value = await getAllCategories();
-  localStorage.setItem("categories", JSON.stringify(categories.value));
-  console.log("cat", categories.value);
-});
-
-onMounted(async () => {
-  reviews.value = await getAllReviews();
-  localStorage.setItem("reviews", JSON.stringify(reviews.value));
-  console.log("reviews", reviews.value);
-});
-
-onMounted(() => {
-  getUserLocation();
-});
 </script>
 
 <template>
   <UserLayoutUser>
-    <div class="categories lg:w-full mx-auto lg:mb-20 mt-16">
+    <div class="categories lg:w-full mx-auto lg:mb-20 mt-16 ">
       <!-- Search Bar and Categories -->
       <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
         <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
@@ -354,95 +411,77 @@ onMounted(() => {
 
       <!-- Existing Companies -->
       <div
-        class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6"
+ class="lg:flex md:flex lg:w-11/12 lg:mx-auto second-cards ml-2 pb-4 mt-6">
+  <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
+    <!-- Loading -->
+    <div v-if="loading" class="flex justify-center items-center py-20 w-full mx-auto mt-16">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"></div>
+    </div>
+
+    <!-- No companies -->
+    <div
+      v-else-if="!filteredCompanies.length || filteredCompanies == '' || filteredCompanies == null"
+      class="justify-center items-center py-20 -mt-8 w-full mx-auto"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"/>
+      </svg>
+      <p class="text-gray-400 ml-32 lg:ml-76">No companies yet!</p>
+    </div>
+
+    <!-- Company cards -->
+    <div v-else class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        v-for="company in filteredCompanies"
+        :key="company.id"
+        class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
       >
-        <div class="flex flex-wrap w-full px-2 lg:px-0 pb-6">
-          <div
-            v-if="loading"
-            class="flex justify-center items-center py-20 w-full mx-auto mt-16"
-          >
-            <div
-              class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-white -mt-8"
-            ></div>
-          </div>
-          <div
-            v-else-if="
-              !filteredCompanies.length ||
-              filteredCompanies == '' ||
-              filteredCompanies == null
-            "
-            class="justify-center items-center py-20 -mt-8 w-full mx-auto"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <div class="rounded-t-2xl">
+          <img
+            :src="getImageUrl(company.images)"
+            alt=""
+            class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
+          />
+          <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
+            {{ company.name }}
+          </p>
+          <p class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1 truncate">
+            {{ company.description }}
+          </p>
+          <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
+<i
+
+  @click="
+    handleMapClick(
+      company.location
+        ? company.location
+        : JSON.stringify({ lat: company.latitude, lng: company.longitude })
+    )
+  "
+  class="fas fa-map-marker-alt text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
+></i>
+
+
+
+
+            <RouterLink
+              :to="{ name: 'CompanyDetail', params: { id: company.id } }"
+              class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
-              />
-            </svg>
-            <p class="text-gray-400 ml-32 lg:ml-76">No companies yet!</p>
-          </div>
-          <div
-            v-else
-            class="grid w-full gap-4 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          >
-            <div
-              v-for="company in filteredCompanies"
-              :key="company.id"
-              class="w-[300px] xs:w-[350px] pb-4 bg-white rounded-t-lg lg:w-[300px] 2xl:w-[350px]"
-            >
-              <div class="rounded-t-2xl">
-                <img
-                  :src="getImageUrl(company.images)"
-                  alt=""
-                  class="rounded-br-4xl rounded-t-lg w-full h-[250px]"
-                />
-                <p class="font-bold ml-2 h-6 text-xs mt-4 lg:text-lg">
-                  {{ company.name }}
-                </p>
-                <p
-                  class="text-xs mt-4 ml-2 h-26 lg:h-26 font-normal pr-1 truncate"
-                >
-                  {{ company.description }}
-                </p>
-                <div class="flex md:-mt-4 ml-4 h-10 lg:-mt-6">
-                  <i
-                    @click="
-                      openMapModal({
-                        latitude: company.latitude,
-                        longitude: company.longitude,
-                      })
-                    "
-                    class="fa-solid fa-location-dot text-[#FF8C00] mr-12 mt-2 lg:mt-2 lg:ml-4 lg:text-xl cursor-pointer"
-                  ></i>
-                  <RouterLink
-                    :to="{ name: 'CompanyDetail', params: { id: company.id } }"
-                    class="w-20 lg:ml-20 md:ml-8 md:mt-0 lg:w-28 lg:h-10 h-8 bg-[#1B7590] rounded-lg"
-                  >
-                    <p
-                      class="text-white text-xs hover:cursor-pointer text-center mt-2.5"
-                    >
-                      Explore more
-                    </p>
-                  </RouterLink>
-                </div>
-                <MapModal
-                  :visible="isMapVisible"
-                  :mapSrc="mapSrc"
-                  @close="closeMapModal"
-                />
-              </div>
-            </div>
+              <p class="text-white text-xs hover:cursor-pointer text-center mt-2.5">
+                Explore more
+              </p>
+            </RouterLink>
           </div>
         </div>
       </div>
+
+     
+      <MapModal v-if="isMapVisible" :mapSrc="mapSrc" @close="closeMapModal" />
+    </div>
+  </div>
+</div>
 
       <!-- Closest Companies from Database -->
       <div class="lg:w-11/12 lg:mx-auto mt-12 pb-4">
