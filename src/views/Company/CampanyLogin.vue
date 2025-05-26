@@ -602,7 +602,10 @@ export default {
       } catch (error) {
         console.error("Error signing in with Google:", error);
         loading.value = false;
-        alert(error);
+            $toast.error("Error signing in with Google", {
+        position: 'top'
+      });
+        // alert(error);
       }
     };
 
@@ -772,7 +775,10 @@ export default {
     const data = response.data;
 
     if (data.status === "rejected") {
-      alert("Login failed: " + (data.message || "Invalid credentials"));
+               $toast.error("Login failed:" (data.message || "Invalid credentials"), {
+        position: 'top'
+      });
+      // alert("Login failed: " + (data.message || "Invalid credentials"));
       return;
     }
 
@@ -781,7 +787,10 @@ export default {
 
   } catch (error) {
     console.error("Error during login:", error);
-    alert("An error occurred during login. Please try again.");
+              $toast.error("An error occurred during login. Please try again.", {
+        position: 'top'
+      });
+    // alert("An error occurred during login. Please try again.");
   }
 };
 
@@ -853,7 +862,10 @@ export default {
             signInMessage.value = "Sent";
           }
         } else {
-          alert("User is not authenticated.");
+                    $toast.error("User is not authenticated", {
+        position: 'top'
+      });
+          // alert("User is not authenticated.");
           loading2.value = false;
           signInMessage.value = "Submit";
           // (email.value = ""), (password.value = "");
@@ -863,7 +875,10 @@ export default {
         console.error("Login error:", error.message);
         loading2.value = false;
         // (email.value = ""), (password.value = "");
-        alert(error.message);
+                       $toast.error("Invalid email or password", {
+        position: 'top'
+      });
+        // alert(error.message);
       }
     };
 
