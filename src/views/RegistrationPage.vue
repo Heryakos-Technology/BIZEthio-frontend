@@ -260,7 +260,7 @@
                   Image Uploaded successfully!
                 </h3>
                 <div v-for="(url, index) in imageUrl" :key="index">
-                  <img :src="url" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md absolute" />
+                  <img :src="url" alt="Uploaded Image" class="mt-2 w-80 h-auto rounded-md " />
                 </div>
               </div>
 
@@ -981,7 +981,7 @@ export default {
 
             if (success) {
               const response = await axios.post(
-                `https://bizethio-backend-production-d484.up.railway.app/api/company/register`,
+                `https://bizethio-backend-production-4c6c.up.railway.app/api/company/register`,
                 companyData,
                 {
                   headers: {
@@ -1041,7 +1041,7 @@ export default {
       this.changeRegister = "registering...";
       setTimeout(() => {
         this.changeRegister = "Register";
-      }, 1000);
+      }, 2000);
       this.validateFields();
       if (!this.checkButtonState()) {
         this.handleRegister();
@@ -1115,7 +1115,7 @@ export default {
     async fetchCategories() {
       try {
         const response = await axios.get(
-          "https://bizethio-backend-production-d484.up.railway.app/api/categories"
+          "https://bizethio-backend-production-4c6c.up.railway.app/api/categories"
         );
         this.categories = response.data;
         console.log("categoriessss", this.categories);
