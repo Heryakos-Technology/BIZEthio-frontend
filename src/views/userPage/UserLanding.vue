@@ -270,7 +270,7 @@ onMounted(async () => {
     <div class="categories lg:w-full mx-auto lg:mb-20 mt-16 ">
       <!-- Search Bar and Categories -->
       <div class="lg:pt-10 lg:ml-4 w-full mx-auto">
-        <div class="flex w-72 lg:w-1/5 mt-4 mx-auto">
+        <div class="flex w-72 mt-4 mx-auto">
           <input
             v-model="search"
             @input="handleInput"
@@ -283,7 +283,7 @@ onMounted(async () => {
             v-if="
               isSearchFocused && showSuggestions && filteredCompanies.length > 0
             "
-            class="absolute w-1/5 lg:mt-12 lg:-ml-10 mx-auto bg-white border border-gray-300 rounded-md mt-1 z-10"
+            class="absolute w-1/5 lg:w-1/5 lg:mt-12 lg:-ml-10 mx-auto bg-white border border-gray-300 rounded-md mt-1 z-10"
           >
             <ul>
               <li

@@ -23,7 +23,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         
-        target: "https://bizethio-backend-production-d484.up.railway.app/",
+        target: "https://bizethio-backend-production-4c6c.up.railway.app/",
         changeOrigin: true,
       },
     },
