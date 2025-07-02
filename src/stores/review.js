@@ -69,7 +69,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async updateReview(reviewId, reviewData) {
-      const res = await fetch(`/api/reviews/${reviewId}`, {
+      const res = await fetch(`https://bizethio-backend-production-4c6c.up.railway.app/api/reviews/${reviewId}`, {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async deleteReview(reviewId) {
-      const res = await fetch(`/api/reviews/${reviewId}`, {
+      const res = await fetch(`https://bizethio-backend-production-4c6c.up.railway.app/api/reviews/${reviewId}`, {
         method: "Delete",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
