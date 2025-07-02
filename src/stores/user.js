@@ -17,7 +17,8 @@ export const useUserStore = defineStore("userStore", {
       const res = await fetch('https://bizethio-backend-production-d484.up.railway.app/api/users', {
         method: 'GET',
         headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
 
         },
       });
@@ -44,7 +45,7 @@ export const useUserStore = defineStore("userStore", {
 
       const data = res.status !== 204 ? await res.json() : {};
       const userData = res.data
-      console.log('dataaaa', userData);
+      console.log('data', data);
 
       if (data.errors) {
         this.errors = data.errors;
@@ -55,17 +56,21 @@ export const useUserStore = defineStore("userStore", {
 
 
     /********************* Update User Profile  ********************** */
-    async updateUser(userData) {
-      const res = await fetch('https://bizethio-backend-production-d484.up.railway.app/api/users/', {
+    async updateUser(user) {
+      const res = await fetch(`https://bizethio-backend-production-d484.up.railway.app/api/users/${user.id}`, {
         method: 'PUT',
         headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
+
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(user),
       });
 
+
+      console.log("data in userStore: ", user);
+
       const data = await res.json();
-      console.log(data);
 
       if (data.errors) {
         this.errors = data.errors;

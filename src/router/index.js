@@ -160,7 +160,7 @@ const router = createRouter({
       component: CampanyDashBord,
       // meta: { admin: true },
     },
-   
+
     // Company Related Routes
     {
       path: '/company/:id',
@@ -182,7 +182,7 @@ const router = createRouter({
       name: 'CampanySignIn',
       component: CampanySignIn,
     },
-    
+
     // {
     //   path: '/profile/company/:id',
     //   name: 'CompanyPage',
@@ -198,7 +198,7 @@ const router = createRouter({
       name: 'CampanyLogin',
       component: CampanyLogin,
     },
-      {
+    {
       path: '/admin/CampanyStatus',
       name: 'CampanyStatus',
       component: CampanyStatus,
@@ -210,7 +210,7 @@ const router = createRouter({
     //   name: 'CompanyPage',
     //   component: CompanyPage,
     // },
-    
+
   ],
 })
 
@@ -221,6 +221,7 @@ router.beforeEach(async (to, from) => {
 
   const userInfo = JSON.parse(userInfoString);
 
+  console.log("user from route: ", userInfo);
   const user_role = userInfo?.role;
   const userId = userInfo?.id;
 

@@ -1,12 +1,14 @@
-import { auth } from './firebase'; 
-import { getAuth, 
-         createUserWithEmailAndPassword, 
-         signInWithEmailAndPassword, 
-         signOut, 
-         sendEmailVerification, 
-         fetchSignInMethodsForEmail, 
-         updatePassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc,getDoc,collection, query, where, getDocs  } from "firebase/firestore"; 
+import { auth } from './firebase';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  fetchSignInMethodsForEmail,
+  updatePassword
+} from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 //import { deleteUser} from 'firebase/auth';
 import { deleteDoc } from "firebase/firestore";
 
@@ -17,15 +19,15 @@ const db = getFirestore();
 
 export const register = async (email, newPassword) => {
   try {
-    
+
     const exists = await checkEmailExists(email);
-    
+
     if (!exists) {
       throw new Error('Email is not registered. Please sign up first.');
     }
 
     const isVerified = await checkEmailVerified(email);
-    
+
     if (!isVerified) {
       throw new Error('Email is not verified. Please verify your email before registering.');
     }
@@ -37,10 +39,10 @@ export const register = async (email, newPassword) => {
       //role: role 
     });
 
-    return userCredential; 
+    return userCredential;
   } catch (error) {
     console.error('Error during registration:', error.message);
-    throw error; 
+    throw error;
   }
 };
 
@@ -49,15 +51,15 @@ export const login = async (email, password) => {
   try {
     // Attempt to si  gn in with email and password
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
+
     // Retrieve user document from Firestore
     const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-    
+
     if (userDoc.exists()) {
       const userData = userDoc.data();
       console.log("User role:", userData);
       // return { userCredential, role: userData.role }; 
-       return { userCredential }; 
+      return { userCredential };
     } else {
       throw new Error("User role not found.");
     }
@@ -68,10 +70,10 @@ export const login = async (email, password) => {
 };
 export const logout = async () => {
   try {
-    await signOut(auth); 
+    await signOut(auth);
   } catch (error) {
     console.error('Error during logout:', error.message);
-    throw error; 
+    throw error;
   }
 };
 
@@ -88,7 +90,7 @@ export const checkEmailExists = async (email) => {
 
       if (user && user.email === email) {
         console.log(`User found with verified email: ${email}`);
-        return true; 
+        return true;
       }
 
       console.log(`User not found for email: ${email}`);
@@ -96,10 +98,10 @@ export const checkEmailExists = async (email) => {
     }
 
     console.log(`Email exists with sign-in methods: ${signInMethods}`);
-    return true; 
+    return true;
   } catch (error) {
     console.error("Error checking email existence:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -121,24 +123,24 @@ export const updateUserPassword = async (email, tempPassword, newPassword) => {
   const auth = getAuth();
 
   try {
- 
-    const userCredential = await signInWithEmailAndPassword(auth, email, tempPassword);
-    const currentUser = userCredential.user; 
 
-   
-    await currentUser.reload(); 
+    const userCredential = await signInWithEmailAndPassword(auth, email, tempPassword);
+    const currentUser = userCredential.user;
+
+
+    await currentUser.reload();
     if (currentUser.emailVerified) {
 
       await updatePassword(currentUser, newPassword);
       console.log('Password updated successfully');
-    
-      return true; 
+
+      return true;
     } else {
       throw new Error('Email is not verified. Please verify your email before updating the password.');
     }
   } catch (error) {
     console.error('Error during password update:', error.message);
-    throw error; 
+    throw error;
   }
 };
 export const getUserByEmail = async (email) => {
@@ -164,12 +166,12 @@ export const getUserByEmail = async (email) => {
 
 export const deleteUserByEmail = async (email) => {
   admin.auth().deleteUser(uid)
-  .then(() => {
-    console.log('Successfully deleted user');
-  })
-  .catch((error) => {
-    console.log('Error deleting user:', error);
-  });
+    .then(() => {
+      console.log('Successfully deleted user');
+    })
+    .catch((error) => {
+      console.log('Error deleting user:', error);
+    });
 
   try {
     // Create a query to find the user document by email

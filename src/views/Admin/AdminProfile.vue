@@ -9,6 +9,7 @@ import axios from "axios";
 import CryptoJS from "crypto-js";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import Modal from "@/components/UserProfile/Modal.vue"; // Import Modal Component
 
 const userInfo = ref(null);
 const isModalOpen = ref(false);
@@ -26,6 +27,13 @@ const previewImage = ref(null);
 
 const $toast = useToast();
 
+// Input refs for the modal
+const nameInput = ref("");
+const phoneInput = ref("");
+const cityInput = ref("");
+const subCityInput = ref("");
+const profilePictureUrl = ref("");
+
 onMounted(async () => {
   await fetchUserInfo();
 });
@@ -34,6 +42,14 @@ const fetchUserInfo = async () => {
   const userInfoString = localStorage.getItem("userInfo");
   userInfo.value = JSON.parse(userInfoString);
   tempUserInfo.value = { ...userInfo.value };
+
+  // Initialize input fields with user data
+  nameInput.value = userInfo.value.name;
+  phoneInput.value = userInfo.value.phone_number;
+  cityInput.value = userInfo.value.city;
+  subCityInput.value = userInfo.value.sub_city;
+  profilePictureUrl.value = userInfo.value.profile_picture_url;
+
   console.log(userInfo.value);
 };
 
@@ -66,6 +82,10 @@ const saveChanges = async () => {
 
     const userData = {
       ...tempUserInfo.value,
+      name: nameInput.value,
+      phone_number: phoneInput.value,
+      city: cityInput.value,
+      sub_city: subCityInput.value,
       profile_picture_url: imageUrl,
     };
 
@@ -78,6 +98,7 @@ const saveChanges = async () => {
         },
       }
     );
+    
 
     console.log("User Information updated:", response.data);
     updateUser(response.data.user); // Update the user info
@@ -90,7 +111,7 @@ const saveChanges = async () => {
       "Error updating user information:",
       error.response || error.message
     );
-    $toast.error("Failed to update profile.", {
+    $toast.error(error.response.data.message, {
       position: "top",
     });
   } finally {
@@ -147,6 +168,31 @@ const clearImageUpload = () => {
   uploaded.value = "";
   previewImage.value = null;
   imageFile.value = null;
+};
+
+const triggerImageUpload = () => {
+  const fileInput = document.querySelector('input[type="file"]');
+  fileInput.click();
+};
+
+const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!validImageTypes.includes(file.type)) {
+      $toast.error("Please upload a valid image (JPEG, PNG, GIF)", {
+        position: "top",
+      });
+      return;
+    }
+
+    imageFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      profilePictureUrl.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
 };
 </script>
 
@@ -228,117 +274,167 @@ const clearImageUpload = () => {
       </div>
     </div>
 
-    <!-- Modal -->
-    <div
-      v-if="isModalOpen"
-      class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center"
-      @click.self="closeModal"
-    >
-      <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
-
-        <div class="mb-4">
-          <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
-            >Name:</label
-          >
-          <input
-            type="text"
-            id="name"
-            v-model="tempUserInfo.name"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label for="phone" class="block text-gray-700 text-sm font-bold mb-2"
-            >Phone Number:</label
-          >
-          <input
-            type="text"
-            id="phone"
-            v-model="tempUserInfo.phone_number"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label for="city" class="block text-gray-700 text-sm font-bold mb-2"
-            >City:</label
-          >
-          <input
-            type="text"
-            id="city"
-            v-model="tempUserInfo.city"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="subcity"
-            class="block text-gray-700 text-sm font-bold mb-2"
-            >Subcity:</label
-          >
-          <input
-            type="text"
-            id="subcity"
-            v-model="tempUserInfo.sub_city"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-
-        <!-- Image Upload -->
-        <div class="mb-2">
-          <label for="image" class="block text-gray-700 text-sm font-bold mb-1">
-            Profile Picture:
-          </label>
-          <img
-            :src="tempUserInfo.profile_picture_url"
-            alt="Profile Picture"
-            class="w-20 h-20 rounded-full mb-2"
-          />
-          <div
-            class="relative w-52 h-36 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-100"
-          >
-            <input
-              type="file"
-              id="image"
-              class="absolute w-full h-full top-0 left-0 opacity-0 cursor-pointer"
-              @change="onFileSelected"
-              accept="image/*"
-            />
-            <img
-              v-if="previewImage"
-              :src="previewImage"
-              alt="Preview"
-              class="max-w-full max-h-full object-cover"
-            />
-            <div v-else class="text-gray-700 text-sm text-center p-2">
-              Click or drag image here to upload
-            </div>
-          </div>
-          <p v-if="uploaded" class="mt-2 text-green-500">{{ uploaded }}</p>
-        </div>
-
-        <div class="flex justify-end">
+    <Modal v-if="isModalOpen" @close="closeModal">
+      <template #body>
+        <div
+          class="no-scrollbar relative min-w-full translate-x-12 w-full xs:min-w-0 mx-auto max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 ark:bg-gray-900 lg:p-11 2xl:translate-x-16"
+        >
+          <!-- close btn -->
           <button
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-            type="button"
             @click="closeModal"
+            class="transition-color absolute right-5 top-5 z-999 flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 ark:bg-gray-700 ark:bg-white/[0.05] ark:text-gray-400 ark:hover:bg-white/[0.07] ark:hover:text-gray-300"
           >
-            Cancel
+            <svg
+              class="fill-current"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6.04289 16.5418C5.65237 16.9323 5.65237 17.5655 6.04289 17.956C6.43342 18.3465 7.06658 18.3465 7.45711 17.956L11.9987 13.4144L16.5408 17.9565C16.9313 18.347 17.5645 18.347 17.955 17.9565C18.3455 17.566 18.3455 16.9328 17.955 16.5423L13.4129 12.0002L17.955 7.45808C18.3455 7.06756 18.3455 6.43439 17.955 6.04387C17.5645 5.65335 16.9313 5.65335 16.5408 6.04387L11.9987 10.586L7.45711 6.04439C7.06658 5.65386 6.43342 5.65386 6.04289 6.04439C5.65237 6.43491 5.65237 7.06808 6.04289 7.4586L10.5845 12.0002L6.04289 16.5418Z"
+                fill=""
+              />
+            </svg>
           </button>
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            @click="saveChanges"
-            :disabled="loading"
-          >
-            <span v-if="loading">Saving...</span>
-            <span v-else>Save</span>
-          </button>
+          <div class="px-2 pr-14">
+            <h4 class="mb-2 text-2xl font-semibold text-gray-800 capitalize">
+              Edit Personal Information
+            </h4>
+            <p class="mb-6 text-sm text-gray-500 ark:text-gray-400 lg:mb-7">
+              Update your details to keep your profile up-to-date.
+            </p>
+          </div>
+          <form class="flex flex-col">
+            <div class="custom-scrollbar h-[458px] overflow-y-auto p-2">
+              <div class="mt-3">
+                <h5
+                  class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                >
+                  Personal Information
+                </h5>
+
+                <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                  <div class="col-span-2 lg:col-span-1">
+                    <label
+                      class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      v-model="nameInput"
+                      class="ark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                    />
+                  </div>
+
+                  <div class="col-span-2 lg:col-span-1">
+                    <label
+                      class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                    >
+                      Phone
+                    </label>
+                    <input
+                      type="text"
+                      v-model="phoneInput"
+                      class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 capitalize ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                    />
+                  </div>
+                </div>
+                <div class="px-2 pr-14 mt-8">
+                  <h4 class="mb-2 text-2xl font-semibold text-gray-800">
+                    Edit Address
+                  </h4>
+                </div>
+                <div class="flex  flex-col">
+                  <div class="px-2 py-3 overflow-y-auto custom-scrollbar">
+                    <div
+                      class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2"
+                    >
+                      <div>
+                        <label
+                          class="mb-1.5 block text-sm font-medium text-gray-700"
+                        >
+                          City
+                        </label>
+                        <input
+                          type="text"
+                          v-model="cityInput"
+                          class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          class="mb-1.5 block text-sm font-medium text-gray-700"
+                        >
+                          Sub City
+                        </label>
+                        <input
+                          type="text"
+                          v-model="subCityInput"
+                          class="ark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 ark:border-gray-700 ark:bg-gray-900 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-5 lg:flex justify-start items-center">
+                  <div class="">
+                    <h5
+                      class="mb-5 text-lg font-medium text-gray-800 capitalize lg:mb-6"
+                    >
+                      Profile Picture
+                    </h5>
+                    <div class="flex items-center">
+                      <img
+                        :src="profilePictureUrl"
+                        alt="Profile Picture"
+                        class="w-20 h-20 rounded-full mr-4"
+                      />
+                      <div>
+                        <button
+                          @click="triggerImageUpload"
+                          class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                        >
+                          Change Picture
+                        </button>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          class="hidden"
+                          @change="handleImageUpload"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+              <button
+                @click="closeModal"
+                type="button"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                @click="saveChanges"
+                type="button"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-white hover:bg-primaryColor sm:w-auto cursor-pointer"
+                :disabled="loading"
+              >
+                <span v-if="loading">Saving...</span>
+                <span v-else>Save Changes</span>
+              </button>
+            </div>
+          </form>
         </div>
-      </div>
-    </div>
+      </template>
+    </Modal>
   </AdminLayout>
 </template>

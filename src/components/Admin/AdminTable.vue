@@ -531,7 +531,7 @@ const generateSignature = (params) => {
     <!-- Delete Confirmation Pop-over Dialog -->
     <div
       v-if="isDeleteConfirmOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-black/50 backdrop-blur-[5px] flex items-center justify-center z-50"
     >
       <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
         <h3 class="text-lg font-bold text-darkBlue mb-4">Confirm Deletion</h3>
