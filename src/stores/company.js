@@ -16,7 +16,7 @@ export const useCompanyStore = defineStore("companyStore", {
       if (localStorage.getItem("all_companies")) {
         return JSON.parse(localStorage.getItem("all_companies"));
       }
-      const res = await fetch("https://bizethio-backend-production-d484.up.railway.app/api/companies", {
+      const res = await fetch("https://bizethio-backend-production-4c6c.up.railway.app/api/companies", {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -42,7 +42,7 @@ export const useCompanyStore = defineStore("companyStore", {
         }
       }
 
-      const res = await fetch(`https://bizethio-backend-production-d484.up.railway.app/api/companies/${companyId}`, {
+      const res = await fetch(`https://bizethio-backend-production-4c6c.up.railway.app/api/companies/${companyId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -62,7 +62,7 @@ export const useCompanyStore = defineStore("companyStore", {
     async updateCompany(payload, company) {
 
       localStorage.removeItem("all_companies");
-      const res = await fetch(`https://bizethio-backend-production-d484.up.railway.app/api/companies/${company}`, {
+      const res = await fetch(`https://bizethio-backend-production-4c6c.up.railway.app/api/companies/${company}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
