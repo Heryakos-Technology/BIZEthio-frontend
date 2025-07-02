@@ -14,7 +14,7 @@ export const useUserStore = defineStore("userStore", {
 
     /********************* Get All Users  ********************** */
     async getAllUsers() {
-      const res = await fetch('https://bizethio-backend-production-d484.up.railway.app/api/users', {
+      const res = await fetch('https://bizethio-backend-production-4c6c.up.railway.app/api/users', {
         method: 'GET',
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,7 +34,7 @@ export const useUserStore = defineStore("userStore", {
 
     /********************* Delete User  ********************** */
     async deleteUsers(userId) {
-      const res = await fetch(`https://bizethio-backend-production-d484.up.railway.app/api/users/${userId}`, {
+      const res = await fetch(`https://bizethio-backend-production-4c6c.up.railway.app/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
