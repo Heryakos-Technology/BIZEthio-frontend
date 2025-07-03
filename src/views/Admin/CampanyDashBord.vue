@@ -986,26 +986,7 @@ if (storedCampanies) {
 }
         fetchCampanies();
 
-        // try {
-        //           if (singleampany.value.images) {
-        //               images.value = JSON.parse(singleampany.value.images);
-        //           } else {
-        //               console.error("Images data is undefined");
-        //           }
-        //       } catch (error) {
-        //           console.error("Error parsing images:", error);
-        //       }
-
-        //       // Parse the social media links into an object with error handling
-        //       try {
-        //           if (singleampany.value.social_media_links) {
-        //               socialMediaLinks.value = JSON.parse(singleampany.value.social_media_links);
-        //           } else {
-        //               console.error("Social media links data is undefined");
-        //           }
-        //       } catch (error) {
-        //           console.error("Error parsing social media links:", error);
-        //       }
+      
       } else {
         this.$router.push({ name: "SignIn" });
       }
