@@ -610,7 +610,7 @@ export default {
           return;
         }
 
-        // Check if the user already exists in your backend
+       
         const response = await checkUserExists(user.email);
 
         if (response.exists) {
