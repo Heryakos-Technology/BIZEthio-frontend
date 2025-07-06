@@ -384,12 +384,12 @@
               </div>
             </div>
 
-            <div>
+            <!-- <div>
               <button @click="hidepassword"
                 class="bg-[#2178AC] mb-32 lg:mb-0 mx-auto hover:bg-cyan-500 ml-2 lg:ml-4 py-2 cursor-pointer transition-all duration-300 lg:mt-4 hover:scale-105 px-6 mt-10 md:ml-20 rounded-md text-white text-md">
                 Back
               </button>
-            </div>
+            </div> -->
             <!-- <p v-if="showRegistrationError" class="text-red-600 mt-2 text-center">An error occured. please try again!
               </p> -->
             <div class="-mt-2">
