@@ -170,34 +170,41 @@
         <div class="w-1/13">actions</div>
       </div>
     </div>
-    <div class="modal w-1/3 "  v-if="singleampany">
- 
-   <div class="flex">
-     <div
-       
-         class="modal-content ">
-        <!-- <div v-if="images.length > 0">
-            <img :src="images[0]" alt="campany Image" class="campany-image" />
-        </div> -->
-     
-       
-<p :class="['text-right', 'font-bold', 'mb-2', 'text-xl', 
-    singleampany.status === 'rejected' ? 'text-red-300' : 
-    singleampany.status === 'approved' ? 'text-green-300' : 
-    'text-blue-400']">
-    {{ singleampany.status }}
-</p>
+<!-- Modal Wrapper -->
+<div class="fixed inset-0 z-50 overflow-y-auto bg-black/30" v-if="singleampany">
+  <!-- Modal Content Container -->
+  <div
+    class="modal w-4/5 mx-auto pb-5"
+   
+  >
+    <div class="flex">
+      <!-- Modal Main Panel -->
+      <div class="modal-content max-h-[95vh] overflow-y-auto w-full mt-0 scrollbar-hide">
 
+        <!-- Status Badge -->
+        <p
+          :class="[
+            'text-right', 'font-bold', 'mb-2', 'text-xl',
+            singleampany.status === 'rejected' ? 'text-red-300' :
+            singleampany.status === 'approved' ? 'text-green-300' :
+            'text-blue-400'
+          ]"
+        >
+          {{ singleampany.status }}
+        </p>
+
+        <!-- Company Image -->
         <img
           :src="getImageUrl(singleampany.images)"
-          alt="No Image For This Campany"
-          class="rounded-[10px]  h-60"
+          alt="No Image For This Company"
+          class="rounded-[10px] h-60"
         />
-  
+
+        <!-- Name & Owner -->
         <div class="flex px-3 mt-10">
           <div class="flex mr-7">
             <div>
-              <img src="/campantIcon.png" alt="" class="w-2/3" />
+              <img src="/campantIcon.png" alt="" class="w-3/4" />
             </div>
             <div>{{ singleampany.name }}</div>
           </div>
@@ -208,412 +215,366 @@
             <div>{{ singleampany.owner_name }}</div>
           </div>
         </div>
+
+        <!-- Description -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/textIcon.png" alt="" class="mt-2" />
-          </div>
+          <div><img src="/textIcon.png" alt="" class="mt-2" /></div>
           <div class="ml-2">
             <div>
-              {{ singleampany.description }}
-             
               <span v-if="!singleampany.showFullDescription">
                 {{ singleampany.description.slice(0, 50) }}...
-                <br>
+                <br />
                 <a
                   href="#"
                   @click.prevent="toggleDescription(singleampany)"
                   class="text-blue-400 underline"
-                  >Show more</a
                 >
+                  Show more
+                </a>
               </span>
-               <span  v-else>
-                 {{ singleampany.description }}
-               
-                
-                <br><a
+              <span v-else>
+                {{ singleampany.description }}
+                <br />
+                <a
                   href="#"
                   @click.prevent="toggleDescription(singleampany)"
                   class="text-blue-400 underline"
-                  >Show less</a
                 >
+                  Show less
+                </a>
               </span>
             </div>
           </div>
         </div>
+
+        <!-- Address -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/locationicon.png" alt="" class="w-2/3" />
-          </div>
+          <div><img src="/locationicon.png" alt="" class="w-2/3" /></div>
           <div>{{ singleampany.address }}</div>
         </div>
+
+        <!-- Phone -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/phoneicon.png" alt="" class="w-2/3" />
-          </div>
+          <div><img src="/phoneicon.png" alt="" class="w-2/3" /></div>
           <div>{{ singleampany.contact_phone }}</div>
         </div>
+
+        <!-- Email -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/messageicon.png" alt="" class="" />
-          </div>
+          <div><img src="/messageicon.png" alt="" /></div>
           <div class="ml-1">{{ singleampany.contact_email }}</div>
         </div>
+
+        <!-- Links -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/linkicon.png" alt="" class="w-2/3" />
-          </div>
-          <div class="">
-            <div class="max-w-xs">
-              <a
-                :href="singleampany.website"
-                class="text-blue-500 underline block truncate"
-                target="_blank"
-              >
-                {{ singleampany.website }}
-              </a>
-            </div>
-            <div class="max-w-xs overflow-hidden">
-              <a
-                :href="singleampany.social_media_links"
-                class="text-blue-500 underline block truncate"
-                target="_blank"
-              >
-                {{ singleampany.social_media_links }}
-              </a>
-            </div>
-            <div>
-              <a href="#" class="text-blue-500 underline">{{
-                singleampany.license_url
-              }}</a>
-            </div>
+          <div><img src="/linkicon.png" alt="" class="w-2/3" /></div>
+          <div class="max-w-xs">
+            <a
+              :href="singleampany.website"
+              class="text-blue-500 underline block truncate"
+              target="_blank"
+            >
+              {{ singleampany.website }}
+            </a>
+            <a
+              :href="singleampany.social_media_links"
+              class="text-blue-500 underline block truncate"
+              target="_blank"
+            >
+              {{ singleampany.social_media_links }}
+            </a>
+            <a
+              href="#"
+              class="text-blue-500 underline block truncate"
+            >
+              {{ singleampany.license_url }}
+            </a>
           </div>
         </div>
+
+        <!-- Rating -->
         <div class="flex mt-3 px-3">
-          <div>
-            <img src="/rattingicon.png" alt="" class="w-2/3" />
-          </div>
+          <div><img src="/rattingicon.png" alt="" class="w-2/3" /></div>
           <div>{{ singleampany.rating_avg }}</div>
         </div>
-        
-        <div class="flex  px-3 justify-between w-4/5 mx-auto">
-          
+
+        <!-- Action Buttons -->
+        <div class="flex px-3 justify-between w-4/5 mx-auto mt-6">
+          <!-- Approve Button -->
           <button
             v-if="!loadingCampanies3[singleampany.id]"
             @click="
-              singleampany?.status !== 'approved' &&
-              singleampany?.status !== 'rejected'
+              singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'
                 ? confirmApprove(singleampany.id)
                 : null
             "
             class="bg-[#E0F7FF] px-5 py-1 rounded-md text-black"
             :class="{
-              'opacity-50 cursor-not-allowed':
-                singleampany?.status === 'approved' ||
-                singleampany?.status === 'rejected',
-              'hover:scale-130 transition-transform duration-300':
-                singleampany?.status !== 'approved' &&
-                singleampany?.status !== 'rejected',
-              'cursor-pointer':
-                singleampany?.status !== 'approved' &&
-                singleampany?.status !== 'rejected',
+              'opacity-50 cursor-not-allowed': singleampany?.status === 'approved' || singleampany?.status === 'rejected',
+              'hover:scale-130 transition-transform duration-300': singleampany?.status !== 'approved' && singleampany?.status !== 'rejected',
+              'cursor-pointer': singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'
             }"
-            :disabled="
-              singleampany?.status === 'approved' ||
-              singleampany?.status === 'rejected'
-            "
+            :disabled="singleampany?.status === 'approved' || singleampany?.status === 'rejected'"
           >
             Approve
           </button>
 
-                  <div v-if="showApproveConfirm" class="modalConfirm">
-  <div class="modal-content">
-    <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
-    <p class="mb-6">
-      Are you sure you want to approve the company? This action cannot be undone.
-    </p>
-    <div class="flex justify-end gap-3">
-      <button
-        @click="cancelApprove"
-        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-      >
-        Cancel
-      </button>
-      <button
-        @click="approveCampany(singleampany.id)"
-        class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-      >
-        {{ approveMessage }}
-      </button>
-    </div>
-  </div>
-</div>
-          <!-- <div
-            v-if="showApproveConfirm"
-            class="fixed inset-0  bg-opacity-50 z-50 flex items-center justify-center"
-          >
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-              <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
-              <p class="mb-6">
-                Are you sure you want to Approve the Campany
-
-                action cannot be undone.
-              </p>
-              <div class="flex justify-end gap-3">
-                <button
-                  @click="cancelApprove"
-                  class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  @click="approveCampany(singleampany.id)"
-                  class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-                >
-     
-               {{ approveMessage }}
-
-                </button>
-              </div>
-            </div>
-          </div> -->
-
-
+          <!-- Reject Button -->
           <button
             v-if="!loadingCampanies4[singleampany.id]"
             @click="
-              singleampany?.status !== 'approved' &&
-              singleampany?.status !== 'rejected'
+              singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'
                 ? confirmReject(singleampany.id)
                 : null
             "
             class="bg-[#FFCCCB] px-5 py-1 rounded-md text-black"
             :class="{
-              'opacity-50 cursor-not-allowed':
-                singleampany?.status === 'approved' ||
-                singleampany?.status === 'rejected',
-              'hover:scale-130 transition-transform duration-300':
-                singleampany?.status !== 'approved' &&
-                singleampany?.status !== 'rejected',
-              'cursor-pointer':
-                singleampany?.status !== 'approved' &&
-                singleampany?.status !== 'rejected',
+              'opacity-50 cursor-not-allowed': singleampany?.status === 'approved' || singleampany?.status === 'rejected',
+              'hover:scale-130 transition-transform duration-300': singleampany?.status !== 'approved' && singleampany?.status !== 'rejected',
+              'cursor-pointer': singleampany?.status !== 'approved' && singleampany?.status !== 'rejected'
             }"
-            :disabled="
-              singleampany?.status === 'approved' ||
-              singleampany?.status === 'rejected'
-            "
+            :disabled="singleampany?.status === 'approved' || singleampany?.status === 'rejected'"
           >
             Reject
           </button>
-           <div
-            v-if="showRejectConfirm"
-            class="modalConfirm"
-          >
-            <div class="modal-content">
-              <h3 class="text-lg font-bold mb-4">Confirm Rejection</h3>
-              <p class="mb-6">
-                Are you sure you want to reject the Campany
-                <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
-                action cannot be undone.
-              </p>
-              <div class="flex justify-end gap-3">
-                <button
-                  @click="cancelReject"
-                  class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  @click="rejectCampany(singleampany.id)"
-                  class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-                >
-      
-               {{ rejectMessage }}
-
-                </button>
-              </div>
-            </div>
-          </div>
-
-        
-        </div>
-       
-
-      </div>
-                           <div>
-          <!-- <button @click="closeCompanyModal" class="  text-gray-600 hover:text-red-500 text-xl mt-20 ml-5">closee</button> -->
-            <button @click="closeCompanyModal" class="mt-20 bg-red-500 rounded-full w-10 h-10  text-white  p-2 ml-5"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-   </div>
-
-      
-      </div>
-      
-      <div v-if="noCampanyData" class="text-2xl text-center text-green-700 font-bold">{{  campanyData}}</div>
-    <div v-for="campany in filteredCampanies" :key="campany.id" class="px-3">
- 
-      <div
-        class="flex bg-white py-3 mt-3 text-xs rounded-md px-2"
-        :style="{
-          backgroundColor:
-            campany?.status === 'approved'
-              ? '#D4F7D4'
-              : campany?.status === 'rejected'
-              ? '#FFE5E5'
-              : 'white',
-        }"
-      >
-        <div class="break-words max-w-[80px] w-1/7">{{ campany.name }}</div>
-
-        <div class="w-1/10 ml-3">{{ campany.owner_name }}</div>
-
-     <div class="py-2 px-4 w-1/7">
-  <span v-if="!campany.showFullDescription">
-    <span v-if="campany.description">
-      {{ campany.description.slice(0, 10) }}...
-    </span>
-    <br>
-    <a
-      href="#"
-      @click.prevent="toggleDescription(campany)"
-      class="text-blue-400 underline"
-    >Show more</a>
-  </span>
-  <span v-else>
-    <span v-if="campany.description">
-      {{ campany.description }}
-    </span>
-    <br>
-    <a
-      href="#"
-      @click.prevent="toggleDescription(campany)"
-      class="text-blue-400 underline"
-    >Show less</a>
-  </span>
-</div>
-        <div class="w-1/15">{{ campany.category_id }}</div>
-
-        <div class="w-1/7">{{ campany.address }}</div>
-
-        <div class="w-1/10">{{ campany.contact_phone }}</div>
-
-        <div class="w-1/5">{{ campany.contact_email }}</div>
-
-        <div class="break-words max-w-[120px] w-1/13">
-          {{ campany.website }}
         </div>
 
-        <div class="flex justify-between w-1/9 ml-6">
-          <div
-            class="relative hover:scale-130 cursor-pointer shadow-md h-8"
-            @click="fetchSingleCampany(campany.id);openCompanyModal(company.id)"
-          >
-            <img src="/view.png" alt="" class="hover:text-yellow-400" />
-          </div>
-
-          <div
-            class="shadow-md h-8 cursor-pointer"
-            @click="
-              campany.status !== 'approved' && campany.status !== 'rejected'
-                ? confirmApprove(campany.id)
-                : null
-            "
-            :class="{
-              'opacity-50 cursor-not-allowed':
-                campany.status === 'approved' || campany.status === 'rejected',
-              'hover:scale-130':
-                campany.status !== 'approved' && campany.status !== 'rejected',
-            }"
-          >
-
-            <div
-              class="flex justify-center items-center mb-3"
-              v-if="loadingCampanies3[campany.id]"
-            >
-              <div class="loader2"></div>
+        <!-- Approve Confirmation Modal -->
+        <div v-if="showApproveConfirm" class="modalConfirm">
+          <div class="modal-content">
+            <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+            <p class="mb-6">Are you sure you want to approve the company? This action cannot be undone.</p>
+            <div class="flex justify-end gap-3">
+              <button @click="cancelApprove" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800">
+                Cancel
+              </button>
+              <button
+                @click="approveCampany(singleampany.id)"
+                class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white"
+              >
+                {{ approveMessage }}
+              </button>
             </div>
-            <img
-              src="/approve.png"
-              alt=""
-              v-if="!loadingCampanies3[campany.id]"
-            />
           </div>
-               <div v-if="showApproveConfirm" class="modalConfirm">
-  <div class="modal-content">
-    <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
-    <p class="mb-6">
-      Are you sure you want to approve the company? This action cannot be undone.
-    </p>
-    <div class="flex justify-end gap-3">
-      <button
-        @click="cancelApprove"
-        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-      >
-        Cancel
-      </button>
-      <button
-        @click="approveCampany(currentCompanyId)"
-        class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-      >
-        {{ approveMessage }}
-      </button>
+        </div>
+
+        <!-- Reject Confirmation Modal -->
+        <div v-if="showRejectConfirm" class="modalConfirm">
+          <div class="modal-content">
+            <h3 class="text-lg font-bold mb-4">Confirm Rejection</h3>
+            <p class="mb-6">Are you sure you want to reject the company? This action cannot be undone.</p>
+            <div class="flex justify-end gap-3">
+              <button @click="cancelReject" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800">
+                Cancel
+              </button>
+              <button
+                @click="rejectCampany(singleampany.id)"
+                class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white"
+              >
+                {{ rejectMessage }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Close Button -->
+      <div>
+        <button
+          @click="closeCompanyModal"
+          class="mt-[90px] bg-red-500 rounded-full w-10 h-10 text-white p-2 ml-5"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
-          <div
-            class="shadow-md h-8 cursor-pointer"
-            @click="
-              campany.status !== 'approved' && campany.status !== 'rejected'
-                ? confirmReject(campany.id)
-                : null
-            "
-            :class="{
-              'opacity-50 cursor-not-allowed':
-                campany.status === 'approved' || campany.status === 'rejected',
-              'hover:scale-130':
-                campany.status !== 'approved' && campany.status !== 'rejected',
-            }"
-          >
-            <div
-              class="flex justify-center items-center mb-3"
-              v-if="loadingCampanies4[campany.id]"
-            >
-              <div class="loader2"></div>
-            </div>
-            <img src="/ban.png" alt="" v-if="!loadingCampanies4[campany.id]" />
-          </div>
-           <div
-            v-if="showRejectConfirm"
-            class="modalConfirm"
-          >
-            <div class="modal-content">
-              <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
-              <p class="mb-6">
-                Are you sure you want to reject the Campany
-                <!-- <span class="font-semibold">{{ userToDelete?.name }}</span>? This -->
-                action cannot be undone.
-              </p>
-              <div class="flex justify-end gap-3">
-                <button
-                  @click="cancelReject"
-                  class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  @click="rejectCampany(currentCompanyId)"
-                  class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
-                >
-       
-               {{ rejectMessage }}
 
-                </button>
-              </div>
-            </div>
+      
+      <div v-if="noCampanyData" class="text-2xl text-center text-green-700 font-bold">{{  campanyData}}</div>
+ <div v-for="campany in filteredCampanies" :key="campany.id" class="px-3">
+    <div
+      class="flex bg-white py-3 mt-3 text-xs rounded-md px-2 items-start relative"
+      :style="{
+        backgroundColor:
+          campany?.status === 'approved'
+            ? '#D4F7D4'
+            : campany?.status === 'rejected'
+            ? '#FFE5E5'
+            : 'white',
+      }"
+    >
+      <div class="break-words max-w-[80px] w-1/7">{{ campany.name }}</div>
+
+      <div class="w-1/10 ml-3">{{ campany.owner_name }}</div>
+
+      <!-- DESCRIPTION CELL (compact + popover for full text) -->
+      <div class="py-2 px-4 w-1/7 relative">
+        <!-- two-line clamp so the row stays tidy -->
+        <div class="clamp-2 text-gray-700">
+          {{ campany.description || '' }}
+        </div>
+
+        <!-- Show more opens a floating panel instead of expanding the row -->
+        <button
+          v-if="campany.description && campany.description.length > 50"
+          @click.stop="openDesc(campany.id)"
+          class="text-blue-500 underline mt-1"
+          type="button"
+        >
+          Show more
+        </button>
+
+        <!-- Floating description panel (doesn't affect row height) -->
+        <div
+          v-if="expandedDescId === campany.id"
+          class="desc-popover scrollbar-hide absolute z-20 top-full left-0 mt-2 mb-3 w-80 max-h-60 overflow-y-auto rounded-xl border bg-white shadow-xl p-3 text-[13px]"
+          @click.stop
+        >
+          <div class="whitespace-pre-line leading-relaxed">
+            {{ campany.description }}
+          </div>
+          <div class="text-right mt-2">
+            <button
+              type="button"
+              class="text-blue-600 underline"
+              @click="expandedDescId = null"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
+
+      <div class="w-1/15">{{ campany.category_id }}</div>
+
+      <div class="w-1/7">{{ campany.address }}</div>
+
+      <div class="w-1/10">{{ campany.contact_phone }}</div>
+
+      <div class="w-1/5">{{ campany.contact_email }}</div>
+
+      <div class="break-words max-w-[120px] w-1/13">
+        {{ campany.website }}
+      </div>
+
+      <div class="flex justify-between w-1/9 ml-6">
+        <!-- View -->
+        <div
+          class="relative hover:scale-110 transition-transform cursor-pointer shadow-md h-8"
+          @click="fetchSingleCampany(campany.id); openCompanyModal(campany.id)"
+          title="View"
+        >
+          <img src="/view.png" alt="" class="h-8 w-8 object-contain" />
+        </div>
+
+        <!-- Approve -->
+        <div
+          class="shadow-md h-8 cursor-pointer transition-transform"
+          @click="
+            campany.status !== 'approved' && campany.status !== 'rejected'
+              ? confirmApprove(campany.id)
+              : null
+          "
+          :class="{
+            'opacity-50 cursor-not-allowed':
+              campany.status === 'approved' || campany.status === 'rejected',
+            'hover:scale-110':
+              campany.status !== 'approved' && campany.status !== 'rejected',
+          }"
+          title="Approve"
+        >
+          <div
+            class="flex justify-center items-center mb-3"
+            v-if="loadingCampanies3[campany.id]"
+          >
+            <div class="loader2"></div>
+          </div>
+          <img
+            src="/approve.png"
+            alt=""
+            v-if="!loadingCampanies3[campany.id]"
+            class="h-8 w-8 object-contain"
+          />
+        </div>
+
+        <!-- Reject -->
+        <div
+          class="shadow-md h-8 cursor-pointer transition-transform"
+          @click="
+            campany.status !== 'approved' && campany.status !== 'rejected'
+              ? confirmReject(campany.id)
+              : null
+          "
+          :class="{
+            'opacity-50 cursor-not-allowed':
+              campany.status === 'approved' || campany.status === 'rejected',
+            'hover:scale-110':
+              campany.status !== 'approved' && campany.status !== 'rejected',
+          }"
+          title="Reject"
+        >
+          <div
+            class="flex justify-center items-center mb-3"
+            v-if="loadingCampanies4[campany.id]"
+          >
+            <div class="loader2"></div>
+          </div>
+          <img src="/ban.png" alt="" v-if="!loadingCampanies4[campany.id]" class="h-8 w-8 object-contain" />
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- APPROVE CONFIRM (moved outside the v-for) -->
+  <div v-if="showApproveConfirm" class="modalConfirm">
+    <div class="modal-content">
+      <h3 class="text-lg font-bold mb-4">Confirm Approval</h3>
+      <p class="mb-6">
+        Are you sure you want to approve the company? This action cannot be undone.
+      </p>
+      <div class="flex justify-end gap-3">
+        <button
+          @click="cancelApprove"
+          class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
+        >
+          Cancel
+        </button>
+        <button
+          @click="approveCampany(currentCompanyId)"
+          class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
+        >
+          {{ approveMessage }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REJECT CONFIRM (moved outside the v-for) -->
+  <div v-if="showRejectConfirm" class="modalConfirm">
+    <div class="modal-content">
+      <h3 class="text-lg font-bold mb-4">Confirm Rejection</h3>
+      <p class="mb-6">
+        Are you sure you want to reject the Campany? This action cannot be undone.
+      </p>
+      <div class="flex justify-end gap-3">
+        <button
+          @click="cancelReject"
+          class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800 transition duration-200"
+        >
+          Cancel
+        </button>
+        <button
+          @click="rejectCampany(currentCompanyId)"
+          class="px-4 py-2 bg-red-500 hover:bg-red-700 rounded text-white transition duration-200 flex items-center"
+        >
+          {{ rejectMessage }}
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="flex justify-between w-1/2 mx-auto mt-5">
     <div>
       <button class="bg-white px-2 shadow-sm" @click="goToFirst" :class="{ active: activeNumber === 1 }">First</button>
@@ -641,12 +602,15 @@
 
 <script>
 import AdminLayout from "@/layout/AdminLayout.vue";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref,onBeforeUnmount } from "vue";
 import BarChart from "@/components/BarChart.vue";
 import PieChart from "@/components/PieChart.vue"; 
 import axios from "axios";
 import { useToast } from 'vue-toast-notification';
 import { computed } from "vue";
+
+
+
 
 export default {
   components: {
@@ -655,10 +619,24 @@ export default {
     PieChart
   },
   setup() {
+    const expandedDescId = ref(null);
       const chartData = ref({
       labels: [],
       datasets: [],
     });
+    const openDesc = (id)=> {
+  expandedDescId.value = id;
+}
+
+// Close popover when clicking outside
+const onDocClick = (e)=> {
+  const t = e.target;
+  const clickedInsidePopover = t.closest && t.closest('.desc-popover');
+  const clickedShowMore = t.closest && t.closest('button'); // simple guard; adjust if needed
+  if (!clickedInsidePopover && !clickedShowMore) {
+    expandedDescId.value = null;
+  }
+}
 const hasApprovedOrRejected = computed(() => {
   return (
     chartData.value.datasets &&
@@ -971,6 +949,7 @@ const closeCompanyModal = () => {
   selectedCompany.value = null;
 };
     onMounted(() => {
+        document.addEventListener('click', onDocClick);
        updateCompanyStats();
       const token = localStorage.getItem("token");
       if (token) {
@@ -991,7 +970,9 @@ if (storedCampanies) {
         this.$router.push({ name: "SignIn" });
       }
     });
- 
+ onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick);
+});
     function setActive(number) {
       activeNumber.value = number; // Set the active number
     }
@@ -1043,6 +1024,10 @@ if (storedCampanies) {
       hasApprovedOrRejected,
       searchTerm,
       filteredCampanies,
+      openDesc,
+      expandedDescId,
+      onDocClick
+
 
     };
   },
@@ -1050,6 +1035,19 @@ if (storedCampanies) {
 </script>
 
 <style>
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* Custom utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }   /* Chrome/Safari/Edge */
+.scrollbar-hide { -ms-overflow-style: none; }           /* IE/old Edge */
+.scrollbar-hide { scrollbar-width: none; }              /* Firefox */
+.clamp-2{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .loader {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #3498db;
@@ -1075,7 +1073,7 @@ if (storedCampanies) {
   padding: 100px;
   margin-left:210px;
 
-  background-color: rgba(0, 0, 0, 0.423);
+  background-color: rgba(0, 0, 0, 0.308);
   /* display: flex;
   justify-content: center;
   align-items: center;
@@ -1085,9 +1083,7 @@ if (storedCampanies) {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.412);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1101,9 +1097,9 @@ if (storedCampanies) {
   /* padding: 20px; */
   /* max-width: 600px;
   width: 90%; */
-  width:350px;          
+  width:400px;          
   margin-left: 400px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.164);
 }
 .active {
   color: blue; /* Change to the desired shade of blue */
