@@ -50,7 +50,7 @@ const saveProfile = async () => {
     };
 
     const response = await axios.put(
-      `https://bizethio-backend-production-4c6c.up.railway.app/api/users/${userId}`,
+      `https://bizethio-backend-production-daf6.up.railway.app//api/users/${userId}`,
       userData,
       {
         headers: {

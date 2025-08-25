@@ -109,7 +109,7 @@ export default {
 async fetchCompanyRatting() {
   try {
     const response = await axios.get(
-      "https://bizethio-backend-production-4c6c.up.railway.app/api/companies",
+      "https://bizethio-backend-production-daf6.up.railway.app//api/companies",
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

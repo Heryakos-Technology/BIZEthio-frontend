@@ -735,7 +735,7 @@ const approveCampany = async () => {
 
   try {
     const response = await axios.put(
-      `https://bizethio-backend-production-4c6c.up.railway.app/api/companies/${id}`,
+      `https://bizethio-backend-production-daf6.up.railway.app//api/companies/${id}`,
       { status: "approved" }
     );
     approveMessage.value = 'Approved'
@@ -789,7 +789,7 @@ const confirmReject = (id)=>{
 
   try {
     const response = await axios.put(
-      `https://bizethio-backend-production-4c6c.up.railway.app/api/companies/${id}`,
+      `https://bizethio-backend-production-daf6.up.railway.app//api/companies/${id}`,
       {
         status: "rejected",
       }
@@ -831,7 +831,7 @@ rejectMessage.value = 'Rejected'
     const fetchCampanies = async (number) => {
       try {
         const response = await axios.get(
-          `https://bizethio-backend-production-4c6c.up.railway.app/api/companies/paginated?page=${number}`
+          `https://bizethio-backend-production-daf6.up.railway.app//api/companies/paginated?page=${number}`
         );
         campanies.value = response.data.data;
         noCampanyData.value = false;
@@ -858,7 +858,7 @@ rejectMessage.value = 'Rejected'
     // const fetchPaginatedCampanies = async()=>{
     //      try {
     //     const response = await axios.get(
-    //       `https://bizethio-backend-production-4c6c.up.railway.app/api/companies/paginated?page=${page}`
+    //       `https://bizethio-backend-production-daf6.up.railway.app//api/companies/paginated?page=${page}`
     //     );
     //     campanies.value = response.data.data;
     //     localStorage.setItem("campanies", JSON.stringify(campanies.value));
@@ -913,7 +913,7 @@ rejectMessage.value = 'Rejected'
       // });
       loadingCampanies2.value = true;
       const response = await axios.get(
-        `https://bizethio-backend-production-4c6c.up.railway.app/api/companies/${id}`
+        `https://bizethio-backend-production-daf6.up.railway.app//api/companies/${id}`
       );
       singleampany.value = response.data;
       console.log("single campany", singleampany.value);
