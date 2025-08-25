@@ -39,7 +39,7 @@ export default defineComponent({
     const fetchCampanies = async () => {
       try {
         const response = await axios.get(
-          `https://bizethio-backend-production-daf6.up.railway.app//api/companies`
+          `https://bizethio-backend-production-daf6.up.railway.app/api/companies`
         );
         campanies.value = response.data;
         localStorage.setItem("campanies", JSON.stringify(campanies.value));

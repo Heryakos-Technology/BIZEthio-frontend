@@ -228,7 +228,7 @@ const getAllCompanies = async () => {
     return [];
   }
 
-  const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app//api/companies", {
+  const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app/api/companies", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

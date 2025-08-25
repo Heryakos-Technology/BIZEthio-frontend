@@ -739,7 +739,7 @@ submitText.value = "Submit";
             const tempPassword = localStorage.getItem("temporaryPassword");
             try {
               const response = await axios.post(
-                `https://bizethio-backend-production-daf6.up.railway.app//api/firebase-auth`,
+                `https://bizethio-backend-production-daf6.up.railway.app/api/firebase-auth`,
                 
                 userData,
                 {
