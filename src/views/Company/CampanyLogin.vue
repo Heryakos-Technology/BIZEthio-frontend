@@ -685,7 +685,7 @@ export default {
     //   const registerUser = async (user, token) => {
     //     try {
     //       const response = await axios.post(
-    //         `https://bizethio-backend-production-4c6c.up.railway.app/api/firebase-auth`,
+    //         `https://bizethio-backend-production-daf6.up.railway.app//api/firebase-auth`,
     //         {
     //           //name: user.displayName,
     //           email: user.email,
@@ -764,7 +764,7 @@ export default {
     const token = await user.getIdToken();
 
     const response = await axios.post(
-      "https://bizethio-backend-production-4c6c.up.railway.app/api/company/login",
+      "https://bizethio-backend-production-daf6.up.railway.app//api/company/login",
       {
         contact_email: email.value,
         password: password.value,
@@ -820,7 +820,7 @@ export default {
 
           loading2.value = true;
           const response = await axios.post(
-            `https://bizethio-backend-production-4c6c.up.railway.app/api/company/login`,
+            `https://bizethio-backend-production-daf6.up.railway.app//api/company/login`,
             {
               contact_email: email.value,
               password: password.value,

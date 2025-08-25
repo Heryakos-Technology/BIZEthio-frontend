@@ -25,7 +25,7 @@ export default {
     handleLogin() {
       axios
         .post(
-          "https://bizethio-backend-production-4c6c.up.railway.app/api/company/login",
+          "https://bizethio-backend-production-daf6.up.railway.app//api/company/login",
           {
             email: this.email,
             password: this.password,
