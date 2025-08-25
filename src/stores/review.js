@@ -10,7 +10,7 @@ export const useReviewStore = defineStore("reviewStore", {
 
   actions: {
     async getAllReviews() {
-      const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app//api/reviews", {
+      const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app/api/reviews", {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -32,7 +32,7 @@ export const useReviewStore = defineStore("reviewStore", {
       //   return JSON.parse(localStorage.getItem(localStorageKey));
       // }
 
-      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app//api/reviews/company/${companyId}`, {
+      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app/api/reviews/company/${companyId}`, {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -50,7 +50,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async createReview(reviewData) {
-      const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app//api/reviews", {
+      const res = await fetch("https://bizethio-backend-production-daf6.up.railway.app/api/reviews", {
         method: "Post",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async updateReview(reviewId, reviewData) {
-      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app//api/reviews/${reviewId}`, {
+      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app/api/reviews/${reviewId}`, {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const useReviewStore = defineStore("reviewStore", {
     },
 
     async deleteReview(reviewId) {
-      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app//api/reviews/${reviewId}`, {
+      const res = await fetch(`https://bizethio-backend-production-daf6.up.railway.app/api/reviews/${reviewId}`, {
         method: "Delete",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
