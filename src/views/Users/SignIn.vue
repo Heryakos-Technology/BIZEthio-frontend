@@ -530,52 +530,40 @@ export default {
     };
 
     //google
-    const signInWithGoogle = async () => {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        loading.value = true;
-        const user = result.user;
-        console.log("User signed in:", user);
+const signInWithGoogle = async () => {
+  try {
+    loading.value = true;
 
-        // Get the Firebase token
-        const token = await user.getIdToken();
-        console.log("Firebase Token:", token);
-        localStorage.setItem("token", token);
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
 
-        if (!token) {
-          console.error("Failed to retrieve token.");
-          return;
-        }
+    const token = await user.getIdToken();
+    if (!token) {
+      console.error("Failed to retrieve token.");
+      loading.value = false;
+      return;
+    }
 
-        // Check if the user already exists in your backend
-        const response = await checkUserExists(user.email); // Implement this function
+    localStorage.setItem("token", token);
 
-        if (response.exists) {
-          // User already exists, store user ID and redirect
-          localStorage.setItem("user_id", response.userId);
-          console.log("User already exists. Redirecting to user profile...");
-          router.push("/UserLanding");
-          loading.value = false;
-          signInMessage.value = "Sent";
-        } else {
-          // User does not exist, register the user
-          await registerUser(user, token);
-          console.log(
-            "User registered successfully. Redirecting to user profile..."
-          );
-          router.push("/UserLanding");
-          loading.value = false;
-          signInMessage.value = "Sent";
-        }
-      } catch (error) {
-        console.error("Error signing in with Google:", error);
-        loading.value = false;
-        $toast.error("Error signing in with Google", {
-        position: 'top'
-      });
-        //alert(error);
-      }
-    };
+    const response = await checkUserExists(user.email);
+
+    if (response.exists) {
+      localStorage.setItem("user_id", response.userId);
+    } else {
+      await registerUser(user, token);
+    }
+
+    // ✅ Ensure redirect happens AFTER everything resolves
+    router.push({ path: "/UserLanding" });
+    signInMessage.value = "Sent";
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+    $toast.error("Error signing in with Google", { position: "top" });
+  } finally {
+    loading.value = false;
+  }
+};
 
     // Example function to check if user exists
     const checkUserExists = async (email) => {
@@ -653,7 +641,7 @@ export default {
     const registerUser = async (user, token) => {
       try {
         const response = await axios.post(
-          `https://bizethio-backend-production-daf6.up.railway.appapi/firebase-auth`,
+          `https://bizethio-backend-production-daf6.up.railway.app/api/firebase-auth`,
           {
             //name: user.displayName,
             email: user.email,
