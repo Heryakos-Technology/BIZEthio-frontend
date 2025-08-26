@@ -669,7 +669,20 @@ const hasApprovedOrRejected = computed(() => {
     const paginatedCampanies = ref([])
      const activeNumber = ref(1);
      const totalPages = ref(0);
+     const allCompanies = ref([]);
     // Define chartData as a reactive reference
+    const fetchAllCompanies = async () => {
+  try {
+    const response = await axios.get(
+      "https://bizethio-backend-production-daf6.up.railway.app/api/companies"
+    );
+    allCompanies.value = response.data; 
+    console.log("Fetched companies:", allCompanies.value);
+    updateCompanyStats();
+  } catch (error) {
+    console.error("Error fetching all companies:", error);
+  }
+};
     const loading = ref({
       approve: false,
       reject: false,
@@ -680,21 +693,7 @@ const hasApprovedOrRejected = computed(() => {
     campany.name.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
 });
-    // const chartData = ref({
-    //   labels: ["M", "T", "W", "T", "F", "S", "S"],
-    //   datasets: [
-    //     {
-    //       label: "Approved",
-    //       backgroundColor: "#007bff",
-    //       data: [80, 50, 15, 40, 25, 20, 30],
-    //     },
-    //     {
-    //       label: "Ban",
-    //       backgroundColor: "#ff4d4d",
-    //       data: [45, 48, 10, 45, 18, 60, 15],
-    //     },
-    //   ],
-    // });
+   
     const goToFirst = ()=> {
       setActive(1);
       fetchCampanies(1);
@@ -771,8 +770,8 @@ const approveCampany = async () => {
   }
 };
    const confirmApprove = (id) => {
-  currentCompanyId.value = id; // Store the id for the company to approve
-  showApproveConfirm.value = true; // Show the approval confirmation modal
+  currentCompanyId.value = id;
+  showApproveConfirm.value = true; 
 };
 const confirmReject = (id)=>{
   showRejectConfirm.value = true
@@ -781,10 +780,10 @@ const confirmReject = (id)=>{
 
 
   const rejectCampany = async () => {
-  if (!currentCompanyId.value) return; // Ensure we have a valid ID
+  if (!currentCompanyId.value) return; 
 
   const id = currentCompanyId.value;
-  rejectMessage.value = 'Rejecting...' // Use the stored ID
+  rejectMessage.value = 'Rejecting...' 
   loadingCampanies4.value[id] = true;
 
   try {
@@ -855,25 +854,7 @@ rejectMessage.value = 'Rejected'
       setActive(number);
       fetchCampanies(number);
     }
-    // const fetchPaginatedCampanies = async()=>{
-    //      try {
-    //     const response = await axios.get(
-    //       `https://bizethio-backend-production-daf6.up.railway.app/api/companies/paginated?page=${page}`
-    //     );
-    //     campanies.value = response.data.data;
-    //     localStorage.setItem("campanies", JSON.stringify(campanies.value));
-    //     console.log("campanies", campanies.value);
-    //     loadingCampanies.value = false;
-    //   } catch (error) {
-    //     console.log("Errors", error);
-    //     loadingCampanies.value = false;
-    //     errors.value = error;
-    //   }
-    //   if (campanies.value.length === 0) {
-    //     noCampanyData.value = true;
-    //     campanyData.value = "No Campany Found";
-    //   }
-    // } 
+ 
     const fetchCompanyStats = async () => {
       await fetchCampanies();
       const stats = {
@@ -882,35 +863,34 @@ rejectMessage.value = 'Rejected'
       };
 
       campanies.value.forEach(campany => {
-        if (campany.status === "approved") {
-          stats.approved++;
-        } else if (campany.status === "rejected") {
-          stats.rejected++;
-        }
-      });
-
-      return stats;
+    if (campany.status === "approved") stats.approved++;
+    if (campany.status === "rejected") stats.rejected++;
+  });
+  return stats;
     };
     
-    const updateCompanyStats = async () => {
-      const stats = await fetchCompanyStats();
-      chartData.value = {
-        labels: ["Approved", "Rejected"],
-        datasets: [
-          {
-            label: "Company Status",
-            backgroundColor: ["#007bff", "#ff4d4d"],
-            data: [stats.approved, stats.rejected],
-          },
-        ],
-      };
-    };
+  const updateCompanyStats = () => {
+  const stats = { approved: 0, rejected: 0 };
+
+  allCompanies.value.forEach(company => {
+    if (company.status === "approved") stats.approved++;
+    if (company.status === "rejected") stats.rejected++;
+  });
+
+  chartData.value = {
+    labels: ["Approved", "Rejected"],
+    datasets: [
+      {
+        label: "Company Status",
+        backgroundColor: ["#007bff", "#ff4d4d"],
+        data: [stats.approved, stats.rejected],
+      },
+    ],
+  };
+};
 
     const fetchSingleCampany = async (id) => {
-      // window.scrollTo({
-      //   top: 0,
-      //   behavior: "smooth",
-      // });
+    
       loadingCampanies2.value = true;
       const response = await axios.get(
         `https://bizethio-backend-production-daf6.up.railway.app/api/companies/${id}`
@@ -935,12 +915,12 @@ rejectMessage.value = 'Rejected'
     };
 const openCompanyModal = async (id) => {
   try {
-    const response = await axios.get(`/admin/campanies/${id}`);
+    const response = await axios.get(`https://bizethio-backend-production-daf6.up.railway.app/api/companies/${id}`);
     selectedCompany.value = response.data;
     singleampany.value = true;
   } catch (error) {
     console.error(error);
-   // errors.value = "Failed to fetch company details";
+   
   }
 };
 
@@ -964,6 +944,7 @@ if (storedCampanies) {
   console.log("No campanies found in local storage.");
 }
         fetchCampanies();
+        fetchAllCompanies();    
 
       
       } else {
@@ -1039,9 +1020,9 @@ if (storedCampanies) {
 @import "tailwindcss";
 
 /* Custom utility */
-.scrollbar-hide::-webkit-scrollbar { display: none; }   /* Chrome/Safari/Edge */
-.scrollbar-hide { -ms-overflow-style: none; }           /* IE/old Edge */
-.scrollbar-hide { scrollbar-width: none; }              /* Firefox */
+.scrollbar-hide::-webkit-scrollbar { display: none; }  
+.scrollbar-hide { -ms-overflow-style: none; }           
+.scrollbar-hide { scrollbar-width: none; }              
 .clamp-2{
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1074,10 +1055,7 @@ if (storedCampanies) {
   margin-left:210px;
 
   background-color: rgba(0, 0, 0, 0.308);
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; */
+
 }
 .modal {
   position: fixed;
@@ -1094,19 +1072,17 @@ if (storedCampanies) {
 
   
   border-radius: 8px;
-  /* padding: 20px; */
-  /* max-width: 600px;
-  width: 90%; */
+
   width:400px;          
   margin-left: 400px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.164);
 }
 .active {
-  color: blue; /* Change to the desired shade of blue */
-  background-color: lightblue; /* Optional: Change background color */
+  color: blue;
+  background-color: lightblue; 
 }
 .number {
-  transition: background-color 0.3s; /* Smooth transition */
+  transition: background-color 0.3s; 
 }
 @keyframes spin {
   0% {
