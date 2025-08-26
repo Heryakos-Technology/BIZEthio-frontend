@@ -940,7 +940,7 @@ const openCompanyModal = async (id) => {
     singleampany.value = true;
   } catch (error) {
     console.error(error);
-    errors.value = "Failed to fetch company details";
+   // errors.value = "Failed to fetch company details";
   }
 };
 
