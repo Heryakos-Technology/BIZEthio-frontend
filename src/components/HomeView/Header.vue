@@ -21,24 +21,19 @@ const props = defineProps({
   navLinks: {
     type: Array,
     default: () => [
-      {
+    {
         name: "Home",
         label: "Home",
       },
       { name: "AboutUs", label: "About Us" },
+      { name: "ContactUs", label: "Contact Us" },
     ],
   },
 });
 </script>
 
 <template>
-  <div
-    class="z-50 w-full transition-transform duration-300 ease-in-out md:fixed"
-    :class="{
-      '-translate-y-full md:-translate-y-[calc(100%+20px)]': !isNavbarVisible,
-    }"
-  >
-    <!-- Mobile Header -->
+  <div class="">
     <div
       class="fixed top-0 left-0 z-50 flex w-full items-center justify-between md:py-3 bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff] px-4 py-2.5 lg:hidden"
     >
@@ -73,26 +68,6 @@ const props = defineProps({
             />
           </svg>
         </div>
-        <div class="flex gap-x-10 px-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-8 fill-white"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"
-            ></path>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-8 fill-white"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
-            ></path>
-          </svg>
-        </div>
         <ul
           class="mt-16 space-y-3 divide-primaryColor divide-y mx-auto text-3xl text-white"
         >
@@ -104,12 +79,16 @@ const props = defineProps({
             <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
               {{ item.label }}
             </RouterLink>
-
-            <div class="absolute top-0 left-0 h-3 w-8 bg-black"></div>
           </li>
         </ul>
 
-        <RouterLink :to="{ name: 'SignIn' }" class="w-fit mx-auto mt-16">
+        <RouterLink
+          :to="{ name: 'SignIn' }"
+          class="w-fit mx-auto mt-16"
+          :class="{
+            'hidden  w-fit': !isSidebarOpen,
+          }"
+        >
           <button
             class="cursor-pointer rounded-md bg-[#1B7590] px-12 py-3 font-medium text-white"
           >
@@ -118,65 +97,64 @@ const props = defineProps({
         </RouterLink>
       </div>
     </div>
-    <!-- Desktop Heading -->
-    <div
-      class="bg-gradient-to-b from-[#8ae4ff] via-[#bfecfc] to-[#eafaff] border-b px-3 py-2"
-    >
+
+    <div class="hidden lg:block pt-4">
       <div
-        class="mx-auto hidden h-full py-2 cursor-pointer items-center justify-around lg:flex xl:max-w-[90%]"
+        class="flex items-center w-[90%] max-w-[1000px] py-1 mx-auto rounded-full bg-[#C8EDF8] justify-between h-[64px]"
       >
-        <Logo class="w-[120px]" />
-        <RouterLink
-          v-for="(item, index) in props.navLinks"
-          :key="index"
-          :to="{ name: item.name }"
-          class="relative py-1 text-lg hover:font-bold hover:underline transition-all duration-300 ease-linear"
+        <div class="ml-8">
+          <Logo class="w-[100px]" />
+        </div>
+        <ul
+          class="flex gap-x-8 text-[16px] uppercase font-semibold"
           :class="{
-            ' font-semibold': item.name === route.name,
+            '-translate-x-6 ': userId,
           }"
         >
-          {{ item.label }}
-        </RouterLink>
-        <div class="flex items-center gap-x-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="size-8"
+          <li
+            v-for="(item, index) in props.navLinks"
+            :key="index"
+            class="hover:font-bold transition-all duration-200 ease-linear group relative"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-          <RouterLink :to="{ name: 'UserProfile' }" v-if="userId">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-8"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-              />
-            </svg>
-          </RouterLink>
+            <RouterLink :to="{ name: item.name }" @click="handleSidebarOpen">
+              {{ item.label }}
+            </RouterLink>
 
-          <RouterLink
-            v-if="!userId"
-            :to="{ name: 'SignIn' }"
-            class="cursor-pointer rounded-full bg-[#1B7590] px-6 py-2 font-medium text-white lg:px-6"
-          >
-            Get Started
-          </RouterLink>
+            <div
+              class="w-0 group-hover:w-full bottom-0-0 left-0 h-0.5 transition-all ease-linear duration-300 bg-black"
+            ></div>
+          </li>
+        </ul>
+
+        <button
+          v-if="!userId"
+          @click="signInOptions"
+          class="cursor-pointer w-[160px] m-2 flex items-center justify-center rounded-full bg-[#1B7590]/80 px-6 py-2 font-medium text-white lg:px-6 hover:bg-primaryColor"
+        >
+          Get Started
+        </button>
+
+        <div v-else class="lg:-ml-16 md:-ml-4">
+          <router-link
+            to="/UserProfile"
+            class="fa-solid fa-user mr-4 -ml-14 text-gray-800 md:text-text-sm lg:text-xl"
+          ></router-link>
         </div>
+      </div>
+      <div v-if="showOptions" class="ml-260 mt-5">
+        <button
+          @click="router.push('/signin')"
+          class="text-blue-500 underline cursor-pointer hover:scale-110"
+        >
+          Sign In as a User
+        </button>
+        <br />
+        <button
+          @click="router.push('/CampanyLogin')"
+          class="text-blue-500 underline mt-2 cursor-pointer hover:scale-110"
+        >
+          Sign In as a Campany
+        </button>
       </div>
     </div>
   </div>
