@@ -23,10 +23,10 @@ const socialMediaLinks = ref(["", "", ""]);
 const categories = ref([]);
 const isSaving = ref(false); // Add a loading state for the save button
 const handleLogout = async () => {
-  const confirmLogout = confirm("Are you sure you want to log out?");
-  if (!confirmLogout) {
-    return; 
-  }
+//  const confirmLogout = confirm("Are you sure you want to log out?");
+  // if (!confirmLogout) {
+  //   return; 
+  // }
 
   try {
     await authStore.logoutCampany();

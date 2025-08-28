@@ -687,13 +687,7 @@ const hasApprovedOrRejected = computed(() => {
       approve: false,
       reject: false,
     });
-    const filteredCampanies = computed(() => {
-  if (!searchTerm.value) return campanies.value;
-  return campanies.value.filter(campany =>
-    campany.name.toLowerCase().includes(searchTerm.value.toLowerCase())
-  );
-});
-   
+    
     const goToFirst = ()=> {
       setActive(1);
       fetchCampanies(1);
@@ -710,48 +704,48 @@ const hasApprovedOrRejected = computed(() => {
         fetchCampanies(activeNumber.value + 1);
       }
     }
-
-   const goToLast = ()=> {
+    
+    const goToLast = ()=> {
       setActive(totalPages);
       fetchCampanies(totalPages);
     }
-
+    
     const cancelApprove = () => {
       singleampany.value = false
       showApproveConfirm.value = false;
     };
     const cancelReject = ()=>{
       singleampany.value = false
-showRejectConfirm.value = false
+      showRejectConfirm.value = false
     }
-const approveCampany = async () => {
-  if (!currentCompanyId.value) return;
-
-  const id = currentCompanyId.value; // Use the stored id
-  approveMessage.value = "Approving...";
-  loading.value.approve = true;
-  loadingCampanies3.value[id] = true;
-
-  try {
-    const response = await axios.put(
-      `https://bizethio-backend-production-daf6.up.railway.app/api/companies/${id}`,
-      { status: "approved" }
-    );
-    approveMessage.value = 'Approved'
- showApproveConfirm.value = false;
-    approveCampany.value = true;
-    singleampany.value  = false
+    const approveCampany = async () => {
+      if (!currentCompanyId.value) return;
+      
+      const id = currentCompanyId.value; // Use the stored id
+      approveMessage.value = "Approving...";
+      loading.value.approve = true;
+      loadingCampanies3.value[id] = true;
+      
+      try {
+        const response = await axios.put(
+          `https://bizethio-backend-production-daf6.up.railway.app/api/companies/${id}`,
+          { status: "approved" }
+        );
+        approveMessage.value = 'Approved'
+        showApproveConfirm.value = false;
+        approveCampany.value = true;
+        singleampany.value  = false
         $toast.success("Company Approved successfully.", { position: 'top' });
-    // Refresh the page after success
-    // location.reload();
-    updateCompanyStats();
- if (singleampany.value.id === id) {
-      singleampany.value.status = "approved";
-    }
-
-    const index = campanies.value.findIndex((c) => c.id === id);
-    if (index !== -1) {
-      campanies.value[index].status = "approved";
+        // Refresh the page after success
+        // location.reload();
+        updateCompanyStats();
+        if (singleampany.value.id === id) {
+          singleampany.value.status = "approved";
+        }
+        
+        const index = campanies.value.findIndex((c) => c.id === id);
+        if (index !== -1) {
+          campanies.value[index].status = "approved";
       console.log(`approved company ID: ${id}`); // Debugging log
     } else {
       console.error(`Company with ID ${id} not found`); // Debugging log
@@ -760,8 +754,8 @@ const approveCampany = async () => {
   } catch (error) {
     showApproveConfirm.value = false;
     approveMessage.value = "Approve";
-      $toast.error("Error approving company try again!.", { position: 'top' });
-       singleampany.value  = false
+    $toast.error("Error approving company try again!.", { position: 'top' });
+    singleampany.value  = false
 
   } finally {
     loadingCampanies3.value[id] = false;
@@ -793,9 +787,9 @@ const confirmReject = (id)=>{
         status: "rejected",
       }
     );
-rejectMessage.value = 'Rejected'
+    rejectMessage.value = 'Rejected'
  showRejectConfirm.value = false;
-    rejectCampany.value = true;
+ rejectCampany.value = true;
     singleampany.value  = false
     
     $toast.success("Company Rejected successfully.", { position: 'top' });
@@ -813,12 +807,12 @@ rejectMessage.value = 'Rejected'
 
     console.log("Status:", response.data.status);
         // location.reload();(
-        updateCompanyStats();
-  } catch (error) {
-    rejectCampany.value = "Reject"
+          updateCompanyStats();
+        } catch (error) {
+          rejectCampany.value = "Reject"
         $toast.error("Error rejecting company try again!.", { position: 'top' });
-       singleampany.value  = false
-       showRejectConfirm.value = false;
+        singleampany.value  = false
+        showRejectConfirm.value = false;
     console.error("Error updating the company status:", error);
   } finally {
     loadingCampanies4.value[id] = false;
@@ -850,6 +844,12 @@ rejectMessage.value = 'Rejected'
       }
       
     };
+    const filteredCampanies = computed(() => {
+    if (!searchTerm.value) return campanies.value;
+    return campanies.value.filter(campany =>
+    campany.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+    );
+    });
     const handleButtonClick = (number)=> {
       setActive(number);
       fetchCampanies(number);
@@ -957,6 +957,7 @@ if (storedCampanies) {
     function setActive(number) {
       activeNumber.value = number; // Set the active number
     }
+    
     return {
       totalPages,
       goToNext,
